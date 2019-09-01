@@ -8,6 +8,24 @@ export(float, -1.0, 1.0) var cap := 0.15
 export var debug := true
 
 var _noise
+const TILES_RESOURCES := {
+    0x01: preload("res://models/World/Test/Tile01.glb"), # Top tile
+    0x02: preload("res://models/World/Test/Tile02.glb"), # Right tile
+    0x03: preload("res://models/World/Test/Tile03.glb"), # Top & Right tile
+    0x04: preload("res://models/World/Test/Tile04.glb"), # Bottom tile
+    0x05: preload("res://models/World/Test/Tile05.glb"), # Top & Bottom tile
+    0x06: preload("res://models/World/Test/Tile06.glb"), # Right & Bottom tile
+    0x07: preload("res://models/World/Test/Tile07.glb"), # Top & Right & Bottom tile
+    0x08: preload("res://models/World/Test/Tile08.glb"), # Left tile
+    0x09: preload("res://models/World/Test/Tile09.glb"), # Top & Left tile
+    0x0A: preload("res://models/World/Test/Tile10.glb"), # Right & Left tile
+    0x0B: preload("res://models/World/Test/Tile11.glb"), # Top & Right & Left tile
+    0x0C: preload("res://models/World/Test/Tile12.glb"), # Bottom & Left tile
+    0x0D: preload("res://models/World/Test/Tile13.glb"), # Top & Bottom & Left tile
+    0x0E: preload("res://models/World/Test/Tile14.glb"), # Right & Bottom & Left tile
+    0x0F: preload("res://models/World/Test/Tile15.glb"), # Top & Right & Bottom & Left tile
+    0x10: preload("res://models/World/Test/Tile00.glb"), # Full tile
+}
 
 func _ready():
 	
@@ -64,41 +82,9 @@ func _create_bitmask(pos: Vector3) -> int:
 		
 	return mask
 
-
 func _create_tile(mask: int) -> Node:
 	
-	match mask:
-		0x01:	# Top tile
-			return load("res://tileset/Jungle/Tile01.glb").instance()
-		0x02:	# Right tile
-			return load("res://tileset/Jungle/Tile02.glb").instance()
-		0x03:	# Top & Right tile
-			return load("res://tileset/Jungle/Tile03.glb").instance()
-		0x04:	# Bottom tile
-			return load("res://tileset/Jungle/Tile04.glb").instance()
-		0x05:	# Top & Bottom tile
-			return load("res://tileset/Jungle/Tile05.glb").instance()
-		0x06:	# Right & Bottom tile
-			return load("res://tileset/Jungle/Tile06.glb").instance()
-		0x07:	# Top & Right & Bottom tile
-			return load("res://tileset/Jungle/Tile07.glb").instance()
-		0x08:	# Left tile
-			return load("res://tileset/Jungle/Tile08.glb").instance()
-		0x09:	# Top & Left tile
-			return load("res://tileset/Jungle/Tile09.glb").instance()
-		0x0A:	# Right & Left tile
-			return load("res://tileset/Jungle/Tile10.glb").instance()
-		0x0B:	# Top & Right & Left tile
-			return load("res://tileset/Jungle/Tile11.glb").instance()
-		0x0C:	# Bottom & Left tile
-			return load("res://tileset/Jungle/Tile12.glb").instance()
-		0x0D:	# Top & Bottom & Left tile
-			return load("res://tileset/Jungle/Tile13.glb").instance()
-		0x0E:	# Right & Bottom & Left tile
-			return load("res://tileset/Jungle/Tile14.glb").instance()
-		0x0F:	# Top & Right & Bottom & Left tile
-			return load("res://tileset/Jungle/Tile15.glb").instance()
-		0x10:	# Full tile
-			return load("res://tileset/Jungle/Tile00.glb").instance()
-		_:
-			return null
+    if TILES_RESOURCES.has(mask):
+        return TILES_RESOURCES.get(mask).instance()
+    else:
+        return null
