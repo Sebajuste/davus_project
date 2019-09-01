@@ -3,7 +3,7 @@ extends KinematicBody
 
 const GRAVITY := 9.8
 
-export var speed := 10
+export var max_speed := 10
 
 const ACCELERATION = 3
 const DE_ACCELERATION = 7
@@ -15,6 +15,8 @@ var velocity := Vector3()
 
 var _fall_time := 0.0
 var _jump_counter := 1
+var _jumping := false
+var _jumping_timer := 0.0
 
 var _anim_update := false
 
@@ -45,11 +47,25 @@ func _physics_process(delta):
 	
 	velocity.y += delta * -GRAVITY * 2
 	
+	
+	if _jumping:
+		_jumping_timer += delta
+		if _jumping_timer > 0.7:
+			velocity += Vector3.UP * 10
+			_jumping = false
+			pass
+	
+	
 	if Input.is_action_just_pressed("jump") and _fall_time < 0.25 and _jump_counter > 0:
 		_jump_counter -= 1
-		velocity += Vector3.UP * 10
-		_play_anim("jump")
-	
+		
+		if abs(velocity.x) > 0.1:
+			_play_anim("jump_run_in_place")
+			velocity += Vector3.UP * 10
+		else:
+			_jumping = true
+			_jumping_timer = 0.0
+			_play_anim("JumpIdle")
 	
 	var hv = velocity
 	hv.y = 0
@@ -58,7 +74,7 @@ func _physics_process(delta):
 	if dir.dot(hv) > 0:
 		accel = ACCELERATION
 	
-	var new_pos = dir * speed
+	var new_pos = dir * max_speed
 	
 	hv = hv.linear_interpolate(new_pos, accel * delta)
 	velocity.x = hv.x
@@ -81,21 +97,33 @@ func _physics_process(delta):
 	
 	#var state_machines = $AnimationTree["parameters/playback"]
 	
-	if not is_on_floor() and velocity.y < -0.05:
-		_play_anim("falling_cycle")
-	elif abs(velocity.x) > 2:
-		_play_anim("slow_run")
+	if is_falling():
+		_play_anim("Falling")
+	#elif abs(velocity.x) > 2:
+	#	_play_anim("Locomotion")
+	#	set("parameters/Locomotion/blend_position", velocity.x / max_speed)
 	elif abs(velocity.x) > 0.5:
-		_play_anim("walk")
+		$AnimationTree.set("parameters/Locomotion/blend_position", abs(velocity.x) / max_speed)
+		_play_anim("Locomotion")
 	else:
 		_play_anim("idle")
+
+
+func is_falling() -> bool:
+	return not is_on_floor() and velocity.y < -0.05
+
 
 func _play_anim(name: String):
 	if _anim_update:
 		return
 	_anim_update = true
+	
+	$AnimationTree.travel(name)
+	
+	"""
 	var state_machines = $AnimationTree["parameters/playback"]
 	if state_machines.is_playing():
 		state_machines.travel(name)
 	else:
 		state_machines.start(name)
+	"""
