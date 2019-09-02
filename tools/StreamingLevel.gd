@@ -127,7 +127,7 @@ func _load_thread(data):
 
 func _load_batch(loc: Vector3):
 	
-	var level_batch = load("res://tools/LevelBatch.tscn").instance()
+	var level_batch = LevelBatch.instance()
 	
 	level_batch._noise = noise
 	

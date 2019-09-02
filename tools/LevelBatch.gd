@@ -6,32 +6,85 @@ export var debug := true
 
 var _noise
 
- # TODO : Complete the categories with the corresponding files.
 const TILES_RESOURCES := { 
+	0x00:
+		[ # Full
+			preload("res://models/World/Jungle/Tiles/tile00.glb"),
+		],
 	0x01: 
-		[ # Category 1 
-	    	preload("res://models/World/Jungle/Tiles/Tile00.glb"),
-	    	preload("res://models/World/Jungle/Tiles/Tile01.glb"),
+		[ # Top empty
+			preload("res://models/World/Jungle/Tiles/Tile01.glb"),
+			preload("res://models/World/Jungle/Tiles/tile01.001.glb"),
 		],
 	0x02: 
-		[ # Category 2
-			preload("res://models/World/Jungle/Tiles/Tile00.glb"),
-			preload("res://models/World/Jungle/Tiles/Tile01.glb"),
+		[ # Right empty
+			preload("res://models/World/Jungle/Tiles/Tile02.glb"),
+			preload("res://models/World/Jungle/Tiles/tile02.001.glb"),
 		],
 	0x03: 
-		[ # Category 3
-			preload("res://models/World/Jungle/Tiles/Tile00.glb"),
-			preload("res://models/World/Jungle/Tiles/Tile01.glb"),
+		[ # Top Right empty
+			preload("res://models/World/Jungle/Tiles/Tile03.glb"),
+			preload("res://models/World/Jungle/Tiles/tile03.001.glb"),
 		],
 	0x04: 
-		[ # Category 4
-			preload("res://models/World/Jungle/Tiles/Tile00.glb"),
-			preload("res://models/World/Jungle/Tiles/Tile01.glb"),
+		[ # Bottom empty
+			preload("res://models/World/Jungle/Tiles/Tile04.glb"),
+			preload("res://models/World/Jungle/Tiles/tile04.001.glb"),
 		],
 	0x05: 
-		[ # Category 5
-			preload("res://models/World/Jungle/Tiles/Tile00.glb"),
-			preload("res://models/World/Jungle/Tiles/Tile01.glb"),
+		[ # Top Bottom empty
+			preload("res://models/World/Jungle/Tiles/Tile05.glb"),
+			preload("res://models/World/Jungle/Tiles/tile05.001.glb"),
+		],
+	0x06: 
+		[ # Right Bottom empty
+			preload("res://models/World/Jungle/Tiles/Tile06.glb"),
+			preload("res://models/World/Jungle/Tiles/tile06.001.glb"),
+		],
+	0x07: 
+		[ # Top Right Bottom empty
+			preload("res://models/World/Jungle/Tiles/Tile07.glb"),
+			preload("res://models/World/Jungle/Tiles/tile07.001.glb"),
+		],
+	0x08: 
+		[ # Left empty
+			preload("res://models/World/Jungle/Tiles/Tile08.glb"),
+			preload("res://models/World/Jungle/Tiles/tile08.001.glb"),
+		],
+	0x09: 
+		[ # Top Left empty
+			preload("res://models/World/Jungle/Tiles/Tile09.glb"),
+			preload("res://models/World/Jungle/Tiles/tile09.001.glb"),
+		],
+	0x0A: 
+		[ # Right Left empty
+			preload("res://models/World/Jungle/Tiles/Tile10.glb"),
+			preload("res://models/World/Jungle/Tiles/tile10.001.glb"),
+		],
+	0x0B: 
+		[ # Top Right Left empty
+			preload("res://models/World/Jungle/Tiles/Tile11.glb"),
+			preload("res://models/World/Jungle/Tiles/tile11.001.glb"),
+		],
+	0x0C: 
+		[ # Bottom Left empty
+			preload("res://models/World/Jungle/Tiles/Tile12.glb"),
+			preload("res://models/World/Jungle/Tiles/tile12.001.glb"),
+		],
+	0x0D: 
+		[ # Top Bottom Left empty
+			preload("res://models/World/Jungle/Tiles/Tile13.glb"),
+			preload("res://models/World/Jungle/Tiles/tile13.001.glb"),
+		],
+	0x0E: 
+		[ # Right Bottom Left empty
+			preload("res://models/World/Jungle/Tiles/Tile14.glb"),
+			preload("res://models/World/Jungle/Tiles/tile14.001.glb"),
+		],
+	0x0F: 
+		[ # Top Right Bottom Left empty
+			preload("res://models/World/Jungle/Tiles/Tile15.glb"),
+			preload("res://models/World/Jungle/Tiles/tile15.001.glb"),
 		],
 	}
 
@@ -58,9 +111,8 @@ func gen(loc: Vector3):
 	for x in range(size):
 		for y in range(size):
 			var pos = Vector3(loc.x+x, loc.y-y, 0)
-			var mask = 0
 			if _is_solid_tile(pos.x, pos.y):
-				mask = _create_bitmask( pos )
+				var mask = _create_bitmask( pos )
 				var tile = _create_tile(mask)
 				if tile:
 					self.add_child(tile)
@@ -90,51 +142,8 @@ func _create_bitmask(pos: Vector3) -> int:
 	return mask
 
 
-func _get_tile_variant(category: int, angle: float) -> Node:
-	
-	var tilesCategory = TILES_RESOURCES.get(category)
-	var variant = randi() % tilesCategory.size()
-	var tile = tilesCategory[variant].instance()
-	
-	if angle != 0:
-		# TODO : Check compliance with the "Tile" name in the tiles files.
-		tile.find_node("Tile").rotate_z(angle)
-	
-	return tile
-
-
 func _create_tile(mask: int) -> Node:
 
-	match mask:
-		0x1:	# Top
-			return _get_tile_variant(1, 0)
-		0x2:	# Right
-			return _get_tile_variant(1, PI * 0.5)
-		0x3:	# Top Right
-			return _get_tile_variant(2, 0)
-		0x4:	# Bottom
-			return _get_tile_variant(1, PI)
-		0x5:	# Top Bottom
-			return _get_tile_variant(5, 0)
-		0x6:	# Right Bottom
-			return _get_tile_variant(2, PI * 0.5)
-		0x7:	# Top Right Bottom
-			return _get_tile_variant(3, 0)
-		0x8:	# Left
-			return _get_tile_variant(1, PI * 1.5)
-		0x9:	# Top Left
-			return _get_tile_variant(2, PI * 1.5)
-		0xA:	# Right Left
-			return _get_tile_variant(5, PI * 0.5)
-		0xB:	# Top Right Left
-			return _get_tile_variant(3, PI * 1.5)
-		0xC:	# Bottom Left
-			return _get_tile_variant(2, PI)
-		0xD:	# Top Bottom Left
-			return _get_tile_variant(3, PI)
-		0xE:	# Right Bottom Left
-			return _get_tile_variant(3, PI * 0.5)
-		0xF:	# Top Right Bottom Left
-			return _get_tile_variant(4, 0)
-		_:	
-			return null
+	var tilesCategory = TILES_RESOURCES.get(mask)
+	var variant = randi() % tilesCategory.size()
+	return tilesCategory[variant].instance()
