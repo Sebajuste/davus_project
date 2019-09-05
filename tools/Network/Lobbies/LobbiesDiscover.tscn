@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://tools/Network/Lobbies/LobbiesDiscover.gd" type="Script" id=1]
+
+
+[node name="LobbiesDiscover" type="Node"]
+editor/display_folded = true
+script = ExtResource( 1 )
+port = 8081
+
+[node name="GetLobbies" type="HTTPRequest" parent="."]
+[connection signal="request_completed" from="GetLobbies" to="." method="_on_GetLobbies_request_completed"]

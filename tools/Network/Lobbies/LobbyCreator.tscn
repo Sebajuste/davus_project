@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://tools/Network/Lobbies/LobbyCreator.gd" type="Script" id=1]
+
+
+[node name="LobbyCreator" type="Node"]
+editor/display_folded = true
+script = ExtResource( 1 )
+port = 8081
+
+[node name="CreateLobby" type="HTTPRequest" parent="."]
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+
+[node name="PingTimer" type="Timer" parent="."]
+wait_time = 10.0
+[connection signal="request_completed" from="CreateLobby" to="." method="_on_CreateLobby_request_completed"]
+[connection signal="timeout" from="PingTimer" to="." method="_on_PingTimer_timeout"]
