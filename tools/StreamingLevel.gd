@@ -1,7 +1,9 @@
 extends Spatial
 
-const LevelBatch = preload("LevelBatch.tscn")
+const TestLevelBatch = preload("res://tileset/Test/TestLevelBatch.tscn")
+const JungleLevelBatch = preload("res://tileset/Jungle/JungleLevelBatch.tscn")
 
+export(String, "Test", "Jungle") var tilset = "Test"
 export var world_seed := 1
 export var batch_size := 16
 
@@ -123,13 +125,18 @@ func _load_thread(data):
 			return
 		_stop_thread_mutex.unlock()
 		
-	
 
 func _load_batch(loc: Vector3):
 	
-	var level_batch = load("res://tools/LevelBatch.tscn").instance()
+	var level_batch
 	
-	level_batch._noise = noise
+	match tilset:
+		"Jungle":
+			level_batch = JungleLevelBatch.instance()
+		_:
+			level_batch = TestLevelBatch.instance()
+	
+	level_batch.noise = noise
 	
 	level_batch.translate( Vector3(loc.x*batch_size*2, loc.y*batch_size*2, 0) )
 	level_batch.gen( Vector3(loc.x*batch_size, loc.y*batch_size, 0) )
