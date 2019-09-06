@@ -1,0 +1,23 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://scenes/TestNetwork/Player.gd" type="Script" id=1]
+[ext_resource path="res://scenes/TestNetwork/white.png" type="Texture" id=2]
+[ext_resource path="res://scenes/TestNetwork/PlayerHandler.gd" type="Script" id=3]
+[ext_resource path="res://scenes/TestNetwork/NetworkHandler.gd" type="Script" id=4]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+[node name="Player" type="KinematicBody2D"]
+script = ExtResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="PlayerHandler" type="Node" parent="."]
+script = ExtResource( 3 )
+
+[node name="NetworkHandler" type="Node" parent="."]
+script = ExtResource( 4 )

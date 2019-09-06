@@ -27,7 +27,7 @@ func create_lobby():
 	_lobby_created = true
 	
 	var lobby_information = {
-		"name": _lobby_name,
+		"name": lobby_name,
 		"maxPlayer": max_player,
 		"currentPlayer": 0,
 		"host": "localhost",
@@ -64,7 +64,7 @@ func _on_CreateLobby_request_completed(result, response_code, headers, body):
 func _on_PingTimer_timeout():
 	
 	var lobby_information = {
-		"name": _lobby_name,
+		"name": lobby_name,
 		"maxPlayer": max_player,
 		"currentPlayer": 0,
 		"host": "localhost",

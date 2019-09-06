@@ -28,6 +28,32 @@ port = 8081
 wait_time = 10.0
 
 [node name="Connections" parent="." instance=ExtResource( 4 )]
+
+[node name="Control" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="CreateButton" type="Button" parent="Control/HBoxContainer"]
+margin_right = 53.0
+margin_bottom = 40.0
+text = "Create"
+
+[node name="JoinButton" type="Button" parent="Control/HBoxContainer"]
+margin_left = 57.0
+margin_right = 92.0
+margin_bottom = 40.0
+text = "Join"
+
+[node name="World" type="Node2D" parent="."]
 [connection signal="request_completed" from="LobbiesDiscover/GetLobbies" to="LobbiesDiscover" method="_on_GetLobbies_request_completed"]
 [connection signal="request_completed" from="LobbyCreator/CreateLobby" to="LobbyCreator" method="_on_CreateLobby_request_completed"]
 [connection signal="timeout" from="LobbyCreator/PingTimer" to="LobbyCreator" method="_on_PingTimer_timeout"]
+[connection signal="connected" from="Connections" to="." method="_on_Connections_connected"]
+[connection signal="player_connected" from="Connections" to="." method="_on_Connections_player_connected"]
+[connection signal="player_disconnected" from="Connections" to="." method="_on_Connections_player_disconnected"]
+[connection signal="pressed" from="Control/HBoxContainer/CreateButton" to="." method="_on_CreateButton_pressed"]
+[connection signal="pressed" from="Control/HBoxContainer/JoinButton" to="." method="_on_JoinButton_pressed"]
