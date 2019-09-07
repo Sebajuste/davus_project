@@ -38,7 +38,7 @@ __meta__ = {
 }
 
 [node name="Camera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, -4.37114e-008, 1, 0, -1, -4.37114e-008, 0, 80, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 80 )
 
 [node name="DungeonGenerator" type="Node2D" parent="."]
 script = ExtResource( 2 )
