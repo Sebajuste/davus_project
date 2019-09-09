@@ -33,7 +33,7 @@ fov = 50.0
 transform = Transform( 0.964153, -0.174192, 0.200166, 0, 0.754354, 0.656468, -0.265348, -0.632935, 0.727313, 0.524214, 2.70527, 1.9961 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="Spatial"]
-transform = Transform( -4.37114e-08, -0.173648, -0.984808, 0, 0.984808, -0.173648, 1, -7.5904e-09, -4.30473e-08, -4, 2, 0 )
+transform = Transform( -4.37114e-008, -0.173648, -0.984808, 0, 0.984808, -0.173648, 1, -7.5904e-009, -4.30473e-008, -4, 2, 0 )
 layers = 0
 light_color = Color( 0.301961, 0.301961, 0.301961, 1 )
 
@@ -64,13 +64,14 @@ custom_constants/separation = 50
 alignment = 1
 
 [node name="StartButton" type="Button" parent="Control/MarginContainer/VBoxContainer"]
-margin_top = 84.0
+margin_top = 134.0
 margin_right = 352.0
-margin_bottom = 134.0
+margin_bottom = 184.0
 rect_min_size = Vector2( 0, 50 )
 text = "Start"
 
 [node name="OptionsButton" type="Button" parent="Control/MarginContainer/VBoxContainer"]
+visible = false
 margin_top = 184.0
 margin_right = 352.0
 margin_bottom = 234.0
@@ -78,9 +79,9 @@ rect_min_size = Vector2( 0, 50 )
 text = "Options"
 
 [node name="QuitButton" type="Button" parent="Control/MarginContainer/VBoxContainer"]
-margin_top = 284.0
+margin_top = 234.0
 margin_right = 352.0
-margin_bottom = 334.0
+margin_bottom = 284.0
 rect_min_size = Vector2( 0, 50 )
 text = "Quit"
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/StartButton" to="." method="_on_StartButton_pressed"]
