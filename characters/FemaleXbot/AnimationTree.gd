@@ -14,12 +14,12 @@ func _ready():
 
 func set_value(value: float):
 	
-	self.set("parameters/Locomotion/blend_position", value)
-	
+	#self.set("parameters/Locomotion/blend_position", value)
+	pass
 
 func travel(anim_name: String):
 	
-	var state_machines = self["parameters/playback"]
+	var state_machines = self["parameters/StateMachine/playback"]
 	if state_machines.is_playing():
 		state_machines.travel(anim_name)
 	else:

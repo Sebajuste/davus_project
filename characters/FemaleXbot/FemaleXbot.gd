@@ -14,26 +14,71 @@ const DE_ACCELERATION = 7
 var velocity := Vector3()
 
 var _fall_time := 0.0
-var _jump_counter := 1
+var _jump_counter := 2
 var _jumping := false
 var _jumping_timer := 0.0
 
+var _jetpack_on := false
+var _jetpack_max_power := 3.0
+var _jetpack_power := _jetpack_max_power
+
 var _anim_update := false
+
+
+var _pistol_aiming := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _process(delta):
+	
+	
+	if Input.is_action_pressed("jetpack") and _jetpack_power > 0.0:
+		_jetpack_power -= delta
+		_jetpack_on = true
+	else:
+		if _jetpack_power < _jetpack_max_power:
+			_jetpack_power += delta
+		_jetpack_on = false
+	
+	if _jetpack_power <= 0.0:
+		_jetpack_on = false
+	
+	
+	if _pistol_aiming:
+		
+		var target_pos = $CursorSelector.get_target_pos()
+		
+		var bone = $Skeleton.find_bone("mixamorig_Spine2")
+		
+		var bone_pos = $Skeleton.get_bone_global_pose(bone).origin
+		
+		var cur_dir = global_transform.basis.z.normalized()
+		var target_dir = (target_pos - (global_transform.origin+bone_pos)).normalized()
+		
+		var look_dot = cur_dir.dot(target_dir)
+		
+		if look_dot > 0.2:
+			
+			var rotation_angle = acos(cur_dir.x) - acos(target_dir.x)
+			
+			if (cur_dir + target_dir).x > 0 and (cur_dir + target_dir).y < 0:
+				rotation_angle = -rotation_angle
+			
+			if (cur_dir + target_dir).x < 0 and (cur_dir + target_dir).y > 0:
+				rotation_angle = -rotation_angle
+			
+			var rest: Transform = $Skeleton.get_bone_rest(bone)
+			var new_pose = rest.rotated(Vector3.RIGHT, rotation_angle)
+			
+			$Skeleton.set_bone_pose( bone, new_pose )
+
 
 func _physics_process(delta):
 	
 	_anim_update = false
-	
-	
-	
 	
 	var dir = Vector3()
 	
@@ -55,17 +100,30 @@ func _physics_process(delta):
 			_jumping = false
 			pass
 	
-	
-	if Input.is_action_just_pressed("jump") and _fall_time < 0.25 and _jump_counter > 0:
-		_jump_counter -= 1
+	if Input.is_action_just_pressed("unsheathe"):
+		_pistol_aiming = not _pistol_aiming
 		
-		if abs(velocity.x) > 0.1:
-			_play_anim("jump_run_in_place")
-			velocity += Vector3.UP * 10
+		if _pistol_aiming:
+			$AnimationTree.set("parameters/StateMachine/Idle/Weapon/current", 1)
+			$AnimationTree.set("parameters/StateMachine/Locomotion/Weapon/current", 1)
 		else:
-			_jumping = true
-			_jumping_timer = 0.0
-			_play_anim("JumpIdle")
+			$AnimationTree.set("parameters/StateMachine/Idle/Weapon/current", 0)
+			$AnimationTree.set("parameters/StateMachine/Locomotion/Weapon/current", 0)
+	
+	
+	if _jetpack_on:
+		print( _jetpack_power )
+		velocity.y += 1.0
+		if velocity.y > 5.0:
+			velocity.y = 5.0
+		_play_anim("Jetpack")
+	
+	
+	if Input.is_action_just_pressed("jump") and _jump_counter > 0:
+		if is_on_floor() or _fall_time < 0.25 or _fall_time > 0.5:
+			_jump_counter -= 1
+			_play_anim("jump_run_in_place")
+			velocity.y = 10
 	
 	var hv = velocity
 	hv.y = 0
@@ -95,18 +153,13 @@ func _physics_process(delta):
 		global_transform.origin.z = 0
 	
 	
-	#var state_machines = $AnimationTree["parameters/playback"]
-	
 	if is_falling():
 		_play_anim("Falling")
-	#elif abs(velocity.x) > 2:
-	#	_play_anim("Locomotion")
-	#	set("parameters/Locomotion/blend_position", velocity.x / max_speed)
 	elif abs(velocity.x) > 0.5:
-		$AnimationTree.set("parameters/Locomotion/blend_position", abs(velocity.x) / max_speed)
+		#$AnimationTree.set("parameters/Locomotion/blend_position", abs(velocity.x) / max_speed)
 		_play_anim("Locomotion")
 	else:
-		_play_anim("idle")
+		_play_anim("Idle")
 
 
 func is_falling() -> bool:
@@ -120,10 +173,3 @@ func _play_anim(name: String):
 	
 	$AnimationTree.travel(name)
 	
-	"""
-	var state_machines = $AnimationTree["parameters/playback"]
-	if state_machines.is_playing():
-		state_machines.travel(name)
-	else:
-		state_machines.start(name)
-	"""
