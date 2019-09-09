@@ -12,7 +12,6 @@ data = PoolVector3Array( -1, 1, 1, 1, 1, 1, -1, -1, 1, 1, 1, 1, 1, -1, 1, -1, -1
 [node name="TestGameplay" type="Spatial"]
 
 [node name="World" type="Spatial" parent="."]
-editor/display_folded = true
 
 [node name="MeshInstance" type="MeshInstance" parent="World"]
 editor/display_folded = true
@@ -56,6 +55,12 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 2, 0 )
 
 [node name="Test11" parent="World" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 2, 0 )
+
+[node name="Test12" parent="World" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 2, 0 )
+
+[node name="Test13" parent="World" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, 0 )
 
 [node name="FemaleXbot" parent="." instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.26577, 0 )
