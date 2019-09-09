@@ -17,10 +17,9 @@ func set_value(value: float):
 	#self.set("parameters/Locomotion/blend_position", value)
 	pass
 
-func travel(anim_name: String):
-	
+func travel(anim_name: String, force: bool = false):
 	var state_machines = self["parameters/StateMachine/playback"]
-	if state_machines.is_playing():
+	if state_machines.is_playing() and not force:
 		state_machines.travel(anim_name)
 	else:
 		state_machines.start(anim_name)

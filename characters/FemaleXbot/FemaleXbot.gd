@@ -14,13 +14,9 @@ const DE_ACCELERATION = 7
 var velocity := Vector3()
 
 var _fall_time := 0.0
-var _jump_counter := 2
+var _jump_counter := 1
 var _jumping := false
 var _jumping_timer := 0.0
-
-var _jetpack_on := false
-var _jetpack_max_power := 3.0
-var _jetpack_power := _jetpack_max_power
 
 var _anim_update := false
 
@@ -33,19 +29,6 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	
-	
-	if Input.is_action_pressed("jetpack") and _jetpack_power > 0.0:
-		_jetpack_power -= delta
-		_jetpack_on = true
-	else:
-		if _jetpack_power < _jetpack_max_power:
-			_jetpack_power += delta
-		_jetpack_on = false
-	
-	if _jetpack_power <= 0.0:
-		_jetpack_on = false
-	
 	
 	if _pistol_aiming:
 		
@@ -78,8 +61,6 @@ func _process(delta):
 
 func _physics_process(delta):
 	
-	_anim_update = false
-	
 	var dir = Vector3()
 	
 	if Input.is_action_pressed("move_right"):
@@ -98,7 +79,6 @@ func _physics_process(delta):
 		if _jumping_timer > 0.7:
 			velocity += Vector3.UP * 10
 			_jumping = false
-			pass
 	
 	if Input.is_action_just_pressed("unsheathe"):
 		_pistol_aiming = not _pistol_aiming
@@ -110,19 +90,10 @@ func _physics_process(delta):
 			$AnimationTree.set("parameters/StateMachine/Idle/Weapon/current", 0)
 			$AnimationTree.set("parameters/StateMachine/Locomotion/Weapon/current", 0)
 	
-	
-	if _jetpack_on:
-		print( _jetpack_power )
-		velocity.y += 1.0
-		if velocity.y > 5.0:
-			velocity.y = 5.0
-		_play_anim("Jetpack")
-	
-	
 	if Input.is_action_just_pressed("jump") and _jump_counter > 0:
 		if is_on_floor() or _fall_time < 0.25 or _fall_time > 0.5:
 			_jump_counter -= 1
-			_play_anim("jump_run_in_place")
+			_play_anim("jump_run_in_place", true)
 			velocity.y = 10
 	
 	var hv = velocity
@@ -156,20 +127,19 @@ func _physics_process(delta):
 	if is_falling():
 		_play_anim("Falling")
 	elif abs(velocity.x) > 0.5:
-		#$AnimationTree.set("parameters/Locomotion/blend_position", abs(velocity.x) / max_speed)
 		_play_anim("Locomotion")
 	else:
 		_play_anim("Idle")
+	
+	_anim_update = false
 
 
 func is_falling() -> bool:
-	return not is_on_floor() and velocity.y < -0.05
+	return not is_on_floor() and (velocity.y < -0.05 or _fall_time > 0.5)
 
 
-func _play_anim(name: String):
+func _play_anim(name: String, force: bool = false):
 	if _anim_update:
 		return
 	_anim_update = true
-	
 	$AnimationTree.travel(name)
-	
