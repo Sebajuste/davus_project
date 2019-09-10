@@ -56,7 +56,6 @@ func _on_Connections_connected():
 	pass # Replace with function body.
 
 
-
 func _on_Connections_player_connected(id):
 	print("Create player ID ", id)
 	var player = Player.instance()
@@ -68,8 +67,6 @@ func _on_Connections_player_connected(id):
 
 
 func _on_Connections_player_disconnected(id):
-	
 	var player = $World.find_node(str(id))
 	if player:
 		player.queue_free()
-	

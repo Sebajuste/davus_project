@@ -1,7 +1,7 @@
 extends Node
 
 # Temps de refresh de position par le réseau
-const UPDATE_INTERVAL = 0.200
+const UPDATE_INTERVAL := 0.500
 
 # Temp depuis le dernier reresh
 var _current_time := 0.0 
@@ -33,6 +33,7 @@ func control(delta):
 	# on interpole de la dernière position (à la reception du packet) à la prochaine déduite
 	var next_pos = _last_pos.linear_interpolate(_extrap_pos, lerptime)
 	
+	#get_parent()._dir = (next_pos - get_parent().position).normalized()
 	get_parent().position = next_pos # - get_parent()._dir * get_parent().velocity
 	
 	pass
@@ -46,12 +47,6 @@ remote func _set_status(pos: Vector2, velocity: Vector2):
 	
 	# on extrapole la prochaine position qui doit arriver dans UPDATE_INTERVAL millisecondes
 	_extrap_pos = pos + velocity * UPDATE_INTERVAL
-	
-	# La direction, c'est juste la velocité normalisée
-	if velocity.length() > 0:
-		get_parent()._dir = velocity.normalized()
-	else:
-		get_parent()._dir = Vector2()
 	
 	# On sauvegarde la position actuelle pour l'interpolation de position
 	_last_pos = get_parent().position

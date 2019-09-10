@@ -19,12 +19,14 @@ func _ready():
 #func _process(delta):
 #	pass
 
-func create_lobby():
+func create_lobby(name):
 	
 	if _lobby_created:
 		return
 	
 	_lobby_created = true
+	
+	lobby_name = name
 	
 	var lobby_information = {
 		"name": lobby_name,

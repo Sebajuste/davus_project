@@ -1,10 +1,10 @@
 extends Node
 
+signal on_update_lobbies(lobbies)
+
 export var host := "localhost"
 export(int, 3000, 65000 ) var port := 8080
 export var game := "game_name"
-
-signal on_update_lobbies
 
 var _lobbies_list := []
 
