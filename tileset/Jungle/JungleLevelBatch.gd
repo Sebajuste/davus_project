@@ -4,15 +4,15 @@ extends "res://tileset/LevelBatch.gd"
 const TILES_RESOURCES := { 
 	0x00:
 		[ # Full
-			preload("res://models/Tiles/tilePlain.glb"),
+			preload("res://models/Tiles/Jungle/tilePlain.glb"),
 		],
 	0x01:
 		[
-			preload("res://models/Tiles/tileFloor.glb"),
+			preload("res://models/Tiles/Jungle/tileFloor.glb"),
 		],
 	0x02:
 		[
-			preload("res://models/Tiles/tileRoof.glb"),
+			preload("res://models/Tiles/Jungle/tileRoof.glb"),
 		],
 	}
 

@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://scenes/TestWorldGameplay/TestWorldGameplay.gd" type="Script" id=1]
 [ext_resource path="res://tools/StreamingLevel.tscn" type="PackedScene" id=2]
 [ext_resource path="res://characters/FemaleXbot/FemaleXbotCharacter.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/TestWorldGameplay/Camera.gd" type="Script" id=4]
+[ext_resource path="res://music/exploring_the_dungeon.ogg" type="AudioStream" id=5]
 
 [sub_resource type="ProceduralSky" id=1]
 
@@ -39,3 +40,7 @@ transform = Transform( 0.688174, 0.557913, -0.463843, -0.00878779, 0.645664, 0.7
 light_color = Color( 0.894118, 0.917647, 0.815686, 1 )
 light_energy = 2.0
 shadow_enabled = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 5 )
+autoplay = true
