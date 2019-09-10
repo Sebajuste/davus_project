@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://tools/CursorSelector/CursorSelector.gd" type="Script" id=1]
+[ext_resource path="res://tools/CursorSelector/target.material" type="Material" id=2]
+
+[sub_resource type="BoxShape" id=1]
+extents = Vector3( 15, 15, 0.122756 )
+
+[sub_resource type="QuadMesh" id=2]
+
+[node name="CursorSelector" type="StaticBody"]
+transform = Transform( 1, 0, 0, 0, 0.999289, 0.0377137, 0, -0.0377137, 0.999289, 0, 1.61902, 0.0190239 )
+collision_layer = 128
+collision_mask = 0
+script = ExtResource( 1 )
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+shape = SubResource( 1 )
+
+[node name="Target" type="MeshInstance" parent="."]
+transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0 )
+mesh = SubResource( 2 )
+material/0 = ExtResource( 2 )
