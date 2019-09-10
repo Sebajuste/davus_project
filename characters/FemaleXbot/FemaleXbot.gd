@@ -41,6 +41,22 @@ func _process(delta):
 		var cur_dir = global_transform.basis.z.normalized()
 		var target_dir = (target_pos - (global_transform.origin+bone_pos)).normalized()
 		
+		var look_dir = Vector3()
+		
+		look_dir += Vector3.UP * Input.get_action_strength("look_up")
+		
+		#if Input.get_action_strength("look_down"):
+		look_dir += Vector3.DOWN * Input.get_action_strength("look_down")
+		
+		#if Input.get_action_strength("look_right"):
+		look_dir += Vector3.RIGHT * Input.get_action_strength("look_right")
+		
+		#if Input.get_action_strength("look_left"):
+		look_dir += Vector3.LEFT * Input.get_action_strength("look_left")
+		
+		if look_dir.length() > 0.5:
+			target_dir = look_dir.normalized()
+		
 		var look_dot = cur_dir.dot(target_dir)
 		
 		if look_dot > 0.2:
