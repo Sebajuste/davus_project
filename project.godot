@@ -19,6 +19,10 @@ config/name="DAVUS Project"
 run/main_scene="res://scenes/MainMenu/MainMenu.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+configuration="*res://scripts/singletons/configuration.gd"
+
 [input]
 
 move_right={
@@ -81,6 +85,10 @@ look_left={
 "events": [ Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":0,"axis":2,"axis_value":-1.0,"script":null)
  ]
 }
+
+[locale]
+
+translations=PoolStringArray( "res://i18n/button.en.translation", "res://i18n/button.fr.translation", "res://i18n/label.en.translation", "res://i18n/label.fr.translation", "res://i18n/title.en.translation", "res://i18n/title.fr.translation" )
 
 [rendering]
 

@@ -1,0 +1,152 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://ui/options/Options.gd" type="Script" id=1]
+[ext_resource path="res://ui/options/OptionsVideo.tscn" type="PackedScene" id=2]
+[ext_resource path="res://ui/options/OptionsAudio.tscn" type="PackedScene" id=3]
+[ext_resource path="res://ui/options/OptionsGame.tscn" type="PackedScene" id=4]
+
+[node name="Options" type="Control"]
+pause_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 1.29236
+margin_top = -1.29234
+margin_right = 1.29236
+margin_bottom = -1.29236
+script = ExtResource( 1 )
+
+[node name="Panel" type="Panel" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -419.5
+margin_top = -292.5
+margin_right = 419.5
+margin_bottom = 292.5
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 20.0
+margin_top = 20.0
+margin_right = -20.0
+margin_bottom = -20.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
+margin_right = 799.0
+margin_bottom = 545.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+margin_right = 799.0
+margin_bottom = 511.0
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_right = 200.0
+margin_bottom = 511.0
+rect_min_size = Vector2( 200, 0 )
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+margin_right = 200.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 0, 30 )
+text = "title_options"
+align = 1
+valign = 1
+
+[node name="HSeparator" type="HSeparator" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+margin_top = 34.0
+margin_right = 200.0
+margin_bottom = 38.0
+
+[node name="VideoOptions" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+margin_top = 42.0
+margin_right = 200.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 0, 30 )
+text = "title_video"
+
+[node name="AudioOptions" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+margin_top = 76.0
+margin_right = 200.0
+margin_bottom = 106.0
+rect_min_size = Vector2( 0, 30 )
+text = "title_sound"
+
+[node name="GameOptions" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+margin_top = 110.0
+margin_right = 200.0
+margin_bottom = 140.0
+rect_min_size = Vector2( 0, 30 )
+text = "title_game"
+
+[node name="VSeparator" type="VSeparator" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 204.0
+margin_right = 208.0
+margin_bottom = 511.0
+
+[node name="OptionsContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 212.0
+margin_right = 799.0
+margin_bottom = 511.0
+size_flags_horizontal = 3
+
+[node name="OptionsVideo" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/OptionsContainer" instance=ExtResource( 2 )]
+margin_right = 587.0
+margin_bottom = 511.0
+
+[node name="OptionsAudio" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/OptionsContainer" instance=ExtResource( 3 )]
+visible = false
+margin_right = 587.0
+margin_bottom = 511.0
+
+[node name="OptionsGame" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/OptionsContainer" instance=ExtResource( 4 )]
+visible = false
+margin_right = 587.0
+margin_bottom = 511.0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+margin_top = 515.0
+margin_right = 799.0
+margin_bottom = 545.0
+rect_min_size = Vector2( 0, 30 )
+
+[node name="ReturnButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
+margin_right = 68.0
+margin_bottom = 30.0
+text = "btn_back"
+
+[node name="CancelButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 72.0
+margin_right = 152.0
+margin_bottom = 30.0
+text = "btn_cancel"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 156.0
+margin_right = 799.0
+margin_bottom = 30.0
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="ApplyButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+margin_left = 431.0
+margin_right = 531.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 100, 0 )
+text = "btn_apply"
+
+[node name="ApplySaveButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+margin_left = 535.0
+margin_right = 643.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 100, 0 )
+text = "btn_save_apply"
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/VideoOptions" to="." method="_on_VideoOptions_pressed"]
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/AudioOptions" to="." method="_on_AudioOptions_pressed"]
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/GameOptions" to="." method="_on_GameOptions_pressed"]
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ReturnButton" to="." method="_on_ReturnButton_pressed"]
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/CancelButton" to="." method="_on_CancelButton_pressed"]
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer/ApplyButton" to="." method="_on_ApplyButton_pressed"]
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer/ApplySaveButton" to="." method="_on_ApplySaveButton_pressed"]

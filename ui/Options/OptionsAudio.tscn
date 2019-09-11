@@ -1,0 +1,111 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://ui/options/OptionsAudio.gd" type="Script" id=1]
+
+[node name="OptionsAudio" type="VBoxContainer"]
+margin_right = 394.0
+margin_bottom = 521.0
+script = ExtResource( 1 )
+
+[node name="Label" type="Label" parent="."]
+margin_right = 394.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 0, 30 )
+text = "title_sound"
+align = 1
+valign = 1
+
+[node name="HSeparator" type="HSeparator" parent="."]
+margin_top = 34.0
+margin_right = 394.0
+margin_bottom = 38.0
+
+[node name="Master" type="HBoxContainer" parent="."]
+margin_top = 42.0
+margin_right = 394.0
+margin_bottom = 72.0
+
+[node name="Label" type="Label" parent="Master"]
+margin_right = 100.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 100, 30 )
+text = "label_general"
+align = 2
+valign = 1
+
+[node name="Slider" type="HSlider" parent="Master"]
+margin_left = 104.0
+margin_right = 394.0
+margin_bottom = 30.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tick_count = 10
+ticks_on_borders = true
+
+[node name="Music" type="HBoxContainer" parent="."]
+margin_top = 76.0
+margin_right = 394.0
+margin_bottom = 106.0
+
+[node name="Label" type="Label" parent="Music"]
+margin_right = 100.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 100, 30 )
+text = "label_music"
+align = 2
+valign = 1
+
+[node name="Slider" type="HSlider" parent="Music"]
+margin_left = 104.0
+margin_right = 394.0
+margin_bottom = 30.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tick_count = 10
+ticks_on_borders = true
+
+[node name="SoundEffects" type="HBoxContainer" parent="."]
+visible = false
+margin_top = 110.0
+margin_right = 394.0
+margin_bottom = 140.0
+
+[node name="Label" type="Label" parent="SoundEffects"]
+margin_right = 125.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 100, 30 )
+text = "label_sound_effects"
+align = 2
+valign = 1
+
+[node name="Slider" type="HSlider" parent="SoundEffects"]
+margin_left = 129.0
+margin_right = 394.0
+margin_bottom = 30.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tick_count = 10
+ticks_on_borders = true
+
+[node name="Mute" type="HBoxContainer" parent="."]
+visible = false
+margin_top = 144.0
+margin_right = 394.0
+margin_bottom = 174.0
+
+[node name="Label" type="Label" parent="Mute"]
+margin_right = 100.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 100, 30 )
+align = 2
+valign = 1
+
+[node name="Checkbox" type="CheckBox" parent="Mute"]
+margin_left = 104.0
+margin_right = 203.0
+margin_bottom = 30.0
+text = "label_mute"
+[connection signal="value_changed" from="Master/Slider" to="." method="_on_General_value_changed"]
+[connection signal="value_changed" from="Music/Slider" to="." method="_on_Music_value_changed"]
+[connection signal="value_changed" from="SoundEffects/Slider" to="." method="_on_Effects_value_changed"]
+[connection signal="toggled" from="Mute/Checkbox" to="." method="_on_Mute_toggled"]
