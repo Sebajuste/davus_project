@@ -30,6 +30,7 @@ func create_lobby(name):
 	
 	var lobby_information = {
 		"name": lobby_name,
+		"version": "",
 		"maxPlayer": max_player,
 		"currentPlayer": 0,
 		"host": "localhost",
@@ -39,6 +40,7 @@ func create_lobby(name):
 	var headers: PoolStringArray = ["Content-Type: application/json"]
 	
 	$CreateLobby.request("http://%s:%d/games-lobbies/games/%s/lobbies/%s" % [host, port, game, lobby_name], headers, true, HTTPClient.METHOD_PUT, JSON.print(lobby_information) )
+	
 
 
 func remove_lobby():
@@ -51,7 +53,7 @@ func remove_lobby():
 
 func _on_CreateLobby_request_completed(result, response_code, headers, body):
 	
-	if result == 2:
+	if result != HTTPRequest.RESULT_SUCCESS:
 		_lobby_created = false
 		print("Cannot connect to the server")
 		return

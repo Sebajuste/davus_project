@@ -21,20 +21,22 @@ func get_lobbies():
 
 func discover():
 	
-	$GetLobbies.request("http://%s:%d/games-lobbies/games/%s/lobbies" % [host, port, game] )
+	print("Discover Request -> http://%s:%d/games-lobbies/games/%s/lobbies" % [host, port, game])
+	
+	$GetLobbies.request("http://%s:%d/games-lobbies/games/%s/lobbies" % [host, port, game], PoolStringArray(), false, HTTPClient.METHOD_GET )
 	
 
 
 func _on_GetLobbies_request_completed(result, response_code, headers, body):
 	
-	if result == 2:
+	if result != HTTPRequest.RESULT_SUCCESS:
 		print("Cannot connect to the server")
 		return
 	
-	print("result: ", result, ", response_code: ", response_code, ", headers: ", headers, ", body: ", body.get_string_from_utf8() )
+	print("GetLobbies -> result: ", result, ", response_code: ", response_code, ", headers: ", headers, ", body: ", body.get_string_from_utf8() )
 	
 	if response_code == 200:
 		var lobbies = JSON.parse( body.get_string_from_utf8() )
-		print("lobbies: ", lobbies)
+		print("lobbies: ", lobbies.result)
 		#_lobbies_list = lobbies
-		emit_signal("on_update_lobbies", lobbies)
+		emit_signal("on_update_lobbies", lobbies.result)

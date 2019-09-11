@@ -21,7 +21,7 @@ margin_right = 904.0
 margin_bottom = 50.0
 
 [node name="Name" type="Label" parent="MarginContainer/HBoxContainer"]
-margin_right = 759.0
+margin_right = 696.0
 margin_bottom = 50.0
 rect_min_size = Vector2( 0, 50 )
 size_flags_horizontal = 3
@@ -29,11 +29,12 @@ text = "Name"
 valign = 1
 
 [node name="Player" type="Label" parent="MarginContainer/HBoxContainer"]
-margin_left = 763.0
-margin_top = 18.0
+margin_left = 700.0
 margin_right = 800.0
-margin_bottom = 32.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 100, 50 )
 text = "0 / 10"
+valign = 1
 
 [node name="JoinButton" type="Button" parent="MarginContainer/HBoxContainer"]
 margin_left = 804.0

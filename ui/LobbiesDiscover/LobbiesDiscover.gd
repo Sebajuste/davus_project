@@ -28,12 +28,13 @@ func _on_RefreshButton_pressed():
 
 
 func _on_LobbiesDiscover_on_update_lobbies(lobbies):
+	print("new lobbies list : ", lobbies)
 	clear_lobbies()
 	for lobby in lobbies:
 		var item = Lobby.instance()
 		item.lobby_name = lobby.name
-		item.current_player = lobby.current_player
-		item.max_player = lobby.max_player
+		item.current_player = int(lobby.currentPlayer)
+		item.max_player = int(lobby.maxPlayer)
 		item.connect("joined", self, "_on_JoinButton_pressed")
 		_lobbies.add_child(item)
 
