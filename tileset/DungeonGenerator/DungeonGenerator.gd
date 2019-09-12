@@ -3,7 +3,8 @@ extends Node2D
 export var scale2D = 2
 export var tile_size = 2
 export var room_margin = 1
-export(int, 3, 13) var number_of_rooms = 5
+export(int, 3, 13) var number_of_rooms = 12
+export var number_of_keys = 1
 export var map_width = 40
 export var map_height = 25
 export var min_room_size = 5
@@ -12,11 +13,16 @@ export var map_seed = 2
 
 signal graph_gen_finnished
 
-enum eTilesType { Empty = -1, Floor = 0, Wall = 1 }
+enum eTilesType { Empty = -1, Door = 0, Wall = 1, Key = 2 }
 
 var rooms_areas = Array()
+var starting_room = null
+var ending_room = null
 var pathfinding := AStar.new()
 var rnd = RandomNumberGenerator.new()
+
+var label = Label.new()
+var f = label.get_font("")
 
 func _ready():
 	rnd.seed = map_seed
@@ -83,21 +89,62 @@ func generate_graph(locations: Array) -> AStar:
 					
 		var point = astar.get_available_point_id()
 		astar.add_point(point, closest_position)
-		astar.connect_points(astar.get_closest_point(current_position), point, false)
+		astar.connect_points(astar.get_closest_point(current_position), point)
 		locations.erase(closest_position)
 	return astar
 
+func get_distantest_rooms() -> Array:
+	var result = Array()
+	var a1 = null
+	var a2 = null
+	var distanceMax = 0
+	var roomsBetweenMax = 0
+	for area in rooms_areas:
+		var middleArea = get_middle(area)
+		var pointArea = pathfinding.get_closest_point(middleArea)
+		for other in rooms_areas:
+			if area != other:
+				var middleOther = get_middle(other)
+				var pointOther = pathfinding.get_closest_point(middleOther)
+				var path = pathfinding.get_id_path(pointArea, pointOther)
+				var roomsBetween = path.size()
+				var isDistantest = false
+				var distance = middleArea.distance_to(middleOther)
+				if roomsBetween > roomsBetweenMax:
+					roomsBetweenMax = roomsBetween
+					isDistantest = true
+				elif roomsBetween == roomsBetweenMax:
+					if distance > distanceMax:
+						isDistantest = true
+				
+				if isDistantest:
+					a1 = area
+					a2 = other
+					distanceMax = distance
+	
+	result.append(a1)
+	result.append(a2)
+	return result
 
 func generate_grid_map(map:GridMap):
 	map.clear()
 	fill_the_map(map)
 	write_rooms_on_map(map)
 	write_corridors_on_map(map)
+	var distantest = get_distantest_rooms()
+	starting_room = distantest[0]
+	ending_room = distantest[1]
+	for a in distantest:
+		var v = get_middle(a)
+		apply_tile_on_tilemap(map, v, eTilesType.Key)
+
 
 func fill_the_map(map: GridMap):
 	for x in range(map_width * tile_size):
 		for y in range(map_height * tile_size):
-			map.set_cell_item(x, y, 0, eTilesType.Wall)
+			var v = Vector3(x, y, 0)
+			apply_tile_on_tilemap(map, v, eTilesType.Wall)
+
 
 func write_rooms_on_map(map: GridMap):
 	for area in rooms_areas:
@@ -109,43 +156,40 @@ func write_rooms_on_map(map: GridMap):
 		var z = 0
 		for x in range(left, right + 1):
 			for y in range(top, bottom + 1):
-				map.set_cell_item(x, y, z, eTilesType.Empty)	# room floor
-				if x == left or x == right or y == top or y == bottom:
-					map.set_cell_item(x, y, z, eTilesType.Empty)	# room walls
+				var v = Vector3(x, y, z)
+				apply_tile_on_tilemap(map, v, eTilesType.Empty)
 
 
 func write_corridors_on_map(map: GridMap):
+	var rooms_done = []
 	for area in rooms_areas:
-		var corridors = []
 		var point = pathfinding.get_closest_point(get_middle(area))
 		for connection in pathfinding.get_point_connections(point):
-			if not connection in corridors:
+			if not connection in rooms_done:
 				var start = pathfinding.get_point_position(point)
 				var end = pathfinding.get_point_position(connection)
 				dig_path(map, start, end)
-				corridors.append(connection)
+		
+		rooms_done.append(point)
 
 
 func dig_path(map: GridMap, start: Vector3, end: Vector3):
-	var xStep = sign(end.x - start.x)
-	var yStep = sign(end.y - start.y)
-	if xStep == 0: xStep = pow(-1, rnd.randi() % 2)
-	if yStep == 0: yStep = pow(-1, rnd.randi() % 2)
-	var x_to_y = start		# Direction horizontal and vertical
-	var y_to_x = end		# Direction vertical and horizontal
-	var z = 0
-	if rnd.randi() % 2 == 0:
-		y_to_x = start
-		x_to_y = end
-	for x in range(start.x, end.x + xStep, xStep): # + xStep * 2, xStep):
-		#map.set_cell_item(x, x_to_y.y - yStep, z, eTilesType.Empty)
-		map.set_cell_item(x, x_to_y.y, z, eTilesType.Empty)
-		map.set_cell_item(x, x_to_y.y + yStep, z, eTilesType.Empty)
-	for y in range(start.y, end.y + yStep, yStep): # + yStep * 2, yStep):
-		#map.set_cell_item(y_to_x.x - xStep, y, z, eTilesType.Empty)
-		map.set_cell_item(y_to_x.x, y, z, eTilesType.Empty)
-		map.set_cell_item(y_to_x.x + xStep, y, z, eTilesType.Empty)
+	var diff = end - start
+	var step = Vector2(sign(diff.x), sign(diff.y))
+	if step.x == 0: step.x = pow(-1, rnd.randi() % 2)
+	if step.y == 0: step.y = pow(-1, rnd.randi() % 2)
+	var collidorSize = 2 #rnd.randi() % 3 + 1
+	for x in range(start.x, end.x, step.x):
+		for y in range(start.y, start.y + step.y * collidorSize, step.y):
+			var v = Vector3(x, y, 0)
+			apply_tile_on_tilemap(map, v, eTilesType.Empty)
+	for y in range(start.y, end.y, step.y):
+		for x in range(end.x, end.x + step.x * collidorSize, step.x):
+			var v = Vector3(x, y, 0)
+			apply_tile_on_tilemap(map, v, eTilesType.Empty)
 
+func apply_tile_on_tilemap(map: GridMap, pos: Vector3, tileType: int):
+	map.set_cell_item(pos.x, pos.y, pos.z, tileType)
 
 func to_vector3(v: Vector2, z :int = 0) -> Vector3:
 	return Vector3(v.x, v.y, z)
@@ -168,8 +212,17 @@ func scale_rectangle(r: Rect2, scale: int, reverseY: bool = false) -> Rect2:
 
 func _draw():
 	for area in rooms_areas:
-		draw_rect(scale_rectangle(area, scale2D, true), Color.white, false)						# draw area
-		draw_rect(scale_rectangle(get_room_rectangle(area), scale2D, true), Color.red, true)	# draw room (without margin)
+		var rect = scale_rectangle(area, scale2D, true)
+		var pos = get_middle(rect)
+		var point = pathfinding.get_closest_point(get_middle(area))
+		draw_string(f, to_vector2(pos * 6), str(point), Color.red)
+		draw_rect(rect, Color.white, false)						# draw area
+		var color = Color.blue
+		if area == starting_room:
+			color = Color.green
+		elif area == ending_room:
+			color = Color.red
+		draw_rect(scale_rectangle(get_room_rectangle(area), scale2D, true), color, false)	# draw room (without margin)
 	draw_path(pathfinding)
 
 func draw_path(path: AStar):
