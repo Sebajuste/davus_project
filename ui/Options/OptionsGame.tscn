@@ -1,0 +1,41 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://ui/options/OptionsGame.gd" type="Script" id=1]
+
+[node name="OptionsGame" type="VBoxContainer"]
+margin_right = 394.0
+margin_bottom = 521.0
+script = ExtResource( 1 )
+
+[node name="Label" type="Label" parent="."]
+margin_right = 394.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 0, 30 )
+text = "title_game"
+align = 1
+valign = 1
+
+[node name="HSeparator" type="HSeparator" parent="."]
+margin_top = 34.0
+margin_right = 394.0
+margin_bottom = 38.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_top = 42.0
+margin_right = 394.0
+margin_bottom = 72.0
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+margin_right = 100.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 100, 30 )
+text = "label_language"
+align = 2
+valign = 1
+
+[node name="languageList" type="OptionButton" parent="HBoxContainer"]
+margin_left = 104.0
+margin_right = 394.0
+margin_bottom = 30.0
+size_flags_horizontal = 3
+[connection signal="item_selected" from="HBoxContainer/languageList" to="." method="_on_languageList_item_selected"]
