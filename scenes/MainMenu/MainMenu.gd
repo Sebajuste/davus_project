@@ -13,6 +13,8 @@ var select_pos := 0
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
+	$Spatial/FemaleCharacter/AnimationPlayer.play("angry")
+	
 	_buttons[select_pos].grab_focus()
 	
 

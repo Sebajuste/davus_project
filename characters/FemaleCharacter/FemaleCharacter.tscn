@@ -1,23 +1,24 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.gd" type="Script" id=1]
 [ext_resource path="res://models/FemaleCharacter/Palette.material" type="Material" id=2]
 [ext_resource path="res://models/Cosmetic/HairTail/HairTail.tscn" type="PackedScene" id=3]
-[ext_resource path="res://models/Weapons/Pistol/Pistol.tscn" type="PackedScene" id=4]
+[ext_resource path="res://objects/weapons/Pistol/Pistol.tscn" type="PackedScene" id=4]
 [ext_resource path="res://tools/CursorSelector/CursorSelector.tscn" type="PackedScene" id=5]
 [ext_resource path="res://characters/FemaleCharacter/Jetpack.gd" type="Script" id=6]
-[ext_resource path="res://models/FemaleCharacter/falling.anim" type="Animation" id=7]
-[ext_resource path="res://models/FemaleCharacter/idle.anim" type="Animation" id=8]
-[ext_resource path="res://models/FemaleCharacter/jetpack.anim" type="Animation" id=9]
-[ext_resource path="res://models/FemaleCharacter/jump.anim" type="Animation" id=10]
-[ext_resource path="res://models/FemaleCharacter/pistol-idle.anim" type="Animation" id=11]
-[ext_resource path="res://models/FemaleCharacter/pistol-run.anim" type="Animation" id=12]
-[ext_resource path="res://models/FemaleCharacter/rifle-aiming-idle.anim" type="Animation" id=13]
-[ext_resource path="res://models/FemaleCharacter/rifle-run.anim" type="Animation" id=14]
-[ext_resource path="res://models/FemaleCharacter/slow_run.anim" type="Animation" id=15]
-[ext_resource path="res://characters/FemaleCharacter/FemaleAnimationPlayer.tres" type="AnimationNodeStateMachine" id=16]
-[ext_resource path="res://characters/FemaleCharacter/FemaleAnimationPlayerStateMachine.tres" type="AnimationNodeStateMachinePlayback" id=17]
-[ext_resource path="res://characters/FemaleCharacter/AnimationTree.gd" type="Script" id=18]
+[ext_resource path="res://models/FemaleCharacter/angry.anim" type="Animation" id=7]
+[ext_resource path="res://models/FemaleCharacter/falling.anim" type="Animation" id=8]
+[ext_resource path="res://models/FemaleCharacter/idle.anim" type="Animation" id=9]
+[ext_resource path="res://models/FemaleCharacter/jetpack.anim" type="Animation" id=10]
+[ext_resource path="res://models/FemaleCharacter/jump.anim" type="Animation" id=11]
+[ext_resource path="res://models/FemaleCharacter/pistol-idle.anim" type="Animation" id=12]
+[ext_resource path="res://models/FemaleCharacter/pistol-run.anim" type="Animation" id=13]
+[ext_resource path="res://models/FemaleCharacter/rifle-aiming-idle.anim" type="Animation" id=14]
+[ext_resource path="res://models/FemaleCharacter/rifle-run.anim" type="Animation" id=15]
+[ext_resource path="res://models/FemaleCharacter/slow_run.anim" type="Animation" id=16]
+[ext_resource path="res://characters/FemaleCharacter/FemaleAnimationPlayer.tres" type="AnimationNodeStateMachine" id=17]
+[ext_resource path="res://characters/FemaleCharacter/FemaleAnimationPlayerStateMachine.tres" type="AnimationNodeStateMachinePlayback" id=18]
+[ext_resource path="res://characters/FemaleCharacter/AnimationTree.gd" type="Script" id=19]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 0.226884
@@ -288,7 +289,7 @@ tracks/34/keys = PoolRealArray( 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 )
 
 [sub_resource type="AnimationNodeBlendTree" id=4]
 graph_offset = Vector2( -548, 45 )
-nodes/StateMachine/node = ExtResource( 16 )
+nodes/StateMachine/node = ExtResource( 17 )
 nodes/StateMachine/position = Vector2( -120, 140 )
 node_connections = [ "output", 0, "StateMachine" ]
 
@@ -512,14 +513,14 @@ mesh = SubResource( 2 )
 material/0 = null
 
 [node name="Head" type="BoneAttachment" parent="Skeleton"]
-transform = Transform( 0.967847, -0.245413, -0.055176, 0.207783, 0.903643, -0.374507, 0.141769, 0.351001, 0.925582, 0.0250448, 1.53077, 0.042043 )
+transform = Transform( 0.999525, 0.0170002, 0.0257407, -0.0157249, 0.998678, -0.0489521, -0.0265388, 0.0485239, 0.998469, -0.0243654, 1.56053, -0.0548218 )
 bone_name = "mixamorig_Head"
 
 [node name="HairTail" parent="Skeleton/Head" instance=ExtResource( 3 )]
 transform = Transform( 0.998199, -0.0278291, 0.0532083, 0.0272939, 0.999569, 0.0107601, -0.053485, -0.00928839, 0.998525, 0.0482045, -1.51198, 0.0532389 )
 
 [node name="RightHand" type="BoneAttachment" parent="Skeleton"]
-transform = Transform( 0.407502, -0.207291, 0.889366, 0.912732, 0.0611301, -0.403959, 0.0293709, 0.976367, 0.214112, -0.0215744, 1.47749, 0.418518 )
+transform = Transform( 0.334062, 0.0925398, 0.937998, 0.12907, -0.990285, 0.0517316, 0.933671, 0.103787, -0.342761, -0.220727, 0.953434, -0.0134702 )
 bone_name = "mixamorig_RightHand"
 
 [node name="Spatial" type="Spatial" parent="Skeleton/RightHand"]
@@ -533,25 +534,28 @@ transform = Transform( 0.0147597, 0.915448, -0.402164, 0.980249, 0.0660798, 0.18
 
 [node name="Jetpack" type="Node" parent="Equipement"]
 script = ExtResource( 6 )
+max_power = 1.0
+activation_delay = 0.1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "default"
+anims/angry = ExtResource( 7 )
 anims/default = SubResource( 3 )
-anims/falling = ExtResource( 7 )
-anims/idle = ExtResource( 8 )
-anims/jetpack = ExtResource( 9 )
-anims/jump = ExtResource( 10 )
-anims/pistol-idle = ExtResource( 11 )
-anims/pistol-run = ExtResource( 12 )
-anims/rifle-aiming-idle = ExtResource( 13 )
-anims/rifle-run = ExtResource( 14 )
-anims/slow_run = ExtResource( 15 )
+anims/falling = ExtResource( 8 )
+anims/idle = ExtResource( 9 )
+anims/jetpack = ExtResource( 10 )
+anims/jump = ExtResource( 11 )
+anims/pistol-idle = ExtResource( 12 )
+anims/pistol-run = ExtResource( 13 )
+anims/rifle-aiming-idle = ExtResource( 14 )
+anims/rifle-run = ExtResource( 15 )
+anims/slow_run = ExtResource( 16 )
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource( 4 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
-parameters/StateMachine/playback = ExtResource( 17 )
-parameters/StateMachine/Idle/Weapon/current = 1
+parameters/StateMachine/playback = ExtResource( 18 )
+parameters/StateMachine/Idle/Weapon/current = 0
 parameters/StateMachine/Locomotion/Weapon/current = 0
-script = ExtResource( 18 )
+script = ExtResource( 19 )

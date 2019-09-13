@@ -29,7 +29,7 @@ func _process(delta):
 	if not _character:
 		return
 	
-	if _character._jumping and _character._jump_event:
+	if (_character._jumping or _character.is_falling() ) and _character._jump_event:
 		_start_jetpack = true
 	
 	if _character.is_on_floor():

@@ -25,7 +25,7 @@ var _pistol_aiming := false
 
 var _jump_event := false
 var _jump_action := false
-var _jump_dir := Vector3()
+#var _jump_dir := Vector3()
 var _jump_count := MAX_JUMP
 var _jumping := false
 
@@ -75,7 +75,7 @@ func _process(delta):
 			if (cur_dir + target_dir).x < 0 and (cur_dir + target_dir).y > 0:
 				rotation_angle = -rotation_angle
 			
-			var rest: Transform = $Skeleton.get_bone_rest(bone)
+			var rest: Transform = $Skeleton.get_bone_pose(bone)
 			var new_pose = rest.rotated(Vector3.RIGHT, rotation_angle)
 			
 			$Skeleton.set_bone_pose( bone, new_pose )
@@ -118,10 +118,10 @@ func _physics_process(delta):
 			$AnimationTree.set("parameters/StateMachine/Locomotion/Weapon/current", 0)
 	
 	if _jump_event:
-		_jump_dir = dir
+		#_jump_dir = dir
 		if not is_falling() and _jump_count > 0:
 			_jump_count -= 1
-			_jump_dir = dir
+			#_jump_dir = dir
 			_jumping = true
 			_play_anim("jump_run_in_place", true)
 			velocity.y = 10
@@ -135,22 +135,27 @@ func _physics_process(delta):
 		accel = ACCELERATION
 	var new_pos = dir * max_speed
 	
+	#hv = hv.linear_interpolate(new_pos, accel * delta)
+	
+	
 	if is_on_floor() or not _jumping:
 		hv = hv.linear_interpolate(new_pos, accel * delta)
 	else:
 		
 		accel = AIR_DE_ACCELERATION
-		if _jump_dir.dot(hv) > 0:
+		if dir.dot(hv) > 0:
 			accel = AIR_ACCELERATION
-		new_pos = _jump_dir * max_speed
+		new_pos = dir * max_speed
+		hv = hv.linear_interpolate(new_pos, accel * delta)
 		
+		"""
 		if _jump_action:
 			hv = hv.linear_interpolate(new_pos, accel * delta)
 			pass
 		else:
 			hv = hv.linear_interpolate(Vector3(), ACCELERATION * delta)
 			pass
-		
+		"""
 		#if Input.action_press("jump"):
 		#	hv = hv.linear_interpolate(new_pos, ACCELERATION * delta)
 		pass

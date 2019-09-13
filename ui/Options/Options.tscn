@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://ui/options/Options.gd" type="Script" id=1]
-[ext_resource path="res://ui/options/OptionsVideo.tscn" type="PackedScene" id=2]
-[ext_resource path="res://ui/options/OptionsAudio.tscn" type="PackedScene" id=3]
-[ext_resource path="res://ui/options/OptionsGame.tscn" type="PackedScene" id=4]
+[ext_resource path="res://ui/Options/Options.gd" type="Script" id=1]
+[ext_resource path="res://ui/Options/OptionsVideo.tscn" type="PackedScene" id=2]
+[ext_resource path="res://ui/Options/OptionsAudio.tscn" type="PackedScene" id=3]
+[ext_resource path="res://ui/Options/OptionsGame.tscn" type="PackedScene" id=4]
 
 [node name="Options" type="Control"]
 pause_mode = 2

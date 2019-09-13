@@ -85,6 +85,7 @@ xfade_time = 0.4
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=17]
 xfade_time = 0.4
+priority = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=18]
 
@@ -128,11 +129,11 @@ states/Falling/position = Vector2( 189, 19 )
 states/Idle/node = SubResource( 6 )
 states/Idle/position = Vector2( 563, 238 )
 states/Jetpack/node = SubResource( 7 )
-states/Jetpack/position = Vector2( 336, -140 )
+states/Jetpack/position = Vector2( 336, -141 )
 states/Locomotion/node = SubResource( 12 )
 states/Locomotion/position = Vector2( 563, 46 )
 states/jump_run_in_place/node = SubResource( 13 )
-states/jump_run_in_place/position = Vector2( 811, -77 )
+states/jump_run_in_place/position = Vector2( 853, -104 )
 transitions = [ "jump_run_in_place", "Falling", SubResource( 14 ), "Idle", "jump_run_in_place", SubResource( 15 ), "jump_run_in_place", "Idle", SubResource( 16 ), "jump_run_in_place", "Locomotion", SubResource( 17 ), "Locomotion", "jump_run_in_place", SubResource( 18 ), "Locomotion", "Falling", SubResource( 19 ), "Idle", "Locomotion", SubResource( 20 ), "Locomotion", "Idle", SubResource( 21 ), "Idle", "Falling", SubResource( 22 ), "Jetpack", "Falling", SubResource( 23 ), "Falling", "Locomotion", SubResource( 24 ), "Falling", "Idle", SubResource( 25 ), "Idle", "Jetpack", SubResource( 26 ), "Locomotion", "Jetpack", SubResource( 27 ), "Falling", "Jetpack", SubResource( 28 ), "Falling", "jump_run_in_place", SubResource( 29 ) ]
 start_node = "Idle"
-graph_offset = Vector2( 113, -141 )
+graph_offset = Vector2( 74, -193 )
