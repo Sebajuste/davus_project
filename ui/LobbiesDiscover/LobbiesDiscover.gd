@@ -6,7 +6,9 @@ onready var _lobbies = $VBoxContainer/Lobbies
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	
+	refresh()
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
@@ -14,17 +16,13 @@ func _ready():
 
 
 func refresh():
-	pass
+	clear_lobbies()
+	$LobbiesDiscover.discover()
 
 
 func clear_lobbies():
 	for lobby in _lobbies.get_children():
 		lobby.queue_free()
-
-
-func _on_RefreshButton_pressed():
-	clear_lobbies()
-	$LobbiesDiscover.discover()
 
 
 func _on_LobbiesDiscover_on_update_lobbies(lobbies):
@@ -37,6 +35,12 @@ func _on_LobbiesDiscover_on_update_lobbies(lobbies):
 		item.max_player = int(lobby.maxPlayer)
 		item.connect("joined", self, "_on_JoinButton_pressed")
 		_lobbies.add_child(item)
+		
+		print("type string : ", typeof(lobby.lastUpdate)  == TYPE_STRING)
+		var timesmtap = 0
+		var datetime = OS.get_datetime_from_unix_time(timesmtap)
+		
+		print( datetime )
 
 
 func _on_JoinButton_pressed(host, port):

@@ -3,7 +3,7 @@
 [ext_resource path="res://scenes/TestNetwork/TestNetwork.gd" type="Script" id=1]
 [ext_resource path="res://tools/Network/Lobbies/LobbiesDiscover.gd" type="Script" id=2]
 [ext_resource path="res://tools/Network/Lobbies/LobbyCreator.gd" type="Script" id=3]
-[ext_resource path="res://tools/Network/Connections.tscn" type="PackedScene" id=4]
+[ext_resource path="res://tools/Network/Connections/Connections.tscn" type="PackedScene" id=4]
 
 [node name="TestNetwork" type="Node"]
 script = ExtResource( 1 )

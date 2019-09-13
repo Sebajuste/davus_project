@@ -39,13 +39,17 @@ func create_lobby(name):
 	
 	var headers: PoolStringArray = ["Content-Type: application/json"]
 	
-	$CreateLobby.request("http://%s:%d/games-lobbies/games/%s/lobbies/%s" % [host, port, game, lobby_name], headers, true, HTTPClient.METHOD_PUT, JSON.print(lobby_information) )
+	print("http://%s:%d/games-lobbies/games/%s/lobbies/%s" % [host, port, game, lobby_name])
+	
+	var result = $CreateLobby.request("http://%s:%d/games-lobbies/games/%s/lobbies/%s" % [host, port, game.percent_encode(), lobby_name.percent_encode()], headers, true, HTTPClient.METHOD_PUT, JSON.print(lobby_information) )
+	
+	print("Create Lobby Result: ", result)
 	
 
 
 func remove_lobby():
 	
-	$HTTPRequest.request("http://%s:%d/games-lobbies/games/%s/lobbies/%s" % [host, port, game, lobby_name], PoolStringArray(), true, HTTPClient.METHOD_DELETE)
+	$HTTPRequest.request("http://%s:%d/games-lobbies/games/%s/lobbies/%s" % [host, port, game.percent_encode(), lobby_name.percent_encode()], PoolStringArray(), true, HTTPClient.METHOD_DELETE)
 	
 	$PingTimer.stop()
 	
@@ -55,7 +59,7 @@ func _on_CreateLobby_request_completed(result, response_code, headers, body):
 	
 	if result != HTTPRequest.RESULT_SUCCESS:
 		_lobby_created = false
-		print("Cannot connect to the server")
+		print("Cannot connect to the server. Code: ", result)
 		return
 	
 	$PingTimer.start()
@@ -77,5 +81,5 @@ func _on_PingTimer_timeout():
 	
 	var headers: PoolStringArray = ["Content-Type: application/json"]
 	
-	$CreateLobby.request("http://%s:%d/games-lobbies/games/%s/lobbies/%s" % [host, port, game, lobby_name], headers, true, HTTPClient.METHOD_PUT, JSON.print(lobby_information) )
+	$CreateLobby.request("http://%s:%d/games-lobbies/games/%s/lobbies/%s" % [host, port, game.percent_encode(), lobby_name.percent_encode()], headers, true, HTTPClient.METHOD_PUT, JSON.print(lobby_information) )
 	
