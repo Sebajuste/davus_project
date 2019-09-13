@@ -13,16 +13,17 @@ func _ready():
 
 
 func _process(delta):
-	var target_pos = _mouse_pos( get_viewport().get_mouse_position() )
-	$Target.global_transform.origin = target_pos
+	if camera:
+		var target_pos = _mouse_pos( get_viewport().get_mouse_position() )
+		$Target.global_transform.origin = target_pos
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
-	
-	var cam_pos = camera.get_global_transform().origin
-	cam_pos.z = -0.5
-	self.global_transform.origin = cam_pos
+	if camera:
+		var cam_pos = camera.get_global_transform().origin
+		cam_pos.z = -0.5
+		self.global_transform.origin = cam_pos
 	
 
 
