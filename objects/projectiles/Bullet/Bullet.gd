@@ -25,18 +25,12 @@ func _process(delta):
 
 
 func _physics_process(delta):
-	
 	transform.origin = transform.origin + direction * speed * delta
-	
+
 
 func set_direction(dir):
 	direction = dir.normalized()
 
 
 func _on_Area_body_entered(body):
-	
-	print("hit !")
-	
 	queue_free()
-	
-	pass # Replace with function body.

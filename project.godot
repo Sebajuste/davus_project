@@ -8,9 +8,26 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Node",
+"class": "CombatStats",
+"language": "GDScript",
+"path": "res://tools/combat/CombatStats/CombatStats.gd"
+}, {
+"base": "Area",
+"class": "DamageSource",
+"language": "GDScript",
+"path": "res://tools/combat/DamageSource/DamageSource.gd"
+}, {
+"base": "Reference",
+"class": "Hit",
+"language": "GDScript",
+"path": "res://tools/combat/Hit.gd"
+} ]
 _global_script_class_icons={
-
+"CombatStats": "",
+"DamageSource": "",
+"Hit": ""
 }
 
 [application]
@@ -97,7 +114,10 @@ shoot={
 3d_physics/layer_1="environement"
 3d_physics/layer_2="mobile"
 3d_physics/layer_3="bullets"
+3d_physics/layer_4="hitbox"
 3d_physics/layer_8="cursor selector"
+3d_physics/layer_11="damage source"
+3d_physics/layer_12="hitbox"
 
 [locale]
 
