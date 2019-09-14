@@ -51,13 +51,10 @@ func _process(delta):
 		
 		look_dir += Vector3.UP * Input.get_action_strength("look_up")
 		
-		#if Input.get_action_strength("look_down"):
 		look_dir += Vector3.DOWN * Input.get_action_strength("look_down")
 		
-		#if Input.get_action_strength("look_right"):
 		look_dir += Vector3.RIGHT * Input.get_action_strength("look_right")
 		
-		#if Input.get_action_strength("look_left"):
 		look_dir += Vector3.LEFT * Input.get_action_strength("look_left")
 		
 		if look_dir.length() > 0.5:
@@ -88,11 +85,15 @@ func _process(delta):
 	if Input.is_action_just_released("jump"):
 		_jump_action =  false
 	
+	
+	if _pistol_aiming and velocity.y < 0.1:
+		$Equipement/WeaponHandler.shoot_ready = true
+	else:
+		$Equipement/WeaponHandler.shoot_ready = false
+	
 
 
 func _physics_process(delta):
-	
-	
 	
 	var dir = Vector3()
 	
@@ -109,7 +110,6 @@ func _physics_process(delta):
 	
 	if Input.is_action_just_pressed("unsheathe"):
 		_pistol_aiming = not _pistol_aiming
-		
 		if _pistol_aiming:
 			$AnimationTree.set("parameters/StateMachine/Idle/Weapon/current", 1)
 			$AnimationTree.set("parameters/StateMachine/Locomotion/Weapon/current", 1)
@@ -118,10 +118,8 @@ func _physics_process(delta):
 			$AnimationTree.set("parameters/StateMachine/Locomotion/Weapon/current", 0)
 	
 	if _jump_event:
-		#_jump_dir = dir
 		if not is_falling() and _jump_count > 0:
 			_jump_count -= 1
-			#_jump_dir = dir
 			_jumping = true
 			_play_anim("jump_run_in_place", true)
 			velocity.y = 10
@@ -135,30 +133,14 @@ func _physics_process(delta):
 		accel = ACCELERATION
 	var new_pos = dir * max_speed
 	
-	#hv = hv.linear_interpolate(new_pos, accel * delta)
-	
-	
-	if is_on_floor() or not _jumping:
+	if is_on_floor():
 		hv = hv.linear_interpolate(new_pos, accel * delta)
 	else:
-		
 		accel = AIR_DE_ACCELERATION
 		if dir.dot(hv) > 0:
 			accel = AIR_ACCELERATION
 		new_pos = dir * max_speed
 		hv = hv.linear_interpolate(new_pos, accel * delta)
-		
-		"""
-		if _jump_action:
-			hv = hv.linear_interpolate(new_pos, accel * delta)
-			pass
-		else:
-			hv = hv.linear_interpolate(Vector3(), ACCELERATION * delta)
-			pass
-		"""
-		#if Input.action_press("jump"):
-		#	hv = hv.linear_interpolate(new_pos, ACCELERATION * delta)
-		pass
 	
 	velocity.x = hv.x
 	velocity.z = hv.z
@@ -180,9 +162,6 @@ func _physics_process(delta):
 		global_transform = Transform(rotTransform.basis, global_transform.origin)
 		global_transform.origin.z = 0
 	
-	
-	#if is_falling():
-	#	_play_anim("Falling")
 	if is_on_floor():
 		if abs(velocity.x) > 0.5:
 			_play_anim("Locomotion")
@@ -192,8 +171,6 @@ func _physics_process(delta):
 		_play_anim("Falling")
 	
 	_anim_update = false
-
-
 
 
 func is_falling() -> bool:

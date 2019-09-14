@@ -92,6 +92,13 @@ shoot={
  ]
 }
 
+[layer_names]
+
+3d_physics/layer_1="environement"
+3d_physics/layer_2="mobile"
+3d_physics/layer_3="bullets"
+3d_physics/layer_8="cursor selector"
+
 [locale]
 
 translations=PoolStringArray( "res://i18n/button.en.translation", "res://i18n/button.fr.translation", "res://i18n/label.en.translation", "res://i18n/label.fr.translation", "res://i18n/title.en.translation", "res://i18n/title.fr.translation" )
