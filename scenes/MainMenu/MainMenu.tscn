@@ -12,9 +12,9 @@ background_mode = 1
 
 [sub_resource type="PlaneMesh" id=2]
 
-[sub_resource type="SpatialMaterial" id=4]
+[sub_resource type="SpatialMaterial" id=3]
 
-[sub_resource type="ConcavePolygonShape" id=3]
+[sub_resource type="ConcavePolygonShape" id=4]
 data = PoolVector3Array( 1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1 )
 
 [sub_resource type="CubeMesh" id=5]
@@ -33,12 +33,12 @@ transform = Transform( 10, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0, 0 )
 layers = 2
 cast_shadow = 0
 mesh = SubResource( 2 )
-material/0 = SubResource( 4 )
+material/0 = SubResource( 3 )
 
 [node name="StaticBody" type="StaticBody" parent="Spatial/Ground"]
 
 [node name="CollisionShape" type="CollisionShape" parent="Spatial/Ground/StaticBody"]
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 
 [node name="Camera" type="Camera" parent="Spatial"]
 transform = Transform( 0.995527, 0.0245097, -0.0912386, 0, 0.965761, 0.259435, 0.0944733, -0.258275, 0.961441, -0.944143, 1.77172, 2.8491 )

@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://tileset/test/Test.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/TestGameplay/Camera.gd" type="Script" id=2]
 [ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=3]
+[ext_resource path="res://objects/projectiles/Bullet/Bullet.tscn" type="PackedScene" id=4]
 
 [sub_resource type="CubeMesh" id=1]
 
@@ -72,3 +73,7 @@ distance = 20.0
 
 [node name="FemaleCharacter" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22544, 0 )
+
+[node name="Bullet" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.41047, 0.719913, 0 )
+direction = Vector3( 1, 1, 0 )
