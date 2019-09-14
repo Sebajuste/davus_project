@@ -1,7 +1,7 @@
 extends Node
 
 
-export var max_power := 2.0
+export var max_power := 1.0
 export var consumption := 1.0
 export var reload := 0.5
 

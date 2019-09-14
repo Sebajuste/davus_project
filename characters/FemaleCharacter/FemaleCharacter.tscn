@@ -3,9 +3,9 @@
 [ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.gd" type="Script" id=1]
 [ext_resource path="res://models/FemaleCharacter/Palette.material" type="Material" id=2]
 [ext_resource path="res://models/Cosmetic/HairTail/HairTail.tscn" type="PackedScene" id=3]
-[ext_resource path="res://objects/weapons/Pistol/Pistol.tscn" type="PackedScene" id=4]
-[ext_resource path="res://tools/CursorSelector/CursorSelector.tscn" type="PackedScene" id=5]
-[ext_resource path="res://characters/FemaleCharacter/Jetpack.gd" type="Script" id=6]
+[ext_resource path="res://tools/CursorSelector/CursorSelector.tscn" type="PackedScene" id=4]
+[ext_resource path="res://characters/FemaleCharacter/Jetpack.gd" type="Script" id=5]
+[ext_resource path="res://tools/WeaponHandler/WeaponHandler.gd" type="Script" id=6]
 [ext_resource path="res://models/FemaleCharacter/angry.anim" type="Animation" id=7]
 [ext_resource path="res://models/FemaleCharacter/falling.anim" type="Animation" id=8]
 [ext_resource path="res://models/FemaleCharacter/idle.anim" type="Animation" id=9]
@@ -294,6 +294,8 @@ nodes/StateMachine/position = Vector2( -120, 140 )
 node_connections = [ "output", 0, "StateMachine" ]
 
 [node name="FemaleCharacter" type="KinematicBody"]
+collision_layer = 2
+collision_mask = 3
 script = ExtResource( 1 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
@@ -331,7 +333,7 @@ bones/5/name = "mixamorig_Head"
 bones/5/parent = 4
 bones/5/rest = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0560172, 0.0120709 )
 bones/5/enabled = true
-bones/5/bound_children = [  ]
+bones/5/bound_children = [ NodePath("Head") ]
 bones/6/name = "mixamorig_HeadTop_End"
 bones/6/parent = 5
 bones/6/rest = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.59258, 0.0437383 )
@@ -416,7 +418,7 @@ bones/22/name = "mixamorig_RightHand"
 bones/22/parent = 21
 bones/22/rest = Transform( 0.820071, 0.152838, -0.551476, -0.0493779, 0.97898, 0.19789, 0.570129, -0.135053, 0.810379, -7.30157e-007, 0.257955, -7.15256e-007 )
 bones/22/enabled = true
-bones/22/bound_children = [  ]
+bones/22/bound_children = [ NodePath("RightHand") ]
 bones/23/name = "mixamorig_RightHandThumb1"
 bones/23/parent = 22
 bones/23/rest = Transform( 0.83614, 0.548516, 1.01328e-006, -0.548517, 0.83614, 2.05636e-006, 1.49012e-008, -1.75834e-006, 1, 0.0307962, 0.0442578, 3.57628e-007 )
@@ -513,29 +515,31 @@ mesh = SubResource( 2 )
 material/0 = null
 
 [node name="Head" type="BoneAttachment" parent="Skeleton"]
-transform = Transform( 0.999525, 0.0170002, 0.0257407, -0.0157249, 0.998678, -0.0489521, -0.0265388, 0.0485239, 0.998469, -0.0243654, 1.56053, -0.0548218 )
+transform = Transform( 0.999429, 0.0167653, 0.0292929, -0.0148507, 0.997813, -0.0643906, -0.0303085, 0.0639194, 0.997495, -0.0300511, 1.56049, -0.0479509 )
 bone_name = "mixamorig_Head"
 
 [node name="HairTail" parent="Skeleton/Head" instance=ExtResource( 3 )]
 transform = Transform( 0.998199, -0.0278291, 0.0532083, 0.0272939, 0.999569, 0.0107601, -0.053485, -0.00928839, 0.998525, 0.0482045, -1.51198, 0.0532389 )
 
 [node name="RightHand" type="BoneAttachment" parent="Skeleton"]
-transform = Transform( 0.334062, 0.0925398, 0.937998, 0.12907, -0.990285, 0.0517316, 0.933671, 0.103787, -0.342761, -0.220727, 0.953434, -0.0134702 )
+transform = Transform( 0.332803, 0.0854475, 0.939116, 0.127988, -0.990762, 0.0447908, 0.934269, 0.10529, -0.340666, -0.224646, 0.944241, -0.0086654 )
 bone_name = "mixamorig_RightHand"
 
-[node name="Spatial" type="Spatial" parent="Skeleton/RightHand"]
+[node name="Position" type="Spatial" parent="Skeleton/RightHand"]
 transform = Transform( 0.0147597, 0.915448, -0.402164, 0.980249, 0.0660798, 0.186394, 0.197209, -0.396972, -0.896393, 0.0259951, 0.145295, 0.039593 )
 
-[node name="Pistol" parent="Skeleton/RightHand/Spatial" instance=ExtResource( 4 )]
-
-[node name="CursorSelector" parent="." instance=ExtResource( 5 )]
+[node name="CursorSelector" parent="." instance=ExtResource( 4 )]
 
 [node name="Equipement" type="Node" parent="."]
 
 [node name="Jetpack" type="Node" parent="Equipement"]
-script = ExtResource( 6 )
-max_power = 1.0
+script = ExtResource( 5 )
+max_power = 0.8
 activation_delay = 0.1
+
+[node name="WeaponHandler" type="Node" parent="Equipement"]
+script = ExtResource( 6 )
+right_hand = NodePath("../../Skeleton/RightHand/Position")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "default"
