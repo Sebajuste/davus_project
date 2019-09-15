@@ -1,13 +1,12 @@
 extends Node
 
 export var size := 16
-#export(float, -1.0, 1.0) var cap := 0.15
-export var debug := true
+export var debug := false setget set_debug
 
-#export var noise: OpenSimplexNoise
 
-func _ready():
-	
+func set_debug(v):
+	debug = v
+	$ImmediateGeometry.clear()
 	if debug:
 		$ImmediateGeometry.begin(Mesh.PRIMITIVE_LINE_LOOP)
 		
@@ -19,13 +18,6 @@ func _ready():
 		$ImmediateGeometry.add_vertex(Vector3(0, size*2, 1))
 		
 		$ImmediateGeometry.end()
-	
-	pass
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
 
 
 # Must be override
