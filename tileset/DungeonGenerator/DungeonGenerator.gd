@@ -1,21 +1,22 @@
 extends Node2D
 
 export var scale2D = 2
-export var tile_size = 2
-export var room_margin = 1
-export(int, 3, 13) var number_of_rooms = 12
+export var room_margin = 2
+export(int, 3, 13) var number_of_rooms = 5
 export var number_of_keys = 1
-export var map_width = 40
-export var map_height = 25
-export var min_room_size = 5
-export var max_room_size = 10
+export var map_width = 80
+export var map_height = 50
+export var min_room_width = 8
+export var max_room_width = 10
+export var min_room_height = 5
+export var max_room_height = 6
 export var map_seed = 2
 
 signal graph_gen_finnished
 
 enum eTilesType { Empty = -1, Door = 0, Wall = 1, Key = 2 }
 
-var rooms_areas = Array()
+var rooms_areas = Dictionary()
 var starting_room = null
 var ending_room = null
 var pathfinding := AStar.new()
@@ -35,40 +36,38 @@ func _input(event):
 func gen_graph():
 	rooms_areas.clear()
 	pathfinding = null
-	var roomLocations = generate_rooms()
-	pathfinding = generate_graph(roomLocations)
+	rooms_areas = generate_rooms()
+	pathfinding = generate_graph(rooms_areas.keys())
 	update()
 	emit_signal("graph_gen_finnished")
 
-func generate_rooms() -> Array:
-	var locations = Array()
+func generate_rooms() -> Dictionary:
+	var rooms = Dictionary()
 	for i in range(number_of_rooms):
 		var room
 		var collide = true
 		while (collide):
 			collide = false
 			room = create_room()
-			for other in rooms_areas:
+			for other in rooms.values():
 				if room.intersects(other):
 					collide = true
 			
 			if not collide:
-				rooms_areas.append(room)
-				locations.append(get_middle(room))
-	
-	return locations
+				rooms[get_middle(room)] = room
+	return rooms
 
 func create_room() -> Rect2:
-	var width = (min_room_size + rnd.randi() % (max_room_size - min_room_size)) * tile_size
-	var height = (min_room_size + rnd.randi() % (max_room_size - min_room_size)) * tile_size
-	var x = rnd.randi() % (map_width * tile_size - width)
-	var y = rnd.randi() % (map_height * tile_size - height)
-	var pos = Vector2(x - (x % tile_size), y - (y % tile_size))
+	var width = (2 * room_margin + min_room_width + rnd.randi() % (max_room_width + 1 - min_room_width))
+	var height = (2 * room_margin + min_room_height + rnd.randi() % (max_room_height + 1 - min_room_height))
+	var x = rnd.randi() % (map_width - width)
+	var y = rnd.randi() % (map_height - height)
+	var pos = Vector2(floor(x), floor(y))
 	var size = Vector2(width, height)
 	return Rect2(pos, size)
 
 func get_room_rectangle(area: Rect2) -> Rect2:
-	return area.grow(- room_margin * tile_size)
+	return area.grow(- room_margin)
 
 func generate_graph(locations: Array) -> AStar:
 	var astar = AStar.new()
@@ -99,10 +98,10 @@ func get_distantest_rooms() -> Array:
 	var a2 = null
 	var distanceMax = 0
 	var roomsBetweenMax = 0
-	for area in rooms_areas:
+	for area in rooms_areas.values():
 		var middleArea = get_middle(area)
 		var pointArea = pathfinding.get_closest_point(middleArea)
-		for other in rooms_areas:
+		for other in rooms_areas.values():
 			if area != other:
 				var middleOther = get_middle(other)
 				var pointOther = pathfinding.get_closest_point(middleOther)
@@ -140,78 +139,147 @@ func generate_grid_map(map:GridMap):
 
 
 func fill_the_map(map: GridMap):
-	for x in range(map_width * tile_size):
-		for y in range(map_height * tile_size):
+	for x in range(map_width):
+		for y in range(map_height):
 			var v = Vector3(x, y, 0)
 			apply_tile_on_tilemap(map, v, eTilesType.Wall)
 
 
 func write_rooms_on_map(map: GridMap):
-	for area in rooms_areas:
+	for area in rooms_areas.values():
 		var room = get_room_rectangle(area)
 		var left = room.position.x
 		var right = left + room.size.x
 		var top = room.position.y
 		var bottom = top + room.size.y
 		var z = 0
-		for x in range(left, right + 1):
-			for y in range(top, bottom + 1):
+		for x in range(left, right):
+			for y in range(top, bottom):
 				var v = Vector3(x, y, z)
 				apply_tile_on_tilemap(map, v, eTilesType.Empty)
 
 
 func write_corridors_on_map(map: GridMap):
 	var rooms_done = []
-	for area in rooms_areas:
-		var point = pathfinding.get_closest_point(get_middle(area))
+	
+	for point in pathfinding.get_points():
 		for connection in pathfinding.get_point_connections(point):
 			if not connection in rooms_done:
-				var start = pathfinding.get_point_position(point)
-				var end = pathfinding.get_point_position(connection)
-				dig_path(map, start, end)
+				var posRoom1 = pathfinding.get_point_position(point)
+				var posRoom2 = pathfinding.get_point_position(connection)
+				var start = get_door_location(get_room_rectangle(rooms_areas[posRoom1]), posRoom2)
+				var end = get_door_location(get_room_rectangle(rooms_areas[posRoom2]), posRoom1)
+				dig_path(map, start, end, true, true)
 		
 		rooms_done.append(point)
 
+func dig_path(map: GridMap, start: Dictionary, end: Dictionary, doorOnStart: bool = false, doorOnEnd: bool = false):
+	var dir = start.keys()[0]
+	var startPos = to_vector3(start.values()[0])
+	var endPos = to_vector3(end.values()[0])
+	var startPoint = pathfinding.get_closest_point(startPos)
+	var endPoint = pathfinding.get_closest_point(endPos)
+	
+	var dif = (endPos - startPos)
+	startPos = vector3_floor(startPos)
+	endPos = vector3_floor(endPos)
+	var middle = vector3_round(startPos + (dif / 2))
+	var step = Vector2(sign(dif.x), sign(dif.y))
+	
+	print(str(step) + " / " + str(dif) + " / " + str(startPoint) + " -> " + str(endPoint) + " = " + str(start) + " -> " + str(end))
+	if dir == 2 || dir == 8:		# Horizontal and vertical
+		for x in range(startPos.x, endPos.x, step.x):
+			var v : Vector3
+			if x < middle.x && step.x > 0 || x > middle.x && step.x < 0:
+				v = Vector3(x, startPos.y, 0)
+			else:
+				v = Vector3(x, endPos.y, 0)
+			if doorOnStart && x == startPos.x + step.x || \
+					doorOnEnd && x == endPos.x - step.x:
+				apply_tile_on_tilemap(map, v, eTilesType.Door)
+			else:
+				apply_tile_on_tilemap(map, v, eTilesType.Empty)
+		for y in range(startPos.y, endPos.y, step.y):
+			var v = Vector3(middle.x, y, 0)
+			apply_tile_on_tilemap(map, v, eTilesType.Empty)
+	else:							# Vertical and horizontal
+		for y in range(startPos.y, endPos.y, step.y):
+			var v : Vector3
+			if y < middle.y && step.y > 0 || y > middle.y && step.y < 0:
+				v = Vector3(startPos.x, y, 0)
+			else:
+				v = Vector3(endPos.x, y, 0)
+			if doorOnStart && y == startPos.y + step.y || doorOnEnd && y == endPos.y - step.y:
+				apply_tile_on_tilemap(map, v, eTilesType.Door)
+			else:
+				apply_tile_on_tilemap(map, v, eTilesType.Empty)
+		for x in range(startPos.x, endPos.x, step.x):
+			var v = Vector3(x, middle.y, 0)
+			apply_tile_on_tilemap(map, v, eTilesType.Empty)
 
-func dig_path(map: GridMap, start: Vector3, end: Vector3):
-	var diff = end - start
-	var step = Vector2(sign(diff.x), sign(diff.y))
-	if step.x == 0: step.x = pow(-1, rnd.randi() % 2)
-	if step.y == 0: step.y = pow(-1, rnd.randi() % 2)
-	var collidorSize = 2 #rnd.randi() % 3 + 1
-	for x in range(start.x, end.x, step.x):
-		for y in range(start.y, start.y + step.y * collidorSize, step.y):
-			var v = Vector3(x, y, 0)
-			apply_tile_on_tilemap(map, v, eTilesType.Empty)
-	for y in range(start.y, end.y, step.y):
-		for x in range(end.x, end.x + step.x * collidorSize, step.x):
-			var v = Vector3(x, y, 0)
-			apply_tile_on_tilemap(map, v, eTilesType.Empty)
+
+func get_door_location(rect: Rect2, point: Vector3) -> Dictionary:
+	var middle = to_vector2(get_middle(rect))
+	var point2D = to_vector2(point)
+	var topRight = rect.position + (rect.size * Vector2.RIGHT)
+	var bottomLeft = rect.position + (rect.size * Vector2.DOWN)
+	var bottomRight = rect.position + rect.size
+	var dir = (point2D - middle).normalized()
+	var intersections = Dictionary()
+	intersections[1] = (get_line_intersection(rect.position, topRight, middle, point2D) - dir)
+	intersections[2] = (get_line_intersection(topRight, bottomRight, middle, point2D) - dir)
+	intersections[4] = (get_line_intersection(bottomLeft, bottomRight, middle, point2D) - dir)
+	intersections[8] = (get_line_intersection(rect.position, bottomLeft, middle, point2D) - dir)
+	for direction in intersections.keys():
+		var intersection = intersections[direction]
+		if intersection == Vector2.INF:
+			intersections.erase(direction)
+	return intersections
+
+
+func get_line_intersection(p1: Vector2, p2: Vector2, p3: Vector2, p4: Vector2) -> Vector2:
+	var denominator = (p1.x - p2.x) * (p3.y - p4.y) - (p1.y - p2.y) * (p3.x - p4.x)
+	if denominator != 0:
+		var t = ((p1.x - p3.x) * (p3.y - p4.y) - (p1.y - p3.y) * (p3.x - p4.x)) / denominator
+		var u = -((p1.x - p2.x) * (p1.y - p3.y) - (p1.y - p2.y) * (p1.x - p3.x)) / denominator
+		if (t >= 0 && t <= 1 && u >= 0 && u <= 1):
+			return Vector2(p1.x + t * (p2.x - p1.x), p1.y + t * (p2.y - p1.y));
+	return Vector2.INF
+
 
 func apply_tile_on_tilemap(map: GridMap, pos: Vector3, tileType: int):
 	map.set_cell_item(pos.x, pos.y, pos.z, tileType)
 
 func to_vector3(v: Vector2, z :int = 0) -> Vector3:
 	return Vector3(v.x, v.y, z)
-	
+
+func vector3_ceil(v: Vector3) -> Vector3:
+	return Vector3(ceil(v.x), ceil(v.y), ceil(v.z))
+
+func vector3_floor(v: Vector3) -> Vector3:
+	return Vector3(floor(v.x), floor(v.y), floor(v.z))
+
+func vector3_round(v: Vector3) -> Vector3:
+	return Vector3(round(v.x), round(v.y), round(v.z))
+
 func to_vector2(v: Vector3) -> Vector2:
 		return Vector2(v.x, v.y)
 
 func reverse_y_axis(v: Vector2):
-	return Vector2(v.x, map_height * tile_size -v.y) 
+	return Vector2(v.x, map_height - v.y)
 
 func get_middle(r: Rect2) -> Vector3:
-	return to_vector3(r.position + (r.size / 2))
+	return to_vector3(r.position + (r.size * 0.5))
 
 func scale_rectangle(r: Rect2, scale: int, reverseY: bool = false) -> Rect2:
 		if reverseY:
-			var pos = Vector2(r.position.x, r.position.y + r.size.y - map_height * tile_size / 2)
+			var pos = Vector2(r.position.x, r.position.y + r.size.y - map_height / 2)
 			return Rect2(reverse_y_axis(pos * scale), r.size * scale)
 		else:
 			return Rect2(r.position * scale, r.size * scale)
 
 func _draw():
-	for area in rooms_areas:
+	for area in rooms_areas.values():
 		var rect = scale_rectangle(area, scale2D, true)
 		var pos = get_middle(rect)
 		var point = pathfinding.get_closest_point(get_middle(area))
