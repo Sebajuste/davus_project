@@ -35,6 +35,7 @@ func _ready():
 
 func _input(event):
 	if event is InputEventKey and not event.is_pressed() and event.scancode == KEY_SPACE:
+		clear_console()
 		gen_graph()
 
 func gen_graph():
@@ -133,10 +134,11 @@ func generate_grid_map(map:GridMap):
 	map.clear()
 	fill_the_map(map)
 	write_rooms_on_map(map)
-	write_corridors_on_map(map)
 	var distantest = get_distantest_rooms()
 	starting_room = distantest[0]
 	ending_room = distantest[1]
+	var endingPoint = pathfinding.get_closest_point(get_middle(ending_room))
+	write_corridors_on_map(map, endingPoint)
 	var v = get_middle(starting_room)
 	apply_tile_on_tilemap(map, v, eTilesType.Start)
 	v = get_middle(ending_room)
@@ -168,19 +170,18 @@ func write_rooms_on_map(map: GridMap):
 				apply_tile_on_tilemap(map, v, eTilesType.Empty)
 
 
-func write_corridors_on_map(map: GridMap):
-	var rooms_done = []
-	
-	for point in pathfinding.get_points():
-		for connection in pathfinding.get_point_connections(point):
-			if not connection in rooms_done:
-				var posRoom1 = pathfinding.get_point_position(point)
-				var posRoom2 = pathfinding.get_point_position(connection)
-				var start = get_door_location(get_room_rectangle(rooms_areas[posRoom1]), posRoom2)
-				var end = get_door_location(get_room_rectangle(rooms_areas[posRoom2]), posRoom1)
-				dig_path(map, start, end, true, true)
-		
-		rooms_done.append(point)
+func write_corridors_on_map(map: GridMap, room_point: int, rooms_done: Array = []):
+	print(room_point)
+	var posRoom1 = pathfinding.get_point_position(room_point)
+	for connection in pathfinding.get_point_connections(room_point):
+		if not connection in rooms_done:
+			var posRoom2 = pathfinding.get_point_position(connection)
+			var start = get_door_location(get_room_rectangle(rooms_areas[posRoom1]), posRoom2)
+			var end = get_door_location(get_room_rectangle(rooms_areas[posRoom2]), posRoom1)
+			dig_path(map, start, end, true, true)
+			rooms_done.append(room_point)
+			write_corridors_on_map(map, connection, rooms_done)
+
 
 func dig_path(map: GridMap, start: Dictionary, end: Dictionary, doorOnStart: bool = false, doorOnEnd: bool = false):
 	if start.size() > 0 && end.size() > 0:
@@ -189,8 +190,8 @@ func dig_path(map: GridMap, start: Dictionary, end: Dictionary, doorOnStart: boo
 		var startPos = to_vector3(start.values()[0])
 		var endPos = to_vector3(end.values()[0])
 		
-		var startPoint = pathfinding.get_closest_point(startPos)
-		var endPoint = pathfinding.get_closest_point(endPos)
+		#var startPoint = pathfinding.get_closest_point(startPos)
+		#var endPoint = pathfinding.get_closest_point(endPos)
 		
 		var horizontalStart = (startDir == eDirection.Left || startDir == eDirection.Right)
 		var horizontalEnd = (endDir == eDirection.Left || endDir == eDirection.Right)
@@ -200,11 +201,11 @@ func dig_path(map: GridMap, start: Dictionary, end: Dictionary, doorOnStart: boo
 		var verticalPath = (verticalStart && verticalEnd)
 		
 		#print(str(startPoint) + " -> " + str(endPoint) + " = " + str(start) + " -> " + str(end))
-		if horizontalPath:
+		if horizontalPath:		# Horizontal direction only
 			dig_horizontally(map, startPos, endPos, doorOnStart, doorOnEnd)
-		elif verticalPath:
+		elif verticalPath:		# Vertical direction only
 			dig_vertically(map, startPos, endPos, doorOnStart, doorOnEnd)
-		else:	# mixed directions
+		else:					# Mixed directions
 			if horizontalStart && verticalEnd:
 				dig_mixed_directions(map, startPos, endPos, doorOnStart, doorOnEnd)
 			elif verticalStart && horizontalEnd:
@@ -297,10 +298,10 @@ func get_door_location(rect: Rect2, point: Vector3) -> Dictionary:
 	var bottomRight = rect.position + rect.size
 	var dir = (point2D - middle).normalized()
 	var intersections = Dictionary()
-	intersections[eDirection.Top] = (get_line_intersection(rect.position, topRight, middle, point2D))
-	intersections[eDirection.Bottom] = (get_line_intersection(bottomLeft, bottomRight, middle, point2D) - dir)
-	intersections[eDirection.Right] = (get_line_intersection(topRight, bottomRight, middle, point2D) - dir)
-	intersections[eDirection.Left] = (get_line_intersection(rect.position, bottomLeft, middle, point2D))
+	intersections[eDirection.Top] = get_line_intersection(rect.position, topRight, middle, point2D)
+	intersections[eDirection.Bottom] = get_line_intersection(bottomLeft, bottomRight, middle, point2D) - dir
+	intersections[eDirection.Right] = get_line_intersection(topRight, bottomRight, middle, point2D) - dir
+	intersections[eDirection.Left] = get_line_intersection(rect.position, bottomLeft, middle, point2D)
 	for direction in intersections.keys():
 		var intersection = intersections[direction]
 		if intersection == Vector2.INF:
@@ -382,3 +383,7 @@ func draw_path(path: AStar):
 				var pointPosition = path.get_point_position(point)
 				var edgePosition = path.get_point_position(edges)
 				draw_line(reverse_y_axis(to_vector2(pointPosition)) * scale2D, reverse_y_axis(to_vector2(edgePosition)) * scale2D, Color.yellow)
+			
+func clear_console():
+	var escape := PoolByteArray([0x1b]).get_string_from_ascii()
+	print(escape + "[2J" + escape + "[;H")
