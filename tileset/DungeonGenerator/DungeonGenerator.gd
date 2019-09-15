@@ -2,7 +2,7 @@ extends Node2D
 
 export var scale2D = 2
 export var room_margin = 2
-export(int, 3, 13) var number_of_rooms = 5
+export(int, 3, 13) var number_of_rooms = 15
 export var number_of_keys = 1
 export var map_width = 80
 export var map_height = 50
@@ -14,13 +14,17 @@ export var map_seed = 2
 
 signal graph_gen_finnished
 
-enum eTilesType { Empty = -1, Door = 0, Wall = 1, Key = 2 }
+enum eTilesType { Empty = -1, Door = 0, Wall = 1, Key = 2, End = 3, DoorInsertion = 4, Start = 5 }
+enum eDirection { Top = 1, Right = 2, Bottom = 4, Left = 8 }
+const DEBUG = true
+const DESIRED_SEED_COUNTER = 1
 
 var rooms_areas = Dictionary()
 var starting_room = null
 var ending_room = null
 var pathfinding := AStar.new()
 var rnd = RandomNumberGenerator.new()
+var seed_counter = 1
 
 var label = Label.new()
 var f = label.get_font("")
@@ -133,9 +137,14 @@ func generate_grid_map(map:GridMap):
 	var distantest = get_distantest_rooms()
 	starting_room = distantest[0]
 	ending_room = distantest[1]
-	for a in distantest:
-		var v = get_middle(a)
-		apply_tile_on_tilemap(map, v, eTilesType.Key)
+	var v = get_middle(starting_room)
+	apply_tile_on_tilemap(map, v, eTilesType.Start)
+	v = get_middle(ending_room)
+	apply_tile_on_tilemap(map, v, eTilesType.End)
+	
+	seed_counter += 1
+	if DEBUG && seed_counter < DESIRED_SEED_COUNTER || DESIRED_SEED_COUNTER == -1:
+		gen_graph()
 
 
 func fill_the_map(map: GridMap):
@@ -174,32 +183,43 @@ func write_corridors_on_map(map: GridMap):
 		rooms_done.append(point)
 
 func dig_path(map: GridMap, start: Dictionary, end: Dictionary, doorOnStart: bool = false, doorOnEnd: bool = false):
-	var startDir = start.keys()[0]
-	var endDir = end.keys()[0]
-	var startPos = to_vector3(start.values()[0])
-	var endPos = to_vector3(end.values()[0])
+	if start.size() > 0 && end.size() > 0:
+		var startDir = start.keys()[0]
+		var endDir = end.keys()[0]
+		var startPos = to_vector3(start.values()[0])
+		var endPos = to_vector3(end.values()[0])
+		
+		var startPoint = pathfinding.get_closest_point(startPos)
+		var endPoint = pathfinding.get_closest_point(endPos)
+		
+		var horizontalStart = (startDir == eDirection.Left || startDir == eDirection.Right)
+		var horizontalEnd = (endDir == eDirection.Left || endDir == eDirection.Right)
+		var verticalStart = (startDir == eDirection.Top || startDir == eDirection.Bottom)
+		var verticalEnd = (endDir == eDirection.Top || endDir == eDirection.Bottom)
+		var horizontalPath = (horizontalStart && horizontalEnd)
+		var verticalPath = (verticalStart && verticalEnd)
+		
+		#print(str(startPoint) + " -> " + str(endPoint) + " = " + str(start) + " -> " + str(end))
+		if horizontalPath:
+			dig_horizontally(map, startPos, endPos, doorOnStart, doorOnEnd)
+		elif verticalPath:
+			dig_vertically(map, startPos, endPos, doorOnStart, doorOnEnd)
+		else:	# mixed directions
+			if horizontalStart && verticalEnd:
+				dig_mixed_directions(map, startPos, endPos, doorOnStart, doorOnEnd)
+			elif verticalStart && horizontalEnd:
+				dig_mixed_directions(map, endPos, startPos, doorOnEnd, doorOnStart)
+		
+		if DEBUG:
+			apply_tile_on_tilemap(map, to_vector3(start.values()[0]), eTilesType.DoorInsertion)
+			apply_tile_on_tilemap(map, to_vector3(end.values()[0]), eTilesType.DoorInsertion)
 	
-	var startPoint = pathfinding.get_closest_point(startPos)
-	var endPoint = pathfinding.get_closest_point(endPos)
-	
-	var horizontalStart = (startDir == "left" || startDir == "right")
-	var horizontalEnd = (endDir == "left" || endDir == "right")
-	var verticalStart = (startDir == "top" || startDir == "bottom")
-	var verticalEnd = (endDir == "top" || endDir == "bottom")
-	var horizontalPath = (horizontalStart && horizontalEnd)
-	var verticalPath = (verticalStart && verticalEnd)
-	
-	print(str(startPoint) + " -> " + str(endPoint) + " = " + str(start) + " -> " + str(end))
-	
-	if horizontalPath:
-		dig_horizontally(map, startPos, endPos, doorOnStart, doorOnEnd)
-	elif verticalPath:
-		dig_vertically(map, startPos, endPos, doorOnStart, doorOnEnd)
-	else:	# mixed directions
-		if horizontalStart && verticalEnd:
-			dig_mixed_directions(map, startPos, endPos, doorOnStart, doorOnEnd)
-		elif verticalStart && horizontalEnd:
-			dig_mixed_directions(map, endPos, startPos, doorOnEnd, doorOnStart)
+	else:
+		print("Connections impossible, regénération de donjon : ")
+		print("map_seed = " + str(map_seed))
+		print("seed_counter = " + str(seed_counter))
+		print("get_seed = " + str(rnd.seed))
+		gen_graph()
 
 
 func dig_horizontally(map: GridMap, startPos: Vector3, endPos: Vector3, doorOnStart: bool, doorOnEnd: bool):
@@ -209,20 +229,18 @@ func dig_horizontally(map: GridMap, startPos: Vector3, endPos: Vector3, doorOnSt
 	var middlePos = vector3_round(startPos + (dif / 2))
 	var step = Vector2(sign(dif.x), sign(dif.y))
 	
-	print("step " + str(step) + " dif " + str(dif))
-	for x in range(startPos.x, endPos.x, step.x):
+	for x in range(startPos.x, endPos.x + step.x, step.x):
 		var v : Vector3
 		if x < middlePos.x && step.x > 0 || x > middlePos.x && step.x < 0:
 			v = Vector3(x, startPos.y, 0)
 		else:
 			v = Vector3(x, endPos.y, 0)
 		if doorOnStart && x == startPos.x + step.x ||doorOnEnd && x == endPos.x - step.x:
-			print("door at " + str(v))
 			apply_tile_on_tilemap(map, v, eTilesType.Door)
 		else:
 			apply_tile_on_tilemap(map, v, eTilesType.Empty)
 		
-	for y in range(startPos.y, endPos.y, step.y):
+	for y in range(startPos.y, endPos.y + step.y, step.y):
 		var v = Vector3(middlePos.x, y, 0)
 		apply_tile_on_tilemap(map, v, eTilesType.Empty)
 
@@ -234,20 +252,18 @@ func dig_vertically(map: GridMap, startPos: Vector3, endPos: Vector3, doorOnStar
 	var middlePos = vector3_round(startPos + (dif / 2))
 	var step = Vector2(sign(dif.x), sign(dif.y))
 	
-	print("step " + str(step) + " dif " + str(dif))
-	for y in range(startPos.y, endPos.y, step.y):
+	for y in range(startPos.y, endPos.y + step.y, step.y):
 		var v : Vector3
 		if y < middlePos.y && step.y > 0 || y > middlePos.y && step.y < 0:
 			v = Vector3(startPos.x, y, 0)
 		else:
 			v = Vector3(endPos.x, y, 0)
 		if doorOnStart && y == startPos.y + step.y || doorOnEnd && y == endPos.y - step.y:
-			print("door at " + str(v))
 			apply_tile_on_tilemap(map, v, eTilesType.Door)
 		else:
 			apply_tile_on_tilemap(map, v, eTilesType.Empty)
 		
-	for x in range(startPos.x, endPos.x, step.x):
+	for x in range(startPos.x, endPos.x + step.x, step.x):
 		var v = Vector3(x, middlePos.y, 0)
 		apply_tile_on_tilemap(map, v, eTilesType.Empty)
 
@@ -261,7 +277,6 @@ func dig_mixed_directions(map: GridMap, horizontalPos: Vector3, verticalPos: Vec
 	for x in range(horizontalPos.x, verticalPos.x, step.x):
 		var v = Vector3(x, horizontalPos.y, 0)
 		if doorOnHorizontal && x == horizontalPos.x + step.x:
-			print("door at " + str(v))
 			apply_tile_on_tilemap(map, v, eTilesType.Door)
 		else:
 			apply_tile_on_tilemap(map, v, eTilesType.Empty)
@@ -269,7 +284,6 @@ func dig_mixed_directions(map: GridMap, horizontalPos: Vector3, verticalPos: Vec
 	for y in range(horizontalPos.y, verticalPos.y, step.y):
 		var v = Vector3(verticalPos.x, y, 0)
 		if doorOnVertical && y == verticalPos.y - step.y:
-			print("door at " + str(v))
 			apply_tile_on_tilemap(map, v, eTilesType.Door)
 		else:
 			apply_tile_on_tilemap(map, v, eTilesType.Empty)
@@ -283,10 +297,10 @@ func get_door_location(rect: Rect2, point: Vector3) -> Dictionary:
 	var bottomRight = rect.position + rect.size
 	var dir = (point2D - middle).normalized()
 	var intersections = Dictionary()
-	intersections["top"] = (get_line_intersection(rect.position, topRight, middle, point2D) - dir)
-	intersections["right"] = (get_line_intersection(topRight, bottomRight, middle, point2D) - dir)
-	intersections["bottom"] = (get_line_intersection(bottomLeft, bottomRight, middle, point2D) - dir)
-	intersections["left"] = (get_line_intersection(rect.position, bottomLeft, middle, point2D) - dir)
+	intersections[eDirection.Top] = (get_line_intersection(rect.position, topRight, middle, point2D))
+	intersections[eDirection.Bottom] = (get_line_intersection(bottomLeft, bottomRight, middle, point2D) - dir)
+	intersections[eDirection.Right] = (get_line_intersection(topRight, bottomRight, middle, point2D) - dir)
+	intersections[eDirection.Left] = (get_line_intersection(rect.position, bottomLeft, middle, point2D))
 	for direction in intersections.keys():
 		var intersection = intersections[direction]
 		if intersection == Vector2.INF:
@@ -299,7 +313,7 @@ func get_line_intersection(p1: Vector2, p2: Vector2, p3: Vector2, p4: Vector2) -
 	if denominator != 0:
 		var t = ((p1.x - p3.x) * (p3.y - p4.y) - (p1.y - p3.y) * (p3.x - p4.x)) / denominator
 		var u = -((p1.x - p2.x) * (p1.y - p3.y) - (p1.y - p2.y) * (p1.x - p3.x)) / denominator
-		if (t >= 0 && t <= 1 && u >= 0 && u <= 1):
+		if (t >= 0 && t < 1 && u >= 0 && u < 1):
 			return Vector2(p1.x + t * (p2.x - p1.x), p1.y + t * (p2.y - p1.y));
 	return Vector2.INF
 
@@ -319,8 +333,19 @@ func vector3_floor(v: Vector3) -> Vector3:
 func vector3_round(v: Vector3) -> Vector3:
 	return Vector3(round(v.x), round(v.y), round(v.z))
 
+
+func vector2_ceil(v: Vector2) -> Vector2:
+	return Vector2(ceil(v.x), ceil(v.y))
+
+func vector2_floor(v: Vector2) -> Vector2:
+	return Vector2(floor(v.x), floor(v.y))
+
+func vector2_round(v: Vector2) -> Vector2:
+	return Vector2(round(v.x), round(v.y))
+
 func to_vector2(v: Vector3) -> Vector2:
 		return Vector2(v.x, v.y)
+
 
 func reverse_y_axis(v: Vector2):
 	return Vector2(v.x, map_height - v.y)

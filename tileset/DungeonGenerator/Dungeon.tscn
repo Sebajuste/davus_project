@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://tileset/DungeonGenerator/Dungeon.gd" type="Script" id=1]
 [ext_resource path="res://tileset/DungeonGenerator/DungeonGenerator.gd" type="Script" id=2]
@@ -11,7 +11,29 @@ material = SubResource( 1 )
 
 [sub_resource type="CubeMesh" id=3]
 
+[sub_resource type="SpatialMaterial" id=6]
+albedo_color = Color( 0, 0, 1, 1 )
+
 [sub_resource type="PrismMesh" id=4]
+material = SubResource( 6 )
+
+[sub_resource type="SpatialMaterial" id=7]
+albedo_color = Color( 1, 0, 0, 1 )
+
+[sub_resource type="SphereMesh" id=8]
+material = SubResource( 7 )
+
+[sub_resource type="SpatialMaterial" id=9]
+albedo_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="SphereMesh" id=10]
+material = SubResource( 9 )
+
+[sub_resource type="SpatialMaterial" id=11]
+albedo_color = Color( 0, 1, 0, 1 )
+
+[sub_resource type="SphereMesh" id=12]
+material = SubResource( 11 )
 
 [sub_resource type="MeshLibrary" id=5]
 item/0/name = ""
@@ -23,6 +45,15 @@ item/1/shapes = [  ]
 item/2/name = ""
 item/2/mesh = SubResource( 4 )
 item/2/shapes = [  ]
+item/3/name = ""
+item/3/mesh = SubResource( 8 )
+item/3/shapes = [  ]
+item/4/name = ""
+item/4/mesh = SubResource( 10 )
+item/4/shapes = [  ]
+item/5/name = ""
+item/5/mesh = SubResource( 12 )
+item/5/shapes = [  ]
 
 [node name="Dungeon" type="Spatial"]
 script = ExtResource( 1 )
@@ -34,7 +65,7 @@ data = {
 }
 __meta__ = {
 "_editor_clip_": 0,
-"_editor_floor_": Vector3( 0, -1, 0 )
+"_editor_floor_": Vector3( 0, 0, 0 )
 }
 
 [node name="Camera" type="Camera" parent="."]
