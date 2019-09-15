@@ -1,15 +1,12 @@
 extends Spatial
 
-const TestLevelBatch = preload("res://tileset/Test/TestLevelBatch.tscn")
-const JungleLevelBatch = preload("res://tileset/Jungle/JungleLevelBatch.tscn")
+#const TestLevelBatch = preload("res://tileset/Test/TestLevelBatch.tscn")
+#const JungleLevelBatch = preload("res://tileset/Jungle/JungleLevelBatch.tscn")
 
-export(String, "Test", "Jungle") var tilset = "Test"
-export var world_seed := 1
-export var batch_size := 16
+#export(String, "Test", "Jungle") var tilset = "Test"
 
+export(int) var batch_size := 16
 
-
-var noise := OpenSimplexNoise.new()
 
 var _current_batch_x := 99999
 var _current_batch_y := 99999
@@ -24,26 +21,23 @@ var _add_batch_mutex := Mutex.new()
 var _batch_loc_queue := []
 var _batchloc_queue_mutex := Mutex.new()
 
+var _layouts := []
+
 func _ready():
-	
-	noise.seed = world_seed
-	noise.octaves = 3
-	noise.period = 3.0
-	noise.persistence = 0
-	noise.lacunarity = 1
-	
 	_thread.start(self, "_load_thread")
-	
+	for child in get_children():
+		if child != $Batches:
+			_layouts.append(child)
+			child.batch_size = batch_size
+
 
 func _process(delta):
-	
 	_add_batch_mutex.lock()
-	
 	while not _add_batch_queue.empty():
 		var batch = _add_batch_queue.pop_front()
-		add_child(batch)
+		$Batches.add_child(batch)
 	_add_batch_mutex.unlock()
-	
+
 
 func _exit_tree():
 	_stop_thread_mutex.lock()
@@ -81,14 +75,14 @@ func update(global_x: float, global_y: float):
 		
 		# Search existing nodes, and remove them from the require list
 		# Remove also unecessaries batches
-		for batch in get_children():
+		for batch in $Batches.get_children():
 			var batch_pos = _to_batch_loc(batch.global_transform.origin)
 			var index = batches_required.find(batch_pos)
 			if index != -1:
 				batches_required.remove(index)
 			else:
 				
-				remove_child(batch)
+				$Batches.remove_child(batch)
 				batch.free()
 			#	batch.queue_free()
 		
@@ -99,12 +93,8 @@ func update(global_x: float, global_y: float):
 		_batchloc_queue_mutex.unlock()
 
 
-
-
 func _to_batch_loc(global_pos: Vector3) -> Vector3:
 	return Vector3(global_pos.x / (batch_size*2), global_pos.y / (batch_size*2), global_pos.z / (batch_size*2))
-
-
 
 
 func _load_thread(data):
@@ -124,10 +114,20 @@ func _load_thread(data):
 			_stop_thread_mutex.unlock()
 			return
 		_stop_thread_mutex.unlock()
-		
+
 
 func _load_batch(loc: Vector3):
 	
+	for layout in _layouts:
+		var layout_batch = layout.gen(Vector3(loc.x, loc.y, 0))
+		
+		if layout_batch:
+			_add_batch_mutex.lock()
+			_add_batch_queue.push_back(layout_batch)
+			_add_batch_mutex.unlock()
+		
+	
+	"""
 	var level_batch
 	
 	match tilset:
@@ -139,9 +139,9 @@ func _load_batch(loc: Vector3):
 	level_batch.noise = noise
 	
 	level_batch.translate( Vector3(loc.x*batch_size*2, loc.y*batch_size*2, 0) )
-	level_batch.gen( Vector3(loc.x*batch_size, loc.y*batch_size, 0) )
+	level_batch.gen( Vector3(loc.x*batch_size, loc.y*batch_size, 0), [] )
 	
 	_add_batch_mutex.lock()
 	_add_batch_queue.push_back(level_batch)
 	_add_batch_mutex.unlock()
-	
+	"""

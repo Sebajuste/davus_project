@@ -1,10 +1,10 @@
 extends Node
 
 export var size := 16
-export(float, -1.0, 1.0) var cap := 0.15
+#export(float, -1.0, 1.0) var cap := 0.15
 export var debug := true
 
-export var noise: OpenSimplexNoise
+#export var noise: OpenSimplexNoise
 
 func _ready():
 	
@@ -22,12 +22,12 @@ func _ready():
 	
 	pass
 
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
 
-func gen(loc: Vector3):
-	pass
 
-func _is_solid_tile(global_pos: Vector3):
-	return noise.get_noise_2d(global_pos.x, global_pos.y) > cap
+# Must be override
+func gen(loc: Vector3, noise: OpenSimplexNoise, cap: float) -> void:
+	pass
