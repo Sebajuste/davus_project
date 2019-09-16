@@ -6,9 +6,9 @@
 [ext_resource path="res://tools/combat/DamageSource/DamageSource.tscn" type="PackedScene" id=4]
 [ext_resource path="res://tools/combat/CombatStats/CombatStats.tscn" type="PackedScene" id=5]
 
-[sub_resource type="AnimationNodeStateMachinePlayback" id=2]
+[sub_resource type="AnimationNodeStateMachinePlayback" id=1]
 
-[sub_resource type="SphereShape" id=3]
+[sub_resource type="SphereShape" id=2]
 radius = 6.2401
 
 [node name="MobTentacle" instance=ExtResource( 1 )]
@@ -22,7 +22,7 @@ editor/display_folded = true
 transform = Transform( -1.74846e-008, 0, 0.4, 0, 0.4, 0, -0.4, 0, -1.74846e-008, 0, 0, 0 )
 
 [node name="BoneAttachment" type="BoneAttachment" parent="MobTentacle/TentacleMobSkeleton" index="0"]
-transform = Transform( -1.19188e-007, 1.77953, -0.38679, -1.85903e-007, 0.38679, 1.77953, 1.82108, 1.49734e-007, 1.09809e-007, 1.16861, 3.58659, 9.41727e-007 )
+transform = Transform( -1.39798e-007, 1.79707, -0.581907, 1.41601e-007, 0.581907, 1.79706, 1.88893, 7.81841e-008, -2.25178e-007, 1.28259, 3.72077, 4.35503e-007 )
 bone_name = "Bone.005"
 
 [node name="DamageSource" parent="MobTentacle/TentacleMobSkeleton/BoneAttachment" index="0" instance=ExtResource( 4 )]
@@ -32,7 +32,7 @@ editor/display_folded = true
 transform = Transform( 0.369449, -9.39582e-008, -4.50166e-008, -4.35427e-008, 0.00577441, -0.369404, 9.46501e-008, 0.369404, 0.00577445, -2.0805e-007, 0.275134, -0.203402 )
 
 [node name="AnimationTree" parent="MobTentacle" index="3"]
-parameters/playback = SubResource( 2 )
+parameters/playback = SubResource( 1 )
 
 [node name="HitBox" parent="." index="2"]
 combat_stats = NodePath("../CombatStats")
@@ -46,7 +46,7 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape" type="CollisionShape" parent="Detection" index="0"]
-shape = SubResource( 3 )
+shape = SubResource( 2 )
 
 [node name="CombatStats" parent="." index="4" instance=ExtResource( 5 )]
 [connection signal="body_entered" from="Detection" to="." method="_on_Detection_body_entered"]
