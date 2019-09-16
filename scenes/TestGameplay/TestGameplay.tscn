@@ -75,4 +75,4 @@ distance = 20.0
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22544, 0 )
 
 [node name="MobTentacle" parent="." instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.93653, -0.62602, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.15666, -0.529681, 0 )
