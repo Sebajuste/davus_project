@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://models/Weapons/Pistol/Pistol.tscn" type="PackedScene" id=1]
+[ext_resource path="res://objects/weapons/Pistol/Pistol.gd" type="Script" id=2]
+[ext_resource path="res://sounds/weapons/shoot_gun01.wav" type="AudioStream" id=3]
+
+[node name="Pistol" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="Muzzle" type="Position3D" parent="." index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.216585, 0.0592, 0 )
+
+[node name="FireDir" type="Position3D" parent="Muzzle" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.302149, 0, 0 )
+
+[node name="FireTimer" type="Timer" parent="." index="2"]
+
+[node name="ShootAudio" type="AudioStreamPlayer3D" parent="." index="3"]
+stream = ExtResource( 3 )
+unit_size = 30.0
+[connection signal="timeout" from="FireTimer" to="." method="_on_FireTimer_timeout"]

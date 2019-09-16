@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://tileset/test/Test.tscn" type="PackedScene" id=1]
-[ext_resource path="res://characters/FemaleXbot/FemaleXbotCharacter.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scenes/TestGameplay/Camera.gd" type="Script" id=3]
+[ext_resource path="res://scenes/TestGameplay/Camera.gd" type="Script" id=2]
+[ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=3]
+[ext_resource path="res://characters/Mobs/MobTentacle/MobTentacle.tscn" type="PackedScene" id=4]
 
 [sub_resource type="CubeMesh" id=1]
 
@@ -14,7 +15,6 @@ data = PoolVector3Array( -1, 1, 1, 1, 1, 1, -1, -1, 1, 1, 1, 1, 1, -1, 1, -1, -1
 [node name="World" type="Spatial" parent="."]
 
 [node name="MeshInstance" type="MeshInstance" parent="World"]
-editor/display_folded = true
 transform = Transform( 35.8403, 0, 0, 0, 0.35, 0, 0, 0, 2.45, 11.2899, -1.33652, 0 )
 mesh = SubResource( 1 )
 material/0 = null
@@ -62,12 +62,15 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 2, 0 )
 [node name="Test13" parent="World" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, 0 )
 
-[node name="FemaleXbot" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.26577, 0 )
-
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.999289, 0.0377137, 0, -0.0377137, 0.999289, 0, 1.61902, 8.05316 )
 fov = 40.0
-script = ExtResource( 3 )
-target = NodePath("../FemaleXbot")
+script = ExtResource( 2 )
+target = NodePath("../FemaleCharacter")
 distance = 20.0
+
+[node name="FemaleCharacter" parent="." instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22544, 0 )
+
+[node name="MobTentacle" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.15666, -0.529681, 0 )

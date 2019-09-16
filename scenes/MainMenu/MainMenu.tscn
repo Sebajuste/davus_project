@@ -1,13 +1,23 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scenes/MainMenu/MainMenu.gd" type="Script" id=1]
-[ext_resource path="res://models/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=2]
-[ext_resource path="res://music/main_menu.ogg" type="AudioStream" id=3]
+[ext_resource path="res://models/Weapons/AssaultRifle/AssaultRifle.tscn" type="PackedScene" id=2]
+[ext_resource path="res://models/Weapons/SMG/SMG.tscn" type="PackedScene" id=3]
+[ext_resource path="res://models/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=4]
+[ext_resource path="res://ui/Options/Options.tscn" type="PackedScene" id=5]
+[ext_resource path="res://music/main_menu.ogg" type="AudioStream" id=6]
 
 [sub_resource type="Environment" id=1]
 background_mode = 1
 
 [sub_resource type="PlaneMesh" id=2]
+
+[sub_resource type="SpatialMaterial" id=3]
+
+[sub_resource type="ConcavePolygonShape" id=4]
+data = PoolVector3Array( 1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1 )
+
+[sub_resource type="CubeMesh" id=5]
 
 [node name="MainMenu" type="Node"]
 script = ExtResource( 1 )
@@ -18,31 +28,56 @@ environment = SubResource( 1 )
 [node name="Spatial" type="Spatial" parent="."]
 
 [node name="Ground" type="MeshInstance" parent="Spatial"]
+editor/display_folded = true
 transform = Transform( 10, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0, 0 )
 layers = 2
+cast_shadow = 0
 mesh = SubResource( 2 )
-material/0 = null
+material/0 = SubResource( 3 )
 
-[node name="FemaleCharacter2" parent="Spatial" instance=ExtResource( 2 )]
-transform = Transform( 0.744796, 0, -0.667293, 0, 1, 0, 0.667293, 0, 0.744796, 0, 0, 0 )
+[node name="StaticBody" type="StaticBody" parent="Spatial/Ground"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/Ground/StaticBody"]
+shape = SubResource( 4 )
 
 [node name="Camera" type="Camera" parent="Spatial"]
-transform = Transform( 1, 0, 0, 0, 0.96576, 0.259435, 0, -0.259435, 0.96576, -0.944143, 1.77172, 2.8491 )
+transform = Transform( 0.995527, 0.0245097, -0.0912386, 0, 0.965761, 0.259435, 0.0944733, -0.258275, 0.961441, -0.944143, 1.77172, 2.8491 )
 fov = 50.0
 
 [node name="SpotLight" type="SpotLight" parent="Spatial"]
 transform = Transform( 0.964153, -0.174192, 0.200166, 0, 0.754354, 0.656468, -0.265348, -0.632935, 0.727313, 0.524214, 2.70527, 1.9961 )
+shadow_enabled = true
 
 [node name="DirectionalLight" type="DirectionalLight" parent="Spatial"]
 transform = Transform( -4.37114e-008, -0.173648, -0.984808, 0, 0.984808, -0.173648, 1, -7.5904e-009, -4.30473e-008, -4, 2, 0 )
 layers = 0
 light_color = Color( 0.301961, 0.301961, 0.301961, 1 )
+shadow_enabled = true
 
-[node name="Control" type="Control" parent="."]
+[node name="Spatial" type="Spatial" parent="Spatial"]
+editor/display_folded = true
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.430329, 0, 0.317639 )
+
+[node name="AssaultRifle" parent="Spatial/Spatial" instance=ExtResource( 2 )]
+transform = Transform( 0.0928257, -0.995065, -0.0350459, 0.88341, 0.0660706, 0.46392, -0.459315, -0.0740236, 0.885183, 1.69625, 0.370153, -0.349921 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Spatial/Spatial"]
+transform = Transform( 0.467772, 0, -0.176605, 0, 0.5, 0, 0.176605, 0, 0.467772, 1.60018, 0.370153, -1.13688 )
+mesh = SubResource( 5 )
+material/0 = null
+
+[node name="SMG" parent="Spatial/Spatial" instance=ExtResource( 3 )]
+transform = Transform( 0.921171, -0.389159, -0.00031404, 0, -0.000806971, 1, -0.389159, -0.92117, -0.000743358, 1.34816, 0.887079, -0.879736 )
+
+[node name="FemaleCharacter" parent="Spatial" instance=ExtResource( 4 )]
+transform = Transform( 0.871252, 0, -0.490837, 0, 1, 0, 0.490837, 0, 0.871252, 0, 0, 0 )
+
+[node name="MainControls" type="Control" parent="."]
+editor/display_folded = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="Label" type="Label" parent="Control"]
+[node name="Label" type="Label" parent="MainControls"]
 margin_left = 80.0
 margin_top = 37.0
 margin_right = 507.0
@@ -50,7 +85,7 @@ margin_bottom = 98.0
 text = "DAVUS"
 uppercase = true
 
-[node name="MarginContainer" type="MarginContainer" parent="Control"]
+[node name="MarginContainer" type="MarginContainer" parent="MainControls"]
 anchor_top = 0.5
 anchor_bottom = 0.5
 margin_left = 40.0
@@ -58,36 +93,41 @@ margin_top = -300.0
 margin_right = 347.0
 margin_bottom = 300.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainControls/MarginContainer"]
 margin_right = 307.0
 margin_bottom = 600.0
 custom_constants/separation = 50
 alignment = 1
 
-[node name="StartButton" type="Button" parent="Control/MarginContainer/VBoxContainer"]
-margin_top = 225.0
+[node name="StartButton" type="Button" parent="MainControls/MarginContainer/VBoxContainer"]
+margin_top = 175.0
 margin_right = 307.0
-margin_bottom = 275.0
+margin_bottom = 225.0
 rect_min_size = Vector2( 0, 50 )
-text = "Start"
+text = "btn_play"
 
-[node name="OptionsButton" type="Button" parent="Control/MarginContainer/VBoxContainer"]
+[node name="OptionsButton" type="Button" parent="MainControls/MarginContainer/VBoxContainer"]
+margin_top = 275.0
+margin_right = 307.0
+margin_bottom = 325.0
+rect_min_size = Vector2( 0, 50 )
+text = "btn_options"
+
+[node name="QuitButton" type="Button" parent="MainControls/MarginContainer/VBoxContainer"]
+margin_top = 375.0
+margin_right = 307.0
+margin_bottom = 425.0
+rect_min_size = Vector2( 0, 50 )
+text = "btn_quit"
+
+[node name="Options" parent="." instance=ExtResource( 5 )]
 visible = false
-margin_top = 184.0
-margin_right = 352.0
-margin_bottom = 234.0
-rect_min_size = Vector2( 0, 50 )
-text = "Options"
-
-[node name="QuitButton" type="Button" parent="Control/MarginContainer/VBoxContainer"]
-margin_top = 325.0
-margin_right = 307.0
-margin_bottom = 375.0
-rect_min_size = Vector2( 0, 50 )
-text = "Quit"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 3 )
+stream = ExtResource( 6 )
 autoplay = true
-[connection signal="pressed" from="Control/MarginContainer/VBoxContainer/StartButton" to="." method="_on_StartButton_pressed"]
-[connection signal="pressed" from="Control/MarginContainer/VBoxContainer/QuitButton" to="." method="_on_QuitButton_pressed"]
+bus = "Music"
+[connection signal="pressed" from="MainControls/MarginContainer/VBoxContainer/StartButton" to="." method="_on_StartButton_pressed"]
+[connection signal="pressed" from="MainControls/MarginContainer/VBoxContainer/OptionsButton" to="." method="_on_OptionsButton_pressed"]
+[connection signal="pressed" from="MainControls/MarginContainer/VBoxContainer/QuitButton" to="." method="_on_QuitButton_pressed"]
+[connection signal="on_close" from="Options" to="." method="_on_Options_on_close"]

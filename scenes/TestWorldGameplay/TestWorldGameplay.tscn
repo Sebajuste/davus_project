@@ -1,10 +1,13 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://scenes/TestWorldGameplay/TestWorldGameplay.gd" type="Script" id=1]
-[ext_resource path="res://tools/StreamingLevel.tscn" type="PackedScene" id=2]
-[ext_resource path="res://characters/FemaleXbot/FemaleXbotCharacter.tscn" type="PackedScene" id=3]
-[ext_resource path="res://scenes/TestWorldGameplay/Camera.gd" type="Script" id=4]
-[ext_resource path="res://music/exploring_the_dungeon.ogg" type="AudioStream" id=5]
+[ext_resource path="res://tools/StreamingLevel/StreamingLevel.tscn" type="PackedScene" id=2]
+[ext_resource path="res://tileset/Jungle/JungleLevelLayout.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/TestWorldGameplay/JungleNoise.tres" type="OpenSimplexNoise" id=4]
+[ext_resource path="res://tools/StreamingLevel/MonsterLayout/MonsterLevelLayout.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/TestWorldGameplay/Camera.gd" type="Script" id=6]
+[ext_resource path="res://music/exploring_the_dungeon.ogg" type="AudioStream" id=7]
+[ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=8]
 
 [sub_resource type="ProceduralSky" id=1]
 
@@ -22,16 +25,20 @@ script = ExtResource( 1 )
 environment = SubResource( 2 )
 
 [node name="StreamingLevel" parent="." instance=ExtResource( 2 )]
-tilset = "Jungle"
 
-[node name="FemaleXbotCharacter" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.36136, 5.40668, 0 )
+[node name="JungleLevelLayout" parent="StreamingLevel" instance=ExtResource( 3 )]
+noise = ExtResource( 4 )
+cap = 0.15
+
+[node name="MonsterLevelLayout" parent="StreamingLevel" instance=ExtResource( 5 )]
+noise = ExtResource( 4 )
+cap = 0.15
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, -9.43685e-009, 5.87452e-009, 9.43685e-009, 1, 5.15538e-009, -5.87452e-009, -5.15538e-009, 1, 0, 0, 5.52072 )
-fov = 30.0
-script = ExtResource( 4 )
-target = NodePath("../FemaleXbotCharacter")
+fov = 20.0
+script = ExtResource( 6 )
+target = NodePath("../FemaleCharacter")
 distance = 30.0
 target_y_offset = 2.0
 
@@ -42,5 +49,8 @@ light_energy = 2.0
 shadow_enabled = true
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 5 )
+stream = ExtResource( 7 )
 autoplay = true
+
+[node name="FemaleCharacter" parent="." instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.40796, 4.59231, 0 )

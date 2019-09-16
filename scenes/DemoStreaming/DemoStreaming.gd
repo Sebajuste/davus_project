@@ -7,7 +7,7 @@ func _ready():
 	
 	$StreamingLevel.update($Camera.global_transform.origin.x, $Camera.global_transform.origin.y)
 
-func _process(delta):
+func _physics_process(delta):
 	
 	var cam_move = Vector3()
 	
