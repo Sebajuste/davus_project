@@ -1,33 +1,34 @@
 extends Node2D
 
-export var scale2D = 2
-export var room_margin = 2
-export(int, 3, 13) var number_of_rooms = 15
-export var number_of_keys = 1
-export var map_width = 80
-export var map_height = 50
-export var min_room_width = 8
-export var max_room_width = 10
-export var min_room_height = 5
-export var max_room_height = 6
+export var scale2D:int = 2
+export var room_margin:int = 2
+export(int, 3, 13) var number_of_rooms:int = 15
+export var number_of_keys:int = 1
+export var map_width:int = 80
+export var map_height:int = 50
+export var min_room_width:int = 8
+export var max_room_width:int = 10
+export var min_room_height:int = 5
+export var max_room_height:int = 6
 export var map_seed = 2
 
 signal graph_gen_finnished
 
 enum eTilesType { Empty = -1, Door = 0, Wall = 1, Key = 2, End = 3, DoorInsertion = 4, Start = 5 }
 enum eDirection { Top = 1, Right = 2, Bottom = 4, Left = 8 }
+
 const DEBUG = true
 const DESIRED_SEED_COUNTER = 1
 
-var rooms_areas = Dictionary()
-var starting_room = null
-var ending_room = null
+var rooms_areas := Dictionary()
+var starting_room : Rect2
+var ending_room : Rect2
 var pathfinding := AStar.new()
-var rnd = RandomNumberGenerator.new()
-var seed_counter = 1
+var rnd := RandomNumberGenerator.new()
+var seed_counter:int = 1
 
-var label = Label.new()
-var f = label.get_font("")
+var label := Label.new()
+var f:Font = label.get_font("")
 
 func _ready():
 	rnd.seed = map_seed
@@ -43,14 +44,18 @@ func gen_graph():
 	pathfinding = null
 	rooms_areas = generate_rooms()
 	pathfinding = generate_graph(rooms_areas.keys())
+	var distantest:Array = get_distantest_rooms()
+	starting_room = distantest[0]
+	ending_room = distantest[1]
+	rooms_areas = reorder_rooms()
 	update()
 	emit_signal("graph_gen_finnished")
 
 func generate_rooms() -> Dictionary:
-	var rooms = Dictionary()
+	var rooms := Dictionary()
 	for i in range(number_of_rooms):
-		var room
-		var collide = true
+		var room:Rect2
+		var collide:bool = true
 		while (collide):
 			collide = false
 			room = create_room()
@@ -63,27 +68,27 @@ func generate_rooms() -> Dictionary:
 	return rooms
 
 func create_room() -> Rect2:
-	var width = (2 * room_margin + min_room_width + rnd.randi() % (max_room_width + 1 - min_room_width))
-	var height = (2 * room_margin + min_room_height + rnd.randi() % (max_room_height + 1 - min_room_height))
-	var x = rnd.randi() % (map_width - width)
-	var y = rnd.randi() % (map_height - height)
-	var pos = Vector2(floor(x), floor(y))
-	var size = Vector2(width, height)
+	var width:int = (2 * room_margin + min_room_width + rnd.randi() % (max_room_width + 1 - min_room_width))
+	var height:int = (2 * room_margin + min_room_height + rnd.randi() % (max_room_height + 1 - min_room_height))
+	var x:int = rnd.randi() % (map_width - width)
+	var y:int = rnd.randi() % (map_height - height)
+	var pos := Vector2(floor(x), floor(y))
+	var size := Vector2(width, height)
 	return Rect2(pos, size)
 
 func get_room_rectangle(area: Rect2) -> Rect2:
 	return area.grow(- room_margin)
 
 func generate_graph(locations: Array) -> AStar:
-	var astar = AStar.new()
+	var astar := AStar.new()
 	astar.add_point(astar.get_available_point_id(), locations.pop_front())
 	while locations:
-		var current_position
-		var closest_position
+		var current_position:Vector3
+		var closest_position:Vector3
 		var min_distance = INF
 		
 		for point in astar.get_points():
-			var pos = astar.get_point_position(point)
+			var pos:Vector3 = astar.get_point_position(point)
 			for otherPos in locations:
 				var dist = pos.distance_to(otherPos)
 				if dist < min_distance:
@@ -91,16 +96,16 @@ func generate_graph(locations: Array) -> AStar:
 					current_position = pos
 					closest_position = otherPos
 					
-		var point = astar.get_available_point_id()
+		var point:int = astar.get_available_point_id()
 		astar.add_point(point, closest_position)
 		astar.connect_points(astar.get_closest_point(current_position), point)
 		locations.erase(closest_position)
 	return astar
 
 func get_distantest_rooms() -> Array:
-	var result = Array()
-	var a1 = null
-	var a2 = null
+	var result := Array()
+	var a1 :Rect2
+	var a2 :Rect2
 	var distanceMax = 0
 	var roomsBetweenMax = 0
 	for area in rooms_areas.values():
@@ -130,19 +135,41 @@ func get_distantest_rooms() -> Array:
 	result.append(a2)
 	return result
 
+func reorder_rooms() -> Dictionary:
+	var reordered := Dictionary()
+	var startingPoint:int = pathfinding.get_closest_point(get_middle(starting_room))
+	var endingPoint:int = pathfinding.get_closest_point(get_middle(ending_room))
+	var path:PoolIntArray = pathfinding.get_id_path(endingPoint, startingPoint)
+	var rooms_done := Array()
+	
+	for pathPoint in path:
+		var pos:Vector3 = pathfinding.get_point_position(pathPoint)
+		reordered[pos] = rooms_areas[pos]
+		rooms_done.append(pathPoint)
+		
+		for point in pathfinding.get_point_connections(pathPoint):
+			insert_child_rooms(point, reordered, path, rooms_done)
+	
+	return reordered
+
+func insert_child_rooms(point: int, reordered: Dictionary, path: PoolIntArray, rooms_done: Array):
+	for connection in pathfinding.get_point_connections(point):
+		if not connection in path:
+			if not connection in rooms_done:
+				var pos:Vector3 = pathfinding.get_point_position(connection)
+				reordered[pos] = rooms_areas[pos]
+				rooms_done.append(connection)
+				insert_child_rooms(connection, reordered, path, rooms_done)
+
 func generate_grid_map(map:GridMap):
 	map.clear()
 	fill_the_map(map)
 	write_rooms_on_map(map)
-	var distantest = get_distantest_rooms()
-	starting_room = distantest[0]
-	ending_room = distantest[1]
-	var endingPoint = pathfinding.get_closest_point(get_middle(ending_room))
-	write_corridors_on_map(map, endingPoint)
-	var v = get_middle(starting_room)
-	apply_tile_on_tilemap(map, v, eTilesType.Start)
-	v = get_middle(ending_room)
-	apply_tile_on_tilemap(map, v, eTilesType.End)
+	write_corridors_on_map(map)
+	
+	if DEBUG:
+		apply_tile_on_tilemap(map, get_middle(starting_room), eTilesType.Start)
+		apply_tile_on_tilemap(map, get_middle(ending_room), eTilesType.End)
 	
 	seed_counter += 1
 	if DEBUG && seed_counter < DESIRED_SEED_COUNTER || DESIRED_SEED_COUNTER == -1:
@@ -170,17 +197,21 @@ func write_rooms_on_map(map: GridMap):
 				apply_tile_on_tilemap(map, v, eTilesType.Empty)
 
 
-func write_corridors_on_map(map: GridMap, room_point: int, rooms_done: Array = []):
-	print(room_point)
-	var posRoom1 = pathfinding.get_point_position(room_point)
-	for connection in pathfinding.get_point_connections(room_point):
-		if not connection in rooms_done:
-			var posRoom2 = pathfinding.get_point_position(connection)
-			var start = get_door_location(get_room_rectangle(rooms_areas[posRoom1]), posRoom2)
-			var end = get_door_location(get_room_rectangle(rooms_areas[posRoom2]), posRoom1)
-			dig_path(map, start, end, true, true)
-			rooms_done.append(room_point)
-			write_corridors_on_map(map, connection, rooms_done)
+func write_corridors_on_map(map: GridMap):
+	var rooms_done = []
+
+	for area in rooms_areas.keys():
+		var point:int = pathfinding.get_closest_point(area)
+		for connection in pathfinding.get_point_connections(point):
+			if not connection in rooms_done:
+				print(str(point) + " -> " + str(connection))
+				var posRoom1 = pathfinding.get_point_position(point)
+				var posRoom2 = pathfinding.get_point_position(connection)
+				var start = get_door_location(get_room_rectangle(rooms_areas[posRoom1]), posRoom2)
+				var end = get_door_location(get_room_rectangle(rooms_areas[posRoom2]), posRoom1)
+				dig_path(map, start, end, true, true)
+		
+		rooms_done.append(point)
 
 
 func dig_path(map: GridMap, start: Dictionary, end: Dictionary, doorOnStart: bool = false, doorOnEnd: bool = false):
