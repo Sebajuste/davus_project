@@ -36,6 +36,8 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	
+	var valid_target := false
+	
 	if _pistol_aiming:
 		
 		var target_pos = $CursorSelector.get_target_pos()
@@ -50,11 +52,8 @@ func _process(delta):
 		var look_dir = Vector3()
 		
 		look_dir += Vector3.UP * Input.get_action_strength("look_up")
-		
 		look_dir += Vector3.DOWN * Input.get_action_strength("look_down")
-		
 		look_dir += Vector3.RIGHT * Input.get_action_strength("look_right")
-		
 		look_dir += Vector3.LEFT * Input.get_action_strength("look_left")
 		
 		if look_dir.length() > 0.5:
@@ -63,6 +62,8 @@ func _process(delta):
 		var look_dot = cur_dir.dot(target_dir)
 		
 		if look_dot > 0.2:
+			
+			valid_target = true
 			
 			var rotation_angle = acos(cur_dir.x) - acos(target_dir.x)
 			
@@ -86,8 +87,9 @@ func _process(delta):
 		_jump_action =  false
 	
 	
-	if _pistol_aiming and velocity.y < 0.1:
+	if _pistol_aiming and velocity.y < 0.1 and valid_target:
 		$Equipement/WeaponHandler.shoot_ready = true
+		$Equipement/WeaponHandler.target = $CursorSelector.get_target_pos()
 	else:
 		$Equipement/WeaponHandler.shoot_ready = false
 	

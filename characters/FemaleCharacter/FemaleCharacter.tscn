@@ -305,7 +305,6 @@ transform = Transform( 1, 0, 0, 0, -0.000659509, 1, 0, -1, -0.000659509, 0, 0.87
 shape = SubResource( 1 )
 
 [node name="Skeleton" type="Skeleton" parent="."]
-editor/display_folded = true
 bones_in_world_transform = true
 bones/0/name = "mixamorig_Hips"
 bones/0/parent = -1
@@ -518,22 +517,24 @@ mesh = SubResource( 2 )
 material/0 = null
 
 [node name="Head" type="BoneAttachment" parent="Skeleton"]
-transform = Transform( 0.999425, 0.0188626, 0.0281528, -0.0176676, 0.998957, -0.0421075, -0.0289177, 0.0415861, 0.998715, -0.0352716, 1.55943, -0.0592488 )
+transform = Transform( 0.999582, 0.017575, 0.0229302, -0.0170116, 0.999554, -0.0245364, -0.0233512, 0.0241364, 0.999436, -0.0305998, 1.55921, -0.0638624 )
 bone_name = "mixamorig_Head"
 
 [node name="HairTail" parent="Skeleton/Head" instance=ExtResource( 3 )]
 transform = Transform( 0.998199, -0.0278291, 0.0532083, 0.0272939, 0.999569, 0.0107601, -0.053485, -0.00928839, 0.998525, 0.0482045, -1.51198, 0.0532389 )
 
 [node name="RightHand" type="BoneAttachment" parent="Skeleton"]
-transform = Transform( 0.34036, 0.0886086, 0.93611, 0.130412, -0.990376, 0.0463299, 0.931206, 0.106311, -0.348642, -0.230876, 0.950042, -0.0162176 )
+transform = Transform( 0.335608, 0.0873286, 0.937945, 0.13303, -0.990107, 0.0445862, 0.93256, 0.109812, -0.343907, -0.229133, 0.954814, -0.0192214 )
 bone_name = "mixamorig_RightHand"
 
 [node name="Position" type="Spatial" parent="Skeleton/RightHand"]
 transform = Transform( 0.0147597, 0.915448, -0.402164, 0.980249, 0.0660798, 0.186394, 0.197209, -0.396972, -0.896393, 0.0259951, 0.145295, 0.039593 )
 
 [node name="HitBox" parent="." instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.935989, 0 )
 combat_stats = NodePath("../CombatStats")
+
+[node name="CollisionShape" parent="HitBox" index="0"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-008, -1, 0, 1, -4.37114e-008, 0, 0.955656, 4.17731e-008 )
 
 [node name="CursorSelector" parent="." instance=ExtResource( 5 )]
 
@@ -549,6 +550,7 @@ script = ExtResource( 7 )
 right_hand = NodePath("../../Skeleton/RightHand/Position")
 
 [node name="CombatStats" parent="." instance=ExtResource( 8 )]
+max_health = 10
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "default"
@@ -572,3 +574,5 @@ parameters/StateMachine/playback = ExtResource( 20 )
 parameters/StateMachine/Idle/Weapon/current = 0
 parameters/StateMachine/Locomotion/Weapon/current = 0
 script = ExtResource( 21 )
+
+[editable path="HitBox"]
