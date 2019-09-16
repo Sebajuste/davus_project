@@ -13,10 +13,8 @@ data = PoolVector3Array( -1, 1, 1, 1, 1, 1, -1, -1, 1, 1, 1, 1, 1, -1, 1, -1, -1
 [node name="TestGameplay" type="Spatial"]
 
 [node name="World" type="Spatial" parent="."]
-editor/display_folded = true
 
 [node name="MeshInstance" type="MeshInstance" parent="World"]
-editor/display_folded = true
 transform = Transform( 35.8403, 0, 0, 0, 0.35, 0, 0, 0, 2.45, 11.2899, -1.33652, 0 )
 mesh = SubResource( 1 )
 material/0 = null

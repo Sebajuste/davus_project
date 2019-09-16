@@ -26,6 +26,7 @@ script = ExtResource( 1 )
 environment = SubResource( 1 )
 
 [node name="Spatial" type="Spatial" parent="."]
+editor/display_folded = true
 
 [node name="Ground" type="MeshInstance" parent="Spatial"]
 editor/display_folded = true
@@ -72,6 +73,7 @@ transform = Transform( 0.921171, -0.389159, -0.00031404, 0, -0.000806971, 1, -0.
 transform = Transform( 0.871252, 0, -0.490837, 0, 1, 0, 0.490837, 0, 0.871252, 0, 0, 0 )
 
 [node name="MainControls" type="Control" parent="."]
+editor/display_folded = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 
