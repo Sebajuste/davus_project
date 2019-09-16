@@ -17,6 +17,8 @@ func _ready() -> void:
 
 
 func take_damage(hit: Hit) -> void:
+	if health == 0:
+		return
 	var old_health = health
 	health -= hit.damage
 	emit_signal("damage_taken")

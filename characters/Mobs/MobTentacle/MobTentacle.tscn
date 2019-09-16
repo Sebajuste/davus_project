@@ -11,15 +11,18 @@
 [sub_resource type="SphereShape" id=2]
 radius = 6.2401
 
-[node name="MobTentacle" instance=ExtResource( 1 )]
+[node name="MobTentacle" index="0" instance=ExtResource( 1 )]
+collision_mask = 2
 script = ExtResource( 2 )
 
 [node name="CollisionShape" parent="." index="0"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-008, -1, 0, 1, -4.37114e-008, 0, 0.483039, 0 )
 
 [node name="MobTentacle" parent="." index="1" instance=ExtResource( 3 )]
-editor/display_folded = true
 transform = Transform( -1.74846e-008, 0, 0.4, 0, 0.4, 0, -0.4, 0, -1.74846e-008, 0, 0, 0 )
+
+[node name="TentacleMobSkeleton" parent="MobTentacle" index="0"]
+bones/5/bound_children = [ NodePath("BoneAttachment") ]
 
 [node name="BoneAttachment" type="BoneAttachment" parent="MobTentacle/TentacleMobSkeleton" index="0"]
 transform = Transform( -1.39798e-007, 1.79707, -0.581907, 1.41601e-007, 0.581907, 1.79706, 1.88893, 7.81841e-008, -2.25178e-007, 1.28259, 3.72077, 4.35503e-007 )
@@ -32,7 +35,8 @@ editor/display_folded = true
 transform = Transform( 0.369449, -9.39582e-008, -4.50166e-008, -4.35427e-008, 0.00577441, -0.369404, 9.46501e-008, 0.369404, 0.00577445, -2.0805e-007, 0.275134, -0.203402 )
 
 [node name="AnimationTree" parent="MobTentacle" index="3"]
-parameters/playback = SubResource( 1 )
+process_mode = 0
+parameters/StateMachine/playback = SubResource( 1 )
 
 [node name="HitBox" parent="." index="2"]
 combat_stats = NodePath("../CombatStats")
@@ -49,9 +53,16 @@ collision_mask = 2
 shape = SubResource( 2 )
 
 [node name="CombatStats" parent="." index="4" instance=ExtResource( 5 )]
+max_health = 2
+
+[node name="RemoveTimer" type="Timer" parent="." index="5"]
+wait_time = 5.0
+one_shot = true
 [connection signal="body_entered" from="Detection" to="." method="_on_Detection_body_entered"]
 [connection signal="body_exited" from="Detection" to="." method="_on_Detection_body_exited"]
+[connection signal="damage_taken" from="CombatStats" to="." method="_on_CombatStats_damage_taken"]
 [connection signal="health_depleted" from="CombatStats" to="." method="_on_CombatStats_health_depleted"]
+[connection signal="timeout" from="RemoveTimer" to="." method="_on_RemoveTimer_timeout"]
 
 [editable path="MobTentacle"]
 

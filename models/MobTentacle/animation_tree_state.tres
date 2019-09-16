@@ -1,0 +1,31 @@
+[gd_resource type="AnimationNodeStateMachine" load_steps=8 format=2]
+
+[sub_resource type="AnimationNodeAnimation" id=1]
+animation = "TentacleAttack"
+
+[sub_resource type="AnimationNodeAnimation" id=2]
+animation = "TentacleDeath"
+
+[sub_resource type="AnimationNodeAnimation" id=3]
+animation = "TentacleIdle"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=4]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=5]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=6]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=7]
+
+[resource]
+states/Attack/node = SubResource( 1 )
+states/Attack/position = Vector2( 424, 1 )
+states/Death/node = SubResource( 2 )
+states/Death/position = Vector2( 737, 118 )
+states/Idle/node = SubResource( 3 )
+states/Idle/position = Vector2( 424, 118 )
+transitions = [ "Idle", "Attack", SubResource( 4 ), "Attack", "Idle", SubResource( 5 ), "Attack", "Death", SubResource( 6 ), "Idle", "Death", SubResource( 7 ) ]
+graph_offset = Vector2( 89, -42 )
