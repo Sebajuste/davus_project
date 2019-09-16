@@ -7,7 +7,6 @@ signal health_depleted()
 signal damage_taken()
 
 export var max_health: int = 1 setget set_max_health
-export var attack: int = 1
 
 var health: int
 
@@ -22,7 +21,6 @@ func take_damage(hit: Hit) -> void:
 	health -= hit.damage
 	emit_signal("damage_taken")
 	health = max(0, health)
-	print("health: ", health)
 	emit_signal("health_changed", health, old_health)
 	if health == 0:
 		emit_signal("health_depleted")

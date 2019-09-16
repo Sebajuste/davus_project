@@ -8,9 +8,8 @@ var is_active: = true setget set_is_active
 
 onready var _combat_stats = get_node(combat_stats)
 
-func _ready() -> void:
-	connect("area_entered", self, "_on_area_entered")
-
+func _exit_tree():
+	disconnect("area_entered", self, "_on_area_entered")
 
 func _on_area_entered(damage_source: DamageSource) -> void:
 	

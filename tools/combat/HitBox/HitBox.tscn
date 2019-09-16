@@ -3,8 +3,8 @@
 [ext_resource path="res://tools/combat/HitBox/HitBox.gd" type="Script" id=1]
 
 [sub_resource type="CapsuleShape" id=1]
-radius = 0.668219
-height = 0.922747
+radius = 0.18903
+height = 1.36698
 
 [node name="HitBox" type="Area"]
 collision_layer = 2048
