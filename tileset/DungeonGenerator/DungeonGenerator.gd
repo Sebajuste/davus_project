@@ -2,23 +2,27 @@ extends Node2D
 
 export var scale2D:int = 2
 export var room_margin:int = 2
-export(int, 3, 13) var number_of_rooms:int = 15
+export(int, 2, 10) var number_of_rooms:int = 10
 export var number_of_keys:int = 1
 export var map_width:int = 80
 export var map_height:int = 50
-export var min_room_width:int = 8
-export var max_room_width:int = 10
-export var min_room_height:int = 5
-export var max_room_height:int = 6
+export var min_room_width:int = 4
+export var max_room_width:int = 4
+export var min_room_height:int = 3
+export var max_room_height:int = 3
 export var map_seed = 2
 
 signal graph_gen_finnished
 
-enum eTilesType { Empty = -1, Door = 0, Wall = 1, Key = 2, End = 3, DoorInsertion = 4, Start = 5 }
+enum eTilesType { Empty = -1, Door = 0, Wall = 1, Key = 2, End = 3, DoorInsertion = 4, Start = 5, LeftLadder = 6, RightLadder = 7 }
 enum eDirection { Top = 1, Right = 2, Bottom = 4, Left = 8 }
 
 const DEBUG = true
-const DESIRED_SEED_COUNTER = 1
+const DRAW_ROOMS_INDEX = true
+const PRINT_REFUSED_DUNGEON = false
+const PRINT_ROOMS_TRAVEL = true
+const DESIRED_SEED_STEP_COUNTER = 132
+var _desired_seed_counter:int = 100
 
 var rooms_areas := Dictionary()
 var starting_room : Rect2
@@ -172,7 +176,7 @@ func generate_grid_map(map:GridMap):
 		apply_tile_on_tilemap(map, get_middle(ending_room), eTilesType.End)
 	
 	seed_counter += 1
-	if DEBUG && seed_counter < DESIRED_SEED_COUNTER || DESIRED_SEED_COUNTER == -1:
+	if DEBUG && seed_counter < _desired_seed_counter || _desired_seed_counter == -1:
 		gen_graph()
 
 
@@ -247,17 +251,29 @@ func dig_path(map: GridMap, start: Dictionary, end: Dictionary, doorOnStart: boo
 			apply_tile_on_tilemap(map, to_vector3(end.values()[0]), eTilesType.DoorInsertion)
 	
 	else:
-		print("Connections impossible, regénération de donjon : ")
-		print("map_seed = " + str(map_seed))
-		print("seed_counter = " + str(seed_counter))
-		print("get_seed = " + str(rnd.seed))
+		if PRINT_REFUSED_DUNGEON:
+			print("Connections impossible, regénération de donjon : ")
+			print("map_seed = " + str(map_seed))
+			print("seed_counter = " + str(seed_counter))
+			print("get_seed = " + str(rnd.seed))
 		gen_graph()
 
 
+func _first_step_is_on_right(dif: Vector3, dir: Vector2) -> bool:
+	var yIndex = int(abs(dif.y))
+	if dir.y > 0:
+		return dir.x > 0
+	else:
+		if dir.x < 0:
+			return yIndex % 2 == 1
+		else:
+			return yIndex % 2 == 0
+
+
 func dig_horizontally(map: GridMap, startPos: Vector3, endPos: Vector3, doorOnStart: bool, doorOnEnd: bool):
-	var dif = (endPos - startPos)
 	startPos = vector3_floor(startPos)
 	endPos = vector3_floor(endPos)
+	var dif = (endPos - startPos)
 	var middlePos = vector3_round(startPos + (dif / 2))
 	var step = Vector2(sign(dif.x), sign(dif.y))
 	
@@ -271,10 +287,26 @@ func dig_horizontally(map: GridMap, startPos: Vector3, endPos: Vector3, doorOnSt
 			apply_tile_on_tilemap(map, v, eTilesType.Door)
 		else:
 			apply_tile_on_tilemap(map, v, eTilesType.Empty)
-		
+	
+	var toggleRight:bool = _first_step_is_on_right(dif, step)
 	for y in range(startPos.y, endPos.y + step.y, step.y):
 		var v = Vector3(middlePos.x, y, 0)
 		apply_tile_on_tilemap(map, v, eTilesType.Empty)
+		"""
+		var isEndOfLadder:bool = false
+		if step.y > 0:
+			isEndOfLadder = y == int(endPos.y)
+		else:
+			isEndOfLadder = y == int(startPos.y)
+		if not isEndOfLadder:
+			if toggleRight:
+				apply_tile_on_tilemap(map, v, eTilesType.RightLadder)
+			else:
+				apply_tile_on_tilemap(map, v, eTilesType.LeftLadder)
+			toggleRight = not toggleRight
+		else:
+			apply_tile_on_tilemap(map, v, eTilesType.Empty)
+		"""
 
 
 func dig_vertically(map: GridMap, startPos: Vector3, endPos: Vector3, doorOnStart: bool, doorOnEnd: bool):
@@ -284,6 +316,11 @@ func dig_vertically(map: GridMap, startPos: Vector3, endPos: Vector3, doorOnStar
 	var middlePos = vector3_round(startPos + (dif / 2))
 	var step = Vector2(sign(dif.x), sign(dif.y))
 	
+	for x in range(startPos.x, endPos.x + step.x, step.x):
+		var v = Vector3(x, middlePos.y, 0)
+		apply_tile_on_tilemap(map, v, eTilesType.Empty)
+	
+	var toggleRight:bool = _first_step_is_on_right(dif, step)
 	for y in range(startPos.y, endPos.y + step.y, step.y):
 		var v : Vector3
 		if y < middlePos.y && step.y > 0 || y > middlePos.y && step.y < 0:
@@ -294,13 +331,25 @@ func dig_vertically(map: GridMap, startPos: Vector3, endPos: Vector3, doorOnStar
 			apply_tile_on_tilemap(map, v, eTilesType.Door)
 		else:
 			apply_tile_on_tilemap(map, v, eTilesType.Empty)
-		
-	for x in range(startPos.x, endPos.x + step.x, step.x):
-		var v = Vector3(x, middlePos.y, 0)
-		apply_tile_on_tilemap(map, v, eTilesType.Empty)
+			"""
+			var isEndOfLadder:bool = false
+			if step.y > 0:
+				isEndOfLadder = y == int(endPos.y)
+			else:
+				isEndOfLadder = y == int(startPos.y)
+			if not isEndOfLadder:
+				if toggleRight:
+					apply_tile_on_tilemap(map, v, eTilesType.RightLadder)
+				else:
+					apply_tile_on_tilemap(map, v, eTilesType.LeftLadder)
+				toggleRight = not toggleRight
+			else:
+				apply_tile_on_tilemap(map, v, eTilesType.Empty)
+			"""
 
 
 func dig_mixed_directions(map: GridMap, horizontalPos: Vector3, verticalPos: Vector3, doorOnHorizontal: bool, doorOnVertical: bool):
+	print("dig_mixed_directions : seed = " + str(map_seed) + " seed_counter = " + str(seed_counter))
 	var dif = (verticalPos - horizontalPos)
 	horizontalPos = vector3_floor(horizontalPos)
 	verticalPos = vector3_floor(verticalPos)
@@ -313,12 +362,25 @@ func dig_mixed_directions(map: GridMap, horizontalPos: Vector3, verticalPos: Vec
 		else:
 			apply_tile_on_tilemap(map, v, eTilesType.Empty)
 	
+	var toggleRight:bool = _first_step_is_on_right(dif, step)
 	for y in range(horizontalPos.y, verticalPos.y, step.y):
 		var v = Vector3(verticalPos.x, y, 0)
 		if doorOnVertical && y == verticalPos.y - step.y:
 			apply_tile_on_tilemap(map, v, eTilesType.Door)
 		else:
-			apply_tile_on_tilemap(map, v, eTilesType.Empty)
+			var isEndOfLadder:bool = false
+			if step.y > 0:
+				isEndOfLadder = y == int(verticalPos.y)
+			else:
+				isEndOfLadder = y == int(horizontalPos.y)
+			if not isEndOfLadder:
+				if toggleRight:
+					apply_tile_on_tilemap(map, v, eTilesType.RightLadder)
+				else:
+					apply_tile_on_tilemap(map, v, eTilesType.LeftLadder)
+				toggleRight = not toggleRight
+			else:
+				apply_tile_on_tilemap(map, v, eTilesType.Empty)
 
 
 func get_door_location(rect: Rect2, point: Vector3) -> Dictionary:
@@ -395,9 +457,10 @@ func scale_rectangle(r: Rect2, scale: int, reverseY: bool = false) -> Rect2:
 func _draw():
 	for area in rooms_areas.values():
 		var rect = scale_rectangle(area, scale2D, true)
-		var pos = get_middle(rect)
-		var point = pathfinding.get_closest_point(get_middle(area))
-		draw_string(f, to_vector2(pos * 6), str(point), Color.red)
+		if DRAW_ROOMS_INDEX:
+			var pos = get_middle(rect)
+			var point = pathfinding.get_closest_point(get_middle(area))
+			draw_string(f, to_vector2(pos * 6), str(point), Color.red)
 		draw_rect(rect, Color.white, false)						# draw area
 		var color = Color.blue
 		if area == starting_room:
@@ -416,5 +479,9 @@ func draw_path(path: AStar):
 				draw_line(reverse_y_axis(to_vector2(pointPosition)) * scale2D, reverse_y_axis(to_vector2(edgePosition)) * scale2D, Color.yellow)
 			
 func clear_console():
+	for i in range(50):
+		print(" ")
+	"""
 	var escape := PoolByteArray([0x1b]).get_string_from_ascii()
 	print(escape + "[2J" + escape + "[;H")
+	"""
