@@ -33,8 +33,7 @@ cap = 0.15
 [node name="MonsterLevelLayout" parent="StreamingLevel" instance=ExtResource( 5 )]
 noise = ExtResource( 4 )
 cap = 0.15
-top_y = -3
-end_y = -10
+end_max_y = -5
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, -9.43685e-009, 5.87452e-009, 9.43685e-009, 1, 5.15538e-009, -5.87452e-009, -5.15538e-009, 1, 0, 0, 5.52072 )
