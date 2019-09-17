@@ -5,6 +5,8 @@ extends Spatial
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
+	$FemaleCharacter.global_transform.origin = Vector3(0, 30, 0)
+	
 	$StreamingLevel.update($Camera.global_transform.origin.x, $Camera.global_transform.origin.y)
 	
 
