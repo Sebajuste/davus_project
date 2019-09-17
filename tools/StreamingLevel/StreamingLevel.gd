@@ -18,6 +18,10 @@ var _batch_loc_queue := []
 var _batchloc_queue_mutex := Mutex.new()
 
 
+class DeleteItem:
+	var batch
+	var timer
+
 var _delete_queue := []
 var _delete_queue_mutex := Mutex.new()
 
@@ -42,12 +46,22 @@ func _process(delta):
 	_add_batch_mutex.unlock()
 	
 	
+	var index := 0
+	for item in _delete_queue:
+		item.timer += delta
+		if item.timer > 1.0:
+			item.batch.queue_free()
+			_delete_queue.remove(index)
+			return
+		index += 1
+	
+	"""
 	_delete_queue_mutex.lock()
 	while not _delete_queue.empty():
 		var batch = _delete_queue.pop_front()
 		batch.queue_free()
 	_delete_queue_mutex.unlock()
-	
+	"""
 
 
 func _exit_tree():
@@ -111,7 +125,11 @@ func update(global_x: float, global_y: float):
 					$Batches.remove_child(batch)
 					#batch.queue_free()
 					_delete_queue_mutex.lock()
-					_delete_queue.push_back(batch)
+					
+					var delete_item = DeleteItem.new()
+					delete_item.batch = batch
+					delete_item.timer = 0.0
+					_delete_queue.push_back(delete_item)
 					_delete_queue_mutex.unlock()
 
 
