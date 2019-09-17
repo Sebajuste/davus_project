@@ -43,15 +43,25 @@ func _process(delta):
 	
 	if Input.is_action_pressed("jetpack") and _start_timer > activation_delay and power > 0.0:
 		power -= consumption * delta
+		power = max(0.0, power)
 		jetpack_on = true
-		_character._jumping = false;
+		_character._jumping = false
+		if not $AudioStreamPlayer3D.playing and power > 0.1:
+			$AudioStreamPlayer3D.play()
 	else:
 		if power < max_power:
 			power += reload * delta
+			power = min(power, max_power)
 		jetpack_on = false
+		$AudioStreamPlayer3D.stop()
 	
-	if power <= 0.0:
+	if power == 0.0:
 		jetpack_on = false
+		$AudioStreamPlayer3D.stop()
+	
+	if $AudioStreamPlayer3D.playing:
+		$AudioStreamPlayer3D.global_transform.origin = get_parent().get_parent().global_transform.origin
+	
 
 
 func _physics_process(delta):

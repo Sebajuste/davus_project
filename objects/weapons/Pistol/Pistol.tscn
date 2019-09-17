@@ -18,4 +18,5 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.302149, 0, 0 )
 [node name="ShootAudio" type="AudioStreamPlayer3D" parent="." index="3"]
 stream = ExtResource( 3 )
 unit_size = 30.0
+bus = "SoundEffects"
 [connection signal="timeout" from="FireTimer" to="." method="_on_FireTimer_timeout"]
