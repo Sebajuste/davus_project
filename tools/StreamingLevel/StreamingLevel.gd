@@ -121,9 +121,8 @@ func update(global_x: float, global_y: float):
 				_current_batch_loc.remove(index)
 			for batch in $Batches.get_children():
 				var batch_loc = _to_batch_loc(batch.global_transform.origin)
-				if batch_loc == delete_loc:
+				if batch_loc.x == delete_loc.x && batch_loc.y == delete_loc.y:
 					$Batches.remove_child(batch)
-					#batch.queue_free()
 					_delete_queue_mutex.lock()
 					
 					var delete_item = DeleteItem.new()
