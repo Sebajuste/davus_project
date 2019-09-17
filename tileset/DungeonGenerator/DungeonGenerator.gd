@@ -20,7 +20,9 @@ enum eDirection { Top = 1, Right = 2, Bottom = 4, Left = 8 }
 const DEBUG = true
 const DRAW_ROOMS_INDEX = true
 const PRINT_REFUSED_DUNGEON = false
+const PRINT_LADDER = true
 const PRINT_ROOMS_TRAVEL = true
+const PRINT_DOOR_LOCATION = false
 const DESIRED_SEED_STEP_COUNTER = 132
 var _desired_seed_counter:int = 100
 
@@ -39,19 +41,30 @@ func _ready():
 	gen_graph()
 
 func _input(event):
-	if event is InputEventKey and not event.is_pressed() and event.scancode == KEY_SPACE:
-		clear_console()
-		gen_graph()
+	if event is InputEventKey and not event.is_pressed():
+		if event.scancode == KEY_SPACE:
+			clear_console()
+			gen_graph()
+		if event.scancode == KEY_ENTER:
+			_desired_seed_counter += DESIRED_SEED_STEP_COUNTER
+			clear_console()
+			gen_graph()
+		if event.scancode == KEY_0:
+			clear_console()
+			for point in pathfinding.get_points():
+				for connection in pathfinding.get_point_connections(point):
+					print(str(point) + " -> " + str(connection))
 
 func gen_graph():
+	clear_console()
 	rooms_areas.clear()
 	pathfinding = null
-	rooms_areas = generate_rooms()
-	pathfinding = generate_graph(rooms_areas.keys())
-	var distantest:Array = get_distantest_rooms()
+	var rooms_locations = generate_rooms()
+	pathfinding = generate_graph(rooms_locations.keys())
+	var distantest:Array = get_distantest_rooms(rooms_locations)
 	starting_room = distantest[0]
 	ending_room = distantest[1]
-	rooms_areas = reorder_rooms()
+	rooms_areas = reorder_rooms(rooms_locations)
 	update()
 	emit_signal("graph_gen_finnished")
 
@@ -106,20 +119,20 @@ func generate_graph(locations: Array) -> AStar:
 		locations.erase(closest_position)
 	return astar
 
-func get_distantest_rooms() -> Array:
+func get_distantest_rooms(rooms_locations: Dictionary) -> Array:
 	var result := Array()
 	var a1 :Rect2
 	var a2 :Rect2
 	var distanceMax = 0
 	var roomsBetweenMax = 0
-	for area in rooms_areas.values():
+	for area in rooms_locations.values():
 		var middleArea = get_middle(area)
-		var pointArea = pathfinding.get_closest_point(middleArea)
-		for other in rooms_areas.values():
-			if area != other:
-				var middleOther = get_middle(other)
-				var pointOther = pathfinding.get_closest_point(middleOther)
-				var path = pathfinding.get_id_path(pointArea, pointOther)
+		var point = pathfinding.get_closest_point(middleArea)
+		for otherArea in rooms_locations.values():
+			if area != otherArea:
+				var middleOther = get_middle(otherArea)
+				var otherPoint = pathfinding.get_closest_point(middleOther)
+				var path = pathfinding.get_id_path(point, otherPoint)
 				var roomsBetween = path.size()
 				var isDistantest = false
 				var distance = middleArea.distance_to(middleOther)
@@ -132,38 +145,35 @@ func get_distantest_rooms() -> Array:
 				
 				if isDistantest:
 					a1 = area
-					a2 = other
+					a2 = otherArea
 					distanceMax = distance
 	
 	result.append(a1)
 	result.append(a2)
 	return result
 
-func reorder_rooms() -> Dictionary:
+func reorder_rooms(rooms_locations: Dictionary) -> Dictionary:
 	var reordered := Dictionary()
 	var startingPoint:int = pathfinding.get_closest_point(get_middle(starting_room))
 	var endingPoint:int = pathfinding.get_closest_point(get_middle(ending_room))
 	var path:PoolIntArray = pathfinding.get_id_path(endingPoint, startingPoint)
-	var rooms_done := Array()
 	
 	for pathPoint in path:
 		var pos:Vector3 = pathfinding.get_point_position(pathPoint)
-		reordered[pos] = rooms_areas[pos]
-		rooms_done.append(pathPoint)
+		reordered[pathPoint] = rooms_locations[pos]
 		
 		for point in pathfinding.get_point_connections(pathPoint):
-			insert_child_rooms(point, reordered, path, rooms_done)
+			insert_child_rooms(point, reordered, rooms_locations, path)
 	
 	return reordered
 
-func insert_child_rooms(point: int, reordered: Dictionary, path: PoolIntArray, rooms_done: Array):
+func insert_child_rooms(point: int, reordered: Dictionary, rooms_locations: Dictionary, path: PoolIntArray):
 	for connection in pathfinding.get_point_connections(point):
 		if not connection in path:
-			if not connection in rooms_done:
+			if not connection in reordered.keys():
 				var pos:Vector3 = pathfinding.get_point_position(connection)
-				reordered[pos] = rooms_areas[pos]
-				rooms_done.append(connection)
-				insert_child_rooms(connection, reordered, path, rooms_done)
+				reordered[connection] = rooms_locations[pos]
+				insert_child_rooms(connection, reordered, rooms_locations, path)
 
 func generate_grid_map(map:GridMap):
 	map.clear()
@@ -203,16 +213,15 @@ func write_rooms_on_map(map: GridMap):
 
 func write_corridors_on_map(map: GridMap):
 	var rooms_done = []
-
-	for area in rooms_areas.keys():
-		var point:int = pathfinding.get_closest_point(area)
+	
+	for point in rooms_areas.keys():
 		for connection in pathfinding.get_point_connections(point):
 			if not connection in rooms_done:
-				print(str(point) + " -> " + str(connection))
+				if PRINT_ROOMS_TRAVEL: print(str(point) + " -> " + str(connection))
 				var posRoom1 = pathfinding.get_point_position(point)
 				var posRoom2 = pathfinding.get_point_position(connection)
-				var start = get_door_location(get_room_rectangle(rooms_areas[posRoom1]), posRoom2)
-				var end = get_door_location(get_room_rectangle(rooms_areas[posRoom2]), posRoom1)
+				var start = get_door_location(get_room_rectangle(rooms_areas[point]), posRoom2)
+				var end = get_door_location(get_room_rectangle(rooms_areas[connection]), posRoom1)
 				dig_path(map, start, end, true, true)
 		
 		rooms_done.append(point)
@@ -225,9 +234,6 @@ func dig_path(map: GridMap, start: Dictionary, end: Dictionary, doorOnStart: boo
 		var startPos = to_vector3(start.values()[0])
 		var endPos = to_vector3(end.values()[0])
 		
-		#var startPoint = pathfinding.get_closest_point(startPos)
-		#var endPoint = pathfinding.get_closest_point(endPos)
-		
 		var horizontalStart = (startDir == eDirection.Left || startDir == eDirection.Right)
 		var horizontalEnd = (endDir == eDirection.Left || endDir == eDirection.Right)
 		var verticalStart = (startDir == eDirection.Top || startDir == eDirection.Bottom)
@@ -235,7 +241,11 @@ func dig_path(map: GridMap, start: Dictionary, end: Dictionary, doorOnStart: boo
 		var horizontalPath = (horizontalStart && horizontalEnd)
 		var verticalPath = (verticalStart && verticalEnd)
 		
-		#print(str(startPoint) + " -> " + str(endPoint) + " = " + str(start) + " -> " + str(end))
+		if PRINT_DOOR_LOCATION:
+			var startPoint = pathfinding.get_closest_point(startPos)
+			var endPoint = pathfinding.get_closest_point(endPos)
+			print(str(startPoint) + " -> " + str(endPoint) + " = " + str(start) + " -> " + str(end))
+			
 		if horizontalPath:		# Horizontal direction only
 			dig_horizontally(map, startPos, endPos, doorOnStart, doorOnEnd)
 		elif verticalPath:		# Vertical direction only
@@ -261,6 +271,8 @@ func dig_path(map: GridMap, start: Dictionary, end: Dictionary, doorOnStart: boo
 
 func _first_step_is_on_right(dif: Vector3, dir: Vector2) -> bool:
 	var yIndex = int(abs(dif.y))
+	if PRINT_LADDER:
+		print("yIndex = " + str(yIndex) + " Dif = " + str(dif) + " Dir = " + str(dir))
 	if dir.y > 0:
 		return dir.x > 0
 	else:
@@ -310,9 +322,9 @@ func dig_horizontally(map: GridMap, startPos: Vector3, endPos: Vector3, doorOnSt
 
 
 func dig_vertically(map: GridMap, startPos: Vector3, endPos: Vector3, doorOnStart: bool, doorOnEnd: bool):
-	var dif = (endPos - startPos)
 	startPos = vector3_floor(startPos)
 	endPos = vector3_floor(endPos)
+	var dif = (endPos - startPos)
 	var middlePos = vector3_round(startPos + (dif / 2))
 	var step = Vector2(sign(dif.x), sign(dif.y))
 	
@@ -320,21 +332,29 @@ func dig_vertically(map: GridMap, startPos: Vector3, endPos: Vector3, doorOnStar
 		var v = Vector3(x, middlePos.y, 0)
 		apply_tile_on_tilemap(map, v, eTilesType.Empty)
 	
-	var toggleRight:bool = _first_step_is_on_right(dif, step)
+	var delta: Vector3
+	if step.y > 0:
+		delta = (startPos - middlePos)
+	else:
+		delta = (endPos - middlePos)
+		
+	var toggleRight:bool = _first_step_is_on_right(delta, step)
 	for y in range(startPos.y, endPos.y + step.y, step.y):
 		var v : Vector3
 		if y < middlePos.y && step.y > 0 || y > middlePos.y && step.y < 0:
 			v = Vector3(startPos.x, y, 0)
 		else:
 			v = Vector3(endPos.x, y, 0)
+			if y == middlePos.y:
+				toggleRight = _first_step_is_on_right(delta, step)
 		if doorOnStart && y == startPos.y + step.y || doorOnEnd && y == endPos.y - step.y:
 			apply_tile_on_tilemap(map, v, eTilesType.Door)
 		else:
-			apply_tile_on_tilemap(map, v, eTilesType.Empty)
-			"""
 			var isEndOfLadder:bool = false
 			if step.y > 0:
 				isEndOfLadder = y == int(endPos.y)
+			elif step.y == 0:
+				isEndOfLadder = true
 			else:
 				isEndOfLadder = y == int(startPos.y)
 			if not isEndOfLadder:
@@ -349,10 +369,9 @@ func dig_vertically(map: GridMap, startPos: Vector3, endPos: Vector3, doorOnStar
 
 
 func dig_mixed_directions(map: GridMap, horizontalPos: Vector3, verticalPos: Vector3, doorOnHorizontal: bool, doorOnVertical: bool):
-	print("dig_mixed_directions : seed = " + str(map_seed) + " seed_counter = " + str(seed_counter))
-	var dif = (verticalPos - horizontalPos)
 	horizontalPos = vector3_floor(horizontalPos)
 	verticalPos = vector3_floor(verticalPos)
+	var dif = (verticalPos - horizontalPos)
 	var step = Vector2(sign(dif.x), sign(dif.y))
 	
 	for x in range(horizontalPos.x, verticalPos.x, step.x):
@@ -368,6 +387,8 @@ func dig_mixed_directions(map: GridMap, horizontalPos: Vector3, verticalPos: Vec
 		if doorOnVertical && y == verticalPos.y - step.y:
 			apply_tile_on_tilemap(map, v, eTilesType.Door)
 		else:
+			apply_tile_on_tilemap(map, v, eTilesType.Empty)
+			"""
 			var isEndOfLadder:bool = false
 			if step.y > 0:
 				isEndOfLadder = y == int(verticalPos.y)
@@ -381,6 +402,7 @@ func dig_mixed_directions(map: GridMap, horizontalPos: Vector3, verticalPos: Vec
 				toggleRight = not toggleRight
 			else:
 				apply_tile_on_tilemap(map, v, eTilesType.Empty)
+			"""
 
 
 func get_door_location(rect: Rect2, point: Vector3) -> Dictionary:
@@ -479,7 +501,7 @@ func draw_path(path: AStar):
 				draw_line(reverse_y_axis(to_vector2(pointPosition)) * scale2D, reverse_y_axis(to_vector2(edgePosition)) * scale2D, Color.yellow)
 			
 func clear_console():
-	for i in range(50):
+	for i in range(5):
 		print(" ")
 	"""
 	var escape := PoolByteArray([0x1b]).get_string_from_ascii()
