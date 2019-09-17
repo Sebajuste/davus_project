@@ -13,18 +13,19 @@ export var max_room_height:int = 3
 export var map_seed = 2
 
 signal graph_gen_finnished
+signal dungeon_generated
 
 enum eTilesType { Empty = -1, Door = 0, Wall = 1, Key = 2, End = 3, DoorInsertion = 4, Start = 5, LeftLadder = 6, RightLadder = 7 }
 enum eDirection { Top = 1, Right = 2, Bottom = 4, Left = 8 }
 
-const DEBUG = true
+const DEBUG = false
 const DRAW_ROOMS_INDEX = true
 const PRINT_REFUSED_DUNGEON = false
 const PRINT_LADDER = true
 const PRINT_ROOMS_TRAVEL = true
 const PRINT_DOOR_LOCATION = false
 const DESIRED_SEED_STEP_COUNTER = 132
-var _desired_seed_counter:int = 100
+var _desired_seed_counter:int = 0 #100
 
 var rooms_areas := Dictionary()
 var starting_room : Rect2
@@ -188,6 +189,8 @@ func generate_grid_map(map:GridMap):
 	seed_counter += 1
 	if DEBUG && seed_counter < _desired_seed_counter || _desired_seed_counter == -1:
 		gen_graph()
+	
+	emit_signal("dungeon_generated")
 
 
 func fill_the_map(map: GridMap):
@@ -222,7 +225,7 @@ func write_corridors_on_map(map: GridMap):
 				var posRoom2 = pathfinding.get_point_position(connection)
 				var start = get_door_location(get_room_rectangle(rooms_areas[point]), posRoom2)
 				var end = get_door_location(get_room_rectangle(rooms_areas[connection]), posRoom1)
-				dig_path(map, start, end, true, true)
+				dig_path(map, start, end, false, false)
 		
 		rooms_done.append(point)
 
@@ -300,10 +303,9 @@ func dig_horizontally(map: GridMap, startPos: Vector3, endPos: Vector3, doorOnSt
 		else:
 			apply_tile_on_tilemap(map, v, eTilesType.Empty)
 	
-	var toggleRight:bool = _first_step_is_on_right(dif, step)
+	#var toggleRight:bool = _first_step_is_on_right(dif, step)
 	for y in range(startPos.y, endPos.y + step.y, step.y):
 		var v = Vector3(middlePos.x, y, 0)
-		apply_tile_on_tilemap(map, v, eTilesType.Empty)
 		"""
 		var isEndOfLadder:bool = false
 		if step.y > 0:
@@ -319,6 +321,7 @@ func dig_horizontally(map: GridMap, startPos: Vector3, endPos: Vector3, doorOnSt
 		else:
 			apply_tile_on_tilemap(map, v, eTilesType.Empty)
 		"""
+		apply_tile_on_tilemap(map, v, eTilesType.Empty)
 
 
 func dig_vertically(map: GridMap, startPos: Vector3, endPos: Vector3, doorOnStart: bool, doorOnEnd: bool):
@@ -332,24 +335,30 @@ func dig_vertically(map: GridMap, startPos: Vector3, endPos: Vector3, doorOnStar
 		var v = Vector3(x, middlePos.y, 0)
 		apply_tile_on_tilemap(map, v, eTilesType.Empty)
 	
+	"""
 	var delta: Vector3
-	if step.y > 0:
+	if step.y < 0:
 		delta = (startPos - middlePos)
 	else:
 		delta = (endPos - middlePos)
 		
 	var toggleRight:bool = _first_step_is_on_right(delta, step)
+	"""
 	for y in range(startPos.y, endPos.y + step.y, step.y):
 		var v : Vector3
 		if y < middlePos.y && step.y > 0 || y > middlePos.y && step.y < 0:
 			v = Vector3(startPos.x, y, 0)
 		else:
 			v = Vector3(endPos.x, y, 0)
-			if y == middlePos.y:
+			"""
+			if y == middlePos.y && step.x != 0:
 				toggleRight = _first_step_is_on_right(delta, step)
+			"""
 		if doorOnStart && y == startPos.y + step.y || doorOnEnd && y == endPos.y - step.y:
 			apply_tile_on_tilemap(map, v, eTilesType.Door)
+			#toggleRight = not toggleRight
 		else:
+			"""
 			var isEndOfLadder:bool = false
 			if step.y > 0:
 				isEndOfLadder = y == int(endPos.y)
@@ -357,6 +366,7 @@ func dig_vertically(map: GridMap, startPos: Vector3, endPos: Vector3, doorOnStar
 				isEndOfLadder = true
 			else:
 				isEndOfLadder = y == int(startPos.y)
+			
 			if not isEndOfLadder:
 				if toggleRight:
 					apply_tile_on_tilemap(map, v, eTilesType.RightLadder)
@@ -366,6 +376,7 @@ func dig_vertically(map: GridMap, startPos: Vector3, endPos: Vector3, doorOnStar
 			else:
 				apply_tile_on_tilemap(map, v, eTilesType.Empty)
 			"""
+			apply_tile_on_tilemap(map, v, eTilesType.Empty)
 
 
 func dig_mixed_directions(map: GridMap, horizontalPos: Vector3, verticalPos: Vector3, doorOnHorizontal: bool, doorOnVertical: bool):
