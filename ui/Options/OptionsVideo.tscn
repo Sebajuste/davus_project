@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://ui/Options/OptionsVideo.gd" type="Script" id=1]
+[ext_resource path="res://fonts/mechsuit.tres" type="DynamicFont" id=2]
 
 [node name="OptionsVideo" type="VBoxContainer"]
 margin_right = 394.0
@@ -9,21 +10,22 @@ script = ExtResource( 1 )
 
 [node name="Label" type="Label" parent="."]
 margin_right = 394.0
-margin_bottom = 30.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 0, 30 )
+custom_fonts/font = ExtResource( 2 )
 text = "title_video"
 align = 1
 valign = 1
 
 [node name="HSeparator" type="HSeparator" parent="."]
-margin_top = 34.0
+margin_top = 36.0
 margin_right = 394.0
-margin_bottom = 38.0
+margin_bottom = 40.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-margin_top = 42.0
+margin_top = 44.0
 margin_right = 394.0
-margin_bottom = 72.0
+margin_bottom = 74.0
 
 [node name="Label" type="Label" parent="HBoxContainer"]
 margin_right = 102.0
@@ -40,9 +42,9 @@ margin_bottom = 30.0
 size_flags_horizontal = 3
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="."]
-margin_top = 76.0
+margin_top = 78.0
 margin_right = 394.0
-margin_bottom = 106.0
+margin_bottom = 108.0
 
 [node name="Label" type="Label" parent="HBoxContainer2"]
 margin_right = 100.0
@@ -58,9 +60,9 @@ margin_bottom = 30.0
 text = "label_fullscreen"
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="."]
-margin_top = 110.0
+margin_top = 112.0
 margin_right = 394.0
-margin_bottom = 140.0
+margin_bottom = 142.0
 
 [node name="Label" type="Label" parent="HBoxContainer3"]
 margin_right = 100.0
@@ -76,9 +78,9 @@ margin_bottom = 30.0
 text = "label_vsync"
 
 [node name="HBoxContainer4" type="HBoxContainer" parent="."]
-margin_top = 144.0
+margin_top = 146.0
 margin_right = 394.0
-margin_bottom = 174.0
+margin_bottom = 176.0
 
 [node name="Label" type="Label" parent="HBoxContainer4"]
 margin_right = 100.0

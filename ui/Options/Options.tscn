@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://ui/Options/Options.gd" type="Script" id=1]
-[ext_resource path="res://ui/Options/OptionsVideo.tscn" type="PackedScene" id=2]
-[ext_resource path="res://ui/Options/OptionsAudio.tscn" type="PackedScene" id=3]
-[ext_resource path="res://ui/Options/OptionsGame.tscn" type="PackedScene" id=4]
+[ext_resource path="res://fonts/mechsuit.tres" type="DynamicFont" id=2]
+[ext_resource path="res://fonts/mechsuit_thin.tres" type="DynamicFont" id=3]
+[ext_resource path="res://ui/Options/OptionsVideo.tscn" type="PackedScene" id=4]
+[ext_resource path="res://ui/Options/OptionsAudio.tscn" type="PackedScene" id=5]
+[ext_resource path="res://ui/Options/OptionsGame.tscn" type="PackedScene" id=6]
 
 [node name="Options" type="Control"]
 pause_mode = 2
@@ -49,36 +51,40 @@ rect_min_size = Vector2( 200, 0 )
 
 [node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
 margin_right = 200.0
-margin_bottom = 30.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 0, 30 )
+custom_fonts/font = ExtResource( 2 )
 text = "title_options"
 align = 1
 valign = 1
 
 [node name="HSeparator" type="HSeparator" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
-margin_top = 34.0
+margin_top = 36.0
 margin_right = 200.0
-margin_bottom = 38.0
+margin_bottom = 40.0
 
 [node name="VideoOptions" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
-margin_top = 42.0
+margin_top = 44.0
 margin_right = 200.0
-margin_bottom = 72.0
+margin_bottom = 74.0
 rect_min_size = Vector2( 0, 30 )
+custom_fonts/font = ExtResource( 3 )
 text = "title_video"
 
 [node name="AudioOptions" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
-margin_top = 76.0
+margin_top = 78.0
 margin_right = 200.0
-margin_bottom = 106.0
+margin_bottom = 108.0
 rect_min_size = Vector2( 0, 30 )
+custom_fonts/font = ExtResource( 3 )
 text = "title_sound"
 
 [node name="GameOptions" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
-margin_top = 110.0
+margin_top = 112.0
 margin_right = 200.0
-margin_bottom = 140.0
+margin_bottom = 142.0
 rect_min_size = Vector2( 0, 30 )
+custom_fonts/font = ExtResource( 3 )
 text = "title_game"
 
 [node name="VSeparator" type="VSeparator" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer"]
@@ -92,16 +98,16 @@ margin_right = 799.0
 margin_bottom = 511.0
 size_flags_horizontal = 3
 
-[node name="OptionsVideo" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/OptionsContainer" instance=ExtResource( 2 )]
+[node name="OptionsVideo" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/OptionsContainer" instance=ExtResource( 4 )]
 margin_right = 587.0
 margin_bottom = 511.0
 
-[node name="OptionsAudio" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/OptionsContainer" instance=ExtResource( 3 )]
+[node name="OptionsAudio" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/OptionsContainer" instance=ExtResource( 5 )]
 visible = false
 margin_right = 587.0
 margin_bottom = 511.0
 
-[node name="OptionsGame" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/OptionsContainer" instance=ExtResource( 4 )]
+[node name="OptionsGame" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/OptionsContainer" instance=ExtResource( 6 )]
 visible = false
 margin_right = 587.0
 margin_bottom = 511.0
@@ -113,35 +119,39 @@ margin_bottom = 545.0
 rect_min_size = Vector2( 0, 30 )
 
 [node name="ReturnButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
-margin_right = 68.0
+margin_right = 107.0
 margin_bottom = 30.0
+custom_fonts/font = ExtResource( 3 )
 text = "btn_back"
 
 [node name="CancelButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
-margin_left = 72.0
-margin_right = 152.0
+margin_left = 111.0
+margin_right = 242.0
 margin_bottom = 30.0
+custom_fonts/font = ExtResource( 3 )
 text = "btn_cancel"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
-margin_left = 156.0
+margin_left = 246.0
 margin_right = 799.0
 margin_bottom = 30.0
 size_flags_horizontal = 3
 alignment = 2
 
 [node name="ApplyButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
-margin_left = 431.0
-margin_right = 531.0
+margin_left = 220.0
+margin_right = 370.0
 margin_bottom = 30.0
-rect_min_size = Vector2( 100, 0 )
+rect_min_size = Vector2( 150, 0 )
+custom_fonts/font = ExtResource( 3 )
 text = "btn_apply"
 
 [node name="ApplySaveButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
-margin_left = 535.0
-margin_right = 643.0
+margin_left = 374.0
+margin_right = 553.0
 margin_bottom = 30.0
-rect_min_size = Vector2( 100, 0 )
+rect_min_size = Vector2( 150, 0 )
+custom_fonts/font = ExtResource( 3 )
 text = "btn_save_apply"
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/VideoOptions" to="." method="_on_VideoOptions_pressed"]
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/AudioOptions" to="." method="_on_AudioOptions_pressed"]
