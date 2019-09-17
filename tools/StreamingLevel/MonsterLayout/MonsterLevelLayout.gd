@@ -5,7 +5,7 @@ const MonsterLayoutBatch = preload("MonsterLayoutBatch.tscn")
 const TILE_SIZE := 2
 
 export var top_max_y := -2
-export var top_max_value := 0.0
+export(float, -1.0, 1.0) var top_max_value := 0.0
 export var end_max_y := 0
 
 func gen(pos: Vector3) -> Spatial:
