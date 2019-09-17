@@ -520,14 +520,14 @@ mesh = SubResource( 2 )
 material/0 = null
 
 [node name="Head" type="BoneAttachment" parent="Skeleton"]
-transform = Transform( 0.999455, 0.0202781, 0.0260656, -0.0189355, 0.99853, -0.0507558, -0.0270566, 0.050235, 0.998371, -0.0257663, 1.56051, -0.0539923 )
+transform = Transform( 0.999511, 0.0155722, 0.0270961, -0.014067, 0.998393, -0.0548847, -0.0279073, 0.0544766, 0.998125, -0.0273774, 1.56034, -0.0518367 )
 bone_name = "mixamorig_Head"
 
 [node name="HairTail" parent="Skeleton/Head" instance=ExtResource( 3 )]
 transform = Transform( 0.998199, -0.0278291, 0.0532083, 0.0272939, 0.999569, 0.0107601, -0.053485, -0.00928839, 0.998525, 0.0482045, -1.51198, 0.0532389 )
 
 [node name="RightHand" type="BoneAttachment" parent="Skeleton"]
-transform = Transform( 0.325031, 0.098433, 0.940567, 0.135559, -0.989146, 0.056673, 0.935937, 0.109082, -0.334848, -0.216556, 0.947836, -0.0116568 )
+transform = Transform( 0.332464, 0.0889134, 0.938915, 0.130278, -0.990331, 0.0476524, 0.934073, 0.106478, -0.340834, -0.222544, 0.94771, -0.0105474 )
 bone_name = "mixamorig_RightHand"
 
 [node name="Position" type="Spatial" parent="Skeleton/RightHand"]
@@ -584,9 +584,13 @@ parameters/StateMachine/Idle/Weapon/current = 0
 parameters/StateMachine/Locomotion/Weapon/current = 0
 script = ExtResource( 22 )
 
+[node name="WalkTimer" type="Timer" parent="."]
+wait_time = 0.4
+
 [node name="WalkSound" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource( 23 )
-unit_size = 30.0
+unit_size = 20.0
 bus = "SoundEffects"
+[connection signal="timeout" from="WalkTimer" to="." method="_on_WalkTimer_timeout"]
 
 [editable path="HitBox"]

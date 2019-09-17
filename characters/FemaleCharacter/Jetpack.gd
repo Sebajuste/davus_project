@@ -58,6 +58,10 @@ func _process(delta):
 	if power == 0.0:
 		jetpack_on = false
 		$AudioStreamPlayer3D.stop()
+	
+	if $AudioStreamPlayer3D.playing:
+		$AudioStreamPlayer3D.global_transform.origin = get_parent().get_parent().global_transform.origin
+	
 
 
 func _physics_process(delta):

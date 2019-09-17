@@ -29,6 +29,8 @@ var _jump_action := false
 var _jump_count := MAX_JUMP
 var _jumping := false
 
+var _walk_sound_ready := true
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -167,8 +169,11 @@ func _physics_process(delta):
 	if is_on_floor():
 		if abs(velocity.x) > 0.5:
 			_play_anim("Locomotion")
-			if not $WalkSound.playing:
+			if not $WalkSound.playing and _walk_sound_ready:
+				$WalkSound.pitch_scale = rand_range(0.8, 1.2)
 				$WalkSound.play()
+				$WalkTimer.start()
+				_walk_sound_ready = false
 		else:
 			_play_anim("Idle")
 			$WalkSound.stop()
@@ -188,3 +193,7 @@ func _play_anim(name: String, force: bool = false):
 		return
 	_anim_update = true
 	$AnimationTree.travel(name)
+
+
+func _on_WalkTimer_timeout():
+	_walk_sound_ready = true
