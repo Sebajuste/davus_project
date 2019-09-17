@@ -167,10 +167,14 @@ func _physics_process(delta):
 	if is_on_floor():
 		if abs(velocity.x) > 0.5:
 			_play_anim("Locomotion")
+			if not $WalkSound.playing:
+				$WalkSound.play()
 		else:
 			_play_anim("Idle")
+			$WalkSound.stop()
 	else:
 		_play_anim("Falling")
+		$WalkSound.stop()
 	
 	_anim_update = false
 
