@@ -37,7 +37,6 @@ script = ExtResource( 1 )
 environment = SubResource( 2 )
 
 [node name="StreamingLevel" parent="." instance=ExtResource( 2 )]
-editor/display_folded = true
 
 [node name="JungleLevelLayout" parent="StreamingLevel" instance=ExtResource( 3 )]
 noise = ExtResource( 4 )
@@ -57,7 +56,7 @@ end_max_y = 1
 transform = Transform( 1, -9.43685e-009, 5.87452e-009, 9.43685e-009, 1, 5.15538e-009, -5.87452e-009, -5.15538e-009, 1, 0, 0, 5.52072 )
 fov = 20.0
 script = ExtResource( 7 )
-target = NodePath("../FemaleCharacter")
+target = NodePath("../Player")
 distance = 30.0
 target_y_offset = 2.0
 
@@ -73,4 +72,10 @@ min_y = -30
 stream = ExtResource( 9 )
 autoplay = true
 
-[node name="FemaleCharacter" parent="." instance=ExtResource( 10 )]
+[node name="Player" parent="." instance=ExtResource( 10 )]
+
+[node name="PlayerRespawnTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+[connection signal="died" from="Player" to="." method="_on_FemaleCharacter_died"]
+[connection signal="timeout" from="PlayerRespawnTimer" to="." method="_on_PlayerRespawnTimer_timeout"]
