@@ -1,7 +1,9 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://prefabs/environment/jungle/alienPlant/scripts/AlienPlantRandomization.gd" type="Script" id=1]
-[ext_resource path="res://prefabs/environment/jungle/alienPlant/assets/alienPlantCold.glb" type="PackedScene" id=2]
+[ext_resource path="res://prefabs/environment/jungle/alienPlant/AlienPlantRandomization.gd" type="Script" id=1]
+[ext_resource path="res://models/Props/Jungle/alienPlantCold.glb" type="PackedScene" id=2]
+
+
 
 [node name="AlienPlant" type="Spatial"]
 script = ExtResource( 1 )
