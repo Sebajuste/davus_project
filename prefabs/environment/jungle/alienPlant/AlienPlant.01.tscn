@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://prefabs/environment/jungle/alienPlant/scripts/AlienPlantRandomization.gd" type="Script" id=1]
+[ext_resource path="res://prefabs/environment/jungle/alienPlant/assets/alienPlantCold.glb" type="PackedScene" id=2]
+
+[node name="AlienPlant" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="plant" type="Spatial" parent="."]
+transform = Transform( -0.302243, -0.120798, 0.945546, 0.148136, 0.973935, 0.171776, -0.94165, 0.191988, -0.27647, 0.309475, 0.881245, -0.777357 )
+
+[node name="model" parent="plant" instance=ExtResource( 2 )]
+transform = Transform( 0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0 )
+
+[node name="plant2" type="Spatial" parent="."]
+transform = Transform( 0.175832, 0, -1.59031, 0, 1.6, 0, 1.59031, 0, 0.175832, 0.456659, 0.857721, -0.738095 )
+
+[node name="model2" parent="plant2" instance=ExtResource( 2 )]
+
+[node name="light" type="OmniLight" parent="plant2"]
+transform = Transform( 0.624998, 0, -4.47035e-008, 0, 0.625, 0, 2.98023e-008, 0, 0.624998, 0.220186, 0.797264, 0.019928 )
+light_color = Color( 0.854902, 0.74902, 0.941176, 1 )
+light_energy = 2.69
+shadow_enabled = true
+omni_range = 2.2
