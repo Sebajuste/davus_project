@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://tileset/test/Test.tscn" type="PackedScene" id=1]
-[ext_resource path="res://scenes/TestGameplay/Camera.gd" type="Script" id=2]
-[ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=3]
-[ext_resource path="res://characters/Mobs/MobTentacle/MobTentacle.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/TestGameplay/TestGameplay.gd" type="Script" id=1]
+[ext_resource path="res://tileset/test/Test.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/TestGameplay/Camera.gd" type="Script" id=3]
+[ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=4]
+[ext_resource path="res://characters/Mobs/MobTentacle/MobTentacle.tscn" type="PackedScene" id=5]
 
 [sub_resource type="CubeMesh" id=1]
 
@@ -11,66 +12,71 @@
 data = PoolVector3Array( -1, 1, 1, 1, 1, 1, -1, -1, 1, 1, 1, 1, 1, -1, 1, -1, -1, 1, 1, 1, -1, -1, 1, -1, 1, -1, -1, -1, 1, -1, -1, -1, -1, 1, -1, -1, 1, 1, 1, 1, 1, -1, 1, -1, 1, 1, 1, -1, 1, -1, -1, 1, -1, 1, -1, 1, -1, -1, 1, 1, -1, -1, -1, -1, 1, 1, -1, -1, 1, -1, -1, -1, 1, 1, 1, -1, 1, 1, 1, 1, -1, -1, 1, 1, -1, 1, -1, 1, 1, -1, -1, -1, 1, 1, -1, 1, -1, -1, -1, 1, -1, 1, 1, -1, -1, -1, -1, -1 )
 
 [node name="TestGameplay" type="Spatial"]
+script = ExtResource( 1 )
 
 [node name="World" type="Spatial" parent="."]
+editor/display_folded = true
 
 [node name="MeshInstance" type="MeshInstance" parent="World"]
+editor/display_folded = true
 transform = Transform( 35.8403, 0, 0, 0, 0.35, 0, 0, 0, 2.45, 11.2899, -1.33652, 0 )
 mesh = SubResource( 1 )
 material/0 = null
 
 [node name="StaticBody" type="StaticBody" parent="World/MeshInstance"]
+editor/display_folded = true
 
 [node name="CollisionShape" type="CollisionShape" parent="World/MeshInstance/StaticBody"]
 shape = SubResource( 2 )
 
-[node name="Test" parent="World" instance=ExtResource( 1 )]
+[node name="Test" parent="World" instance=ExtResource( 2 )]
 
-[node name="Test2" parent="World" instance=ExtResource( 1 )]
+[node name="Test2" parent="World" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.96342, 0, 0 )
 
-[node name="Test3" parent="World" instance=ExtResource( 1 )]
+[node name="Test3" parent="World" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.94525, 1.98517, 0 )
 
-[node name="Test4" parent="World" instance=ExtResource( 1 )]
+[node name="Test4" parent="World" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0 )
 
-[node name="Test5" parent="World" instance=ExtResource( 1 )]
+[node name="Test5" parent="World" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 4, 0 )
 
-[node name="Test6" parent="World" instance=ExtResource( 1 )]
+[node name="Test6" parent="World" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 0 )
 
-[node name="Test7" parent="World" instance=ExtResource( 1 )]
+[node name="Test7" parent="World" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 4, 0 )
 
-[node name="Test8" parent="World" instance=ExtResource( 1 )]
+[node name="Test8" parent="World" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 6, 0 )
 
-[node name="Test9" parent="World" instance=ExtResource( 1 )]
+[node name="Test9" parent="World" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 6, 0 )
 
-[node name="Test10" parent="World" instance=ExtResource( 1 )]
+[node name="Test10" parent="World" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 2, 0 )
 
-[node name="Test11" parent="World" instance=ExtResource( 1 )]
+[node name="Test11" parent="World" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 2, 0 )
 
-[node name="Test12" parent="World" instance=ExtResource( 1 )]
+[node name="Test12" parent="World" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 2, 0 )
 
-[node name="Test13" parent="World" instance=ExtResource( 1 )]
+[node name="Test13" parent="World" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, 0 )
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.999289, 0.0377137, 0, -0.0377137, 0.999289, 0, 1.61902, 8.05316 )
 fov = 40.0
-script = ExtResource( 2 )
-target = NodePath("../FemaleCharacter")
+script = ExtResource( 3 )
+target = NodePath("../Player")
 distance = 20.0
 
-[node name="FemaleCharacter" parent="." instance=ExtResource( 3 )]
+[node name="Player" parent="." instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22544, 0 )
 
-[node name="MobTentacle" parent="." instance=ExtResource( 4 )]
+[node name="MobTentacle" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.15666, -0.529681, 0 )
+[connection signal="died" from="Player" to="." method="_on_Player_died"]

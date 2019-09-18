@@ -6,3 +6,5 @@
 script = ExtResource( 1 )
 
 [node name="ImmediateGeometry" type="ImmediateGeometry" parent="."]
+
+[node name="MultiMeshInstance" type="MultiMeshInstance" parent="."]

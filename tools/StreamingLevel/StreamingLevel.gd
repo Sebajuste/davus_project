@@ -18,6 +18,10 @@ var _batch_loc_queue := []
 var _batchloc_queue_mutex := Mutex.new()
 
 
+class DeleteItem:
+	var batch
+	var timer
+
 var _delete_queue := []
 var _delete_queue_mutex := Mutex.new()
 
@@ -26,7 +30,7 @@ var _layouts := []
 var _current_batch_loc := []
 
 func _ready():
-	_thread.start(self, "_load_thread")
+	_thread.start(self, "_thread_process")
 	for child in get_children():
 		if child != $Batches:
 			_layouts.append(child)
@@ -42,12 +46,23 @@ func _process(delta):
 	_add_batch_mutex.unlock()
 	
 	
+	var index := 0
+	for item in _delete_queue:
+		item.timer += delta
+		if item.timer > 5.0:
+			#item.batch.queue_free()
+			call_deferred("_delete_batch", item.batch)
+			_delete_queue.remove(index)
+			return
+		index += 1
+	
+	"""
 	_delete_queue_mutex.lock()
 	while not _delete_queue.empty():
 		var batch = _delete_queue.pop_front()
 		batch.queue_free()
 	_delete_queue_mutex.unlock()
-	
+	"""
 
 
 func _exit_tree():
@@ -107,11 +122,14 @@ func update(global_x: float, global_y: float):
 				_current_batch_loc.remove(index)
 			for batch in $Batches.get_children():
 				var batch_loc = _to_batch_loc(batch.global_transform.origin)
-				if batch_loc == delete_loc:
+				if batch_loc.x == delete_loc.x && batch_loc.y == delete_loc.y:
 					$Batches.remove_child(batch)
-					#batch.queue_free()
 					_delete_queue_mutex.lock()
-					_delete_queue.push_back(batch)
+					
+					var delete_item = DeleteItem.new()
+					delete_item.batch = batch
+					delete_item.timer = 0.0
+					_delete_queue.push_back(delete_item)
 					_delete_queue_mutex.unlock()
 
 
@@ -119,18 +137,15 @@ func _to_batch_loc(global_pos: Vector3) -> Vector3:
 	return Vector3(global_pos.x / (batch_size*2), global_pos.y / (batch_size*2), global_pos.z / (batch_size*2))
 
 
-func _load_thread(data):
-	
+func _thread_process(data):
 	while true:
 		var next_loc = null
 		_batchloc_queue_mutex.lock()
 		if not _batch_loc_queue.empty():
 			next_loc = _batch_loc_queue.pop_front()
 		_batchloc_queue_mutex.unlock()
-		
 		if next_loc != null:
 			_load_batch(next_loc)
-		
 		_stop_thread_mutex.lock()
 		if _stop_tread:
 			_stop_thread_mutex.unlock()
@@ -138,12 +153,25 @@ func _load_thread(data):
 		_stop_thread_mutex.unlock()
 
 
+func _load_queued_batch():
+	var next_loc = null
+	_batchloc_queue_mutex.lock()
+	if not _batch_loc_queue.empty():
+		next_loc = _batch_loc_queue.pop_front()
+	_batchloc_queue_mutex.unlock()
+	if next_loc != null:
+		_load_batch(next_loc)
+
+
 func _load_batch(loc: Vector3):
 	for layout in _layouts:
 		var layout_batch = layout.gen(Vector3(loc.x, loc.y, 0))
-		
 		if layout_batch:
 			_add_batch_mutex.lock()
 			_add_batch_queue.push_back(layout_batch)
 			_add_batch_mutex.unlock()
-	
+
+
+func _delete_batch(batch):
+	batch.free()
+	pass

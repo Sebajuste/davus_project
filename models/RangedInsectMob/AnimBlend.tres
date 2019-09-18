@@ -1,0 +1,46 @@
+[gd_resource type="AnimationNodeBlendTree" load_steps=11 format=2]
+
+[sub_resource type="AnimationNodeAnimation" id=1]
+animation = "RangedInsectHit"
+
+[sub_resource type="AnimationNodeOneShot" id=2]
+
+[sub_resource type="AnimationNodeAnimation" id=3]
+animation = "RangedInsectAttack"
+
+[sub_resource type="AnimationNodeAnimation" id=10]
+animation = "RangedInsectDeath"
+
+[sub_resource type="AnimationNodeAnimation" id=4]
+animation = "RangedInsectIdle"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=5]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=6]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=11]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=12]
+
+[sub_resource type="AnimationNodeStateMachine" id=7]
+states/Attack/node = SubResource( 3 )
+states/Attack/position = Vector2( 320, -16 )
+states/Death/node = SubResource( 10 )
+states/Death/position = Vector2( 614, 46 )
+states/Idle/node = SubResource( 4 )
+states/Idle/position = Vector2( 320, 119 )
+transitions = [ "Idle", "Attack", SubResource( 5 ), "Attack", "Idle", SubResource( 6 ), "Attack", "Death", SubResource( 11 ), "Idle", "Death", SubResource( 12 ) ]
+start_node = "Idle"
+graph_offset = Vector2( -21, -58 )
+
+[resource]
+graph_offset = Vector2( -518, -1 )
+nodes/Animation/node = SubResource( 1 )
+nodes/Animation/position = Vector2( -360, 260 )
+nodes/Hit/node = SubResource( 2 )
+nodes/Hit/position = Vector2( -20, 100 )
+nodes/StateMachine/node = SubResource( 7 )
+nodes/StateMachine/position = Vector2( -360, 60 )
+node_connections = [ "output", 0, "Hit", "Hit", 0, "StateMachine", "Hit", 1, "Animation" ]

@@ -1,0 +1,62 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://characters/Mobs/Mob.tscn" type="PackedScene" id=1]
+[ext_resource path="res://characters/Mobs/Fly/Fly.gd" type="Script" id=2]
+[ext_resource path="res://models/RangedInsectMob/Fly.tscn" type="PackedScene" id=3]
+[ext_resource path="res://tools/combat/CombatStats/CombatStats.tscn" type="PackedScene" id=4]
+[ext_resource path="res://sounds/mobs/fly.wav" type="AudioStream" id=5]
+
+[sub_resource type="SphereShape" id=1]
+radius = 0.265279
+
+[sub_resource type="SphereShape" id=2]
+radius = 0.883535
+
+[sub_resource type="SphereShape" id=3]
+radius = 7.20149
+
+[node name="Fly" instance=ExtResource( 1 )]
+collision_layer = 2
+collision_mask = 3
+script = ExtResource( 2 )
+
+[node name="CollisionShape" parent="." index="0"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-008, -1, 0, 1, -4.37114e-008, 0, 0.214783, 0 )
+shape = SubResource( 1 )
+
+[node name="HitBox" parent="." index="1"]
+combat_stats = NodePath("../CombatStats")
+
+[node name="CollisionShape" parent="HitBox" index="0"]
+shape = SubResource( 2 )
+
+[node name="FlyModel" parent="." index="2" instance=ExtResource( 3 )]
+transform = Transform( -1, 0, -8.74228e-008, 0, 1, 0, 8.74228e-008, 0, -1, 0, 0, 0 )
+
+[node name="Detection" type="Area" parent="." index="3"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Detection" index="0"]
+shape = SubResource( 3 )
+
+[node name="CombatStats" parent="." index="4" instance=ExtResource( 4 )]
+max_health = 2
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." index="5"]
+stream = ExtResource( 5 )
+attenuation_model = 1
+unit_size = 20.0
+pitch_scale = 0.7
+autoplay = true
+max_distance = 25.0
+bus = "SoundEffects"
+
+[node name="RemoveTimer" type="Timer" parent="." index="6"]
+wait_time = 5.0
+one_shot = true
+[connection signal="body_entered" from="Detection" to="." method="_on_Detection_body_entered"]
+[connection signal="body_exited" from="Detection" to="." method="_on_Detection_body_exited"]
+[connection signal="damage_taken" from="CombatStats" to="." method="_on_CombatStats_damage_taken"]
+[connection signal="health_depleted" from="CombatStats" to="." method="_on_CombatStats_health_depleted"]
+[connection signal="timeout" from="RemoveTimer" to="." method="_on_RemoveTimer_timeout"]
+
+[editable path="HitBox"]

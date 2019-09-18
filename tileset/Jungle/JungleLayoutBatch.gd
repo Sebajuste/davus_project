@@ -16,12 +16,15 @@ const TILES_RESOURCES := {
 		],
 	}
 
+var top_max_y : int
+var top_max_value : float
+var end_max_y : int
 
 func gen(loc: Vector3, noise: OpenSimplexNoise, cap: float) -> void:
 	for x in range(size):
 		for y in range(size):
 			var global_pos = Vector3(loc.x+x, loc.y-y, 0)
-			if _is_solid_tile(global_pos, noise, cap):
+			if global_pos.y < end_max_y and _is_solid_tile(global_pos, noise, cap):
 				var mask = _create_bitmask( global_pos, noise, cap)
 				var tile = _create_tile(mask)
 				if tile:

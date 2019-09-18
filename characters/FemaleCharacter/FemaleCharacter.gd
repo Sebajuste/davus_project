@@ -1,5 +1,6 @@
 extends KinematicBody
 
+signal died
 
 const GRAVITY := 9.8
 const MAX_JUMP := 1
@@ -28,6 +29,8 @@ var _jump_action := false
 #var _jump_dir := Vector3()
 var _jump_count := MAX_JUMP
 var _jumping := false
+
+var _walk_sound_ready := true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -80,6 +83,10 @@ func _process(delta):
 	
 	
 	_jump_event = false
+	
+	if $CombatStats.health == 0:
+		return
+	
 	if Input.is_action_just_pressed("jump"):
 		_jump_action = true
 		_jump_event = true
@@ -99,18 +106,19 @@ func _physics_process(delta):
 	
 	var dir = Vector3()
 	
-	if Input.is_action_pressed("move_right"):
-		dir += Vector3.RIGHT
+	if $CombatStats.health > 0:
+		if Input.is_action_pressed("move_right"):
+			dir += Vector3.RIGHT
 	
-	if Input.is_action_pressed("move_left"):
-		dir += Vector3.LEFT
+		if Input.is_action_pressed("move_left"):
+			dir += Vector3.LEFT
 	
 	dir = dir.normalized()
 	
 	velocity.y += delta * -GRAVITY * 2
 	
 	
-	if Input.is_action_just_pressed("unsheathe"):
+	if $CombatStats.health > 0 and Input.is_action_just_pressed("unsheathe"):
 		_pistol_aiming = not _pistol_aiming
 		if _pistol_aiming:
 			$AnimationTree.set("parameters/StateMachine/Idle/Weapon/current", 1)
@@ -149,6 +157,9 @@ func _physics_process(delta):
 	
 	velocity = move_and_slide( velocity , Vector3.UP )
 	
+	if $CombatStats.health == 0:
+		return
+	
 	if is_on_floor():
 		_jumping = false
 		_jump_count = MAX_JUMP
@@ -167,10 +178,17 @@ func _physics_process(delta):
 	if is_on_floor():
 		if abs(velocity.x) > 0.5:
 			_play_anim("Locomotion")
+			if not $WalkSound.playing and _walk_sound_ready:
+				$WalkSound.pitch_scale = rand_range(0.8, 1.2)
+				$WalkSound.play()
+				$WalkTimer.start()
+				_walk_sound_ready = false
 		else:
 			_play_anim("Idle")
+			$WalkSound.stop()
 	else:
 		_play_anim("Falling")
+		$WalkSound.stop()
 	
 	_anim_update = false
 
@@ -184,3 +202,28 @@ func _play_anim(name: String, force: bool = false):
 		return
 	_anim_update = true
 	$AnimationTree.travel(name)
+
+
+func _on_WalkTimer_timeout():
+	_walk_sound_ready = true
+
+
+func _on_CombatStats_damage_taken():
+	
+	$AnimationTree.set("parameters/Hit/active", true)
+	
+	pass # Replace with function body.
+
+
+func _on_CombatStats_health_depleted():
+	
+	$AnimationTree.set("parameters/Alive/current", 1)
+	$Equipement/WeaponHandler.shoot_ready = false
+	
+	emit_signal("died")
+	
+
+
+func _on_CombatStats_health_changed(new_value, old_value):
+	if new_value > 0:
+		$AnimationTree.set("parameters/Alive/current", 0)

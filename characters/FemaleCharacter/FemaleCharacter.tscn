@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=34 format=2]
 
 [ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.gd" type="Script" id=1]
 [ext_resource path="res://models/FemaleCharacter/Palette.material" type="Material" id=2]
@@ -6,21 +6,25 @@
 [ext_resource path="res://tools/combat/HitBox/HitBox.tscn" type="PackedScene" id=4]
 [ext_resource path="res://tools/CursorSelector/CursorSelector.tscn" type="PackedScene" id=5]
 [ext_resource path="res://characters/FemaleCharacter/Jetpack.gd" type="Script" id=6]
-[ext_resource path="res://tools/WeaponHandler/WeaponHandler.gd" type="Script" id=7]
-[ext_resource path="res://tools/combat/CombatStats/CombatStats.tscn" type="PackedScene" id=8]
-[ext_resource path="res://models/FemaleCharacter/angry.anim" type="Animation" id=9]
-[ext_resource path="res://models/FemaleCharacter/falling.anim" type="Animation" id=10]
-[ext_resource path="res://models/FemaleCharacter/idle.anim" type="Animation" id=11]
-[ext_resource path="res://models/FemaleCharacter/jetpack.anim" type="Animation" id=12]
-[ext_resource path="res://models/FemaleCharacter/jump.anim" type="Animation" id=13]
-[ext_resource path="res://models/FemaleCharacter/pistol-idle.anim" type="Animation" id=14]
-[ext_resource path="res://models/FemaleCharacter/pistol-run.anim" type="Animation" id=15]
-[ext_resource path="res://models/FemaleCharacter/rifle-aiming-idle.anim" type="Animation" id=16]
-[ext_resource path="res://models/FemaleCharacter/rifle-run.anim" type="Animation" id=17]
-[ext_resource path="res://models/FemaleCharacter/slow_run.anim" type="Animation" id=18]
-[ext_resource path="res://characters/FemaleCharacter/FemaleAnimationPlayer.tres" type="AnimationNodeStateMachine" id=19]
-[ext_resource path="res://characters/FemaleCharacter/FemaleAnimationPlayerStateMachine.tres" type="AnimationNodeStateMachinePlayback" id=20]
-[ext_resource path="res://characters/FemaleCharacter/AnimationTree.gd" type="Script" id=21]
+[ext_resource path="res://sounds/jetpack/jetpack.wav" type="AudioStream" id=7]
+[ext_resource path="res://tools/WeaponHandler/WeaponHandler.gd" type="Script" id=8]
+[ext_resource path="res://tools/combat/CombatStats/CombatStats.tscn" type="PackedScene" id=9]
+[ext_resource path="res://models/FemaleCharacter/angry.anim" type="Animation" id=10]
+[ext_resource path="res://models/FemaleCharacter/death.anim" type="Animation" id=11]
+[ext_resource path="res://models/FemaleCharacter/falling.anim" type="Animation" id=12]
+[ext_resource path="res://models/FemaleCharacter/hit.anim" type="Animation" id=13]
+[ext_resource path="res://models/FemaleCharacter/idle.anim" type="Animation" id=14]
+[ext_resource path="res://models/FemaleCharacter/jetpack.anim" type="Animation" id=15]
+[ext_resource path="res://models/FemaleCharacter/jump.anim" type="Animation" id=16]
+[ext_resource path="res://models/FemaleCharacter/pistol-idle.anim" type="Animation" id=17]
+[ext_resource path="res://models/FemaleCharacter/pistol-run.anim" type="Animation" id=18]
+[ext_resource path="res://models/FemaleCharacter/rifle-aiming-idle.anim" type="Animation" id=19]
+[ext_resource path="res://models/FemaleCharacter/rifle-run.anim" type="Animation" id=20]
+[ext_resource path="res://models/FemaleCharacter/slow_run.anim" type="Animation" id=21]
+[ext_resource path="res://characters/FemaleCharacter/FemaleAnimationPlayer.tres" type="AnimationNodeStateMachine" id=22]
+[ext_resource path="res://characters/FemaleCharacter/FemaleAnimationPlayerStateMachine.tres" type="AnimationNodeStateMachinePlayback" id=23]
+[ext_resource path="res://characters/FemaleCharacter/AnimationTree.gd" type="Script" id=24]
+[ext_resource path="res://sounds/character/walk.wav" type="AudioStream" id=25]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 0.226884
@@ -289,13 +293,41 @@ tracks/34/imported = false
 tracks/34/enabled = true
 tracks/34/keys = PoolRealArray( 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 )
 
-[sub_resource type="AnimationNodeBlendTree" id=4]
-graph_offset = Vector2( -548, 45 )
-nodes/StateMachine/node = ExtResource( 19 )
-nodes/StateMachine/position = Vector2( -120, 140 )
-node_connections = [ "output", 0, "StateMachine" ]
+[sub_resource type="AnimationNodeTransition" id=4]
+input_count = 2
+xfade_time = 0.1
+input_0/name = "Alive"
+input_0/auto_advance = false
+input_1/name = "Death"
+input_1/auto_advance = false
 
-[node name="FemaleCharacter" type="KinematicBody"]
+[sub_resource type="AnimationNodeAnimation" id=5]
+animation = "hit"
+
+[sub_resource type="AnimationNodeAnimation" id=6]
+animation = "death"
+
+[sub_resource type="AnimationNodeOneShot" id=7]
+fadein_time = 0.5
+fadeout_time = 0.5
+
+[sub_resource type="AnimationNodeBlendTree" id=8]
+graph_offset = Vector2( -763, 164 )
+nodes/Alive/node = SubResource( 4 )
+nodes/Alive/position = Vector2( 40, 200 )
+nodes/Animation/node = SubResource( 6 )
+nodes/Animation/position = Vector2( -280, 340 )
+"nodes/Animation 2/node" = SubResource( 5 )
+"nodes/Animation 2/position" = Vector2( -640, 300 )
+nodes/Hit/node = SubResource( 7 )
+nodes/Hit/position = Vector2( -345, 119 )
+nodes/StateMachine/node = ExtResource( 22 )
+nodes/StateMachine/position = Vector2( -680, 140 )
+node_connections = [ "output", 0, "Alive", "Hit", 0, "StateMachine", "Hit", 1, "Animation 2", "Alive", 0, "Hit", "Alive", 1, "Animation" ]
+
+[node name="FemaleCharacter" type="KinematicBody" groups=[
+"player",
+]]
 collision_layer = 2
 collision_mask = 3
 script = ExtResource( 1 )
@@ -335,7 +367,7 @@ bones/5/name = "mixamorig_Head"
 bones/5/parent = 4
 bones/5/rest = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0560172, 0.0120709 )
 bones/5/enabled = true
-bones/5/bound_children = [  ]
+bones/5/bound_children = [ NodePath("Head") ]
 bones/6/name = "mixamorig_HeadTop_End"
 bones/6/parent = 5
 bones/6/rest = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.59258, 0.0437383 )
@@ -420,7 +452,7 @@ bones/22/name = "mixamorig_RightHand"
 bones/22/parent = 21
 bones/22/rest = Transform( 0.820071, 0.152838, -0.551476, -0.0493779, 0.97898, 0.19789, 0.570129, -0.135053, 0.810379, -7.30157e-007, 0.257955, -7.15256e-007 )
 bones/22/enabled = true
-bones/22/bound_children = [  ]
+bones/22/bound_children = [ NodePath("RightHand") ]
 bones/23/name = "mixamorig_RightHandThumb1"
 bones/23/parent = 22
 bones/23/rest = Transform( 0.83614, 0.548516, 1.01328e-006, -0.548517, 0.83614, 2.05636e-006, 1.49012e-008, -1.75834e-006, 1, 0.0307962, 0.0442578, 3.57628e-007 )
@@ -517,20 +549,23 @@ mesh = SubResource( 2 )
 material/0 = null
 
 [node name="Head" type="BoneAttachment" parent="Skeleton"]
-transform = Transform( 0.999582, 0.017575, 0.0229302, -0.0170116, 0.999554, -0.0245364, -0.0233512, 0.0241364, 0.999436, -0.0305998, 1.55921, -0.0638624 )
+editor/display_folded = true
+transform = Transform( 0.999226, 0.0229577, 0.0319587, -0.0209995, 0.997959, -0.0603186, -0.0332782, 0.0596006, 0.997667, -0.0231305, 1.56043, -0.0524703 )
 bone_name = "mixamorig_Head"
 
 [node name="HairTail" parent="Skeleton/Head" instance=ExtResource( 3 )]
 transform = Transform( 0.998199, -0.0278291, 0.0532083, 0.0272939, 0.999569, 0.0107601, -0.053485, -0.00928839, 0.998525, 0.0482045, -1.51198, 0.0532389 )
 
 [node name="RightHand" type="BoneAttachment" parent="Skeleton"]
-transform = Transform( 0.335608, 0.0873286, 0.937945, 0.13303, -0.990107, 0.0445862, 0.93256, 0.109812, -0.343907, -0.229133, 0.954814, -0.0192214 )
+editor/display_folded = true
+transform = Transform( 0.320137, 0.0946068, 0.942636, 0.124817, -0.990539, 0.0570251, 0.939111, 0.0994019, -0.328917, -0.218806, 0.949871, -0.0144559 )
 bone_name = "mixamorig_RightHand"
 
 [node name="Position" type="Spatial" parent="Skeleton/RightHand"]
 transform = Transform( 0.0147597, 0.915448, -0.402164, 0.980249, 0.0660798, 0.186394, 0.197209, -0.396972, -0.896393, 0.0259951, 0.145295, 0.039593 )
 
 [node name="HitBox" parent="." instance=ExtResource( 4 )]
+editor/display_folded = true
 combat_stats = NodePath("../CombatStats")
 
 [node name="CollisionShape" parent="HitBox" index="0"]
@@ -539,40 +574,63 @@ transform = Transform( 1, 0, 0, 0, -4.37114e-008, -1, 0, 1, -4.37114e-008, 0, 0.
 [node name="CursorSelector" parent="." instance=ExtResource( 5 )]
 
 [node name="Equipement" type="Node" parent="."]
+editor/display_folded = true
 
 [node name="Jetpack" type="Node" parent="Equipement"]
+editor/display_folded = true
 script = ExtResource( 6 )
 max_power = 0.8
 activation_delay = 0.1
 
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Equipement/Jetpack"]
+stream = ExtResource( 7 )
+unit_size = 20.0
+bus = "SoundEffects"
+
 [node name="WeaponHandler" type="Node" parent="Equipement"]
-script = ExtResource( 7 )
+script = ExtResource( 8 )
 right_hand = NodePath("../../Skeleton/RightHand/Position")
 
-[node name="CombatStats" parent="." instance=ExtResource( 8 )]
+[node name="CombatStats" parent="." instance=ExtResource( 9 )]
 max_health = 10
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "default"
-anims/angry = ExtResource( 9 )
+anims/angry = ExtResource( 10 )
+anims/death = ExtResource( 11 )
 anims/default = SubResource( 3 )
-anims/falling = ExtResource( 10 )
-anims/idle = ExtResource( 11 )
-anims/jetpack = ExtResource( 12 )
-anims/jump = ExtResource( 13 )
-anims/pistol-idle = ExtResource( 14 )
-anims/pistol-run = ExtResource( 15 )
-anims/rifle-aiming-idle = ExtResource( 16 )
-anims/rifle-run = ExtResource( 17 )
-anims/slow_run = ExtResource( 18 )
+anims/falling = ExtResource( 12 )
+anims/hit = ExtResource( 13 )
+anims/idle = ExtResource( 14 )
+anims/jetpack = ExtResource( 15 )
+anims/jump = ExtResource( 16 )
+anims/pistol-idle = ExtResource( 17 )
+anims/pistol-run = ExtResource( 18 )
+anims/rifle-aiming-idle = ExtResource( 19 )
+anims/rifle-run = ExtResource( 20 )
+anims/slow_run = ExtResource( 21 )
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource( 4 )
+tree_root = SubResource( 8 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
-parameters/StateMachine/playback = ExtResource( 20 )
+parameters/Alive/current = 0
+parameters/Hit/active = false
+parameters/StateMachine/playback = ExtResource( 23 )
 parameters/StateMachine/Idle/Weapon/current = 0
 parameters/StateMachine/Locomotion/Weapon/current = 0
-script = ExtResource( 21 )
+script = ExtResource( 24 )
+
+[node name="WalkTimer" type="Timer" parent="."]
+wait_time = 0.4
+
+[node name="WalkSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource( 25 )
+unit_size = 10.0
+bus = "SoundEffects"
+[connection signal="damage_taken" from="CombatStats" to="." method="_on_CombatStats_damage_taken"]
+[connection signal="health_changed" from="CombatStats" to="." method="_on_CombatStats_health_changed"]
+[connection signal="health_depleted" from="CombatStats" to="." method="_on_CombatStats_health_depleted"]
+[connection signal="timeout" from="WalkTimer" to="." method="_on_WalkTimer_timeout"]
 
 [editable path="HitBox"]
