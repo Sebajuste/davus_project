@@ -49,8 +49,9 @@ func _process(delta):
 	var index := 0
 	for item in _delete_queue:
 		item.timer += delta
-		if item.timer > 1.0:
-			item.batch.queue_free()
+		if item.timer > 5.0:
+			#item.batch.queue_free()
+			call_deferred("_delete_batch", item.batch)
 			_delete_queue.remove(index)
 			return
 		index += 1
@@ -163,4 +164,8 @@ func _load_batch(loc: Vector3):
 			_add_batch_mutex.lock()
 			_add_batch_queue.push_back(layout_batch)
 			_add_batch_mutex.unlock()
-	
+
+
+func _delete_batch(batch):
+	batch.free()
+	pass
