@@ -2,7 +2,7 @@ extends Node
 
 class_name CombatStats
 
-signal health_changed(old_value, new_value)
+signal health_changed(new_value, old_value)
 signal health_depleted()
 signal damage_taken()
 
@@ -31,7 +31,8 @@ func take_damage(hit: Hit) -> void:
 func heal(amount: int) -> void:
 	var old_health = health
 	health = min(health + amount, max_health)
-	emit_signal("health_changed", health, old_health)
+	if old_health != health:
+		emit_signal("health_changed", health, old_health)
 
 
 func set_max_health(value: int) -> void:

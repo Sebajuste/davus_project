@@ -1,17 +1,19 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://models/FemaleCharacter/FemaleCharacter.dae" type="PackedScene" id=1]
 [ext_resource path="res://models/Cosmetic/HairTail/HairTail.tscn" type="PackedScene" id=2]
 [ext_resource path="res://models/FemaleCharacter/angry.anim" type="Animation" id=3]
-[ext_resource path="res://models/FemaleCharacter/falling.anim" type="Animation" id=4]
-[ext_resource path="res://models/FemaleCharacter/idle.anim" type="Animation" id=5]
-[ext_resource path="res://models/FemaleCharacter/jetpack.anim" type="Animation" id=6]
-[ext_resource path="res://models/FemaleCharacter/jump.anim" type="Animation" id=7]
-[ext_resource path="res://models/FemaleCharacter/pistol-idle.anim" type="Animation" id=8]
-[ext_resource path="res://models/FemaleCharacter/pistol-run.anim" type="Animation" id=9]
-[ext_resource path="res://models/FemaleCharacter/rifle-aiming-idle.anim" type="Animation" id=10]
-[ext_resource path="res://models/FemaleCharacter/rifle-run.anim" type="Animation" id=11]
-[ext_resource path="res://models/FemaleCharacter/slow_run.anim" type="Animation" id=12]
+[ext_resource path="res://models/FemaleCharacter/death.anim" type="Animation" id=4]
+[ext_resource path="res://models/FemaleCharacter/falling.anim" type="Animation" id=5]
+[ext_resource path="res://models/FemaleCharacter/hit.anim" type="Animation" id=6]
+[ext_resource path="res://models/FemaleCharacter/idle.anim" type="Animation" id=7]
+[ext_resource path="res://models/FemaleCharacter/jetpack.anim" type="Animation" id=8]
+[ext_resource path="res://models/FemaleCharacter/jump.anim" type="Animation" id=9]
+[ext_resource path="res://models/FemaleCharacter/pistol-idle.anim" type="Animation" id=10]
+[ext_resource path="res://models/FemaleCharacter/pistol-run.anim" type="Animation" id=11]
+[ext_resource path="res://models/FemaleCharacter/rifle-aiming-idle.anim" type="Animation" id=12]
+[ext_resource path="res://models/FemaleCharacter/rifle-run.anim" type="Animation" id=13]
+[ext_resource path="res://models/FemaleCharacter/slow_run.anim" type="Animation" id=14]
 
 [node name="FemaleCharacter" instance=ExtResource( 1 )]
 
@@ -25,12 +27,14 @@ transform = Transform( 1, -9.20016e-011, -9.90335e-011, 1.15511e-011, 0.999999, 
 [node name="AnimationPlayer" parent="." index="1"]
 autoplay = "default"
 anims/angry = ExtResource( 3 )
-anims/falling = ExtResource( 4 )
-anims/idle = ExtResource( 5 )
-anims/jetpack = ExtResource( 6 )
-anims/jump = ExtResource( 7 )
-anims/pistol-idle = ExtResource( 8 )
-anims/pistol-run = ExtResource( 9 )
-anims/rifle-aiming-idle = ExtResource( 10 )
-anims/rifle-run = ExtResource( 11 )
-anims/slow_run = ExtResource( 12 )
+anims/death = ExtResource( 4 )
+anims/falling = ExtResource( 5 )
+anims/hit = ExtResource( 6 )
+anims/idle = ExtResource( 7 )
+anims/jetpack = ExtResource( 8 )
+anims/jump = ExtResource( 9 )
+anims/pistol-idle = ExtResource( 10 )
+anims/pistol-run = ExtResource( 11 )
+anims/rifle-aiming-idle = ExtResource( 12 )
+anims/rifle-run = ExtResource( 13 )
+anims/slow_run = ExtResource( 14 )

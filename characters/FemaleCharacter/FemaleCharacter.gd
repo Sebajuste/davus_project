@@ -1,5 +1,6 @@
 extends KinematicBody
 
+signal died
 
 const GRAVITY := 9.8
 const MAX_JUMP := 1
@@ -82,6 +83,10 @@ func _process(delta):
 	
 	
 	_jump_event = false
+	
+	if $CombatStats.health == 0:
+		return
+	
 	if Input.is_action_just_pressed("jump"):
 		_jump_action = true
 		_jump_event = true
@@ -101,18 +106,19 @@ func _physics_process(delta):
 	
 	var dir = Vector3()
 	
-	if Input.is_action_pressed("move_right"):
-		dir += Vector3.RIGHT
+	if $CombatStats.health > 0:
+		if Input.is_action_pressed("move_right"):
+			dir += Vector3.RIGHT
 	
-	if Input.is_action_pressed("move_left"):
-		dir += Vector3.LEFT
+		if Input.is_action_pressed("move_left"):
+			dir += Vector3.LEFT
 	
 	dir = dir.normalized()
 	
 	velocity.y += delta * -GRAVITY * 2
 	
 	
-	if Input.is_action_just_pressed("unsheathe"):
+	if $CombatStats.health > 0 and Input.is_action_just_pressed("unsheathe"):
 		_pistol_aiming = not _pistol_aiming
 		if _pistol_aiming:
 			$AnimationTree.set("parameters/StateMachine/Idle/Weapon/current", 1)
@@ -150,6 +156,9 @@ func _physics_process(delta):
 	velocity.z = hv.z
 	
 	velocity = move_and_slide( velocity , Vector3.UP )
+	
+	if $CombatStats.health == 0:
+		return
 	
 	if is_on_floor():
 		_jumping = false
@@ -197,3 +206,24 @@ func _play_anim(name: String, force: bool = false):
 
 func _on_WalkTimer_timeout():
 	_walk_sound_ready = true
+
+
+func _on_CombatStats_damage_taken():
+	
+	$AnimationTree.set("parameters/Hit/active", true)
+	
+	pass # Replace with function body.
+
+
+func _on_CombatStats_health_depleted():
+	
+	$AnimationTree.set("parameters/Alive/current", 1)
+	$Equipement/WeaponHandler.shoot_ready = false
+	
+	emit_signal("died")
+	
+
+
+func _on_CombatStats_health_changed(new_value, old_value):
+	if new_value > 0:
+		$AnimationTree.set("parameters/Alive/current", 0)
