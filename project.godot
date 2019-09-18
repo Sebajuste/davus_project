@@ -33,12 +33,13 @@ _global_script_class_icons={
 [application]
 
 config/name="DAVUS Project"
-run/main_scene="res://scenes/MainMenu/MainMenu.tscn"
+run/main_scene="res://scenes/EntryPoint/EntryPoint.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
 configuration="*res://scripts/singletons/configuration.gd"
+loading="*res://scripts/singletons/loading.gd"
 
 [input]
 

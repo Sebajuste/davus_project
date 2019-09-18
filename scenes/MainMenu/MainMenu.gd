@@ -42,7 +42,7 @@ func _physics_process(delta):
 
 func _on_StartButton_pressed():
 	
-	get_tree().change_scene("res://scenes/TestWorldGameplay/TestWorldGameplay.tscn")
+	loading.change_scene("res://scenes/TestWorldGameplay/TestWorldGameplay.tscn")
 	
 
 
