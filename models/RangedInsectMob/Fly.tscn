@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://models/RangedInsectMob/RangedInsectMob.glb" type="PackedScene" id=1]
+[ext_resource path="res://models/RangedInsectMob/AnimBlend.tres" type="AnimationNodeBlendTree" id=2]
+[ext_resource path="res://models/RangedInsectMob/AnimStateMachine.tres" type="AnimationNodeStateMachinePlayback" id=3]
+
+[node name="Fly" instance=ExtResource( 1 )]
+
+[node name="InsectSkeleton" parent="." index="0"]
+editor/display_folded = true
+
+[node name="AnimationPlayer" parent="." index="2"]
+autoplay = "RangedInsectIdle"
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="3"]
+tree_root = ExtResource( 2 )
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/Hit/active = false
+parameters/StateMachine/playback = ExtResource( 3 )
