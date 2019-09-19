@@ -1,33 +1,19 @@
 extends Spatial
 
-export var speed = 50
+var _control_camera:bool = false
 
-func _on_DungeonGenerator_graph_gen_finnished():
-	var dg = $DungeonGenerator
-	#dg.map = $GridMap
-	$Camera.translation.x = dg.map_width
-	$Camera.translation.y = dg.map_height
-	
-func _process(delta):
-	
-	var cam_move = Vector3()
-	
-	if Input.is_action_pressed("ui_right"):
-		cam_move += Vector3.RIGHT * speed
-	
-	if Input.is_action_pressed("ui_left"):
-		cam_move += Vector3.LEFT * speed
-	
-	if Input.is_action_pressed("ui_up"):
-		cam_move += Vector3.UP * speed
-	
-	if Input.is_action_pressed("ui_down"):
-		cam_move += -Vector3.UP * speed
-	
-	if Input.is_action_pressed("zoom_forward") or Input.is_key_pressed(KEY_Z):
-		cam_move += Vector3.FORWARD * speed
-	
-	if Input.is_action_pressed("zoom_backward") or Input.is_key_pressed(KEY_S):
-		cam_move += Vector3.BACK * speed
-	
-	$Camera.translate( cam_move * delta )
+func _ready():
+	_select_camera()
+
+func _input(event):
+	if event is InputEventKey and not event.is_pressed():
+		if event.scancode == KEY_9:
+			_select_camera()
+
+func _select_camera():
+	$CameraPlayer.current = not _control_camera
+	$CameraMap.current = _control_camera
+
+func _on_DungeonGenerator_dungeon_generated():
+	$Player.global_transform.origin = $DungeonGenerator.spawn_position
+	$Player/CombatStats.heal( $Player/CombatStats.max_health )

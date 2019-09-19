@@ -11,9 +11,9 @@ export var map_width:int = 80
 export var map_height:int = 50
 export var min_room_width:int = 6
 export var max_room_width:int = 6
-export var min_room_height:int = 4
-export var max_room_height:int = 4
-export var map_seed = 2
+export var min_room_height:int = 3
+export var max_room_height:int = 3
+export var map_seed = 1
 
 const TILE_SIZE = 2
 
@@ -21,10 +21,10 @@ const DEBUG = false
 const FORCE_START_DOOR = false
 const FORCE_END_DOOR = false
 const DISABLE_COLLISION = false
-const DRAW_ROOMS_INDEX = true
+const DRAW_ROOMS_INDEX = false
 const PRINT_REFUSED_DUNGEON = true
 const PRINT_LADDER = false
-const PRINT_ROOMS_TRAVEL = true
+const PRINT_ROOMS_TRAVEL = false
 const PRINT_DOOR_LOCATION = false
 const DESIRED_SEED_STEP_COUNTER = 132
 var _desired_seed_counter:int = 0 #100
@@ -39,6 +39,7 @@ const STATIC_BODY:Dictionary = {
 	eTilesType.RightLadder: preload("res://tileset/test/RightLadder.tscn"),
 	}
 
+var spawn_position:Vector3
 var map: GridMap
 
 var position_walls := Array()
@@ -49,6 +50,7 @@ var position_end := Array()
 var position_left_ladders := Array()
 var position_right_ladders := Array()
 
+var camera_control:bool = false
 var rooms_areas := Dictionary()
 var starting_room : Rect2
 var ending_room : Rect2
@@ -65,7 +67,7 @@ func _ready():
 
 func _input(event):
 	if event is InputEventKey and not event.is_pressed():
-		if event.scancode == KEY_SPACE:
+		if event.scancode == KEY_8:
 			clear_console()
 			gen_graph()
 		if event.scancode == KEY_ENTER:
@@ -78,6 +80,7 @@ func _input(event):
 				for connection in pathfinding.get_point_connections(point):
 					print(str(point) + " -> " + str(connection))
 
+
 func gen_graph():
 	clear_all()
 	
@@ -86,6 +89,7 @@ func gen_graph():
 	var distantest:Array = _get_distantest_rooms(rooms_locations)
 	starting_room = distantest[0]
 	ending_room = distantest[1]
+	spawn_position = get_middle(starting_room) * TILE_SIZE
 	rooms_areas = _reorder_rooms(rooms_locations)
 	update()
 	emit_signal("graph_gen_finnished")
@@ -408,7 +412,7 @@ func _dig_mixed_directions(horizontalPos: Vector3, verticalPos: Vector3, doorOnH
 	var dif = vector3_floor(verticalPos - horizontalPos)
 	var step = Vector2(sign(dif.x), sign(dif.y))
 	
-	for x in range(horizontalPos.x + step.x, verticalPos.x, step.x):
+	for x in range(horizontalPos.x, verticalPos.x, step.x):
 		var v = Vector3(x, horizontalPos.y, 0)
 		if doorOnHorizontal && x == horizontalPos.x + step.x:
 			_apply_tile_on_tilemap(v, eTilesType.Door)
@@ -416,7 +420,7 @@ func _dig_mixed_directions(horizontalPos: Vector3, verticalPos: Vector3, doorOnH
 			_apply_tile_on_tilemap(v, eTilesType.Empty)
 	
 	var toggleRight:bool = _first_step_is_on_right(dif, step)
-	for y in range(horizontalPos.y + step.y, verticalPos.y, step.y):
+	for y in range(horizontalPos.y, verticalPos.y, step.y):
 		var v = Vector3(verticalPos.x, y, 0)
 		if doorOnVertical && y == verticalPos.y - step.y:
 			_apply_tile_on_tilemap(v, eTilesType.Door)
