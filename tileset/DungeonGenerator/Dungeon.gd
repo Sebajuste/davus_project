@@ -4,7 +4,7 @@ export var speed = 50
 
 func _on_DungeonGenerator_graph_gen_finnished():
 	var dg = $DungeonGenerator
-	dg.generate_grid_map($GridMap)
+	#dg.map = $GridMap
 	$Camera.translation.x = dg.map_width
 	$Camera.translation.y = dg.map_height
 	
