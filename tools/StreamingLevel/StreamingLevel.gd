@@ -2,7 +2,7 @@ extends Spatial
 
 
 export(int) var batch_size := 16
-
+export var multithreading := true
 
 var _current_batch_x := 99999
 var _current_batch_y := 99999
@@ -30,7 +30,8 @@ var _layouts := []
 var _current_batch_loc := []
 
 func _ready():
-	_thread.start(self, "_thread_process")
+	if multithreading:
+		_thread.start(self, "_thread_process")
 	for child in get_children():
 		if child != $Batches:
 			_layouts.append(child)
@@ -55,6 +56,9 @@ func _process(delta):
 			_delete_queue.remove(index)
 			return
 		index += 1
+	
+	if not multithreading:
+		_load_queued_batch()
 	
 	"""
 	_delete_queue_mutex.lock()
