@@ -17,6 +17,10 @@ func _process(delta):
 	if Input.is_action_just_pressed("pause"):
 		get_tree().quit()
 	
+	if Input.is_action_just_pressed("show_map"):
+		$Menu.visible = not $Menu.visible
+	
+	
 	$StreamingLevel.update($Camera.global_transform.origin.x, $Camera.global_transform.origin.y)
 	
 
