@@ -9,20 +9,23 @@ export(int, 2, 10) var number_of_rooms:int = 12
 export var number_of_keys:int = 1
 export var map_width:int = 80
 export var map_height:int = 50
-export var min_room_width:int = 4
-export var max_room_width:int = 4
-export var min_room_height:int = 3
-export var max_room_height:int = 3
+export var min_room_width:int = 6
+export var max_room_width:int = 6
+export var min_room_height:int = 4
+export var max_room_height:int = 4
 export var map_seed = 2
 
 const TILE_SIZE = 2
 
-const DEBUG = true
+const DEBUG = false
+const FORCE_START_DOOR = false
+const FORCE_END_DOOR = false
+const DISABLE_COLLISION = false
 const DRAW_ROOMS_INDEX = true
 const PRINT_REFUSED_DUNGEON = true
-const PRINT_LADDER = true
+const PRINT_LADDER = false
 const PRINT_ROOMS_TRAVEL = true
-const PRINT_DOOR_LOCATION = true
+const PRINT_DOOR_LOCATION = false
 const DESIRED_SEED_STEP_COUNTER = 132
 var _desired_seed_counter:int = 0 #100
 
@@ -38,7 +41,6 @@ const STATIC_BODY:Dictionary = {
 
 var map: GridMap
 
-var bodies := Dictionary()
 var position_walls := Array()
 var position_doors := Array()
 var position_doors_insertions := Array()
@@ -90,12 +92,13 @@ func gen_graph():
 	_fill_the_map()
 	_write_rooms_on_map()
 	_write_corridors_on_map()
-	if map == null:
-		_generate_multimesh()
 	
 	if DEBUG:
 		_apply_tile_on_tilemap(get_middle(starting_room), eTilesType.Start)
 		_apply_tile_on_tilemap(get_middle(ending_room), eTilesType.End)
+	
+	if map == null:
+		_generate_multimesh()
 	
 	seed_counter += 1
 	if DEBUG && seed_counter < _desired_seed_counter || _desired_seed_counter == -1:
@@ -244,7 +247,7 @@ func _write_corridors_on_map():
 				var posRoom2 = pathfinding.get_point_position(connection)
 				var start = _get_door_location(get_room_rectangle(rooms_areas[point]), posRoom2)
 				var end = _get_door_location(get_room_rectangle(rooms_areas[connection]), posRoom1)
-				_dig_path(start, end, true, true)
+				_dig_path(start, end, FORCE_START_DOOR, FORCE_END_DOOR)
 		
 		rooms_done.append(point)
 
@@ -312,7 +315,7 @@ func _dig_horizontally(startPos: Vector3, endPos: Vector3, doorOnStart: bool, do
 	var middlePos = vector3_round(startPos + (dif / 2))
 	var step = Vector2(sign(dif.x), sign(dif.y))
 	
-	for x in range(startPos.x, endPos.x + step.x, step.x):
+	for x in range(startPos.x + step.x, endPos.x, step.x):
 		var v : Vector3
 		if x < middlePos.x && step.x > 0 || x > middlePos.x && step.x < 0:
 			v = Vector3(x, startPos.y, 0)
@@ -326,7 +329,6 @@ func _dig_horizontally(startPos: Vector3, endPos: Vector3, doorOnStart: bool, do
 	var toggleRight:bool = _first_step_is_on_right(dif, step)
 	for y in range(startPos.y, endPos.y + step.y, step.y):
 		var v = Vector3(middlePos.x, y, 0)
-		#_apply_tile_on_tilemap(v, eTilesType.Empty)
 		var isEndOfLadder:bool = false
 		if step.y > 0:
 			isEndOfLadder = y == int(endPos.y)
@@ -349,41 +351,46 @@ func _dig_vertically(startPos: Vector3, endPos: Vector3, doorOnStart: bool, door
 	var middlePos = vector3_round(startPos + (dif / 2))
 	var step = Vector2(sign(dif.x), sign(dif.y))
 	
-	for x in range(startPos.x, endPos.x, step.x):
+	var top:Vector3 = endPos
+	var bottom:Vector3 = startPos
+	var doorOnTop = doorOnEnd
+	var doorOnBottom = doorOnStart
+	
+	if step.y < 0:
+		top = startPos
+		bottom = endPos
+		doorOnTop = doorOnStart
+		doorOnBottom = doorOnEnd
+		step = - step
+	
+	for x in range(bottom.x, top.x + step.x, step.x):
 		var v = Vector3(x, middlePos.y, 0)
 		_apply_tile_on_tilemap(v, eTilesType.Empty)
 	
-	
-	var delta: Vector3
-	if step.y > 0:
-		delta = vector3_floor(startPos - middlePos)
-	else:
-		delta = vector3_floor(endPos - middlePos)
+	var delta:Vector3 = vector3_floor(bottom - middlePos)
 		
 	var toggleRight:bool = _first_step_is_on_right(delta, step)
 	
-	for y in range(startPos.y, endPos.y, step.y):
+	for y in range(bottom.y + step.y, top.y, step.y):
 		var v : Vector3
 		if y < middlePos.y && step.y > 0 || y > middlePos.y && step.y < 0:
-			v = Vector3(startPos.x, y, 0)
+			v = Vector3(bottom.x, y, 0)
 		else:
-			v = Vector3(endPos.x, y, 0)
+			v = Vector3(top.x, y, 0)
 			
 			if y == middlePos.y && step.x != 0:
+				delta = vector3_floor(middlePos - top)
 				toggleRight = _first_step_is_on_right(delta, step)
 				
-		if doorOnStart && y == startPos.y + step.y || doorOnEnd && y == endPos.y - step.y:
+		if doorOnBottom && y == bottom.y + step.y || doorOnTop && y == top.y - step.y:
 			_apply_tile_on_tilemap(v, eTilesType.Door)
 			toggleRight = not toggleRight
 		else:
-			#_apply_tile_on_tilemap(v, eTilesType.Empty)
 			var isEndOfLadder:bool = false
 			if step.y > 0:
-				isEndOfLadder = y == int(endPos.y) || y == int(endPos.y - step.y)
+				isEndOfLadder = y == int(top.y) || y == int(top.y - step.y)
 			elif step.y == 0:
 				isEndOfLadder = true
-			else:
-				isEndOfLadder = y == int(startPos.y) || y == int(startPos.y + step.y)
 			
 			if not isEndOfLadder:
 				if toggleRight:
@@ -401,7 +408,7 @@ func _dig_mixed_directions(horizontalPos: Vector3, verticalPos: Vector3, doorOnH
 	var dif = vector3_floor(verticalPos - horizontalPos)
 	var step = Vector2(sign(dif.x), sign(dif.y))
 	
-	for x in range(horizontalPos.x, verticalPos.x, step.x):
+	for x in range(horizontalPos.x + step.x, verticalPos.x, step.x):
 		var v = Vector3(x, horizontalPos.y, 0)
 		if doorOnHorizontal && x == horizontalPos.x + step.x:
 			_apply_tile_on_tilemap(v, eTilesType.Door)
@@ -409,12 +416,11 @@ func _dig_mixed_directions(horizontalPos: Vector3, verticalPos: Vector3, doorOnH
 			_apply_tile_on_tilemap(v, eTilesType.Empty)
 	
 	var toggleRight:bool = _first_step_is_on_right(dif, step)
-	for y in range(horizontalPos.y, verticalPos.y, step.y):
+	for y in range(horizontalPos.y + step.y, verticalPos.y, step.y):
 		var v = Vector3(verticalPos.x, y, 0)
 		if doorOnVertical && y == verticalPos.y - step.y:
 			_apply_tile_on_tilemap(v, eTilesType.Door)
 		else:
-			#_apply_tile_on_tilemap(v, eTilesType.Empty)
 			var isEndOfLadder:bool = false
 			if step.y > 0:
 				isEndOfLadder = y == int(verticalPos.y)
@@ -473,31 +479,52 @@ func _generate_multimesh():
 	
 	wall.multimesh.instance_count = position_walls.size()
 	for i in range(position_walls.size()):
-		wall.multimesh.set_instance_transform(i, Transform(basis,  position_walls[i]) )
+		var pos:Vector3 = position_walls[i]
+		wall.multimesh.set_instance_transform(i, Transform(basis,  pos))
+		if not DISABLE_COLLISION:
+			var body = STATIC_BODY.get(eTilesType.Wall).instance()
+			body.translate(pos)
+			add_child(body)
 	
 	door.multimesh.instance_count = position_doors.size()
 	for i in range(position_doors.size()):
-		door.multimesh.set_instance_transform(i, Transform(basis,  position_doors[i]) )
+		var pos:Vector3 = position_doors[i]
+		door.multimesh.set_instance_transform(i, Transform(basis,  pos))
+		if not DISABLE_COLLISION:
+			var body = STATIC_BODY.get(eTilesType.Door).instance()
+			body.translate(pos)
+			add_child(body)
 	
 	doorInsertion.multimesh.instance_count = position_doors_insertions.size()
 	for i in range(position_doors_insertions.size()):
-		doorInsertion.multimesh.set_instance_transform(i, Transform(basis,  position_doors_insertions[i]) )
+		var pos:Vector3 = position_doors_insertions[i]
+		doorInsertion.multimesh.set_instance_transform(i, Transform(basis,  pos))
 	
 	start.multimesh.instance_count = position_start.size()
 	for i in range(position_start.size()):
-		start.multimesh.set_instance_transform(i, Transform(basis,  position_start[i]) )
+		start.multimesh.set_instance_transform(i, Transform(basis,  position_start[i]))
 	
 	end.multimesh.instance_count = position_end.size()
 	for i in range(position_end.size()):
-		end.multimesh.set_instance_transform(i, Transform(basis,  position_end[i]) )
+		end.multimesh.set_instance_transform(i, Transform(basis,  position_end[i]))
 	
 	leftLadder.multimesh.instance_count = position_left_ladders.size()
 	for i in range(position_left_ladders.size()):
-		leftLadder.multimesh.set_instance_transform(i, Transform(basis,  position_left_ladders[i]) )
+		var pos:Vector3 = position_left_ladders[i]
+		leftLadder.multimesh.set_instance_transform(i, Transform(basis,  pos))
+		if not DISABLE_COLLISION:
+			var body = STATIC_BODY.get(eTilesType.LeftLadder).instance()
+			body.translate(pos)
+			add_child(body)
 	
 	rightLadder.multimesh.instance_count = position_right_ladders.size()
 	for i in range(position_right_ladders.size()):
-		rightLadder.multimesh.set_instance_transform(i, Transform(basis,  position_right_ladders[i]) )
+		var pos:Vector3 = position_right_ladders[i]
+		rightLadder.multimesh.set_instance_transform(i, Transform(basis,  pos))
+		if not DISABLE_COLLISION:
+			var body = STATIC_BODY.get(eTilesType.RightLadder).instance()
+			body.translate(pos)
+			add_child(body)
 
 
 func _apply_tile_on_tilemap(pos: Vector3, tileType: int):
@@ -506,12 +533,6 @@ func _apply_tile_on_tilemap(pos: Vector3, tileType: int):
 	else:
 		var v :Vector3 = pos * TILE_SIZE
 		
-		if STATIC_BODY.has(tileType) && false :
-			var body = STATIC_BODY.get(tileType).instance()
-			body.translate(v)
-			bodies[pos] = body
-			add_child(body)
-		
 		_delete_tile_at(v)
 		match tileType:
 			eTilesType.Wall:
@@ -519,11 +540,14 @@ func _apply_tile_on_tilemap(pos: Vector3, tileType: int):
 			eTilesType.Door:
 				position_doors.append(v)
 			eTilesType.DoorInsertion:
-				position_doors_insertions.append(v)
+				if DEBUG:
+					position_doors_insertions.append(v)
 			eTilesType.Start:
-				position_start.append(v)
+				if DEBUG:
+					position_start.append(v)
 			eTilesType.End:
-				position_end.append(v)
+				if DEBUG:
+					position_end.append(v)
 			eTilesType.LeftLadder:
 				position_left_ladders.append(v)
 			eTilesType.RightLadder:
@@ -531,18 +555,15 @@ func _apply_tile_on_tilemap(pos: Vector3, tileType: int):
 
 
 func _delete_tile_at(pos:Vector3):
-	if bodies.has(pos):
-		var body = bodies[pos]
-		bodies.erase(pos)
-		body.free()
-	
 	position_walls.erase(pos)
 	position_doors.erase(pos)
-	position_doors_insertions.erase(pos)
-	position_start.erase(pos)
-	position_end.erase(pos)
 	position_left_ladders.erase(pos)
 	position_right_ladders.erase(pos)
+	if DEBUG:
+		position_doors_insertions.erase(pos)
+		position_start.erase(pos)
+		position_end.erase(pos)
+
 
 func to_vector3(v: Vector2, z :int = 0) -> Vector3:
 	return Vector3(v.x, v.y, z)
@@ -609,9 +630,8 @@ func draw_path(path: AStar):
 
 func clear_all():
 	clear_console()
-	var wall:MultiMeshInstance = $"../Tiles/Wall"
 	
-	bodies.clear()
+	#queue_free()
 	position_walls.clear()
 	position_doors.clear()
 	position_doors_insertions.clear()
