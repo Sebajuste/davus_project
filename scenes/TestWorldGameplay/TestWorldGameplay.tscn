@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://scenes/TestWorldGameplay/TestWorldGameplay.gd" type="Script" id=1]
 [ext_resource path="res://tools/StreamingLevel/StreamingLevel.tscn" type="PackedScene" id=2]
@@ -10,7 +10,8 @@
 [ext_resource path="res://scenes/TestWorldGameplay/DirectionalLight.gd" type="Script" id=8]
 [ext_resource path="res://music/exploring_the_dungeon.ogg" type="AudioStream" id=9]
 [ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=10]
-[ext_resource path="res://scenes/TestWorldGameplay/WorldMiniMap.gd" type="Script" id=11]
+[ext_resource path="res://ui/Options/Options.tscn" type="PackedScene" id=11]
+[ext_resource path="res://scenes/TestWorldGameplay/WorldMiniMap.gd" type="Script" id=12]
 
 [sub_resource type="ProceduralSky" id=1]
 sky_top_color = Color( 0.937255, 0.619608, 0.0784314, 1 )
@@ -38,6 +39,7 @@ script = ExtResource( 1 )
 environment = SubResource( 2 )
 
 [node name="StreamingLevel" parent="." instance=ExtResource( 2 )]
+multithreading = false
 
 [node name="JungleLevelLayout" parent="StreamingLevel" instance=ExtResource( 3 )]
 noise = ExtResource( 4 )
@@ -55,6 +57,7 @@ end_max_y = 1
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, -9.43685e-009, 5.87452e-009, 9.43685e-009, 1, 5.15538e-009, -5.87452e-009, -5.15538e-009, 1, 0, 0, 5.52072 )
+current = true
 fov = 20.0
 script = ExtResource( 7 )
 target = NodePath("../Player")
@@ -80,6 +83,7 @@ wait_time = 5.0
 one_shot = true
 
 [node name="Menu" type="Control" parent="."]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = -1.36038
@@ -97,35 +101,46 @@ margin_bottom = -50.0
 margin_right = 924.0
 margin_bottom = 500.0
 
-[node name="Control" type="Control" parent="Menu/MarginContainer"]
+[node name="TabContainer" type="TabContainer" parent="Menu/MarginContainer"]
 margin_right = 924.0
 margin_bottom = 500.0
 
-[node name="MarginContainer" type="MarginContainer" parent="Menu/MarginContainer/Control"]
+[node name="Options" type="Tabs" parent="Menu/MarginContainer/TabContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 50.0
-margin_top = 50.0
-margin_right = -50.0
-margin_bottom = -50.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
 
-[node name="ViewportContainer" type="ViewportContainer" parent="Menu/MarginContainer/Control/MarginContainer"]
-margin_right = 824.0
-margin_bottom = 400.0
+[node name="Options" parent="Menu/MarginContainer/TabContainer/Options" instance=ExtResource( 11 )]
+
+[node name="Map" type="Tabs" parent="Menu/MarginContainer/TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="ViewportContainer" type="ViewportContainer" parent="Menu/MarginContainer/TabContainer/Map"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 stretch = true
 
-[node name="Viewport" type="Viewport" parent="Menu/MarginContainer/Control/MarginContainer/ViewportContainer"]
-size = Vector2( 824, 400 )
+[node name="Viewport" type="Viewport" parent="Menu/MarginContainer/TabContainer/Map/ViewportContainer"]
+size = Vector2( 916, 464 )
 handle_input_locally = false
 hdr = false
 disable_3d = true
 usage = 0
-render_target_update_mode = 3
+render_target_update_mode = 0
 gui_disable_input = true
 
-[node name="WorldMiniMap" type="Node2D" parent="Menu/MarginContainer/Control/MarginContainer/ViewportContainer/Viewport"]
-script = ExtResource( 11 )
+[node name="WorldMiniMap" type="Node2D" parent="Menu/MarginContainer/TabContainer/Map/ViewportContainer/Viewport"]
+script = ExtResource( 12 )
 streaming_level = NodePath("../../../../../../../StreamingLevel")
-zoom = 3
+zoom = 4
 [connection signal="died" from="Player" to="." method="_on_FemaleCharacter_died"]
 [connection signal="timeout" from="PlayerRespawnTimer" to="." method="_on_PlayerRespawnTimer_timeout"]
