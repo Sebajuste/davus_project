@@ -13,6 +13,16 @@ func _input(event):
 func _select_camera():
 	$CameraPlayer.current = not _control_camera
 	$CameraMap.current = _control_camera
+	_control_camera = not _control_camera
+
+
+func _on_DungeonGenerator_graph_gen_finnished():
+	var dg = $DungeonGenerator
+	#dg.map = $GridMap
+	$CameraMap.translation.x = dg.map_width
+	$CameraMap.translation.y = dg.map_height
+	$CameraMap.translation.z = dg.map_width
+
 
 func _on_DungeonGenerator_dungeon_generated():
 	$Player.global_transform.origin = $DungeonGenerator.spawn_position
