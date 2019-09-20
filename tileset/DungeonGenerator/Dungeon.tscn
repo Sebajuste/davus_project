@@ -88,6 +88,7 @@ target = NodePath("../Player")
 
 [node name="DungeonGenerator" type="Node2D" parent="."]
 script = ExtResource( 4 )
+map_height = 30
 
 [node name="Tiles" type="Spatial" parent="." groups=[
 "Tiles",

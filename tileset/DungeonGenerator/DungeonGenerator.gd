@@ -5,7 +5,7 @@ signal dungeon_generated
 
 export var scale2D:int = 2
 export var room_margin:int = 2
-export(int, 2, 10) var number_of_rooms:int = 12
+export (int, 2, 10) var number_of_rooms:int = 12
 export var number_of_keys:int = 1
 export var map_width:int = 80
 export var map_height:int = 50
@@ -13,7 +13,8 @@ export var min_room_width:int = 5
 export var max_room_width:int = 8
 export var min_room_height:int = 3
 export var max_room_height:int = 3
-export var map_seed = 1
+export (float, 0, 1) var mob_chance_corridors:float = 0.5
+export var map_seed = 2
 
 const TILE_SIZE = 2
 
@@ -58,6 +59,10 @@ const ROOM_PREFAB:Dictionary = {
 			3: preload("res://tileset/test/Prefab_8x3.tscn"),
 		},
 	}
+const MOB_RESSOURCES:Array = [
+		preload("res://tileset/test/MobSpawn.tscn"),
+	]
+
 
 var spawn_position:Vector3
 var map: GridMap
@@ -104,6 +109,7 @@ func gen_graph():
 	_clear_all()
 	
 	var rooms_locations = _generate_rooms()
+	print(rooms_locations)
 	pathfinding = _generate_graph(rooms_locations.keys())
 	var distantest:Array = _get_distantest_rooms(rooms_locations)
 	starting_room = distantest[0]
@@ -115,8 +121,19 @@ func gen_graph():
 	_fill_the_map()
 	_write_rooms_on_map()
 		gen_graph()
-	
-	emit_signal("dungeon_generated")
+	else:
+		if DEBUG:
+			_apply_tile_on_tilemap(get_middle(starting_room), eTilesType.Start)
+			_apply_tile_on_tilemap(get_middle(ending_room), eTilesType.End)
+		
+		if map == null:
+			_generate_multimesh()
+		
+		seed_counter += 1
+		if DEBUG && seed_counter < _desired_seed_counter:
+			gen_graph()
+		
+		emit_signal("dungeon_generated")
 
 
 func _generate_rooms() -> Dictionary:
@@ -257,7 +274,7 @@ func _write_rooms_on_map():
 				_apply_tile_on_tilemap(v, eTilesType.Empty)
 
 
-func _write_corridors_on_map():
+func _write_corridors_on_map() -> bool:	# Return true on error
 	var rooms_done = []
 	
 	for point in rooms_areas.keys():
@@ -268,12 +285,14 @@ func _write_corridors_on_map():
 				var posRoom2 = pathfinding.get_point_position(connection)
 				var start = _get_door_location(_get_room_rectangle(rooms_areas[point]), posRoom2)
 				var end = _get_door_location(_get_room_rectangle(rooms_areas[connection]), posRoom1)
-				_dig_path(start, end, FORCE_START_DOOR, FORCE_END_DOOR)
-		
+				var error:bool = _dig_path(start, end, FORCE_START_DOOR, FORCE_END_DOOR)
+				if error:
+					return error
 		rooms_done.append(point)
+	return false
 
 
-func _dig_path(start: Dictionary, end: Dictionary, doorOnStart: bool = false, doorOnEnd: bool = false):
+func _dig_path(start: Dictionary, end: Dictionary, doorOnStart: bool = false, doorOnEnd: bool = false) -> bool:	# Return true on error
 	if start.size() > 0 && end.size() > 0:
 		var startDir = start.keys()[0]
 		var endDir = end.keys()[0]
@@ -287,6 +306,8 @@ func _dig_path(start: Dictionary, end: Dictionary, doorOnStart: bool = false, do
 		var horizontalPath = (horizontalStart && horizontalEnd)
 		var verticalPath = (verticalStart && verticalEnd)
 		
+		var putMobSpawn:bool = rnd.randf() > 1 - mob_chance_corridors
+		
 		if PRINT_DOOR_LOCATION:
 			var startPoint = pathfinding.get_closest_point(startPos)
 			var endPoint = pathfinding.get_closest_point(endPos)
@@ -294,26 +315,27 @@ func _dig_path(start: Dictionary, end: Dictionary, doorOnStart: bool = false, do
 			if startPoint == 10 :
 				startPoint=startPoint
 		if horizontalPath:		# Horizontal direction only
-			_dig_horizontally(startPos, endPos, doorOnStart, doorOnEnd)
+			_dig_horizontally(startPos, endPos, putMobSpawn, doorOnStart, doorOnEnd)
 		elif verticalPath:		# Vertical direction only
-			_dig_vertically(startPos, endPos, doorOnStart, doorOnEnd)
+			_dig_vertically(startPos, endPos, putMobSpawn, doorOnStart, doorOnEnd)
 		else:					# Mixed directions
 			if horizontalStart && verticalEnd:
-				_dig_mixed_directions(startPos, endPos, doorOnStart, doorOnEnd)
+				_dig_mixed_directions(startPos, endPos, putMobSpawn, doorOnStart, doorOnEnd)
 			elif verticalStart && horizontalEnd:
-				_dig_mixed_directions(endPos, startPos, doorOnEnd, doorOnStart)
+				_dig_mixed_directions(endPos, startPos, putMobSpawn, doorOnEnd, doorOnStart)
 		
 		if DEBUG:
 			_apply_tile_on_tilemap(to_vector3(start.values()[0]), eTilesType.DoorInsertion)
 			_apply_tile_on_tilemap(to_vector3(end.values()[0]), eTilesType.DoorInsertion)
-	
+		
+		return false
 	else:
 		if PRINT_REFUSED_DUNGEON:
 			print("Connections impossible, regénération de donjon : ")
 			print("map_seed = " + str(map_seed))
 			print("seed_counter = " + str(seed_counter))
 			print("get_seed = " + str(rnd.seed))
-		gen_graph()
+		return true
 
 
 func _first_step_is_on_right(dif: Vector3, dir: Vector2) -> bool:
@@ -329,12 +351,15 @@ func _first_step_is_on_right(dif: Vector3, dir: Vector2) -> bool:
 			return yIndex % 2 == 0
 
 
-func _dig_horizontally(startPos: Vector3, endPos: Vector3, doorOnStart: bool, doorOnEnd: bool):
+func _dig_horizontally(startPos: Vector3, endPos: Vector3, mobSpawn: bool, doorOnStart: bool, doorOnEnd: bool):
 	startPos = vector3_floor(startPos)
 	endPos = vector3_floor(endPos)
 	var dif = vector3_floor(endPos - startPos)
 	var middlePos = vector3_round(startPos + (dif / 2))
 	var step = Vector2(sign(dif.x), sign(dif.y))
+	
+	if mobSpawn:
+		_add_mob_spawn(middlePos)
 	
 	for x in range(startPos.x + step.x, endPos.x, step.x):
 		var v : Vector3
@@ -365,7 +390,7 @@ func _dig_horizontally(startPos: Vector3, endPos: Vector3, doorOnStart: bool, do
 			_apply_tile_on_tilemap(v, eTilesType.Empty)
 
 
-func _dig_vertically(startPos: Vector3, endPos: Vector3, doorOnStart: bool, doorOnEnd: bool):
+func _dig_vertically(startPos: Vector3, endPos: Vector3, mobSpawn: bool, doorOnStart: bool, doorOnEnd: bool):
 	startPos = vector3_floor(startPos)
 	endPos = vector3_floor(endPos)
 	var dif = vector3_floor(endPos - startPos)
@@ -383,6 +408,9 @@ func _dig_vertically(startPos: Vector3, endPos: Vector3, doorOnStart: bool, door
 		doorOnTop = doorOnStart
 		doorOnBottom = doorOnEnd
 		step = - step
+	
+	if mobSpawn:
+		_add_mob_spawn(middlePos)
 	
 	for x in range(bottom.x, top.x + step.x, step.x):
 		var v = Vector3(x, middlePos.y, 0)
@@ -423,11 +451,14 @@ func _dig_vertically(startPos: Vector3, endPos: Vector3, doorOnStart: bool, door
 				_apply_tile_on_tilemap(v, eTilesType.Empty)
 
 
-func _dig_mixed_directions(horizontalPos: Vector3, verticalPos: Vector3, doorOnHorizontal: bool, doorOnVertical: bool):
+func _dig_mixed_directions(horizontalPos: Vector3, verticalPos: Vector3, mobSpawn: bool, doorOnHorizontal: bool, doorOnVertical: bool):
 	horizontalPos = vector3_floor(horizontalPos)
 	verticalPos = vector3_floor(verticalPos)
 	var dif = vector3_floor(verticalPos - horizontalPos)
 	var step = Vector2(sign(dif.x), sign(dif.y))
+	
+	if mobSpawn:
+		_add_mob_spawn(Vector3(verticalPos.x, horizontalPos.y, 0))
 	
 	for x in range(horizontalPos.x, verticalPos.x, step.x):
 		var v = Vector3(x, horizontalPos.y, 0)
@@ -486,6 +517,13 @@ func get_line_intersection(p1: Vector2, p2: Vector2, p3: Vector2, p4: Vector2) -
 			return Vector2(p1.x + t * (p2.x - p1.x), p1.y + t * (p2.y - p1.y));
 	return Vector2.INF
 
+func _add_mob_spawn(pos:Vector3):
+	var variant = randi() % MOB_RESSOURCES.size()
+	var mob_ressource = MOB_RESSOURCES[variant]
+	if mob_ressource:
+		var mob = mob_ressource.instance()
+		mob.translate(pos * TILE_SIZE)
+		add_child(mob)
 
 func _translate_multimesh(multi_mesh_inst:MultiMeshInstance, positions:Array, tileType: int, basis: Basis):
 	multi_mesh_inst.multimesh.instance_count = positions.size()
