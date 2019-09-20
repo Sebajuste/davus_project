@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://characters/Mobs/Mob.tscn" type="PackedScene" id=1]
+[ext_resource path="res://characters/Mobs/Drone/Drone.gd" type="Script" id=2]
+[ext_resource path="res://models/MobDrone/MobDrone.tscn" type="PackedScene" id=3]
+
+[sub_resource type="CylinderShape" id=1]
+radius = 0.346634
+height = 0.304132
+
+[node name="Drone" index="0" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="MobDrone" parent="." index="1" instance=ExtResource( 3 )]
+
+[node name="CollisionShape" parent="HitBox" index="0"]
+transform = Transform( 1, 0, 0, 0, 0.999246, 0.0388372, 0, -0.0388372, 0.999246, 0, 0, 0 )
+shape = SubResource( 1 )
+
+[editable path="HitBox"]
