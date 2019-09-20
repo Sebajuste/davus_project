@@ -126,5 +126,9 @@ __meta__ = {
 }
 
 [node name="Player" parent="." instance=ExtResource( 13 )]
+
+[node name="MapElements" type="Spatial" parent="." groups=[
+"MapElements",
+]]
 [connection signal="dungeon_generated" from="DungeonGenerator" to="." method="_on_DungeonGenerator_dungeon_generated"]
 [connection signal="graph_gen_finnished" from="DungeonGenerator" to="." method="_on_DungeonGenerator_graph_gen_finnished"]
