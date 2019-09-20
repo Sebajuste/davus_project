@@ -1,4 +1,4 @@
-﻿extends Node2D
+extends Node2D
 
 signal graph_gen_finnished
 signal dungeon_generated
@@ -14,7 +14,7 @@ export var max_room_width:int = 8
 export var min_room_height:int = 3
 export var max_room_height:int = 3
 export (float, 0, 1) var mob_chance_corridors:float = 0.5
-export var map_seed = 2
+export var map_seed = 1
 
 const TILE_SIZE = 2
 
@@ -109,7 +109,6 @@ func gen_graph():
 	_clear_all()
 	
 	var rooms_locations = _generate_rooms()
-	print(rooms_locations)
 	pathfinding = _generate_graph(rooms_locations.keys())
 	var distantest:Array = _get_distantest_rooms(rooms_locations)
 	starting_room = distantest[0]
@@ -120,6 +119,7 @@ func gen_graph():
 	emit_signal("graph_gen_finnished")
 	_fill_the_map()
 	_write_rooms_on_map()
+	if _write_corridors_on_map():
 		gen_graph()
 	else:
 		if DEBUG:
