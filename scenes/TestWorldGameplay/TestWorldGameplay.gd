@@ -17,6 +17,17 @@ func _process(delta):
 	if Input.is_action_just_pressed("pause"):
 		get_tree().quit()
 	
+	if Input.is_action_just_pressed("show_map"):
+		if not $Menu.visible:
+			$Menu.visible = true
+			$Menu/MarginContainer/TabContainer.current_tab = 1
+		elif $Menu/MarginContainer/TabContainer.current_tab != 1:
+			$Menu/MarginContainer/TabContainer.current_tab = 1
+		else:
+			$Menu.visible = not $Menu.visible
+		
+	
+	
 	$StreamingLevel.update($Camera.global_transform.origin.x, $Camera.global_transform.origin.y)
 	
 
