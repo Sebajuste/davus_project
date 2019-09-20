@@ -1,5 +1,7 @@
 extends Spatial
 
+signal batch_added(batch)
+signal batch_removed(batch)
 
 export(int) var batch_size := 16
 export var multithreading := true
@@ -44,14 +46,13 @@ func _process(delta):
 		var batch = _add_batch_queue.pop_front()
 		if batch:
 			$Batches.add_child(batch)
+			emit_signal("batch_added", batch)
 	_add_batch_mutex.unlock()
-	
 	
 	var index := 0
 	for item in _delete_queue:
 		item.timer += delta
 		if item.timer > 5.0:
-			#item.batch.queue_free()
 			call_deferred("_delete_batch", item.batch)
 			_delete_queue.remove(index)
 			return
@@ -127,6 +128,7 @@ func update(global_x: float, global_y: float):
 			for batch in $Batches.get_children():
 				var batch_loc = _to_batch_loc(batch.global_transform.origin)
 				if batch_loc.x == delete_loc.x && batch_loc.y == delete_loc.y:
+					emit_signal("batch_removed", batch)
 					$Batches.remove_child(batch)
 					_delete_queue_mutex.lock()
 					
