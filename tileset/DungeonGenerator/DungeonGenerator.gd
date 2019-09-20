@@ -14,7 +14,7 @@ export var max_room_width:int = 8
 export var min_room_height:int = 3
 export var max_room_height:int = 3
 export (float, 0, 1) var mob_chance_corridors:float = 0.5
-export var map_seed = 2
+export var map_seed = 1
 
 const TILE_SIZE = 2
 
@@ -33,7 +33,7 @@ var _desired_seed_counter:int = 0 #100
 
 enum eDirection { Top = 1, Right = 2, Bottom = 4, Left = 8 }
 enum eTilesType { Empty = -1, Door = 0, Wall = 1, Key = 2, Start = 3, End = 4, DoorInsertion = 5, LeftLadder = 6, RightLadder = 7 }
-const STATIC_BODY:Dictionary = { 
+const STATIC_BODIES:Dictionary = { 
 	eTilesType.Door: preload("res://tileset/test/Door.tscn"),
 	eTilesType.Wall: preload("res://tileset/test/Wall.tscn"),
 	eTilesType.LeftLadder: preload("res://tileset/test/LeftLadder.tscn"),
@@ -75,7 +75,6 @@ var position_end := Array()
 var position_left_ladders := Array()
 var position_right_ladders := Array()
 
-var camera_control:bool = false
 var rooms_areas := Dictionary()
 var starting_room : Rect2
 var ending_room : Rect2
@@ -110,7 +109,6 @@ func gen_graph():
 	_clear_all()
 	
 	var rooms_locations = _generate_rooms()
-	print(rooms_locations)
 	pathfinding = _generate_graph(rooms_locations.keys())
 	var distantest:Array = _get_distantest_rooms(rooms_locations)
 	starting_room = distantest[0]
@@ -121,9 +119,7 @@ func gen_graph():
 	emit_signal("graph_gen_finnished")
 	_fill_the_map()
 	_write_rooms_on_map()
-	var error:bool = _write_corridors_on_map()
-	if error:
-		print("error")
+	if _write_corridors_on_map():
 		gen_graph()
 	else:
 		if DEBUG:
@@ -264,6 +260,7 @@ func _write_rooms_on_map():
 			if h:
 				var prefab:Spatial = h.instance()			
 				prefab.translate(get_middle(room) * TILE_SIZE - Vector3(1, 1, 0))
+				prefab.add_to_group("MapElements")
 				add_child(prefab)
 		
 		var left = room.position.x
@@ -528,6 +525,20 @@ func _add_mob_spawn(pos:Vector3):
 		mob.translate(pos * TILE_SIZE)
 		add_child(mob)
 
+func _translate_multimesh(multi_mesh_inst:MultiMeshInstance, positions:Array, tileType: int, basis: Basis):
+	multi_mesh_inst.multimesh.instance_count = positions.size()
+	for i in range(positions.size()):
+		var pos:Vector3 = positions[i]
+		multi_mesh_inst.multimesh.set_instance_transform(i, Transform(basis,  pos))
+		if not DISABLE_COLLISION:
+			var static_body = STATIC_BODIES.get(tileType)
+			if static_body:
+				var body = static_body.instance()
+				body.translate(pos)
+				#body.add_group("MapElements")
+				add_child(body)
+
+
 func _generate_multimesh():
 	var wall:MultiMeshInstance = $"../Tiles/Wall"
 	var door:MultiMeshInstance = $"../Tiles/Door"
@@ -539,54 +550,13 @@ func _generate_multimesh():
 	
 	var basis = Basis()
 	
-	wall.multimesh.instance_count = position_walls.size()
-	for i in range(position_walls.size()):
-		var pos:Vector3 = position_walls[i]
-		wall.multimesh.set_instance_transform(i, Transform(basis,  pos))
-		if not DISABLE_COLLISION:
-			var body = STATIC_BODY.get(eTilesType.Wall).instance()
-			body.translate(pos)
-			add_child(body)
-	
-	door.multimesh.instance_count = position_doors.size()
-	for i in range(position_doors.size()):
-		var pos:Vector3 = position_doors[i]
-		door.multimesh.set_instance_transform(i, Transform(basis,  pos))
-		if not DISABLE_COLLISION:
-			var body = STATIC_BODY.get(eTilesType.Door).instance()
-			body.translate(pos)
-			add_child(body)
-	
-	doorInsertion.multimesh.instance_count = position_doors_insertions.size()
-	for i in range(position_doors_insertions.size()):
-		var pos:Vector3 = position_doors_insertions[i]
-		doorInsertion.multimesh.set_instance_transform(i, Transform(basis,  pos))
-	
-	start.multimesh.instance_count = position_start.size()
-	for i in range(position_start.size()):
-		start.multimesh.set_instance_transform(i, Transform(basis,  position_start[i]))
-	
-	end.multimesh.instance_count = position_end.size()
-	for i in range(position_end.size()):
-		end.multimesh.set_instance_transform(i, Transform(basis,  position_end[i]))
-	
-	leftLadder.multimesh.instance_count = position_left_ladders.size()
-	for i in range(position_left_ladders.size()):
-		var pos:Vector3 = position_left_ladders[i]
-		leftLadder.multimesh.set_instance_transform(i, Transform(basis,  pos))
-		if not DISABLE_COLLISION:
-			var body = STATIC_BODY.get(eTilesType.LeftLadder).instance()
-			body.translate(pos)
-			add_child(body)
-	
-	rightLadder.multimesh.instance_count = position_right_ladders.size()
-	for i in range(position_right_ladders.size()):
-		var pos:Vector3 = position_right_ladders[i]
-		rightLadder.multimesh.set_instance_transform(i, Transform(basis,  pos))
-		if not DISABLE_COLLISION:
-			var body = STATIC_BODY.get(eTilesType.RightLadder).instance()
-			body.translate(pos)
-			add_child(body)
+	_translate_multimesh(wall, position_walls, eTilesType.Wall, basis)
+	_translate_multimesh(door, position_doors, eTilesType.Door, basis)
+	_translate_multimesh(doorInsertion, position_doors_insertions, eTilesType.DoorInsertion, basis)
+	_translate_multimesh(start, position_start, eTilesType.Start, basis)
+	_translate_multimesh(end, position_end, eTilesType.End, basis)
+	_translate_multimesh(leftLadder, position_left_ladders, eTilesType.LeftLadder, basis)
+	_translate_multimesh(rightLadder, position_right_ladders, eTilesType.RightLadder, basis)
 
 
 func _apply_tile_on_tilemap(pos: Vector3, tileType: int):
@@ -691,8 +661,10 @@ func _draw_path(path: AStar):
 
 func _clear_all():
 	clear_console()
+	var MapElements = get_tree().get_nodes_in_group("MapElements")
+	for element in MapElements:
+	    element.queue_free()
 	
-	#queue_free()
 	position_walls.clear()
 	position_doors.clear()
 	position_doors_insertions.clear()
