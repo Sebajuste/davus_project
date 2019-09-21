@@ -9,3 +9,11 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+
+
+func _on_Area_body_entered(body):
+	
+	if body.is_in_group("player") and body.has_method("take_object"):	
+		body.take_object(self)
+	
+	

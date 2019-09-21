@@ -197,6 +197,12 @@ func is_falling() -> bool:
 	return _fall_time > 0.2
 
 
+func take_object(object):
+	
+	print("Player take object")
+	object.queue_free()
+
+
 func _play_anim(name: String, force: bool = false):
 	if _anim_update:
 		return
