@@ -1,0 +1,74 @@
+[gd_scene format=2]
+
+[node name="Inventory" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+margin_right = 1024.0
+margin_bottom = 600.0
+
+[node name="Tabs" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+editor/display_folded = true
+margin_right = 125.0
+margin_bottom = 600.0
+rect_min_size = Vector2( 125, 0 )
+custom_constants/separation = 10
+
+[node name="Weapons" type="Button" parent="MarginContainer/HBoxContainer/Tabs"]
+margin_right = 125.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 0, 50 )
+text = "Weapons"
+
+[node name="Ammo" type="Button" parent="MarginContainer/HBoxContainer/Tabs"]
+margin_top = 60.0
+margin_right = 125.0
+margin_bottom = 110.0
+rect_min_size = Vector2( 0, 50 )
+text = "Ammo"
+
+[node name="Jetpack" type="Button" parent="MarginContainer/HBoxContainer/Tabs"]
+margin_top = 120.0
+margin_right = 125.0
+margin_bottom = 170.0
+rect_min_size = Vector2( 0, 50 )
+text = "Jetpack"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/HBoxContainer"]
+margin_left = 129.0
+margin_right = 574.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer"]
+margin_right = 445.0
+margin_bottom = 308.0
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+margin_right = 445.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 100, 100 )
+
+[node name="Panel2" type="Panel" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+margin_top = 104.0
+margin_right = 445.0
+margin_bottom = 204.0
+rect_min_size = Vector2( 100, 100 )
+
+[node name="Panel3" type="Panel" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+margin_top = 208.0
+margin_right = 445.0
+margin_bottom = 308.0
+rect_min_size = Vector2( 100, 100 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+margin_left = 578.0
+margin_right = 1024.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
