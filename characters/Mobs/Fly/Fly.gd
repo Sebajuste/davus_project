@@ -1,5 +1,7 @@
 extends "res://characters/Mobs/Mob.gd"
 
+const Bullet = preload("res://objects/projectiles/Bullet/Bullet.tscn")
+
 enum state { 
 	CHOOSE_TARGET, 
 	MOVE_FORWARD, 
@@ -43,8 +45,9 @@ func _process(delta):
 	# AI
 	if current_state == state.CHOOSE_TARGET:
 		
-		current_target = targets[0]
-		current_state = state.MOVE_FORWARD
+		if not targets.empty():
+			current_target = targets[0]
+			current_state = state.MOVE_FORWARD
 		
 	elif current_state == state.MOVE_FORWARD:
 		
@@ -69,6 +72,7 @@ func _process(delta):
 		elif abs(dist) <= 2.5:
 			current_state = state.MOVE_BACKWARD
 		
+		
 	elif current_state == state.MOVE_BACKWARD:
 		
 		var target_position = current_target.global_transform.origin
@@ -89,11 +93,21 @@ func _physics_process(delta):
 		if current_target:
 			face_to(current_target.global_transform.origin)
 	else:
-		# TODO : fall
 		
 		move_and_slide(Vector3.DOWN * 5)
 		
 		pass
+
+
+
+func attack():
+	var bullet = Bullet.instance()
+	var root_node = get_tree().get_root().get_child(0)
+	root_node.add_child(bullet)
+	
+	bullet.global_transform.origin = $AttachPosition.global_transform.origin
+	bullet.direction = (current_target.global_transform.origin - self.global_transform.origin).normalized()
+
 
 
 func _on_CombatStats_damage_taken():
