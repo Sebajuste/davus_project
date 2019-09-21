@@ -199,7 +199,7 @@ func _input(event) -> void:
 		
 		var usable = $UsableArea.get_usable()
 		print("use: ", usable)
-		if usable != null:
+		if usable != null and usable.has_method("use"):
 			usable.use(self)
 	
 	pass

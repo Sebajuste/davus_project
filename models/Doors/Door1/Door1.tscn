@@ -1,12 +1,13 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://models/Doors/Door1/Door1.gd" type="Script" id=1]
 
-[sub_resource type="SphereShape" id=9]
+[sub_resource type="SphereShape" id=10]
 radius = 2.21229
 
-[sub_resource type="Animation" id=1]
-resource_name = "closed"
+[sub_resource type="CapsuleMesh" id=18]
+
+[sub_resource type="Animation" id=11]
 length = 0.001
 tracks/0/type = "transform"
 tracks/0/path = NodePath("CSGCombiner2/LeftDoor")
@@ -23,8 +24,7 @@ tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = PoolRealArray( 0, 1, 0, -0.388, 0.4, 0.324604, 0, 0, 0.94585, 1, 1, 1 )
 
-[sub_resource type="Animation" id=2]
-resource_name = "opened"
+[sub_resource type="Animation" id=12]
 length = 0.001
 tracks/0/type = "transform"
 tracks/0/path = NodePath("CSGCombiner2/LeftDoor")
@@ -41,26 +41,26 @@ tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = PoolRealArray( 0, 1, 0, -0.388, 1.80069, 0.324604, 0, 0, 0.94585, 1, 1, 1 )
 
-[sub_resource type="AnimationNodeAnimation" id=3]
+[sub_resource type="AnimationNodeAnimation" id=13]
 animation = "closed"
 
-[sub_resource type="AnimationNodeAnimation" id=4]
+[sub_resource type="AnimationNodeAnimation" id=14]
 animation = "opened"
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=5]
+[sub_resource type="AnimationNodeStateMachineTransition" id=15]
 xfade_time = 1.0
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=6]
+[sub_resource type="AnimationNodeStateMachineTransition" id=16]
 xfade_time = 1.0
 
-[sub_resource type="AnimationNodeStateMachine" id=7]
-states/closed/node = SubResource( 3 )
+[sub_resource type="AnimationNodeStateMachine" id=17]
+states/closed/node = SubResource( 13 )
 states/closed/position = Vector2( 495, 66 )
-states/opened/node = SubResource( 4 )
+states/opened/node = SubResource( 14 )
 states/opened/position = Vector2( 809, 66 )
-transitions = [ "closed", "opened", SubResource( 5 ), "opened", "closed", SubResource( 6 ) ]
+transitions = [ "closed", "opened", SubResource( 15 ), "opened", "closed", SubResource( 16 ) ]
 
-[sub_resource type="AnimationNodeStateMachinePlayback" id=8]
+[sub_resource type="AnimationNodeStateMachinePlayback" id=9]
 
 [node name="Door1" type="Spatial"]
 script = ExtResource( 1 )
@@ -70,7 +70,7 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape" type="CollisionShape" parent="Area"]
-shape = SubResource( 9 )
+shape = SubResource( 10 )
 
 [node name="CSGCombiner" type="CSGCombiner" parent="."]
 editor/display_folded = true
@@ -87,22 +87,23 @@ height = 1.88416
 depth = 1.29219
 
 [node name="CSGCombiner2" type="CSGCombiner" parent="."]
+editor/display_folded = true
 use_collision = true
 
 [node name="LeftDoor" type="CSGBox" parent="CSGCombiner2"]
-transform = Transform( 1, 0, 0, 0, 0.805357, -0.629051, 0, 0.627416, 0.807455, 0, 0.243, -0.4 )
+transform = Transform( 1, 0, 0, 0, 0.805359, -0.629053, 0, 0.627418, 0.807458, 0, 0.243, -0.4 )
 width = 0.05
 height = 2.2
 depth = 1.0
 
 [node name="RightDoor" type="CSGBox" parent="CSGCombiner2"]
-transform = Transform( 1, 0, 0, 0, 0.789264, -0.614054, 0, 0.614054, 0.789264, 0, -0.388, 0.4 )
+transform = Transform( 1, 0, 0, 0, 0.789265, -0.614053, 0, 0.614053, 0.789265, 0, -0.388, 0.4 )
 width = 0.0463537
 height = 2.30977
 depth = 1.10454
 
 [node name="CSGBox4" type="CSGBox" parent="CSGCombiner2"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, -1.19209e-07, 1, 0, -0.0552182, -1.87587 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, -1.19209e-007, 1, 0, -0.0552182, -1.87587 )
 operation = 2
 width = 0.43141
 height = 2.20892
@@ -116,28 +117,33 @@ height = 0.787489
 depth = 2.87314
 
 [node name="CSGBox2" type="CSGBox" parent="CSGCombiner2"]
-transform = Transform( 1, 0, 0, 0, 1, -2.98023e-08, 0, 2.98023e-08, 1, 0, -1.34996, 0.682575 )
+transform = Transform( 1, 0, 0, 0, 1, -2.98023e-008, 0, 2.98023e-008, 1, 0, -1.34996, 0.682575 )
 operation = 2
 width = 0.43141
 height = 0.787489
 depth = 2.88274
 
 [node name="CSGBox5" type="CSGBox" parent="CSGCombiner2"]
-transform = Transform( 1, 0, 0, 0, 1, -2.98023e-08, 0, 2.98023e-08, 1, 0, -0.0554147, 1.96767 )
+transform = Transform( 1, 0, 0, 0, 1, -2.98023e-008, 0, 2.98023e-008, 1, 0, -0.0554147, 1.96767 )
 operation = 2
 width = 0.43141
 height = 1.98986
 depth = 2.12184
 
+[node name="MeshInstance" type="MeshInstance" parent="."]
+transform = Transform( -4.37114e-009, 0, 0.1, 0, 0.1, 0, -0.1, 0, -4.37114e-009, 0.123242, 0.796295, -0.840705 )
+mesh = SubResource( 18 )
+material/0 = null
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "closed"
-anims/closed = SubResource( 1 )
-anims/opened = SubResource( 2 )
+anims/closed = SubResource( 11 )
+anims/opened = SubResource( 12 )
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource( 7 )
+tree_root = SubResource( 17 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
-parameters/playback = SubResource( 8 )
+parameters/playback = SubResource( 9 )
 [connection signal="body_entered" from="Area" to="." method="_on_Area_body_entered"]
 [connection signal="body_exited" from="Area" to="." method="_on_Area_body_exited"]

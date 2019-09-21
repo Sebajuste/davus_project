@@ -554,7 +554,7 @@ material/0 = null
 
 [node name="Head" type="BoneAttachment" parent="Skeleton"]
 editor/display_folded = true
-transform = Transform( 0.999454, 0.0203093, 0.0260484, -0.0189735, 0.99854, -0.0505391, -0.0270369, 0.0500178, 0.998382, -0.0257503, 1.5605, -0.0540822 )
+transform = Transform( 0.999308, 0.0182621, 0.0324156, -0.0162919, 0.998062, -0.0600331, -0.0334491, 0.0594635, 0.99767, -0.0331686, 1.55973, -0.0542718 )
 bone_name = "mixamorig_Head"
 
 [node name="HairTail" parent="Skeleton/Head" instance=ExtResource( 3 )]
@@ -562,7 +562,7 @@ transform = Transform( 0.998199, -0.0278291, 0.0532083, 0.0272939, 0.999569, 0.0
 
 [node name="RightHand" type="BoneAttachment" parent="Skeleton"]
 editor/display_folded = true
-transform = Transform( 0.324989, 0.0985539, 0.940568, 0.13568, -0.989124, 0.0567619, 0.935933, 0.10917, -0.334828, -0.216491, 0.947868, -0.0116977 )
+transform = Transform( 0.327836, 0.0881174, 0.940615, 0.130471, -0.990323, 0.0473014, 0.93568, 0.107217, -0.336162, -0.225828, 0.942256, -0.0131398 )
 bone_name = "mixamorig_RightHand"
 
 [node name="Position" type="Spatial" parent="Skeleton/RightHand"]
