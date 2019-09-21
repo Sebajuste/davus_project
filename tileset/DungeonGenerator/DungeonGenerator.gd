@@ -1,4 +1,4 @@
-extends Node2D
+extends Spatial
 
 signal graph_gen_finnished
 signal dungeon_generated
@@ -17,55 +17,23 @@ export (float, 0, 1) var mob_chance_corridors:float = 0.5
 export var map_seed = 1
 
 const TILE_SIZE = 2
+const USE_GRIDMAP = false
 
-const DEBUG = false
-const FORCE_START_DOOR = false
-const FORCE_END_DOOR = false
-const DISABLE_COLLISION = false
-const DRAW_ROOMS_INDEX = false
-const PRINT_REFUSED_DUNGEON = true
-const PRINT_LADDER = false
-const PRINT_ROOMS_TRAVEL = false
-const PRINT_DOOR_LOCATION = false
-const DESIRED_SEED_STEP_COUNTER = 132
-var _desired_seed_counter:int = 0 #100
-
-
-enum eDirection { Top = 1, Right = 2, Bottom = 4, Left = 8 }
-enum eTilesType { Empty = -1, Door = 0, Wall = 1, Key = 2, Start = 3, End = 4, DoorInsertion = 5, LeftLadder = 6, RightLadder = 7 }
-const STATIC_BODIES:Dictionary = { 
-	eTilesType.Door: preload("res://tileset/test/Door.tscn"),
-	eTilesType.Wall: preload("res://tileset/test/Wall.tscn"),
-	eTilesType.LeftLadder: preload("res://tileset/test/LeftLadder.tscn"),
-	eTilesType.RightLadder: preload("res://tileset/test/RightLadder.tscn"),
-	}
-	
-const ROOM_PREFAB:Dictionary = {
-	5:
-		{
-			3: preload("res://tileset/test/Prefab_5x3.tscn"),
-			4: preload("res://tileset/test/Prefab_5x4.tscn"),
-		},
-	6:
-		{
-			3: preload("res://tileset/test/Prefab_6x3.tscn"),
-		},
-	7:
-		{
-			3: preload("res://tileset/test/Prefab_7x3.tscn"),
-		},
-	8:
-		{
-			3: preload("res://tileset/test/Prefab_8x3.tscn"),
-		},
-	}
-const MOB_RESSOURCES:Array = [
-		preload("res://tileset/test/MobSpawn.tscn"),
-	]
-
+##################### DEBUG AREA #####################
+const DEBUG:bool = false
+const FORCE_START_DOOR:bool = false
+const FORCE_END_DOOR:bool = false
+const DISABLE_COLLISION:bool = false
+const DRAW_ROOMS_INDEX:bool = false
+const PRINT_REFUSED_DUNGEON:bool = true
+const PRINT_LADDER:bool = false
+const PRINT_ROOMS_TRAVEL:bool = false
+const PRINT_DOOR_LOCATION:bool = false
+const DESIRED_SEED_STEP_COUNTER:int = 1
+var _desired_seed_counter:int = 0
+var _seed_counter:int = 1
 
 var spawn_position:Vector3
-var map: GridMap
 
 var position_walls := Array()
 var position_doors := Array()
@@ -75,12 +43,17 @@ var position_end := Array()
 var position_left_ladders := Array()
 var position_right_ladders := Array()
 
+var room_factory := Room #load("res://tileset/DungeonGenerator/Room.gd")
+var geometry:GeometryHelper = GeometryHelper.new()
+var resourceMgr:DungeonRessource = DungeonRessource.new()
+var eTilesType = resourceMgr.eTilesType
+var eDirection = DirectionHelper.eDirection
+
 var rooms_areas := Dictionary()
-var starting_room : Rect2
-var ending_room : Rect2
+var starting_room:Room
+var ending_room:Room
 var pathfinding := AStar.new()
 var rnd := RandomNumberGenerator.new()
-var seed_counter:int = 1
 
 var label := Label.new()
 var f:Font = label.get_font("")
@@ -92,17 +65,10 @@ func _ready():
 func _input(event):
 	if event is InputEventKey and not event.is_pressed():
 		if event.scancode == KEY_8:
+			if event.scancode == KEY_ENTER:
+				_desired_seed_counter += DESIRED_SEED_STEP_COUNTER
 			clear_console()
 			gen_graph()
-		if event.scancode == KEY_ENTER:
-			_desired_seed_counter += DESIRED_SEED_STEP_COUNTER
-			clear_console()
-			gen_graph()
-		if event.scancode == KEY_0:
-			clear_console()
-			for point in pathfinding.get_points():
-				for connection in pathfinding.get_point_connections(point):
-					print(str(point) + " -> " + str(connection))
 
 
 func gen_graph():
@@ -113,9 +79,10 @@ func gen_graph():
 	var distantest:Array = _get_distantest_rooms(rooms_locations)
 	starting_room = distantest[0]
 	ending_room = distantest[1]
-	spawn_position = get_middle(starting_room) * TILE_SIZE
+	var startMiddle:Vector3 = geometry.to_vector3(starting_room.get_middle())
+	spawn_position = startMiddle * TILE_SIZE
 	rooms_areas = _reorder_rooms(rooms_locations)
-	update()
+	#update()
 	emit_signal("graph_gen_finnished")
 	_fill_the_map()
 	_write_rooms_on_map()
@@ -123,46 +90,41 @@ func gen_graph():
 		gen_graph()
 	else:
 		if DEBUG:
-			_apply_tile_on_tilemap(get_middle(starting_room), eTilesType.Start)
-			_apply_tile_on_tilemap(get_middle(ending_room), eTilesType.End)
+			var endMiddle:Vector3 = geometry.to_vector3(ending_room.get_middle())
+			_apply_tile_on_tilemap(startMiddle, eTilesType.Start)
+			_apply_tile_on_tilemap(endMiddle, eTilesType.End)
 		
-		if map == null:
-			_generate_multimesh()
+		if not USE_GRIDMAP:
+			#_generate_multimesh()
+			get_tree().call_group("Tiles", "translate_all")
 		
-		seed_counter += 1
-		if DEBUG && seed_counter < _desired_seed_counter:
+		_seed_counter += 1
+		if DEBUG && _seed_counter < _desired_seed_counter:
 			gen_graph()
 		
 		emit_signal("dungeon_generated")
 
 
-func _generate_rooms() -> Dictionary:
+func _generate_rooms() -> Dictionary:	# <middlePosition:Vector3, Room>
 	var rooms := Dictionary()
 	for i in range(number_of_rooms):
-		var room:Rect2
 		var collide:bool = true
 		while (collide):
 			collide = false
-			room = _create_room()
+			var room = room_factory.new(rnd,
+				min_room_width, max_room_width, 
+				min_room_height, max_room_height, 
+				map_width, map_height, room_margin
+				)
 			for other in rooms.values():
-				if room.intersects(other):
+				if room.area.intersects(other.area):
 					collide = true
 			
 			if not collide:
-				rooms[get_middle(room)] = room
+				var middle:Vector3 = geometry.to_vector3(room.get_middle())
+				rooms[middle] = room
 	return rooms
 
-func _create_room() -> Rect2:
-	var width:int = (2 * room_margin + min_room_width + rnd.randi() % (max_room_width + 1 - min_room_width))
-	var height:int = (2 * room_margin + min_room_height + rnd.randi() % (max_room_height + 1 - min_room_height))
-	var x:int = rnd.randi() % (map_width - width)
-	var y:int = rnd.randi() % (map_height - height)
-	var pos := Vector2(floor(x), floor(y))
-	var size := Vector2(width, height)
-	return Rect2(pos, size)
-
-func _get_room_rectangle(area: Rect2) -> Rect2:
-	return area.grow(- room_margin)
 
 func _generate_graph(locations: Array) -> AStar:
 	var astar := AStar.new()
@@ -187,23 +149,24 @@ func _generate_graph(locations: Array) -> AStar:
 		locations.erase(closest_position)
 	return astar
 
+
 func _get_distantest_rooms(rooms_locations: Dictionary) -> Array:
 	var result := Array()
-	var a1 :Rect2
-	var a2 :Rect2
+	var a1 :Room
+	var a2 :Room
 	var distanceMax = 0
 	var roomsBetweenMax = 0
-	for area in rooms_locations.values():
-		var middleArea = get_middle(area)
-		var point = pathfinding.get_closest_point(middleArea)
-		for otherArea in rooms_locations.values():
+	for middle in rooms_locations.keys():
+		var area = rooms_locations[middle]
+		var point = pathfinding.get_closest_point(middle)
+		for otherMiddle in rooms_locations.keys():
+			var otherArea = rooms_locations[otherMiddle]
 			if area != otherArea:
-				var middleOther = get_middle(otherArea)
-				var otherPoint = pathfinding.get_closest_point(middleOther)
+				var otherPoint = pathfinding.get_closest_point(otherMiddle)
 				var path = pathfinding.get_id_path(point, otherPoint)
 				var roomsBetween = path.size()
 				var isDistantest = false
-				var distance = middleArea.distance_to(middleOther)
+				var distance = middle.distance_to(otherMiddle)
 				if roomsBetween > roomsBetweenMax:
 					roomsBetweenMax = roomsBetween
 					isDistantest = true
@@ -220,12 +183,17 @@ func _get_distantest_rooms(rooms_locations: Dictionary) -> Array:
 	result.append(a2)
 	return result
 
+
 func _reorder_rooms(rooms_locations: Dictionary) -> Dictionary:
 	var reordered := Dictionary()
-	var startingPoint:int = pathfinding.get_closest_point(get_middle(starting_room))
-	var endingPoint:int = pathfinding.get_closest_point(get_middle(ending_room))
-	var path:PoolIntArray = pathfinding.get_id_path(endingPoint, startingPoint)
 	
+	var startMiddle:Vector3 = geometry.to_vector3(starting_room.get_middle())
+	var startingPoint:int = pathfinding.get_closest_point(startMiddle)
+	
+	var endMiddle:Vector3 = geometry.to_vector3(ending_room.get_middle())
+	var endingPoint:int = pathfinding.get_closest_point(endMiddle)
+	
+	var path:PoolIntArray = pathfinding.get_id_path(endingPoint, startingPoint)
 	for pathPoint in path:
 		var pos:Vector3 = pathfinding.get_point_position(pathPoint)
 		reordered[pathPoint] = rooms_locations[pos]
@@ -234,6 +202,7 @@ func _reorder_rooms(rooms_locations: Dictionary) -> Dictionary:
 			_insert_child_rooms(point, reordered, rooms_locations, path)
 	
 	return reordered
+
 
 func _insert_child_rooms(point: int, reordered: Dictionary, rooms_locations: Dictionary, path: PoolIntArray):
 	for connection in pathfinding.get_point_connections(point):
@@ -252,21 +221,21 @@ func _fill_the_map():
 
 
 func _write_rooms_on_map():
-	for area in rooms_areas.values():
-		var room = _get_room_rectangle(area)
-		var w:Dictionary = ROOM_PREFAB.get(int(room.size.x))
+	for room in rooms_areas.values():
+		var room_rect:Rect2 = room.get_room_rect()
+		var w:Dictionary = resourceMgr.ROOM_PREFAB.get(int(room_rect.size.x))
 		if w:
-			var h = w.get(int(room.size.y))
+			var h = w.get(int(room_rect.size.y))
 			if h:
 				var prefab:Spatial = h.instance()			
-				prefab.translate(get_middle(room) * TILE_SIZE - Vector3(1, 1, 0))
+				prefab.translate(geometry.to_vector3(room.get_middle()) * TILE_SIZE - Vector3(1, 1, 0))
 				prefab.add_to_group("MapElements")
 				add_child(prefab)
 		
-		var left = room.position.x
-		var right = left + room.size.x
-		var top = room.position.y
-		var bottom = top + room.size.y
+		var left = room_rect.position.x
+		var right = left + room_rect.size.x
+		var top = room_rect.position.y
+		var bottom = top + room_rect.size.y
 		var z = 0
 		for x in range(left, right):
 			for y in range(top, bottom):
@@ -281,10 +250,10 @@ func _write_corridors_on_map() -> bool:	# Return true on error
 		for connection in pathfinding.get_point_connections(point):
 			if not connection in rooms_done:
 				if PRINT_ROOMS_TRAVEL: print(str(point) + " -> " + str(connection))
-				var posRoom1 = pathfinding.get_point_position(point)
-				var posRoom2 = pathfinding.get_point_position(connection)
-				var start = _get_door_location(_get_room_rectangle(rooms_areas[point]), posRoom2)
-				var end = _get_door_location(_get_room_rectangle(rooms_areas[connection]), posRoom1)
+				var posRoom1:Vector3 = pathfinding.get_point_position(point)
+				var posRoom2:Vector3 = pathfinding.get_point_position(connection)
+				var start = rooms_areas[point].gen_door_location(geometry.to_vector2(posRoom2))
+				var end = rooms_areas[connection].gen_door_location(geometry.to_vector2(posRoom1))
 				var error:bool = _dig_path(start, end, FORCE_START_DOOR, FORCE_END_DOOR)
 				if error:
 					return error
@@ -296,13 +265,25 @@ func _dig_path(start: Dictionary, end: Dictionary, doorOnStart: bool = false, do
 	if start.size() > 0 && end.size() > 0:
 		var startDir = start.keys()[0]
 		var endDir = end.keys()[0]
-		var startPos = to_vector3(start.values()[0])
-		var endPos = to_vector3(end.values()[0])
+		var startPos:Vector3 = geometry.to_vector3(start.values()[0])
+		var endPos:Vector3 = geometry.to_vector3(end.values()[0])
 		
-		var horizontalStart = (startDir == eDirection.Left || startDir == eDirection.Right)
-		var horizontalEnd = (endDir == eDirection.Left || endDir == eDirection.Right)
-		var verticalStart = (startDir == eDirection.Top || startDir == eDirection.Bottom)
-		var verticalEnd = (endDir == eDirection.Top || endDir == eDirection.Bottom)
+		var horizontalStart = (
+			startDir == eDirection.Left || 
+			startDir == eDirection.Right
+			)
+		var horizontalEnd = (
+			endDir == eDirection.Left || 
+			endDir == eDirection.Right
+			)
+		var verticalStart = (
+			startDir == eDirection.Top || 
+			startDir == eDirection.Bottom
+			)
+		var verticalEnd = (
+			endDir == eDirection.Top || 
+			endDir == eDirection.Bottom
+			)
 		var horizontalPath = (horizontalStart && horizontalEnd)
 		var verticalPath = (verticalStart && verticalEnd)
 		
@@ -325,15 +306,15 @@ func _dig_path(start: Dictionary, end: Dictionary, doorOnStart: bool = false, do
 				_dig_mixed_directions(endPos, startPos, putMobSpawn, doorOnEnd, doorOnStart)
 		
 		if DEBUG:
-			_apply_tile_on_tilemap(to_vector3(start.values()[0]), eTilesType.DoorInsertion)
-			_apply_tile_on_tilemap(to_vector3(end.values()[0]), eTilesType.DoorInsertion)
+			_apply_tile_on_tilemap(geometry.to_vector3(start.values()[0]), eTilesType.DoorInsertion)
+			_apply_tile_on_tilemap(geometry.to_vector3(end.values()[0]), eTilesType.DoorInsertion)
 		
 		return false
 	else:
 		if PRINT_REFUSED_DUNGEON:
 			print("Connections impossible, regénération de donjon : ")
 			print("map_seed = " + str(map_seed))
-			print("seed_counter = " + str(seed_counter))
+			print("_seed_counter = " + str(_seed_counter))
 			print("get_seed = " + str(rnd.seed))
 		return true
 
@@ -352,10 +333,10 @@ func _first_step_is_on_right(dif: Vector3, dir: Vector2) -> bool:
 
 
 func _dig_horizontally(startPos: Vector3, endPos: Vector3, mobSpawn: bool, doorOnStart: bool, doorOnEnd: bool):
-	startPos = vector3_floor(startPos)
-	endPos = vector3_floor(endPos)
-	var dif = vector3_floor(endPos - startPos)
-	var middlePos = vector3_round(startPos + (dif / 2))
+	startPos = geometry.vector3_floor(startPos)
+	endPos = geometry.vector3_floor(endPos)
+	var dif = geometry.vector3_floor(endPos - startPos)
+	var middlePos = geometry.vector3_round(startPos + (dif / 2))
 	var step = Vector2(sign(dif.x), sign(dif.y))
 	
 	if mobSpawn:
@@ -391,10 +372,10 @@ func _dig_horizontally(startPos: Vector3, endPos: Vector3, mobSpawn: bool, doorO
 
 
 func _dig_vertically(startPos: Vector3, endPos: Vector3, mobSpawn: bool, doorOnStart: bool, doorOnEnd: bool):
-	startPos = vector3_floor(startPos)
-	endPos = vector3_floor(endPos)
-	var dif = vector3_floor(endPos - startPos)
-	var middlePos = vector3_round(startPos + (dif / 2))
+	startPos = geometry.vector3_floor(startPos)
+	endPos = geometry.vector3_floor(endPos)
+	var dif = geometry.vector3_floor(endPos - startPos)
+	var middlePos = geometry.vector3_round(startPos + (dif / 2))
 	var step = Vector2(sign(dif.x), sign(dif.y))
 	
 	var top:Vector3 = endPos
@@ -416,7 +397,7 @@ func _dig_vertically(startPos: Vector3, endPos: Vector3, mobSpawn: bool, doorOnS
 		var v = Vector3(x, middlePos.y, 0)
 		_apply_tile_on_tilemap(v, eTilesType.Empty)
 	
-	var delta:Vector3 = vector3_floor(bottom - middlePos)
+	var delta:Vector3 = geometry.vector3_floor(bottom - middlePos)
 		
 	var toggleRight:bool = _first_step_is_on_right(delta, step)
 	
@@ -428,7 +409,7 @@ func _dig_vertically(startPos: Vector3, endPos: Vector3, mobSpawn: bool, doorOnS
 			v = Vector3(top.x, y, 0)
 			
 			if y == middlePos.y && step.x != 0:
-				delta = vector3_floor(middlePos - top)
+				delta = geometry.vector3_floor(middlePos - top)
 				toggleRight = _first_step_is_on_right(delta, step)
 				
 		if doorOnBottom && y == bottom.y + step.y || doorOnTop && y == top.y - step.y:
@@ -452,9 +433,9 @@ func _dig_vertically(startPos: Vector3, endPos: Vector3, mobSpawn: bool, doorOnS
 
 
 func _dig_mixed_directions(horizontalPos: Vector3, verticalPos: Vector3, mobSpawn: bool, doorOnHorizontal: bool, doorOnVertical: bool):
-	horizontalPos = vector3_floor(horizontalPos)
-	verticalPos = vector3_floor(verticalPos)
-	var dif = vector3_floor(verticalPos - horizontalPos)
+	horizontalPos = geometry.vector3_floor(horizontalPos)
+	verticalPos = geometry.vector3_floor(verticalPos)
+	var dif = geometry.vector3_floor(verticalPos - horizontalPos)
 	var step = Vector2(sign(dif.x), sign(dif.y))
 	
 	if mobSpawn:
@@ -490,8 +471,8 @@ func _dig_mixed_directions(horizontalPos: Vector3, verticalPos: Vector3, mobSpaw
 
 
 func _get_door_location(rect: Rect2, point: Vector3) -> Dictionary:
-	var middle = to_vector2(get_middle(rect))
-	var point2D = to_vector2(point)
+	var middle = geometry.get_middle(rect)
+	var point2D = geometry.to_vector2(point)
 	var topRight = rect.position + (rect.size * Vector2.RIGHT)
 	var bottomLeft = rect.position + (rect.size * Vector2.DOWN)
 	var bottomRight = rect.position + rect.size
@@ -518,12 +499,15 @@ func get_line_intersection(p1: Vector2, p2: Vector2, p3: Vector2, p4: Vector2) -
 	return Vector2.INF
 
 func _add_mob_spawn(pos:Vector3):
-	var variant = randi() % MOB_RESSOURCES.size()
-	var mob_ressource = MOB_RESSOURCES[variant]
-	if mob_ressource:
-		var mob = mob_ressource.instance()
+	var mob_resources = resourceMgr.MOB_RESOURCES
+	var variant = randi() % mob_resources.size()
+	var mob_resource = mob_resources[variant]
+	if mob_resource:
+		var mob = mob_resource.instance()
 		mob.translate(pos * TILE_SIZE)
+		mob.add_to_group("MapElements")
 		add_child(mob)
+
 
 func _translate_multimesh(multi_mesh_inst:MultiMeshInstance, positions:Array, tileType: int, basis: Basis):
 	multi_mesh_inst.multimesh.instance_count = positions.size()
@@ -531,7 +515,7 @@ func _translate_multimesh(multi_mesh_inst:MultiMeshInstance, positions:Array, ti
 		var pos:Vector3 = positions[i]
 		multi_mesh_inst.multimesh.set_instance_transform(i, Transform(basis,  pos))
 		if not DISABLE_COLLISION:
-			var static_body = STATIC_BODIES.get(tileType)
+			var static_body = resourceMgr.STATIC_BODIES.get(tileType)
 			if static_body:
 				var body = static_body.instance()
 				body.translate(pos)
@@ -540,13 +524,13 @@ func _translate_multimesh(multi_mesh_inst:MultiMeshInstance, positions:Array, ti
 
 
 func _generate_multimesh():
-	var wall:MultiMeshInstance = $"../Tiles/Wall"
-	var door:MultiMeshInstance = $"../Tiles/Door"
-	var doorInsertion:MultiMeshInstance = $"../Tiles/DoorInsertion"
-	var start:MultiMeshInstance = $"../Tiles/Start"
-	var end:MultiMeshInstance = $"../Tiles/End"
-	var leftLadder:MultiMeshInstance = $"../Tiles/LeftLadder"
-	var rightLadder:MultiMeshInstance = $"../Tiles/RightLadder"
+	var wall:MultiMeshInstance = $Wall
+	var door:MultiMeshInstance = $Door
+	var doorInsertion:MultiMeshInstance = $DoorInsertion
+	var start:MultiMeshInstance = $Start
+	var end:MultiMeshInstance = $End
+	var leftLadder:MultiMeshInstance = $LeftLadder
+	var rightLadder:MultiMeshInstance = $RightLadder
 	
 	var basis = Basis()
 	
@@ -559,11 +543,58 @@ func _generate_multimesh():
 	_translate_multimesh(rightLadder, position_right_ladders, eTilesType.RightLadder, basis)
 
 
+func _delete_tile_at(pos:Vector3):
+	position_walls.erase(pos)
+	position_doors.erase(pos)
+	position_left_ladders.erase(pos)
+	position_right_ladders.erase(pos)
+	if DEBUG:
+		position_doors_insertions.erase(pos)
+		position_start.erase(pos)
+		position_end.erase(pos)
+
+
 func _apply_tile_on_tilemap(pos: Vector3, tileType: int):
-	if map:
-		map.set_cell_item(pos.x, pos.y, pos.z, tileType)
+	if USE_GRIDMAP:
+		$GridMap.set_cell_item(pos.x, pos.y, pos.z, tileType)
 	else:
 		var v :Vector3 = pos * TILE_SIZE
+		
+		#get_tree().call_group("Tiles", "delete_tile_at", v)
+		match tileType:
+			eTilesType.Empty:
+				$Wall.delete_tile_at(v)
+			eTilesType.Wall:
+				$Wall.insert(v)
+			eTilesType.Door:
+				$Door.insert(v)
+				$Wall.delete_tile_at(v)
+			eTilesType.LeftLadder:
+				$LeftLadder.insert(v)
+				$Wall.delete_tile_at(v)
+			eTilesType.RightLadder:
+				$RightLadder.insert(v)
+				$Wall.delete_tile_at(v)
+			eTilesType.DoorInsertion:
+				if DEBUG:
+					$DoorInsertions.insert(v)
+					$Wall.delete_tile_at(v)
+			eTilesType.Start:
+				if DEBUG:
+					$Start.insert(v)
+					$Wall.delete_tile_at(v)
+			eTilesType.End:
+				if DEBUG:
+					$End.insert(v)
+					$Wall.delete_tile_at(v)
+"""
+
+func _apply_tile_on_tilemap(pos: Vector3, tileType: int):
+	if USE_GRIDMAP:
+		$GridMap.set_cell_item(pos.x, pos.y, pos.z, tileType)
+	else:
+		var v :Vector3 = pos * TILE_SIZE
+		print(tileType, " ", position_walls.size(), " ", position_doors.size(), " ", position_left_ladders.size(), " ", position_right_ladders.size())
 		_delete_tile_at(v)
 		match tileType:
 			eTilesType.Wall:
@@ -583,81 +614,7 @@ func _apply_tile_on_tilemap(pos: Vector3, tileType: int):
 				position_left_ladders.append(v)
 			eTilesType.RightLadder:
 				position_right_ladders.append(v)
-
-
-func _delete_tile_at(pos:Vector3):
-	position_walls.erase(pos)
-	position_doors.erase(pos)
-	position_left_ladders.erase(pos)
-	position_right_ladders.erase(pos)
-	if DEBUG:
-		position_doors_insertions.erase(pos)
-		position_start.erase(pos)
-		position_end.erase(pos)
-
-
-func to_vector3(v: Vector2, z :int = 0) -> Vector3:
-	return Vector3(v.x, v.y, z)
-
-func vector3_ceil(v: Vector3) -> Vector3:
-	return Vector3(ceil(v.x), ceil(v.y), ceil(v.z))
-
-func vector3_floor(v: Vector3) -> Vector3:
-	return Vector3(floor(v.x), floor(v.y), floor(v.z))
-
-func vector3_round(v: Vector3) -> Vector3:
-	return Vector3(round(v.x), round(v.y), round(v.z))
-
-
-func vector2_ceil(v: Vector2) -> Vector2:
-	return Vector2(ceil(v.x), ceil(v.y))
-
-func vector2_floor(v: Vector2) -> Vector2:
-	return Vector2(floor(v.x), floor(v.y))
-
-func vector2_round(v: Vector2) -> Vector2:
-	return Vector2(round(v.x), round(v.y))
-
-func to_vector2(v: Vector3) -> Vector2:
-	return Vector2(v.x, v.y)
-
-
-func reverse_y_axis(v: Vector2):
-	return Vector2(v.x, map_height - v.y)
-
-func get_middle(r: Rect2) -> Vector3:
-	return to_vector3(r.position + (r.size * 0.5))
-
-func scale_rectangle(r: Rect2, scale: int, reverseY: bool = false) -> Rect2:
-		if reverseY:
-			var pos = Vector2(r.position.x, r.position.y + r.size.y - map_height / 2)
-			return Rect2(reverse_y_axis(pos * scale), r.size * scale)
-		else:
-			return Rect2(r.position * scale, r.size * scale)
-
-func _draw():
-	for area in rooms_areas.values():
-		var rect = scale_rectangle(area, scale2D, true)
-		if DRAW_ROOMS_INDEX:
-			var pos = get_middle(rect)
-			var point = pathfinding.get_closest_point(get_middle(area))
-			draw_string(f, to_vector2(pos * 6), str(point), Color.red)
-		draw_rect(rect, Color.white, false)						# draw area
-		var color = Color.blue
-		if area == starting_room:
-			color = Color.green
-		elif area == ending_room:
-			color = Color.red
-		draw_rect(scale_rectangle(_get_room_rectangle(area), scale2D, true), color, false)	# draw room (without margin)
-	_draw_path(pathfinding)
-
-func _draw_path(path: AStar):
-	if path:
-		for point in path.get_points():
-			for edges in path.get_point_connections(point):
-				var pointPosition = path.get_point_position(point)
-				var edgePosition = path.get_point_position(edges)
-				draw_line(reverse_y_axis(to_vector2(pointPosition)) * scale2D, reverse_y_axis(to_vector2(edgePosition)) * scale2D, Color.yellow)
+"""
 
 func _clear_all():
 	clear_console()
@@ -665,13 +622,7 @@ func _clear_all():
 	for element in MapElements:
 	    element.queue_free()
 	
-	position_walls.clear()
-	position_doors.clear()
-	position_doors_insertions.clear()
-	position_start.clear()
-	position_end.clear()
-	position_left_ladders.clear()
-	position_right_ladders.clear()
+	get_tree().call_group("Tiles", "clear")
 	rooms_areas.clear()
 	pathfinding = null
 
@@ -679,7 +630,3 @@ func _clear_all():
 func clear_console():
 	for i in range(5):
 		print(" ")
-	"""
-	var escape := PoolByteArray([0x1b]).get_string_from_ascii()
-	print(escape + "[2J" + escape + "[;H")
-	"""
