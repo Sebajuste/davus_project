@@ -20,14 +20,44 @@ _global_script_classes=[ {
 "path": "res://tools/combat/DamageSource/DamageSource.gd"
 }, {
 "base": "Reference",
+"class": "DirectionHelper",
+"language": "GDScript",
+"path": "res://helper/DirectionHelper.gd"
+}, {
+"base": "Reference",
+"class": "DungeonRessource",
+"language": "GDScript",
+"path": "res://tileset/DungeonGenerator/DungeonRessource.gd"
+}, {
+"base": "Reference",
+"class": "GeometryHelper",
+"language": "GDScript",
+"path": "res://helper/GeometryHelper.gd"
+}, {
+"base": "Reference",
+"class": "GraphGenerator",
+"language": "GDScript",
+"path": "res://tileset/DungeonGenerator/GraphGenerator.gd"
+}, {
+"base": "Reference",
 "class": "Hit",
 "language": "GDScript",
 "path": "res://tools/combat/Hit.gd"
+}, {
+"base": "Reference",
+"class": "Room",
+"language": "GDScript",
+"path": "res://tileset/DungeonGenerator/Room.gd"
 } ]
 _global_script_class_icons={
 "CombatStats": "",
 "DamageSource": "",
-"Hit": ""
+"DirectionHelper": "",
+"DungeonRessource": "",
+"GeometryHelper": "",
+"GraphGenerator": "",
+"Hit": "",
+"Room": ""
 }
 
 [application]
