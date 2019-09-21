@@ -2,6 +2,7 @@ extends Node2D
 
 var label := Label.new()
 var f:Font = label.get_font("")
+var scale2D:int
 
 """
 func _draw():

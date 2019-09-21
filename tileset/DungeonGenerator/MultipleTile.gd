@@ -1,7 +1,7 @@
 extends MultiMeshInstance
 
 var _positions := Array() #PoolVector3Array()
-signal on_translate_all
+signal on_translate
 
 func insert(pos:Vector3):
 	#print(self.name, " /insert : ", pos, " size =", _positions.size())
@@ -23,4 +23,4 @@ func translate_all():
 	for i in range(size):
 		var pos:Vector3 = _positions[i]
 		multimesh.set_instance_transform(i, Transform(basis,  pos))
-		emit_signal("on_translate_all", pos)
+		emit_signal("on_translate", self, pos)
