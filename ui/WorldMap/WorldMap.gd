@@ -14,7 +14,6 @@ func _ready():
 	$Viewport/CanvasLayer.player_color = player_color
 	
 	var streaming_level_node = get_node(streaming_level)
-	print("streaming_level_node: ", streaming_level_node)
 	streaming_level_node.connect("batch_added", self, "_on_batch_added")
 
 
@@ -24,10 +23,16 @@ func _ready():
 
 
 func _on_batch_added(batch) -> void:
-	print("batch_added")
+	
 	if batch.is_in_group("body_streaming_layout"):
 		for tile in batch.get_children():
 			var tile_pos = tile.global_transform.origin
-			if tile_pos.y <= 30.0:
-				$Viewport/CanvasLayer._tiles_positions.append( Vector2(tile_pos.x, -tile_pos.y) )
+			$Viewport/CanvasLayer._tiles_positions.append( Vector2(tile_pos.x, -tile_pos.y) )
 		$Viewport/CanvasLayer.update()
+	
+	if batch.is_in_group("doors_streaming_layout"):
+		for door in batch.get_children():
+			var door_pos = door.global_transform.origin
+			$Viewport/CanvasLayer._doors_positions.append( Vector2(door_pos.x, -door_pos.y) )
+		$Viewport/CanvasLayer.update()
+	

@@ -1,17 +1,20 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://scenes/TestWorldGameplay/TestWorldGameplay.gd" type="Script" id=1]
 [ext_resource path="res://tools/StreamingLevel/StreamingLevel.tscn" type="PackedScene" id=2]
 [ext_resource path="res://tileset/Jungle/JungleLevelLayout.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/TestWorldGameplay/JungleNoise.tres" type="OpenSimplexNoise" id=4]
 [ext_resource path="res://tools/StreamingLevel/MonsterLayout/MonsterLevelLayout.tscn" type="PackedScene" id=5]
-[ext_resource path="res://tileset/Jungle/JungleBackgroundLevelLayout.tscn" type="PackedScene" id=6]
-[ext_resource path="res://scenes/TestWorldGameplay/Camera.gd" type="Script" id=7]
-[ext_resource path="res://scenes/TestWorldGameplay/DirectionalLight.gd" type="Script" id=8]
-[ext_resource path="res://music/exploring_the_dungeon.ogg" type="AudioStream" id=9]
-[ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=10]
-[ext_resource path="res://ui/Options/Options.tscn" type="PackedScene" id=11]
-[ext_resource path="res://ui/WorldMap/WorldMap.tscn" type="PackedScene" id=12]
+[ext_resource path="res://tools/StreamingLevel/DoorsLayout/DoorsLevelLayout.tscn" type="PackedScene" id=6]
+[ext_resource path="res://tools/StreamingLevel/KeysLayout/KeysLevelLayout.tscn" type="PackedScene" id=7]
+[ext_resource path="res://tileset/Jungle/JungleBackgroundLevelLayout.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scenes/TestWorldGameplay/Camera.gd" type="Script" id=9]
+[ext_resource path="res://scenes/TestWorldGameplay/DirectionalLight.gd" type="Script" id=10]
+[ext_resource path="res://music/exploring_the_dungeon.ogg" type="AudioStream" id=11]
+[ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=12]
+[ext_resource path="res://scenes/TestWorldGameplay/DoorsHandler.gd" type="Script" id=13]
+[ext_resource path="res://ui/Options/Options.tscn" type="PackedScene" id=14]
+[ext_resource path="res://ui/WorldMap/WorldMap.tscn" type="PackedScene" id=15]
 
 [sub_resource type="ProceduralSky" id=1]
 sky_top_color = Color( 0.937255, 0.619608, 0.0784314, 1 )
@@ -50,7 +53,18 @@ noise = ExtResource( 4 )
 cap = 0.2
 end_max_y = -5
 
-[node name="JungleBackgroundLevelLayout" parent="StreamingLevel" instance=ExtResource( 6 )]
+[node name="DoorsLevelLayout" parent="StreamingLevel" instance=ExtResource( 6 )]
+noise = ExtResource( 4 )
+cap = 0.2
+end_max_y = -20
+
+[node name="KeysLevelLayout" parent="StreamingLevel" instance=ExtResource( 7 )]
+noise = ExtResource( 4 )
+cap = 0.3
+end_max_y = -10
+drop_rate = 0.2
+
+[node name="JungleBackgroundLevelLayout" parent="StreamingLevel" instance=ExtResource( 8 )]
 cap = 0.15
 top_max_y = 0
 end_max_y = 1
@@ -59,7 +73,7 @@ end_max_y = 1
 transform = Transform( 1, -9.43685e-009, 5.87452e-009, 9.43685e-009, 1, 5.15538e-009, -5.87452e-009, -5.15538e-009, 1, 0, 0, 5.52072 )
 current = true
 fov = 20.0
-script = ExtResource( 7 )
+script = ExtResource( 9 )
 target = NodePath("../Player")
 distance = 30.0
 target_y_offset = 2.0
@@ -69,20 +83,24 @@ transform = Transform( 0.736818, 0.52042, -0.43158, -0.00878779, 0.645664, 0.763
 light_color = Color( 0.894118, 0.917647, 0.815686, 1 )
 light_energy = 2.0
 shadow_enabled = true
-script = ExtResource( 8 )
+script = ExtResource( 10 )
 min_y = -30
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 9 )
+stream = ExtResource( 11 )
 autoplay = true
 
-[node name="Player" parent="." instance=ExtResource( 10 )]
+[node name="Player" parent="." instance=ExtResource( 12 )]
 
 [node name="PlayerRespawnTimer" type="Timer" parent="."]
 wait_time = 5.0
 one_shot = true
 
+[node name="DoorsHandler" type="Node" parent="."]
+script = ExtResource( 13 )
+
 [node name="Menu" type="Control" parent="."]
+editor/display_folded = true
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -114,10 +132,9 @@ margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
 
-[node name="Options" parent="Menu/MarginContainer/TabContainer/Options" instance=ExtResource( 11 )]
+[node name="Options" parent="Menu/MarginContainer/TabContainer/Options" instance=ExtResource( 14 )]
 
 [node name="Map" type="Tabs" parent="Menu/MarginContainer/TabContainer"]
-editor/display_folded = true
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -126,8 +143,9 @@ margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
 
-[node name="WorldMap" parent="Menu/MarginContainer/TabContainer/Map" instance=ExtResource( 12 )]
+[node name="WorldMap" parent="Menu/MarginContainer/TabContainer/Map" instance=ExtResource( 15 )]
 streaming_level = NodePath("../../../../../StreamingLevel")
 zoom = 3.0
+[connection signal="batch_generated" from="StreamingLevel/DoorsLevelLayout" to="DoorsHandler" method="_on_DoorsLevelLayout_batch_generated"]
 [connection signal="died" from="Player" to="." method="_on_FemaleCharacter_died"]
 [connection signal="timeout" from="PlayerRespawnTimer" to="." method="_on_PlayerRespawnTimer_timeout"]

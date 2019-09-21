@@ -1,6 +1,8 @@
 extends "res://objects/doors/Door.gd"
 
-
+# Declare member variables here. Examples:
+# var a = 2
+# var b = "text"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -13,13 +15,15 @@ func _ready():
 
 func use(actor) -> void:
 	open()
+	print("test")
 	if opened:
-		loading.change_scene("res://tileset/DungeonGenerator/Dungeon.tscn")
+		loading.change_scene("res://scenes/TestWorldGameplay/TestWorldGameplay.tscn")
 
 
 func set_locked(value: bool) -> void:
 	.set_locked(value)
+	$Door1.locked = locked
 	if locked:
-		$Entrance/DoorPanel/OmniLight.light_color = Color.red
+		$OmniLight.light_color = Color.red
 	else:
-		$Entrance/DoorPanel/OmniLight.light_color = Color.green
+		$OmniLight.light_color = Color.green
