@@ -1,9 +1,29 @@
 extends "res://characters/Mobs/Mob.gd"
 
+enum state { 
+	CHOOSE_TARGET, 
+	MOVE_FORWARD, 
+	MOVE_BACKWARD,
+	WAIT
+}
+
 var anim_state_machine
+var current_state
+var position = global_transform.origin
+var vx = 0
+var vy = 0
+
+# Returns the angle between two points.
+func get_angle(x1,y1,x2,y2) -> float:
+	return atan2(y2-y1, x2-x1)
+
+# Returns the distance between two points.
+func get_dist(x1,y1,x2,y2) -> float:
+	return pow(pow(x2-x1,2)+pow(y2-y1,2),0.5)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	current_state = state.CHOOSE_TARGET
 	
 	anim_state_machine = $FlyModel/AnimationTree["parameters/StateMachine/playback"]
 	if anim_state_machine.is_playing():
@@ -15,16 +35,52 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	
 	if $CombatStats.health == 0:
 		return
 	
-	if not targets.empty():
-		var target = targets[0]
-		current_target = target
-	else:
-		current_target = null
-
+	position = global_transform.origin
+	
+	# AI
+	if current_state == state.CHOOSE_TARGET:
+		
+		current_target = targets[0]
+		current_state = state.MOVE_FORWARD
+		
+	elif current_state == state.MOVE_FORWARD:
+		
+		var target_position = current_target.global_transform.origin
+		var angle = get_angle(position.x, position.y, target_position.x, target_position.y)
+		vx = cos(angle) * 2
+		vy = sin(angle) * 2
+		
+		var dist = get_dist(position.x, position.y, target_position.x, target_position.y)
+		if abs(dist) <= 3:
+			current_state = state.WAIT
+	
+	elif current_state == state.WAIT:
+		
+		vx = 0
+		vy = 0
+		
+		var target_position = current_target.global_transform.origin
+		var dist = get_dist(position.x, position.y, target_position.x, target_position.y)
+		if abs(dist) > 3:
+			current_state = state.MOVE_FORWARD
+		elif abs(dist) <= 2.5:
+			current_state = state.MOVE_BACKWARD
+		
+	elif current_state == state.MOVE_BACKWARD:
+		
+		var target_position = current_target.global_transform.origin
+		var angle = get_angle(position.x, position.y, target_position.x, target_position.y)
+		vx = -(cos(angle) * 3)
+		vy = -(sin(angle) * 3)
+		
+		var dist = get_dist(position.x, position.y, target_position.x, target_position.y)
+		if abs(dist) > 2.5:
+			current_state = state.WAIT
+	
+	move_and_slide(Vector3(vx, vy, 0))
 
 
 func _physics_process(delta):
