@@ -33,6 +33,7 @@ func set_locked(value: bool) -> void:
 
 func open() -> void:
 	if not locked:
+		opened = true
 		if auto_closed:
 			$CloseTimer.start()
 	pass
@@ -44,4 +45,11 @@ func set_id(val: int) -> void:
 
 
 func close():
+	opened = false
 	pass
+
+
+func use(actor):
+	open()
+	if opened:
+		loading.change_scene("res://tileset/DungeonGenerator/Dungeon.tscn")

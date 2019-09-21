@@ -193,6 +193,18 @@ func _physics_process(delta):
 	_anim_update = false
 
 
+func _input(event) -> void:
+	
+	if Input.is_action_just_pressed("use"):
+		
+		var usable = $UsableArea.get_usable()
+		print("use: ", usable)
+		if usable != null:
+			usable.use(self)
+	
+	pass
+
+
 func is_falling() -> bool:
 	return _fall_time > 0.2
 

@@ -42,6 +42,7 @@ script = ExtResource( 1 )
 environment = SubResource( 2 )
 
 [node name="StreamingLevel" parent="." instance=ExtResource( 2 )]
+multithreading = false
 
 [node name="JungleLevelLayout" parent="StreamingLevel" instance=ExtResource( 3 )]
 noise = ExtResource( 4 )
