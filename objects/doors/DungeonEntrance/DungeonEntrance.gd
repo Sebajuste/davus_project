@@ -7,10 +7,12 @@ export var auto_closed := true
 export var auto_closed_time := 5.0
 
 
-var open := false
+var opened := false
+
+var id : int = 0 setget set_id
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	$CloseTimer.wait_time = auto_closed_time
 	set_locked(locked)
 	pass # Replace with function body.
@@ -21,7 +23,7 @@ func _ready():
 #	pass
 
 
-func set_locked(value):
+func set_locked(value: bool) -> void:
 	locked = value
 	if locked:
 		close()
@@ -29,11 +31,16 @@ func set_locked(value):
 	else:
 		$Entrance/DoorPanel/OmniLight.light_color = Color.green
 
-func open():
+func open() -> void:
 	if not locked:
 		if auto_closed:
 			$CloseTimer.start()
 	pass
+
+
+func set_id(val: int) -> void:
+	if id == 0:
+		id = val
 
 
 func close():

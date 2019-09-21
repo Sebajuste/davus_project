@@ -1,10 +1,17 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://models/Doors/Dungeon/Entrance.tscn" type="PackedScene" id=1]
 [ext_resource path="res://objects/doors/DungeonEntrance/DungeonEntrance.gd" type="Script" id=2]
 
-[node name="DungeonEntrance" index="0" instance=ExtResource( 1 )]
+[sub_resource type="SphereShape" id=1]
+
+[node name="DungeonEntrance" index="0" groups=[
+"door",
+] instance=ExtResource( 1 )]
 script = ExtResource( 2 )
+
+[node name="Entrance" parent="." index="0"]
+editor/display_folded = true
 
 [node name="OmniLight" type="OmniLight" parent="Entrance/DoorPanel" index="0"]
 transform = Transform( -6.62347e-007, 0, -4.06545, 0, 4.06545, 0, 4.06545, 0, -6.62347e-007, -0.421301, 1.39559, 0 )
@@ -12,4 +19,12 @@ light_color = Color( 1, 0, 0, 1 )
 omni_range = 2.36857
 
 [node name="CloseTimer" type="Timer" parent="." index="1"]
+
+[node name="Area" type="Area" parent="." index="2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75503, 2.01 )
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape" type="CollisionShape" parent="Area" index="0"]
+shape = SubResource( 1 )
 [connection signal="timeout" from="CloseTimer" to="." method="close"]

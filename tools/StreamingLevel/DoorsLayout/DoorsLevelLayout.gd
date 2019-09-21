@@ -15,4 +15,5 @@ func gen(pos: Vector3) -> Spatial:
 	layout_batch.end_max_y = end_max_y
 	layout_batch.translate( Vector3(pos.x*batch_size*TILE_SIZE, pos.y*batch_size*TILE_SIZE, 0) )
 	layout_batch.gen( Vector3(pos.x*batch_size, pos.y*batch_size, 0), noise, cap )
+	emit_signal("batch_generated", layout_batch)
 	return layout_batch

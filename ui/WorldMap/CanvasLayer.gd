@@ -7,8 +7,10 @@ const TILE_SIZE = 2
 var zoom
 var walls_color := Color.white
 var player_color := Color.blue
+var door_color := Color.orange
 
 var _tiles_positions := []
+var _doors_positions := []
 
 var _update_timer := 0.0
 var _player_origin = null
@@ -35,8 +37,6 @@ func _draw():
 	
 	var center_pos = Vector2(viewport_size.x/2, viewport_size.y/2)
 	
-	#var player_pos = players[0].global_transform.origin
-	
 	var player_origin = players[0].global_transform.origin
 	
 	if _player_origin == null:
@@ -48,6 +48,10 @@ func _draw():
 	for tile_pos in _tiles_positions:
 		var rect = Rect2(tile_pos.x*zoom+origin_pos.x, tile_pos.y*zoom+origin_pos.y, TILE_SIZE*zoom, TILE_SIZE*zoom)
 		draw_rect( rect, walls_color, true)
+	
+	for door_pos in _doors_positions:
+		var door_rect = Rect2(door_pos.x*zoom+origin_pos.x, (door_pos.y-2)*zoom+origin_pos.y, TILE_SIZE*zoom, TILE_SIZE*zoom)
+		draw_rect(door_rect, door_color, true)
 	
 	_draw_players(origin_pos)
 	
@@ -65,6 +69,5 @@ func _on_batch_added(batch):
 	if batch.is_in_group("body_streaming_layout"):
 		for tile in batch.get_children():
 			var tile_pos = tile.global_transform.origin
-			if tile_pos.y <= 30.0:
-				_tiles_positions.append( Vector2(tile_pos.x, -tile_pos.y) )
+			_tiles_positions.append( Vector2(tile_pos.x, -tile_pos.y) )
 		update()

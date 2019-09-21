@@ -4,11 +4,30 @@ const TILE_MESH = preload("res://models/Tiles/Jungle/omniTile.mesh")
 
 const STATIC_TILE = preload("res://tileset/Jungle/StaticBody.tscn")
 
+export var debug := false setget set_debug
+
 onready var tile_shape = load("res://tileset/Jungle/tile.shape")
 
 var top_max_y : int
 var top_max_value : float
 var end_max_y : int
+
+
+func set_debug(v):
+	debug = v
+	$ImmediateGeometry.clear()
+	if debug:
+		$ImmediateGeometry.begin(Mesh.PRIMITIVE_LINE_LOOP)
+		
+		$ImmediateGeometry.set_color(Color(1.0, 0.0, 0.0))
+		
+		$ImmediateGeometry.add_vertex(Vector3(0, 0, 1))
+		$ImmediateGeometry.add_vertex(Vector3(size*2, 0, 1))
+		$ImmediateGeometry.add_vertex(Vector3(size*2, size*2, 1))
+		$ImmediateGeometry.add_vertex(Vector3(0, size*2, 1))
+		
+		$ImmediateGeometry.end()
+
 
 func gen(loc: Vector3, noise: OpenSimplexNoise, cap: float) -> void:
 	

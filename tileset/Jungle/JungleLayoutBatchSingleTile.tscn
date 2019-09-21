@@ -7,3 +7,7 @@
 "body_streaming_layout",
 ] instance=ExtResource( 1 )]
 script = ExtResource( 2 )
+
+[node name="ImmediateGeometry" type="ImmediateGeometry" parent="." index="0"]
+
+[node name="MultiMeshInstance" type="MultiMeshInstance" parent="." index="1"]
