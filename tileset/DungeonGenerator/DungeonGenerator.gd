@@ -33,30 +33,18 @@ const DESIRED_SEED_STEP_COUNTER:int = 1
 var _desired_seed_counter:int = 0
 var _seed_counter:int = 1
 
-var spawn_position:Vector3
-
-var position_walls := Array()
-var position_doors := Array()
-var position_doors_insertions := Array()
-var position_start := Array()
-var position_end := Array()
-var position_left_ladders := Array()
-var position_right_ladders := Array()
-
 var room_factory := Room #load("res://tileset/DungeonGenerator/Room.gd")
 var geometry:GeometryHelper = GeometryHelper.new()
 var resourceMgr:DungeonRessource = DungeonRessource.new()
 var eTilesType = resourceMgr.eTilesType
 var eDirection = DirectionHelper.eDirection
+var pathfinding := AStar.new()
+var rnd := RandomNumberGenerator.new()
 
 var rooms_areas := Dictionary()
 var starting_room:Room
 var ending_room:Room
-var pathfinding := AStar.new()
-var rnd := RandomNumberGenerator.new()
-
-var label := Label.new()
-var f:Font = label.get_font("")
+var spawn_position:Vector3
 
 func _ready():
 	rnd.seed = map_seed
@@ -95,8 +83,9 @@ func gen_graph():
 			_apply_tile_on_tilemap(endMiddle, eTilesType.End)
 		
 		if not USE_GRIDMAP:
-			#_generate_multimesh()
-			get_tree().call_group("Tiles", "translate_all")
+			var tiles = get_tree().get_nodes_in_group("Tiles")
+			for tile in tiles:
+			    tile.translate_all()
 		
 		_seed_counter += 1
 		if DEBUG && _seed_counter < _desired_seed_counter:
@@ -469,35 +458,6 @@ func _dig_mixed_directions(horizontalPos: Vector3, verticalPos: Vector3, mobSpaw
 			else:
 				_apply_tile_on_tilemap(v, eTilesType.Empty)
 
-
-func _get_door_location(rect: Rect2, point: Vector3) -> Dictionary:
-	var middle = geometry.get_middle(rect)
-	var point2D = geometry.to_vector2(point)
-	var topRight = rect.position + (rect.size * Vector2.RIGHT)
-	var bottomLeft = rect.position + (rect.size * Vector2.DOWN)
-	var bottomRight = rect.position + rect.size
-	var dir = (point2D - middle).normalized()
-	var intersections = Dictionary()
-	intersections[eDirection.Top] = get_line_intersection(rect.position, topRight, middle, point2D)
-	intersections[eDirection.Bottom] = get_line_intersection(bottomLeft, bottomRight, middle, point2D) - dir
-	intersections[eDirection.Right] = get_line_intersection(topRight, bottomRight, middle, point2D) - dir
-	intersections[eDirection.Left] = get_line_intersection(rect.position, bottomLeft, middle, point2D)
-	for direction in intersections.keys():
-		var intersection = intersections[direction]
-		if intersection == Vector2.INF:
-			intersections.erase(direction)
-	return intersections
-
-
-func get_line_intersection(p1: Vector2, p2: Vector2, p3: Vector2, p4: Vector2) -> Vector2:
-	var denominator = (p1.x - p2.x) * (p3.y - p4.y) - (p1.y - p2.y) * (p3.x - p4.x)
-	if denominator != 0:
-		var t = ((p1.x - p3.x) * (p3.y - p4.y) - (p1.y - p3.y) * (p3.x - p4.x)) / denominator
-		var u = -((p1.x - p2.x) * (p1.y - p3.y) - (p1.y - p2.y) * (p1.x - p3.x)) / denominator
-		if (t >= 0 && t < 1 && u >= 0 && u < 1):
-			return Vector2(p1.x + t * (p2.x - p1.x), p1.y + t * (p2.y - p1.y));
-	return Vector2.INF
-
 func _add_mob_spawn(pos:Vector3):
 	var mob_resources = resourceMgr.MOB_RESOURCES
 	var variant = randi() % mob_resources.size()
@@ -508,7 +468,7 @@ func _add_mob_spawn(pos:Vector3):
 		mob.add_to_group("MapElements")
 		add_child(mob)
 
-
+"""
 func _translate_multimesh(multi_mesh_inst:MultiMeshInstance, positions:Array, tileType: int, basis: Basis):
 	multi_mesh_inst.multimesh.instance_count = positions.size()
 	for i in range(positions.size()):
@@ -519,40 +479,8 @@ func _translate_multimesh(multi_mesh_inst:MultiMeshInstance, positions:Array, ti
 			if static_body:
 				var body = static_body.instance()
 				body.translate(pos)
-				#body.add_group("MapElements")
 				add_child(body)
-
-
-func _generate_multimesh():
-	var wall:MultiMeshInstance = $Wall
-	var door:MultiMeshInstance = $Door
-	var doorInsertion:MultiMeshInstance = $DoorInsertion
-	var start:MultiMeshInstance = $Start
-	var end:MultiMeshInstance = $End
-	var leftLadder:MultiMeshInstance = $LeftLadder
-	var rightLadder:MultiMeshInstance = $RightLadder
-	
-	var basis = Basis()
-	
-	_translate_multimesh(wall, position_walls, eTilesType.Wall, basis)
-	_translate_multimesh(door, position_doors, eTilesType.Door, basis)
-	_translate_multimesh(doorInsertion, position_doors_insertions, eTilesType.DoorInsertion, basis)
-	_translate_multimesh(start, position_start, eTilesType.Start, basis)
-	_translate_multimesh(end, position_end, eTilesType.End, basis)
-	_translate_multimesh(leftLadder, position_left_ladders, eTilesType.LeftLadder, basis)
-	_translate_multimesh(rightLadder, position_right_ladders, eTilesType.RightLadder, basis)
-
-
-func _delete_tile_at(pos:Vector3):
-	position_walls.erase(pos)
-	position_doors.erase(pos)
-	position_left_ladders.erase(pos)
-	position_right_ladders.erase(pos)
-	if DEBUG:
-		position_doors_insertions.erase(pos)
-		position_start.erase(pos)
-		position_end.erase(pos)
-
+"""
 
 func _apply_tile_on_tilemap(pos: Vector3, tileType: int):
 	if USE_GRIDMAP:
@@ -560,69 +488,37 @@ func _apply_tile_on_tilemap(pos: Vector3, tileType: int):
 	else:
 		var v :Vector3 = pos * TILE_SIZE
 		
-		#get_tree().call_group("Tiles", "delete_tile_at", v)
+		$Wall.delete_tile_at(v)
 		match tileType:
-			eTilesType.Empty:
-				$Wall.delete_tile_at(v)
 			eTilesType.Wall:
 				$Wall.insert(v)
 			eTilesType.Door:
 				$Door.insert(v)
-				$Wall.delete_tile_at(v)
 			eTilesType.LeftLadder:
 				$LeftLadder.insert(v)
-				$Wall.delete_tile_at(v)
 			eTilesType.RightLadder:
 				$RightLadder.insert(v)
-				$Wall.delete_tile_at(v)
 			eTilesType.DoorInsertion:
 				if DEBUG:
 					$DoorInsertions.insert(v)
-					$Wall.delete_tile_at(v)
 			eTilesType.Start:
 				if DEBUG:
 					$Start.insert(v)
-					$Wall.delete_tile_at(v)
 			eTilesType.End:
 				if DEBUG:
 					$End.insert(v)
-					$Wall.delete_tile_at(v)
-"""
 
-func _apply_tile_on_tilemap(pos: Vector3, tileType: int):
-	if USE_GRIDMAP:
-		$GridMap.set_cell_item(pos.x, pos.y, pos.z, tileType)
-	else:
-		var v :Vector3 = pos * TILE_SIZE
-		print(tileType, " ", position_walls.size(), " ", position_doors.size(), " ", position_left_ladders.size(), " ", position_right_ladders.size())
-		_delete_tile_at(v)
-		match tileType:
-			eTilesType.Wall:
-				position_walls.append(v)
-			eTilesType.Door:
-				position_doors.append(v)
-			eTilesType.DoorInsertion:
-				if DEBUG:
-					position_doors_insertions.append(v)
-			eTilesType.Start:
-				if DEBUG:
-					position_start.append(v)
-			eTilesType.End:
-				if DEBUG:
-					position_end.append(v)
-			eTilesType.LeftLadder:
-				position_left_ladders.append(v)
-			eTilesType.RightLadder:
-				position_right_ladders.append(v)
-"""
 
 func _clear_all():
 	clear_console()
-	var MapElements = get_tree().get_nodes_in_group("MapElements")
-	for element in MapElements:
+	var mapElements = get_tree().get_nodes_in_group("MapElements")
+	for element in mapElements:
 	    element.queue_free()
 	
-	get_tree().call_group("Tiles", "clear")
+	var tiles = get_tree().get_nodes_in_group("Tiles")
+	for tile in tiles:
+	    tile.clear()
+	
 	rooms_areas.clear()
 	pathfinding = null
 

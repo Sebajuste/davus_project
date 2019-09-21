@@ -1,5 +1,8 @@
 extends Node2D
 
+var label := Label.new()
+var f:Font = label.get_font("")
+
 """
 func _draw():
 	for area in rooms_areas.values():
