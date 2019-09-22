@@ -19,6 +19,7 @@ var _player_origin = null
 func _ready():
 	pass # Replace with function body.
 
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	_update_timer += delta
@@ -55,6 +56,12 @@ func _draw():
 	
 	_draw_players(origin_pos)
 	
+
+
+func clear():
+	_tiles_positions.clear()
+	_doors_positions.clear()
+	update()
 
 
 func _draw_players(origin_pos: Vector2) -> void:

@@ -5,7 +5,7 @@ export(float, 1.0, 10.0) var zoom := 2.0
 export var walls_color := Color.white
 export var player_color := Color.blue
 
-#onready var streaming_level_node = get_node(streaming_level)
+var streaming_level_node setget set_streaming_level_node
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -14,12 +14,24 @@ func _ready():
 	$Viewport/CanvasLayer.player_color = player_color
 	
 	var streaming_level_node = get_node(streaming_level)
-	streaming_level_node.connect("batch_added", self, "_on_batch_added")
+	if streaming_level_node:
+		streaming_level_node.connect("batch_added", self, "_on_batch_added")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+
+
+func clear():
+	$Viewport/CanvasLayer.clear()
+
+
+func set_streaming_level_node(v):
+	if streaming_level_node:
+		streaming_level_node.disconnect("batch_added", self, "_on_batch_added")
+	streaming_level_node = v
+	streaming_level_node.connect("batch_added", self, "_on_batch_added")
 
 
 func _on_batch_added(batch) -> void:

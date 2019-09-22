@@ -32,5 +32,14 @@ func set_direction(dir):
 	direction = dir.normalized()
 
 
-func _on_Area_body_entered(body):
+func set_damage(damage):
+	$DamageSource.damage = damage
+
+
+func _destroy():
 	queue_free()
+
+
+func _on_Area_body_entered(body):
+	call_deferred("_destroy")
+

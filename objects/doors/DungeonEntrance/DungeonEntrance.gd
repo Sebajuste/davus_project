@@ -31,7 +31,7 @@ func close() -> bool:
 func use(actor) -> void:
 	open()
 	if opened:
-		loading.change_scene("res://tileset/DungeonGenerator/Dungeon.tscn")
+		loading.load_scene("res://tileset/DungeonGenerator/Dungeon.tscn")
 
 
 func set_locked(value: bool) -> void:

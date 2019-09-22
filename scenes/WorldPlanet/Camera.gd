@@ -6,7 +6,7 @@ export(float, 1.0, 100.0) var distance := 10.0
 export var speed := 10.0
 export var target_y_offset := 5.0
 
-var target_node # = get_node(target)
+onready var target_node = get_node(target)
 
 
 var _target_posistion := Vector3()
@@ -14,20 +14,12 @@ var _target_posistion := Vector3()
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
-	if not target_node:
-		target_node = get_node(target)
 	
 	pass # Replace with function body.
-
-var test := 0
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	
-	if not target_node:
-		print("oups ", test)
-		test += 1
-		return
 	
 	_target_posistion = Vector3(
 		target_node.global_transform.origin.x,

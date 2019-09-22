@@ -14,7 +14,7 @@ var power := max_power
 
 var jetpack_on := false
 
-onready var _character = get_parent().get_parent()
+onready var _character = get_parent()
 
 var _start_jetpack := false
 

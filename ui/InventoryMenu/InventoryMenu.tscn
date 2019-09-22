@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://ui/Inventory/Inventory.gd" type="Script" id=1]
+[ext_resource path="res://ui/InventoryMenu/InventoryMenu.gd" type="Script" id=1]
 
-[node name="Inventory" type="Control"]
+[node name="InventoryMenu" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 1 )
@@ -16,18 +16,19 @@ margin_right = 1024.0
 margin_bottom = 600.0
 
 [node name="Tabs" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-margin_right = 133.0
+margin_right = 125.0
 margin_bottom = 600.0
 rect_min_size = Vector2( 125, 0 )
 custom_constants/separation = 10
 
 [node name="WeaponMain" type="Button" parent="MarginContainer/HBoxContainer/Tabs"]
-margin_right = 133.0
+margin_right = 125.0
 margin_bottom = 50.0
 rect_min_size = Vector2( 0, 50 )
 text = "WeaponMain"
 
 [node name="WeaponSecondary" type="Button" parent="MarginContainer/HBoxContainer/Tabs"]
+visible = false
 margin_top = 60.0
 margin_right = 133.0
 margin_bottom = 110.0
@@ -43,37 +44,38 @@ rect_min_size = Vector2( 0, 50 )
 text = "Ammo"
 
 [node name="Jetpack" type="Button" parent="MarginContainer/HBoxContainer/Tabs"]
-margin_top = 120.0
-margin_right = 133.0
-margin_bottom = 170.0
+visible = false
+margin_top = 60.0
+margin_right = 125.0
+margin_bottom = 110.0
 rect_min_size = Vector2( 0, 50 )
 text = "Jetpack"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/HBoxContainer"]
-margin_left = 137.0
-margin_right = 578.0
+margin_left = 129.0
+margin_right = 574.0
 margin_bottom = 600.0
 size_flags_horizontal = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer"]
-margin_right = 441.0
+margin_right = 445.0
 size_flags_horizontal = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-margin_left = 582.0
+margin_left = 578.0
 margin_right = 1024.0
 margin_bottom = 600.0
 size_flags_horizontal = 3
 custom_constants/separation = 20
 
 [node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_right = 442.0
+margin_right = 446.0
 margin_bottom = 290.0
 size_flags_vertical = 3
 
 [node name="Panel2" type="Panel" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 margin_top = 310.0
-margin_right = 442.0
+margin_right = 446.0
 margin_bottom = 600.0
 size_flags_vertical = 3
 [connection signal="pressed" from="MarginContainer/HBoxContainer/Tabs/WeaponMain" to="." method="_on_WeaponMain_pressed"]

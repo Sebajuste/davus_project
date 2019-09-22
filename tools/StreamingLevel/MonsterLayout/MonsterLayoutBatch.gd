@@ -14,7 +14,7 @@ func gen(loc: Vector3, noise: OpenSimplexNoise, cap: float) -> void:
 			if global_pos.y < end_max_y and not _is_solid_tile(global_pos, noise, cap) and _is_solid_tile(global_pos+Vector3(0, -1, 0), noise, cap) and randi() % 4 == 1:
 				var tentacle = Tentacle.instance()
 				self.add_child(tentacle)
-				tentacle.translate( Vector3(x*2, (size*2)-(y*2)-0.8, 0) )
+				tentacle.translate( Vector3(x*2, (size*2)-(y*2), 0) )
 
 
 func _is_solid_tile(global_pos: Vector3, noise: OpenSimplexNoise, cap: float) -> bool:

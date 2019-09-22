@@ -1,25 +1,12 @@
 extends Control
 
+signal item_equiped(item)
+
 const WeaponPanel = preload("WeaponPanel/WeaponPanel.tscn")
 
 enum EquipmentType { WEAPON_MAIN, WEAPON_SECONDARY, JETPACK }
 
-var weapons := [{
-	"type": "gun",
-	"damage": 1.0,
-	"rate": 1.0,
-	"equiped": false
-}, {
-	"type": "gun",
-	"damage": 0.5,
-	"rate": 2.0,
-	"equiped": false
-}, {
-	"type": "gun",
-	"damage": 2.0,
-	"rate": 0.5,
-	"equiped": false
-}]
+var weapons := []
 
 
 var _current_equipment_type
@@ -36,15 +23,6 @@ onready var _list = $MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
-	for i in range(5):
-		var weapon = {
-			"type": "gun",
-			"damage": rand_range(0.8, 1.2),
-			"rate": rand_range(0.8, 1.2),
-			"equiped": false
-		}
-		weapons.append(weapon)
-	
 	_current_equipment_type = EquipmentType.WEAPON_MAIN
 	select_weapons()
 	
@@ -54,9 +32,26 @@ func _ready():
 #func _process(delta):
 #	pass
 
+
+func add_item(item) -> bool:
+	match item.type:
+		"gun":
+			weapons.append(item)
+			return true
+		_:
+			return false
+
+
+func remove_item(item) -> void:
+	var index = weapons.find(item)
+	if index != -1:
+		weapons.remove(index)
+
+
 func deselect() -> void:
 	for child in _list.get_children():
 		_list.remove_child(child)
+
 
 func select_weapons() -> void:
 	deselect()
@@ -70,25 +65,29 @@ func select_weapons() -> void:
 func _item_selected(item):
 	if item.equiped:
 		return
-	print("select: ", _current_equipment_type)
-	item.equiped = true
+	
 	match _current_equipment_type:
 		EquipmentType.WEAPON_MAIN:
 			if equipment["weapon_main"]:
 				equipment["weapon_main"].equiped = false
+			item.equiped = true
 			equipment["weapon_main"] = item
 			select_weapons()
 		EquipmentType.WEAPON_SECONDARY:
 			if equipment["weapon_secondary"]:
 				equipment["weapon_secondary"].equiped = false
+			item.equiped = true
 			equipment["weapon_secondary"] = item
 			select_weapons()
 		EquipmentType.JETPACK:
 			if equipment["jetpack"]:
 				equipment["jetpack"].equiped = false
+			item.equiped = true
 			equipment["jetpack"] = item
 		_:
 			return
+	
+	emit_signal("item_equiped", item)
 	
 	pass
 

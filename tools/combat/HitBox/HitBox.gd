@@ -12,10 +12,8 @@ func _exit_tree():
 	disconnect("area_entered", self, "_on_area_entered")
 
 func _on_area_entered(damage_source: DamageSource) -> void:
-	
 	if get_parent().is_a_parent_of(damage_source):
 		return
-	
 	var hit: = Hit.new(damage_source)
 	if _combat_stats and _combat_stats.has_method("take_damage"):
 		_combat_stats.take_damage(hit)
