@@ -8,7 +8,7 @@ func get_middle(r:Rect2) -> Vector2:
 func scale_rectangle(r:Rect2, scale: int, reverseY: bool = false, y_origin:float = 0) -> Rect2:
 		if reverseY:
 			var pos = Vector2(r.position.x, r.position.y + r.size.y - y_origin / 2)
-			return Rect2(reverse_y_axis(pos * scale), r.size * scale)
+			return Rect2(reverse_y_axis(pos * scale, y_origin), r.size * scale)
 		else:
 			return Rect2(r.position * scale, r.size * scale)
 

@@ -17,7 +17,7 @@ export (float, 0, 1) var mob_chance_corridors:float = 0.5
 export var map_seed = 1
 const TILE_SIZE = 2
 const USE_GRIDMAP = false
-
+const DRAW_ROOMS_INDEX = true
 
 var _control_camera:bool = false
 var _rnd := RandomNumberGenerator.new()
@@ -42,10 +42,15 @@ func _ready():
 	_graph_generator.max_room_height = max_room_height
 	_graph_generator.map_seed = map_seed
 	
+	# Initiate map generator
 	var dg := $MapGenerator
 	dg.tile_size = TILE_SIZE
 	dg.mob_chance_corridors = mob_chance_corridors
 	dg.rnd = _rnd
+	
+	# Initiate Mini map
+	$MiniMap.scale2D = scale2D
+	$MiniMap.draw_room_index = DRAW_ROOMS_INDEX
 	
 	create_dungeon()
 
@@ -67,6 +72,8 @@ func create_dungeon():
 	mg.clear_all()
 	_graph_generator.gen_graph()
 	mg.gen_dungeon(_graph_generator)
+	$MiniMap.graph_generator = _graph_generator
+	$MiniMap.gen()
 
 """
 func _on_DungeonGenerator_graph_gen_finnished():
