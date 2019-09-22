@@ -1,11 +1,23 @@
 class_name DungeonRessource
 
-enum eTilesType { Empty = -1, Door = 0, Wall = 1, Key = 2, Start = 3, End = 4, DoorInsertion = 5, LeftLadder = 6, RightLadder = 7 }
+enum eTilesType { 
+		Empty = -1, 
+		Door = 0, 
+		Wall = 1, 
+		Key = 2, 
+		Start = 3, 
+		End = 4, 
+		DoorInsertion = 5, 
+		LeftLadder = 6, 
+		RightLadder = 7,  
+		PipeStraight = 8,
+		PipeTurn = 9,
+	}
 const STATIC_BODIES:Dictionary = { 
-	eTilesType.Door: preload("res://tileset/test/Door.tscn"),
-	eTilesType.Wall: preload("res://tileset/test/Wall.tscn"),
-	eTilesType.LeftLadder: preload("res://tileset/test/LeftLadder.tscn"),
-	eTilesType.RightLadder: preload("res://tileset/test/RightLadder.tscn"),
+		eTilesType.Door: preload("res://tileset/test/Door.tscn"),
+		eTilesType.Wall: preload("res://tileset/test/Wall.tscn"),
+		eTilesType.LeftLadder: preload("res://tileset/test/LeftLadder.tscn"),
+		eTilesType.RightLadder: preload("res://tileset/test/RightLadder.tscn"),
 	}
 
 const ROOM_PREFAB:Dictionary = {
