@@ -9,10 +9,10 @@ var _reset_timer := 0.0
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
+	var ui_inventory = $Menu/MarginContainer/TabContainer/Inventory/Inventory
+	$Player/Inventory.connect("item_added", ui_inventory, "add_item")
+	ui_inventory.connect("item_equiped", $Player/Inventory, "equip")
 	
-		
-	
-	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -26,6 +26,13 @@ func _process(delta):
 	
 	pass
 
+
+func _input(event):
+	
+	if Input.is_action_just_pressed("menu"):
+		$Menu.visible = not $Menu.visible
+	
+	pass
 
 func _on_Player_died():
 	

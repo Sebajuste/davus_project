@@ -1,15 +1,22 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://scenes/TestGameplay/TestGameplay.gd" type="Script" id=1]
 [ext_resource path="res://tileset/test/Test.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scenes/TestGameplay/Camera.gd" type="Script" id=3]
-[ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=4]
-[ext_resource path="res://characters/Mobs/MobTentacle/MobTentacle.tscn" type="PackedScene" id=5]
+[ext_resource path="res://objects/items/Ammo/Ammo.tscn" type="PackedScene" id=3]
+[ext_resource path="res://objects/items/Gun/Gun.tscn" type="PackedScene" id=4]
+[ext_resource path="res://objects/keys/DoorKey/DoorKey.tscn" type="PackedScene" id=5]
+[ext_resource path="res://characters/Mobs/MobTentacle/MobTentacle.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scenes/TestGameplay/Camera.gd" type="Script" id=7]
+[ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=8]
+[ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=9]
+[ext_resource path="res://scenes/TestGameplay/Ammo.gd" type="Script" id=10]
 
 [sub_resource type="CubeMesh" id=1]
 
 [sub_resource type="ConcavePolygonShape" id=2]
 data = PoolVector3Array( -1, 1, 1, 1, 1, 1, -1, -1, 1, 1, 1, 1, 1, -1, 1, -1, -1, 1, 1, 1, -1, -1, 1, -1, 1, -1, -1, -1, 1, -1, -1, -1, -1, 1, -1, -1, 1, 1, 1, 1, 1, -1, 1, -1, 1, 1, 1, -1, 1, -1, -1, 1, -1, 1, -1, 1, -1, -1, 1, 1, -1, -1, -1, -1, 1, 1, -1, -1, 1, -1, -1, -1, 1, 1, 1, -1, 1, 1, 1, 1, -1, -1, 1, 1, -1, 1, -1, 1, 1, -1, -1, -1, 1, 1, -1, 1, -1, -1, -1, 1, -1, 1, 1, -1, -1, -1, -1, -1 )
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=3]
 
 [node name="TestGameplay" type="Spatial"]
 script = ExtResource( 1 )
@@ -67,16 +74,73 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 2, 0 )
 [node name="Test13" parent="World" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, 0 )
 
+[node name="Items" type="Spatial" parent="."]
+editor/display_folded = true
+
+[node name="Ammo" parent="Items" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.88394, 2.12825, 0 )
+ammo_type = "Fire"
+
+[node name="Gun" parent="Items" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.06597, 3.89488, 0 )
+
+[node name="DoorKey" parent="Items" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75829, 0, 0 )
+
+[node name="Mobs" type="Spatial" parent="."]
+
+[node name="MobTentacle" parent="Mobs" instance=ExtResource( 6 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.157, 0, 0 )
+
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.999289, 0.0377137, 0, -0.0377137, 0.999289, 0, 1.61902, 8.05316 )
 fov = 40.0
-script = ExtResource( 3 )
+script = ExtResource( 7 )
 target = NodePath("../Player")
 distance = 20.0
 
-[node name="Player" parent="." instance=ExtResource( 4 )]
+[node name="Player" parent="." instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22544, 0 )
 
-[node name="MobTentacle" parent="." instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.15666, -0.529681, 0 )
+[node name="Head" parent="Player/Skeleton" index="1"]
+transform = Transform( 0.999444, 0.0212257, 0.0257245, -0.0201413, 0.998927, -0.0417006, -0.0265821, 0.0411595, 0.998798, -0.025655, 1.56016, -0.0578297 )
+
+[node name="RightHand" parent="Player/Skeleton" index="2"]
+transform = Transform( 0.326747, 0.101125, 0.939685, 0.139056, -0.988581, 0.0580355, 0.934825, 0.111707, -0.33708, -0.216051, 0.949475, -0.0133233 )
+
+[node name="AnimationTree" parent="Player" index="11"]
+parameters/StateMachine/playback = SubResource( 3 )
+
+[node name="Menu" parent="." instance=ExtResource( 9 )]
+editor/display_folded = true
+
+[node name="MarginContainer" parent="Menu" index="0"]
+editor/display_folded = true
+
+[node name="UI" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="Ammo" type="HBoxContainer" parent="UI"]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 10 )
+
+[node name="Label" type="Label" parent="UI/Ammo"]
+margin_top = 13.0
+margin_right = 43.0
+margin_bottom = 27.0
+text = "Ammo"
+
+[node name="Value" type="Label" parent="UI/Ammo"]
+margin_left = 47.0
+margin_top = 13.0
+margin_right = 77.0
+margin_bottom = 27.0
+text = "Type"
 [connection signal="died" from="Player" to="." method="_on_Player_died"]
+[connection signal="ammo_selected" from="Player/AmmoHandler" to="UI/Ammo" method="_on_AmmoHandler_ammo_selected"]
+
+[editable path="Player"]
+
+[editable path="Menu"]

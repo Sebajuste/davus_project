@@ -1,0 +1,25 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://scenes/MainPlayable/MainGame.gd" type="Script" id=1]
+[ext_resource path="res://scenes/WorldPlanet/WorldPlanet.tscn" type="PackedScene" id=2]
+[ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=3]
+[ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=4]
+[ext_resource path="res://ui/Loading/Loading.tscn" type="PackedScene" id=5]
+
+[node name="MainGame" type="Node"]
+script = ExtResource( 1 )
+
+[node name="World" type="Spatial" parent="."]
+
+[node name="Level" type="Spatial" parent="World"]
+
+[node name="WorldPlanet" parent="World/Level" instance=ExtResource( 2 )]
+
+[node name="Player" parent="World" instance=ExtResource( 3 )]
+
+[node name="Menu" parent="." instance=ExtResource( 4 )]
+visible = true
+
+[node name="Loading" parent="." instance=ExtResource( 5 )]
+visible = false
+[connection signal="died" from="World/Player" to="." method="_on_Player_died"]

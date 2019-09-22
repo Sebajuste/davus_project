@@ -21,12 +21,11 @@ var _fall_time := 0.0
 var _anim_update := false
 
 
-var _pistol_aiming := false
+#var _pistol_aiming := false
 
 
 var _jump_event := false
 var _jump_action := false
-#var _jump_dir := Vector3()
 var _jump_count := MAX_JUMP
 var _jumping := false
 
@@ -39,47 +38,7 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	
-	var valid_target := false
-	
-	if _pistol_aiming:
-		
-		var target_pos = $CursorSelector.get_target_pos()
-		
-		var bone = $Skeleton.find_bone("mixamorig_Spine2")
-		
-		var bone_pos = $Skeleton.get_bone_global_pose(bone).origin
-		
-		var cur_dir = global_transform.basis.z.normalized()
-		var target_dir = (target_pos - (global_transform.origin+bone_pos)).normalized()
-		
-		var look_dir = Vector3()
-		
-		look_dir += Vector3.UP * Input.get_action_strength("look_up")
-		look_dir += Vector3.DOWN * Input.get_action_strength("look_down")
-		look_dir += Vector3.RIGHT * Input.get_action_strength("look_right")
-		look_dir += Vector3.LEFT * Input.get_action_strength("look_left")
-		
-		if look_dir.length() > 0.5:
-			target_dir = look_dir.normalized()
-		
-		var look_dot = cur_dir.dot(target_dir)
-		
-		if look_dot > 0.2:
-			
-			valid_target = true
-			
-			var rotation_angle = acos(cur_dir.x) - acos(target_dir.x)
-			
-			if (cur_dir + target_dir).x > 0 and (cur_dir + target_dir).y < 0:
-				rotation_angle = -rotation_angle
-			
-			if (cur_dir + target_dir).x < 0 and (cur_dir + target_dir).y > 0:
-				rotation_angle = -rotation_angle
-			
-			var rest: Transform = $Skeleton.get_bone_pose(bone)
-			var new_pose = rest.rotated(Vector3.RIGHT, rotation_angle)
-			
-			$Skeleton.set_bone_pose( bone, new_pose )
+	#var valid_target := false
 	
 	
 	_jump_event = false
@@ -94,11 +53,11 @@ func _process(delta):
 		_jump_action =  false
 	
 	
-	if _pistol_aiming and velocity.y < 0.1 and valid_target:
-		$Equipement/WeaponHandler.shoot_ready = true
-		$Equipement/WeaponHandler.target = $CursorSelector.get_target_pos()
+	if $WeaponHandler.aiming and velocity.y < 0.1 and $WeaponHandler.valid_target:
+		$WeaponHandler.shoot_ready = true
+		$WeaponHandler.target = $CursorSelector.get_target_pos()
 	else:
-		$Equipement/WeaponHandler.shoot_ready = false
+		$WeaponHandler.shoot_ready = false
 	
 
 
@@ -118,14 +77,6 @@ func _physics_process(delta):
 	velocity.y += delta * -GRAVITY * 2
 	
 	
-	if $CombatStats.health > 0 and Input.is_action_just_pressed("unsheathe"):
-		_pistol_aiming = not _pistol_aiming
-		if _pistol_aiming:
-			$AnimationTree.set("parameters/StateMachine/Idle/Weapon/current", 1)
-			$AnimationTree.set("parameters/StateMachine/Locomotion/Weapon/current", 1)
-		else:
-			$AnimationTree.set("parameters/StateMachine/Idle/Weapon/current", 0)
-			$AnimationTree.set("parameters/StateMachine/Locomotion/Weapon/current", 0)
 	
 	if _jump_event:
 		if not is_falling() and _jump_count > 0:
@@ -196,23 +147,19 @@ func _physics_process(delta):
 func _input(event) -> void:
 	
 	if Input.is_action_just_pressed("use"):
-		
 		var usable = $UsableArea.get_usable()
-		print("use: ", usable)
 		if usable != null and usable.has_method("use"):
 			usable.use(self)
 	
 	pass
 
 
+func give_object(item) -> void:
+	$Inventory.add_item(item)
+
+
 func is_falling() -> bool:
 	return _fall_time > 0.2
-
-
-func take_object(object):
-	
-	print("Player take object")
-	object.queue_free()
 
 
 func _play_anim(name: String, force: bool = false):
@@ -236,7 +183,7 @@ func _on_CombatStats_damage_taken():
 func _on_CombatStats_health_depleted():
 	
 	$AnimationTree.set("parameters/Alive/current", 1)
-	$Equipement/WeaponHandler.shoot_ready = false
+	$WeaponHandler.shoot_ready = false
 	
 	emit_signal("died")
 	
@@ -245,3 +192,12 @@ func _on_CombatStats_health_depleted():
 func _on_CombatStats_health_changed(new_value, old_value):
 	if new_value > 0:
 		$AnimationTree.set("parameters/Alive/current", 0)
+
+
+func _on_Inventory_item_equiped(item):
+	
+	print("Equip : ", item)
+	
+	print("items : ", $Inventory._items )
+	
+	pass # Replace with function body.
