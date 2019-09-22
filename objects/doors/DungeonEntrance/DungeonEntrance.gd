@@ -4,12 +4,29 @@ extends "res://objects/doors/Door.gd"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	
+	$AnimationTree["parameters/playback"].start("closed")
+	
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+
+
+func open() -> bool:
+	if .open():
+		$AnimationTree["parameters/playback"].travel("opened")
+		return true
+	return false
+
+
+func close() -> bool:
+	if .close():
+		$AnimationTree["parameters/playback"].travel("closed")
+		return true
+	return false
+
 
 func use(actor) -> void:
 	open()
@@ -23,3 +40,15 @@ func set_locked(value: bool) -> void:
 		$Entrance/DoorPanel/OmniLight.light_color = Color.red
 	else:
 		$Entrance/DoorPanel/OmniLight.light_color = Color.green
+
+
+func _on_Area_body_entered(body):
+	if body.is_in_group("player"):
+		open()
+	
+
+
+func _on_Area_body_exited(body):
+	if body.is_in_group("player"):
+		close()
+	

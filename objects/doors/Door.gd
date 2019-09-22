@@ -29,15 +29,20 @@ func set_locked(value: bool) -> void:
 		close()
 
 
-func open() -> void:
-	if not locked:
+func open() -> bool:
+	if not locked and not opened:
 		opened = true
 		if auto_closed and $CloseTimer:
 			$CloseTimer.start()
+		return true
+	return false
 
 
-func close() -> void:
-	opened = false
+func close() -> bool:
+	if opened:
+		opened = false
+		return true
+	return false
 
 
 func _set_id(val: int) -> void:
