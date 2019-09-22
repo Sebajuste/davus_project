@@ -28,9 +28,7 @@ func gen_graph():
 	
 	var rooms_locations:Dictionary = _generate_rooms()
 	pathfinding = _generate_astar(rooms_locations.keys())
-	var distantest:Array = _get_distantest_rooms(rooms_locations)
-	starting_room = distantest[0]
-	ending_room = distantest[1]
+	_calculate_distantest_rooms(rooms_locations)
 	var startMiddle:Vector3 = _geometry.to_vector3(starting_room.get_middle())
 	rooms_areas = _reorder_rooms(rooms_locations)
 	emit_signal("graph_gen_finished")
@@ -42,7 +40,7 @@ func _generate_rooms() -> Dictionary:	# <middlePosition:Vector3, Room>
 		var collide:bool = true
 		while (collide):
 			collide = false
-			var room = _room_factory.new(rnd,
+			var room = Room.new(rnd,
 				min_room_width, max_room_width, 
 				min_room_height, max_room_height, 
 				map_width, map_height, room_margin
@@ -81,10 +79,9 @@ func _generate_astar(locations: Array) -> AStar:
 	return astar
 
 
-func _get_distantest_rooms(rooms_locations: Dictionary) -> Array:
-	var result := Array()
-	var a1 :Room
-	var a2 :Room
+func _calculate_distantest_rooms(rooms_locations: Dictionary):
+	var a1:Room
+	var a2:Room
 	var distanceMax = 0
 	var roomsBetweenMax = 0
 	for middle in rooms_locations.keys():
@@ -108,11 +105,9 @@ func _get_distantest_rooms(rooms_locations: Dictionary) -> Array:
 				if isDistantest:
 					a1 = area
 					a2 = otherArea
-					distanceMax = distance
-	
-	result.append(a1)
-	result.append(a2)
-	return result
+					distanceMax = distance	
+	starting_room = a1
+	ending_room = a2
 
 
 func _reorder_rooms(rooms_locations: Dictionary) -> Dictionary:

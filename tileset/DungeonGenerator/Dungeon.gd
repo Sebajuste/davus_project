@@ -75,16 +75,6 @@ func create_dungeon():
 	$MiniMap.graph_generator = _graph_generator
 	$MiniMap.gen()
 
-"""
-func _on_DungeonGenerator_graph_gen_finnished():
-	var mg := $MapGenerator
-	$CameraMap.translation.x = mg.map_width
-	$CameraMap.translation.y = mg.map_height
-	$CameraMap.translation.z = mg.map_width
-	var spawn:Vector3 = mg.spawn_position
-	$Player.global_transform.origin = spawn
-	$Player/CombatStats.heal( $Player/CombatStats.max_health )
-"""
 
 func _graph_gen_finished():
 	$CameraMap.translation.x = _graph_generator.map_width
@@ -97,6 +87,3 @@ func _on_MapGenerator_dungeon_gen_finished():
 
 func _on_MapGenerator_request_new_dungeon():
 	create_dungeon()
-
-
-

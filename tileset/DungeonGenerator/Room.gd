@@ -2,7 +2,7 @@ class_name Room
 
 var area:Rect2
 var room_margin:int
-var output_locations:Dictionary
+var output_locations:Array
 
 var geometry:GeometryHelper = GeometryHelper.new()
 var direction:DirectionHelper = DirectionHelper.new()
@@ -40,5 +40,5 @@ func gen_door_location(point: Vector2) -> Dictionary:
 		if intersection == Vector2.INF:
 			output.erase(d)
 		else:
-			output_locations[d] = output[d]
+			output_locations.append(output[d])
 	return output

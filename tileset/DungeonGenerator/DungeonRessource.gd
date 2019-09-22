@@ -41,5 +41,9 @@ const ROOM_PREFAB:Dictionary = {
 	}
 
 const MOB_RESOURCES:Array = [
-		preload("res://tileset/test/MobSpawn.tscn"),
+		preload("res://characters/Mobs/MobTentacle/MobTentacle.tscn"),
+		preload("res://characters/Mobs/Drone/Drone.tscn"),
+		preload("res://characters/Mobs/Fly/Fly.tscn"),
 	]
+
+const IN_OUT_DOOR = preload("res://objects/doors/DungeonExit/DungeonExit.tscn")

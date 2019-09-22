@@ -8,6 +8,9 @@ var rnd:RandomNumberGenerator
 var _graph_generator:GraphGenerator
 var mob_chance_corridors:float
 
+########################################## A VIRER après debug.
+var avirer = preload("res://tileset/test/MobSpawn.tscn")
+##########################################
 
 var _geometry:GeometryHelper = GeometryHelper.new()
 var _resourceMgr:DungeonRessource = DungeonRessource.new()
@@ -22,14 +25,14 @@ var tile_size:int
 var spawn_position:Vector3
 
 ##################### DEBUG AREA #####################
-const DEBUG:bool = false
+const DEBUG:bool = true
 const FORCE_START_DOOR:bool = false
 const FORCE_END_DOOR:bool = false
 const DISABLE_COLLISION:bool = false
 const DRAW_ROOMS_INDEX:bool = false
 const PRINT_REFUSED_DUNGEON:bool = true
 const PRINT_LADDER:bool = false
-const PRINT_ROOMS_TRAVEL:bool = false
+const PRINT_ROOMS_TRAVEL:bool = true
 const PRINT_DOOR_LOCATION:bool = false
 const DESIRED_SEED_STEP_COUNTER:int = 50
 var _desired_seed_counter:int = 0
@@ -82,12 +85,17 @@ func gen_dungeon(graph_generator:GraphGenerator):
 	_pathfinding = _graph_generator.pathfinding
 	_rooms_areas = _graph_generator.rooms_areas
 	var startMiddle:Vector3 = _geometry.to_vector3(_graph_generator.starting_room.get_middle())
-	spawn_position = startMiddle * tile_size
 	_fill_the_map()
 	_write_rooms_on_map()
 	if _write_corridors_on_map():
 		emit_signal("request_new_dungeon")
 	else:
+		var door = _add_outside_door(_graph_generator.starting_room)
+		if door:
+			spawn_position = door.translation
+		else:
+			emit_signal("request_new_dungeon")
+		_add_outside_door(_graph_generator.ending_room)
 		if DEBUG:
 			var endMiddle:Vector3 = _geometry.to_vector3(_graph_generator.ending_room.get_middle())
 			_apply_tile_on_tilemap(startMiddle, _eTilesType.Start)
@@ -96,7 +104,8 @@ func gen_dungeon(graph_generator:GraphGenerator):
 		if not use_gridmap:
 			var tiles = get_tree().get_nodes_in_group("Tiles")
 			for tile in tiles:
-			    tile.translate_all()
+				tile.translate_all()
+				pass
 		
 		_seed_counter += 1
 		if DEBUG:
@@ -158,6 +167,32 @@ func _write_corridors_on_map() -> bool:	# Return true on error
 		rooms_done.append(point)
 	return false
 
+func _add_outside_door(room:Room):
+	var room_rect:Rect2 = room.get_room_rect()
+	var bottom:Vector2 = room_rect.position
+	var middle:Vector2 = room.get_middle()
+	var vectorTileSize = Vector2(tile_size * 3, tile_size * 3)
+	for x in range (room_rect.size.x / 2):
+		for i in range(-1, 2, 2):
+			var v:Vector2 = Vector2(middle.x + i * x, bottom.y)
+			var v_rect:Rect2 = Rect2(v - vectorTileSize, vectorTileSize * 2)
+			for out in room.output_locations:
+########################################## A VIRER après debug.
+				var debug = avirer.instance()
+				debug.translate(_geometry.to_vector3(out) * tile_size)
+				debug.add_to_group("MapElements")
+				add_child(debug)
+##########################################
+				var out_rect:Rect2 = Rect2(out - vectorTileSize, vectorTileSize * 2)
+				if not v_rect.intersects(out_rect):
+					var door = _resourceMgr.IN_OUT_DOOR.instance()
+					door.translate(_geometry.to_vector3(v) * tile_size)
+					door.add_to_group("MapElements")
+					add_child(door)
+					return door
+				else:
+					print("intersects ", v_rect, out_rect)
+	return null
 
 func _dig_path(start: Dictionary, end: Dictionary, doorOnStart: bool = false, doorOnEnd: bool = false) -> bool:	# Return true on error
 	if start.size() > 0 && end.size() > 0:
@@ -454,7 +489,6 @@ func clear_all():
 	var mapElements = get_tree().get_nodes_in_group("MapElements")
 	for element in mapElements:
 		element.free()
-		print("remove map element")
 	
 	var tiles = get_tree().get_nodes_in_group("Tiles")
 	for tile in tiles:
