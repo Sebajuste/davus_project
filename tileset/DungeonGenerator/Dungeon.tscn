@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=2]
+[gd_scene load_steps=34 format=2]
 
 [ext_resource path="res://tileset/DungeonGenerator/Dungeon.gd" type="Script" id=1]
 [ext_resource path="res://tileset/DungeonGenerator/CameraMap.gd" type="Script" id=2]
@@ -6,20 +6,22 @@
 [ext_resource path="res://tileset/DungeonGenerator/MapGenerator.gd" type="Script" id=4]
 [ext_resource path="res://tileset/test/Wall.tres" type="CubeMesh" id=5]
 [ext_resource path="res://tileset/DungeonGenerator/MultipleTile.gd" type="Script" id=6]
-[ext_resource path="res://tileset/test/Door.tres" type="CubeMesh" id=7]
-[ext_resource path="res://tileset/test/LeftLadder.tres" type="CubeMesh" id=8]
-[ext_resource path="res://tileset/test/RightLadder.tres" type="CubeMesh" id=9]
-[ext_resource path="res://tileset/test/Start.tres" type="SphereMesh" id=10]
-[ext_resource path="res://tileset/test/End.tres" type="SphereMesh" id=11]
-[ext_resource path="res://tileset/test/DoorInsertion.tres" type="SphereMesh" id=12]
-[ext_resource path="res://tileset/test/pipeStraight.mesh" type="ArrayMesh" id=13]
-[ext_resource path="res://tileset/test/pipeTurn.mesh" type="ArrayMesh" id=14]
-[ext_resource path="res://tileset/test/Key.tres" type="PrismMesh" id=15]
-[ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=16]
-[ext_resource path="res://tileset/DungeonGenerator/MiniMap.gd" type="Script" id=17]
+[ext_resource path="res://models/Dungeon/Pipes/PipeLiana00.mesh" type="ArrayMesh" id=7]
+[ext_resource path="res://models/Dungeon/Pipes/PipeLiana01.mesh" type="ArrayMesh" id=8]
+[ext_resource path="res://models/Dungeon/Pipes/PipeStraight00.mesh" type="ArrayMesh" id=9]
+[ext_resource path="res://models/Dungeon/Pipes/PipeStraight01.mesh" type="ArrayMesh" id=10]
+[ext_resource path="res://models/Dungeon/Pipes/PipeTurn00.mesh" type="ArrayMesh" id=11]
+[ext_resource path="res://models/Dungeon/Pipes/PipeTurn01.mesh" type="ArrayMesh" id=12]
+[ext_resource path="res://tileset/test/Start.tres" type="SphereMesh" id=13]
+[ext_resource path="res://tileset/test/End.tres" type="SphereMesh" id=14]
+[ext_resource path="res://tileset/test/DoorInsertion.tres" type="SphereMesh" id=15]
+[ext_resource path="res://tileset/test/Key.tres" type="PrismMesh" id=16]
+[ext_resource path="res://tileset/test/LeftLadder.tres" type="CubeMesh" id=17]
+[ext_resource path="res://tileset/test/RightLadder.tres" type="CubeMesh" id=18]
+[ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=19]
+[ext_resource path="res://tileset/DungeonGenerator/MiniMap.gd" type="Script" id=20]
 
 [sub_resource type="MultiMesh" id=1]
-transform_format = 1
 mesh = ExtResource( 5 )
 
 [sub_resource type="MultiMesh" id=2]
@@ -54,36 +56,40 @@ mesh = ExtResource( 13 )
 transform_format = 1
 mesh = ExtResource( 14 )
 
-[sub_resource type="SpatialMaterial" id=10]
+[sub_resource type="MultiMesh" id=10]
+transform_format = 1
+mesh = ExtResource( 15 )
+
+[sub_resource type="SpatialMaterial" id=11]
 albedo_color = Color( 0, 1, 0, 1 )
 
-[sub_resource type="CubeMesh" id=11]
-material = SubResource( 10 )
+[sub_resource type="CubeMesh" id=12]
+material = SubResource( 11 )
 
-[sub_resource type="MeshLibrary" id=12]
+[sub_resource type="MeshLibrary" id=13]
 item/0/name = ""
-item/0/mesh = SubResource( 11 )
+item/0/mesh = SubResource( 12 )
 item/0/shapes = [  ]
 item/1/name = ""
 item/1/mesh = ExtResource( 5 )
 item/1/shapes = [  ]
 item/2/name = ""
-item/2/mesh = ExtResource( 15 )
+item/2/mesh = ExtResource( 16 )
 item/2/shapes = [  ]
 item/3/name = ""
-item/3/mesh = ExtResource( 10 )
+item/3/mesh = ExtResource( 13 )
 item/3/shapes = [  ]
 item/4/name = ""
-item/4/mesh = ExtResource( 11 )
+item/4/mesh = ExtResource( 14 )
 item/4/shapes = [  ]
 item/5/name = ""
-item/5/mesh = ExtResource( 12 )
+item/5/mesh = ExtResource( 15 )
 item/5/shapes = [  ]
 item/6/name = ""
-item/6/mesh = ExtResource( 8 )
+item/6/mesh = ExtResource( 17 )
 item/6/shapes = [  ]
 item/7/name = ""
-item/7/mesh = ExtResource( 9 )
+item/7/mesh = ExtResource( 18 )
 item/7/shapes = [  ]
 
 [node name="Dungeon" type="Spatial"]
@@ -101,64 +107,74 @@ target = NodePath("../Player")
 [node name="MapGenerator" type="Spatial" parent="."]
 script = ExtResource( 4 )
 
-[node name="Wall" type="MultiMeshInstance" parent="MapGenerator" groups=[
+[node name="Wall0" type="MultiMeshInstance" parent="MapGenerator" groups=[
 "Tiles",
 ]]
 multimesh = SubResource( 1 )
 script = ExtResource( 6 )
 
-[node name="Door" type="MultiMeshInstance" parent="MapGenerator" groups=[
+[node name="Ladder0" type="MultiMeshInstance" parent="MapGenerator" groups=[
 "Tiles",
 ]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2 )
 multimesh = SubResource( 2 )
 script = ExtResource( 6 )
 
-[node name="LeftLadder" type="MultiMeshInstance" parent="MapGenerator" groups=[
+[node name="Ladder1" type="MultiMeshInstance" parent="MapGenerator" groups=[
 "Tiles",
 ]]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2 )
 multimesh = SubResource( 3 )
 script = ExtResource( 6 )
 
-[node name="RightLadder" type="MultiMeshInstance" parent="MapGenerator" groups=[
+[node name="PipeStraight0" type="MultiMeshInstance" parent="MapGenerator" groups=[
 "Tiles",
 ]]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2 )
 multimesh = SubResource( 4 )
 script = ExtResource( 6 )
 
-[node name="Start" type="MultiMeshInstance" parent="MapGenerator" groups=[
+[node name="PipeStraight1" type="MultiMeshInstance" parent="MapGenerator" groups=[
 "Tiles",
 ]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2 )
 multimesh = SubResource( 5 )
 script = ExtResource( 6 )
 
-[node name="End" type="MultiMeshInstance" parent="MapGenerator" groups=[
+[node name="PipeTurn0" type="MultiMeshInstance" parent="MapGenerator" groups=[
 "Tiles",
 ]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2 )
 multimesh = SubResource( 6 )
 script = ExtResource( 6 )
 
-[node name="DoorInsertion" type="MultiMeshInstance" parent="MapGenerator" groups=[
+[node name="PipeTurn1" type="MultiMeshInstance" parent="MapGenerator" groups=[
 "Tiles",
 ]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2 )
 multimesh = SubResource( 7 )
 script = ExtResource( 6 )
 
-[node name="PipeStraight" type="MultiMeshInstance" parent="MapGenerator" groups=[
+[node name="Start0" type="MultiMeshInstance" parent="MapGenerator" groups=[
 "Tiles",
 ]]
 multimesh = SubResource( 8 )
 script = ExtResource( 6 )
 
-[node name="PipeTurn" type="MultiMeshInstance" parent="MapGenerator" groups=[
+[node name="End0" type="MultiMeshInstance" parent="MapGenerator" groups=[
 "Tiles",
 ]]
 multimesh = SubResource( 9 )
 script = ExtResource( 6 )
 
+[node name="DoorInsertion0" type="MultiMeshInstance" parent="MapGenerator" groups=[
+"Tiles",
+]]
+multimesh = SubResource( 10 )
+script = ExtResource( 6 )
+
 [node name="GridMap" type="GridMap" parent="."]
-mesh_library = SubResource( 12 )
+mesh_library = SubResource( 13 )
 data = {
 "cells": PoolIntArray(  )
 }
@@ -166,13 +182,13 @@ __meta__ = {
 "_editor_clip_": 0
 }
 
-[node name="Player" parent="." instance=ExtResource( 16 )]
+[node name="Player" parent="." instance=ExtResource( 19 )]
 
 [node name="MapElements" type="Spatial" parent="." groups=[
 "MapElements",
 ]]
 
 [node name="MiniMap" type="Node2D" parent="."]
-script = ExtResource( 17 )
+script = ExtResource( 20 )
 [connection signal="dungeon_gen_finished" from="MapGenerator" to="." method="_on_MapGenerator_dungeon_gen_finished"]
 [connection signal="request_new_dungeon" from="MapGenerator" to="." method="_on_MapGenerator_request_new_dungeon"]

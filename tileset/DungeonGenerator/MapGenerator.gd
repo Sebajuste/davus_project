@@ -13,7 +13,7 @@ var avirer = preload("res://tileset/test/MobSpawn.tscn")
 ##########################################
 
 var _geometry:GeometryHelper = GeometryHelper.new()
-var _resourceMgr:DungeonRessource = DungeonRessource.new()
+var _resourceMgr:DungeonResource = DungeonResource.new()
 
 var _eTilesType := _resourceMgr.eTilesType
 var _eDirection := DirectionHelper.eDirection
@@ -25,19 +25,24 @@ var tile_size:int
 var spawn_position:Vector3
 
 ##################### DEBUG AREA #####################
-const DEBUG:bool = true
-const FORCE_START_DOOR:bool = false
-const FORCE_END_DOOR:bool = false
+const DEBUG:bool = false
+const FORCE_START_DOOR:bool = true
+const FORCE_END_DOOR:bool = true
 const DISABLE_COLLISION:bool = false
+const SHOW_DOOR_INSERTIONS:bool = false
+const SHOW_STARTING_ROOM:bool = false
+const SHOW_ENDING_ROOM:bool = false
 const DRAW_ROOMS_INDEX:bool = false
 const PRINT_REFUSED_DUNGEON:bool = true
 const PRINT_LADDER:bool = false
-const PRINT_ROOMS_TRAVEL:bool = true
+const PRINT_ROOMS_TRAVEL:bool = false
 const PRINT_DOOR_LOCATION:bool = false
 const DESIRED_SEED_STEP_COUNTER:int = 50
 var _desired_seed_counter:int = 0
 var _seed_counter:int = 1
 
+var testCase := Dictionary()
+var nbOfCase:int = 10
 var _continue_looping = false
 var _timer_value:float = 1
 var _timer_looping:Timer
@@ -48,14 +53,18 @@ func _ready():
 	for tile in tiles:
 		tile.connect("on_translate", self, "_on_tile_translate")
 	
-	if DEBUG && _continue_looping:
-		_timer_looping = Timer.new()
-		_timer_looping.connect("timeout", self, "loop_execution")
-		_timer_looping.one_shot = true
-		add_child(_timer_looping)
+	if DEBUG: 
+		for i in range(nbOfCase):
+			testCase[i] = false
+		
+		if _continue_looping:
+			_timer_looping = Timer.new()
+			_timer_looping.connect("timeout", self, "_on_timer_looping_timeout")
+			_timer_looping.one_shot = true
+			add_child(_timer_looping)
 
 
-func loop_execution():
+func _on_timer_looping_timeout():
 	if _continue_looping:
 		_desired_seed_counter += DESIRED_SEED_STEP_COUNTER
 		emit_signal("request_new_dungeon")
@@ -69,8 +78,9 @@ func _input(event):
 			emit_signal("request_new_dungeon")
 
 func _on_tile_translate(source:MultiMeshInstance, pos:Vector3, angle_z:float):
-	if not DISABLE_COLLISION:
-		var static_body:Spatial = _resourceMgr.STATIC_BODIES.get(_eTilesType[source.name])
+	if not (DEBUG && DISABLE_COLLISION):
+		var type:String = source.name.left(source.name.length() -1)
+		var static_body = _resourceMgr.STATIC_BODIES.get(_eTilesType[type])
 		if static_body:
 			var body:Spatial = static_body.instance()
 			body.translate(pos)
@@ -109,6 +119,7 @@ func gen_dungeon(graph_generator:GraphGenerator):
 		
 		_seed_counter += 1
 		if DEBUG:
+			print("testCase = ",testCase)
 			if _continue_looping:
 				if _seed_counter < _desired_seed_counter:
 					emit_signal("request_new_dungeon")
@@ -134,10 +145,12 @@ func _write_rooms_on_map():
 		if w:
 			var h = w.get(int(room_rect.size.y))
 			if h:
-				var prefab:Spatial = h.instance()
-				prefab.translate(_geometry.to_vector3(room.get_middle()) * tile_size - Vector3(1, 1, 0))
-				prefab.add_to_group("MapElements")
-				add_child(prefab)
+				if h.size() > 0:
+					var variant:int = rnd.randi() % h.size()
+					var prefab:Spatial = h[variant].instance()
+					prefab.translate(_geometry.to_vector3(room.get_middle()) * tile_size - Vector3(1, 1, 0))
+					prefab.add_to_group("MapElements")
+					add_child(prefab)
 		
 		var left = room_rect.position.x
 		var right = left + room_rect.size.x
@@ -267,8 +280,20 @@ func _dig_horizontally(startPos: Vector3, endPos: Vector3, mobSpawn: bool, doorO
 			v = Vector3(x, startPos.y, 0)
 		else:
 			v = Vector3(x, endPos.y, 0)
-		if doorOnStart && x == startPos.x + step.x ||doorOnEnd && x == endPos.x - step.x:
-			_apply_tile_on_tilemap(v, _eTilesType.Door)
+		if doorOnStart && x == startPos.x + step.x:
+			if step.x > 0:
+				testCase[0] = true
+				_apply_tile_on_tilemap(v, _eTilesType.Door, PI * 1.5)
+			else:
+				testCase[1] = true
+				_apply_tile_on_tilemap(v, _eTilesType.Door, PI * 0.5)
+		if doorOnEnd && x == endPos.x - step.x:
+			if step.x > 0:
+				testCase[2] = true
+				_apply_tile_on_tilemap(v, _eTilesType.Door, PI * 0.5)
+			else:
+				testCase[3] = true
+				_apply_tile_on_tilemap(v, _eTilesType.Door, PI * 1.5)
 		else:
 			if x != middlePos.x || step.y == 0:
 				_apply_tile_on_tilemap(v, _eTilesType.PipeStraight, PI * 0.5)
@@ -313,9 +338,9 @@ func _dig_horizontally(startPos: Vector3, endPos: Vector3, mobSpawn: bool, doorO
 				pass
 		if not isEndOfLadder:
 			if toggleRight:
-				_apply_tile_on_tilemap(v, _eTilesType.RightLadder)
+				_apply_tile_on_tilemap(v, _eTilesType.Ladder)
 			else:
-				_apply_tile_on_tilemap(v, _eTilesType.LeftLadder)
+				_apply_tile_on_tilemap(v, _eTilesType.Ladder, PI)
 			toggleRight = not toggleRight
 
 
@@ -372,8 +397,14 @@ func _dig_vertically(startPos: Vector3, endPos: Vector3, mobSpawn: bool, doorOnS
 				delta = _geometry.vector3_floor(middlePos - top)
 				toggleRight = _first_step_is_on_right(delta, step)
 				
-		if doorOnBottom && y == bottom.y + step.y || doorOnTop && y == top.y - step.y:
+		if doorOnBottom && y == bottom.y + step.y:
+			testCase[4] = true
 			_apply_tile_on_tilemap(v, _eTilesType.Door)
+			toggleRight = not toggleRight
+			
+		if doorOnTop && y == top.y - step.y:
+			testCase[5] = true
+			_apply_tile_on_tilemap(v, _eTilesType.Door, PI)
 			toggleRight = not toggleRight
 		else:
 			if y != middlePos.y || step.x == 0:
@@ -387,15 +418,20 @@ func _dig_vertically(startPos: Vector3, endPos: Vector3, mobSpawn: bool, doorOnS
 			
 			if not isEndOfLadder:
 				if toggleRight:
-					_apply_tile_on_tilemap(v, _eTilesType.RightLadder)
+					_apply_tile_on_tilemap(v, _eTilesType.Ladder)
 				else:
-					_apply_tile_on_tilemap(v, _eTilesType.LeftLadder)
+					_apply_tile_on_tilemap(v, _eTilesType.Ladder, PI)
 				toggleRight = not toggleRight
 			#else:
 				#_apply_tile_on_tilemap(v, _eTilesType.Empty)
 
 
 func _dig_mixed_directions(horizontalPos: Vector3, verticalPos: Vector3, mobSpawn: bool, doorOnHorizontal: bool, doorOnVertical: bool):
+	
+################# debug #################
+	_continue_looping = false
+################# debug #################
+	
 	horizontalPos = _geometry.vector3_floor(horizontalPos)
 	verticalPos = _geometry.vector3_floor(verticalPos)
 	var dif = _geometry.vector3_floor(verticalPos - horizontalPos)
@@ -407,7 +443,12 @@ func _dig_mixed_directions(horizontalPos: Vector3, verticalPos: Vector3, mobSpaw
 	for x in range(horizontalPos.x + step.x, verticalPos.x, step.x):
 		var v = Vector3(x, horizontalPos.y, 0)
 		if doorOnHorizontal && x == horizontalPos.x + step.x:
-			_apply_tile_on_tilemap(v, _eTilesType.Door)
+			if step.x > 0:
+				testCase[6] = true
+				_apply_tile_on_tilemap(v, _eTilesType.Door, PI * 1.5)
+			else:
+				testCase[7] = true
+				_apply_tile_on_tilemap(v, _eTilesType.Door, PI * 0.5)
 		else:
 			_apply_tile_on_tilemap(v, _eTilesType.PipeStraight, PI * 0.5)
 	
@@ -415,7 +456,12 @@ func _dig_mixed_directions(horizontalPos: Vector3, verticalPos: Vector3, mobSpaw
 	for y in range(horizontalPos.y, verticalPos.y, step.y):
 		var v = Vector3(verticalPos.x, y, 0)
 		if doorOnVertical && y == verticalPos.y - step.y:
-			_apply_tile_on_tilemap(v, _eTilesType.Door)
+			if step.y > 0:
+				testCase[8] = true
+				_apply_tile_on_tilemap(v, _eTilesType.Door, PI)
+			else:
+				testCase[9] = true
+				_apply_tile_on_tilemap(v, _eTilesType.Door)
 		else:
 			if y != horizontalPos.y:
 				_apply_tile_on_tilemap(v, _eTilesType.PipeStraight)
@@ -438,9 +484,9 @@ func _dig_mixed_directions(horizontalPos: Vector3, verticalPos: Vector3, mobSpaw
 				
 			if not isEndOfLadder:
 				if toggleRight:
-					_apply_tile_on_tilemap(v, _eTilesType.RightLadder)
+					_apply_tile_on_tilemap(v, _eTilesType.Ladder)
 				else:
-					_apply_tile_on_tilemap(v, _eTilesType.LeftLadder)
+					_apply_tile_on_tilemap(v, _eTilesType.Ladder, PI)
 				toggleRight = not toggleRight
 
 func _add_mob_spawn(pos:Vector3):
@@ -460,29 +506,53 @@ func _apply_tile_on_tilemap(pos: Vector3, tileType: int, angle_z:float = 0):
 	else:
 		var v:Vector3 = pos * tile_size
 		
-		$Wall.delete_tile_at(v)
+		$Wall0.delete_tile_at(v)
 		match tileType:
 			_eTilesType.Wall:
-				$Wall.insert(v, angle_z)
+				match rnd.randi() % 1:
+					0:
+						$Wall0.insert(v, angle_z)
+			
 			_eTilesType.Door:
-				$Door.insert(v, angle_z)
-			_eTilesType.LeftLadder:
-				$LeftLadder.insert(v, angle_z)
-			_eTilesType.RightLadder:
-				$RightLadder.insert(v, angle_z)
+				var variant:int = rnd.randi() % _resourceMgr.INTERIOR_DOORS.size()
+				var door:Spatial = _resourceMgr.INTERIOR_DOORS[variant].instance()
+				door.translate(v)
+				door.rotate_z(angle_z)
+				door.add_to_group("MapElements")
+				add_child(door)
+			
+			_eTilesType.Ladder:
+				match rnd.randi() % 2:
+					0:
+						$Ladder0.insert(v, angle_z)
+					1:
+						$Ladder1.insert(v, angle_z)
+			
 			_eTilesType.PipeStraight:
-				$PipeStraight.insert(v, angle_z)
+				match rnd.randi() % 2:
+					0:
+						$PipeStraight0.insert(v, angle_z)
+					1:
+						$PipeStraight1.insert(v, angle_z)
+			
 			_eTilesType.PipeTurn:
-				$PipeTurn.insert(v, angle_z)
+				match rnd.randi() % 2:
+					0:
+						$PipeTurn0.insert(v, angle_z)
+					1:
+						$PipeTurn1.insert(v, angle_z)
+			
 			_eTilesType.DoorInsertion:
-				if DEBUG:
-					$DoorInsertion.insert(v, angle_z)
+				if DEBUG && SHOW_DOOR_INSERTIONS:
+					$DoorInsertion0.insert(v, angle_z)
+			
 			_eTilesType.Start:
-				if DEBUG:
-					$Start.insert(v, angle_z)
+				if DEBUG && SHOW_STARTING_ROOM:
+					$Start0.insert(v, angle_z)
+			
 			_eTilesType.End:
-				if DEBUG:
-					$End.insert(v, angle_z)
+				if DEBUG && SHOW_ENDING_ROOM:
+					$End0.insert(v, angle_z)
 
 
 func clear_all():

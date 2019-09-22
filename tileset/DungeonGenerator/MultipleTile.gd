@@ -3,6 +3,9 @@ extends MultiMeshInstance
 var _positions := Dictionary() #PoolVector3Array()
 signal on_translate
 
+func _ready():
+	multimesh.transform_format = MultiMesh.TRANSFORM_3D
+
 func insert(pos:Vector3, angle_z: float = 0):
 	_positions[pos] = angle_z
 

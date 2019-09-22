@@ -25,9 +25,9 @@ _global_script_classes=[ {
 "path": "res://helper/DirectionHelper.gd"
 }, {
 "base": "Reference",
-"class": "DungeonRessource",
+"class": "DungeonResource",
 "language": "GDScript",
-"path": "res://tileset/DungeonGenerator/DungeonRessource.gd"
+"path": "res://tileset/DungeonGenerator/DungeonResource.gd"
 }, {
 "base": "Reference",
 "class": "GeometryHelper",
@@ -53,7 +53,7 @@ _global_script_class_icons={
 "CombatStats": "",
 "DamageSource": "",
 "DirectionHelper": "",
-"DungeonRessource": "",
+"DungeonResource": "",
 "GeometryHelper": "",
 "GraphGenerator": "",
 "Hit": "",
