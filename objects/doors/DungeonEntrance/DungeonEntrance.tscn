@@ -8,7 +8,7 @@
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=2]
 
-[node name="DungeonEntrance" index="0" groups=[
+[node name="DungeonEntrance" groups=[
 "door",
 ] instance=ExtResource( 1 )]
 script = ExtResource( 2 )
