@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://scenes/MainPlayable/MainGame.gd" type="Script" id=1]
+[ext_resource path="res://scenes/MainGame/MainGame.gd" type="Script" id=1]
 [ext_resource path="res://scenes/WorldPlanet/WorldPlanet.tscn" type="PackedScene" id=2]
 [ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=3]
 [ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=4]
