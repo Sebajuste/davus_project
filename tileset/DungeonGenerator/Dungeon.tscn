@@ -105,6 +105,7 @@ script = ExtResource( 3 )
 target = NodePath("../Player")
 
 [node name="MapGenerator" type="Spatial" parent="."]
+editor/display_folded = true
 script = ExtResource( 4 )
 
 [node name="Wall0" type="MultiMeshInstance" parent="MapGenerator" groups=[

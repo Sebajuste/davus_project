@@ -64,6 +64,5 @@ const MOB_RESOURCES:Array = [
 
 const IN_OUT_DOOR = preload("res://objects/doors/DungeonExit/DungeonExit.tscn")
 const INTERIOR_DOORS:Array = [
-		preload("res://models/Dungeon/Pipes/PipeDoor00.tscn"),
-		preload("res://models/Dungeon/Pipes/PipeDoor01.tscn"),
+		preload("res://objects/doors/DungeonPipe/DungeonPipe00.tscn"),
 	]

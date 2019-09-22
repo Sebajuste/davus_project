@@ -9,10 +9,13 @@ radius = 1.6944
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=2]
 
-[node name="DungeonExit" groups=[
+[node name="DungeonExit" index="0" groups=[
 "door",
 ] instance=ExtResource( 1 )]
 script = ExtResource( 2 )
+
+[node name="InteriorLabDoor" parent="." index="0"]
+transform = Transform( 1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -1 )
 
 [node name="DoorTopPosition" parent="InteriorLabDoor" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.0246 )

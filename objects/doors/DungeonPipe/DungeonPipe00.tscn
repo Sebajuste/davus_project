@@ -12,16 +12,11 @@ height = 2.22626
 [node name="DungeonPipe00" groups=[
 "door",
 ] instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2 )
 script = ExtResource( 2 )
 
 [node name="door" parent="." index="0"]
 editor/display_folded = true
-
-[node name="DoorBackPosition" parent="door" index="0"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.07332 )
-
-[node name="DoorFrontPosition" parent="door" index="1"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.93746 )
 
 [node name="Area" type="Area" parent="." index="1"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 2 )
@@ -32,7 +27,7 @@ collision_mask = 2
 transform = Transform( 1, 0, 0, 0, -4.37114e-008, -1, 0, 1, -4.37114e-008, 0, 0, -1.19209e-007 )
 shape = SubResource( 1 )
 
-[node name="AnimationTree" parent="." index="3"]
+[node name="AnimationTree" parent="." index="4"]
 parameters/playback = SubResource( 2 )
 [connection signal="body_entered" from="Area" to="." method="_on_Area_body_entered"]
 [connection signal="body_exited" from="Area" to="." method="_on_Area_body_exited"]

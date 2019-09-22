@@ -6,7 +6,8 @@ export var scale2D:int = 2
 # Dungeon Generator Parameters
 export var room_margin:int = 2
 export (int, 2, 10) var number_of_rooms:int = 12
-export var number_of_keys:int = 1
+export var min_nb_key:int = 1
+export (float, 0, 1) var key_occupation = 0.5
 export var map_width:int = 80
 export var map_height:int = 50
 export var min_room_width:int = 9
@@ -32,8 +33,7 @@ func _ready():
 	# Initiate graph generator
 	_graph_generator.rnd = _rnd
 	_graph_generator.room_margin = room_margin
-	_graph_generator.number_of_rooms = number_of_rooms
-	_graph_generator.number_of_keys = number_of_keys
+	_graph_generator.number_of_rooms = number_of_rooms	
 	_graph_generator.map_width = map_width
 	_graph_generator.map_height = map_height
 	_graph_generator.min_room_width = min_room_width
@@ -45,6 +45,8 @@ func _ready():
 	# Initiate map generator
 	var dg := $MapGenerator
 	dg.tile_size = TILE_SIZE
+	dg.min_nb_key = min_nb_key
+	dg.key_occupation = key_occupation
 	dg.mob_chance_corridors = mob_chance_corridors
 	dg.rnd = _rnd
 	

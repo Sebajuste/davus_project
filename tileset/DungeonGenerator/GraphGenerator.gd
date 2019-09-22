@@ -6,7 +6,6 @@ signal graph_gen_finished
 var rnd:RandomNumberGenerator
 var room_margin:int
 var number_of_rooms:int
-var number_of_keys:int
 var map_width:int
 var map_height:int
 var min_room_width:int
@@ -20,6 +19,7 @@ var _room_factory := Room
 
 var pathfinding := AStar.new()
 var rooms_areas := Dictionary()
+var shortest_path:PoolIntArray
 var starting_room:Room
 var ending_room:Room
 
@@ -119,13 +119,13 @@ func _reorder_rooms(rooms_locations: Dictionary) -> Dictionary:
 	var endMiddle:Vector3 = _geometry.to_vector3(ending_room.get_middle())
 	var endingPoint:int = pathfinding.get_closest_point(endMiddle)
 	
-	var path:PoolIntArray = pathfinding.get_id_path(endingPoint, startingPoint)
-	for pathPoint in path:
+	shortest_path = pathfinding.get_id_path(endingPoint, startingPoint)
+	for pathPoint in shortest_path:
 		var pos:Vector3 = pathfinding.get_point_position(pathPoint)
 		reordered[pathPoint] = rooms_locations[pos]
 		
 		for point in pathfinding.get_point_connections(pathPoint):
-			_insert_child_rooms(point, reordered, rooms_locations, path)
+			_insert_child_rooms(point, reordered, rooms_locations, shortest_path)
 	
 	return reordered
 
