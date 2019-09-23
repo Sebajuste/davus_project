@@ -3,7 +3,7 @@ extends Button
 signal item_selected(item)
 
 
-var weapon: Dictionary setget set_weapon
+var weapon: Item setget set_weapon
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -14,11 +14,11 @@ func _ready():
 #	pass
 
 
-func set_weapon(value: Dictionary) -> void:
-	weapon = value
+func set_weapon(item: Item) -> void:
+	weapon = item
 	$MarginContainer/HBoxContainer/Type.text = weapon.type
-	$MarginContainer/HBoxContainer/Stats/Damage/Value.text = str(weapon.damage)
-	$MarginContainer/HBoxContainer/Stats/Rate/Value.text = str(weapon.rate)
+	$MarginContainer/HBoxContainer/Stats/Damage/Value.text = str(weapon.properties["damage"])
+	$MarginContainer/HBoxContainer/Stats/Rate/Value.text = str(weapon.properties["rate"])
 	$MarginContainer/HBoxContainer/Equiped.visible = weapon.equiped
 
 

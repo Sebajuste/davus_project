@@ -21,16 +21,43 @@ func _ready():
 	$World/Player/Inventory.connect("item_added", ui_inventory, "add_item")
 	ui_inventory.connect("item_equiped", $World/Player/Inventory, "equip")
 	
-	var default_weapon = {
-		"type": "gun",
-		"damage": 1.0,
-		"rate": 60
-	}
+	$Menu/MarginContainer/TabContainer/Options/Options.enable_savegame = true
 	
-	$World/Player.give_object(default_weapon)
-	$World/Player/Inventory.equip(default_weapon)
+	var game_loaded = save.load_game()
+	
+	print("game_loaded: ", game_loaded)
+	
+	if game_loaded:
+		return
+	
+	#
+	# Add default Weapon
+	#
+	var default_weapon := Item.new()
+	default_weapon.type = "gun"
+	default_weapon.properties["damage"] = 1.0
+	default_weapon.properties["rate"] = 60
+	
+	$World/Player.give_item(default_weapon)
+	#$World/Player/Inventory.equip(default_weapon)
+	
+	#
+	# Add default ammo
+	# 
+	var default_ammo := Item.new()
+	default_ammo.type = "ammo"
+	default_ammo.properties["ammo_type"] = "normal"
+	
+	$World/Player.give_item(default_ammo)
+	
+	
 	
 	pass # Replace with function body.
+
+
+func _exit_tree():
+	save.save_game()
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
