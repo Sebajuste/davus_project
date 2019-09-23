@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://ui/InventoryMenu/InventoryMenu.gd" type="Script" id=1]
+[ext_resource path="res://ui/Icons/IconPistol64x64.png" type="Texture" id=2]
+[ext_resource path="res://fonts/mechsuit_thin.tres" type="DynamicFont" id=3]
+[ext_resource path="res://ui/Icons/IconClipRegular64x64.png" type="Texture" id=4]
+[ext_resource path="res://ui/Icons/IconJetPack64x64.png" type="Texture" id=5]
 
 [node name="InventoryMenu" type="Control"]
 anchor_right = 1.0
@@ -16,66 +20,157 @@ margin_right = 1024.0
 margin_bottom = 600.0
 
 [node name="Tabs" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-margin_right = 125.0
+margin_right = 200.0
 margin_bottom = 600.0
-rect_min_size = Vector2( 125, 0 )
+rect_min_size = Vector2( 200, 0 )
 custom_constants/separation = 10
 
 [node name="WeaponMain" type="Button" parent="MarginContainer/HBoxContainer/Tabs"]
-margin_right = 125.0
-margin_bottom = 50.0
-rect_min_size = Vector2( 0, 50 )
-text = "WeaponMain"
+editor/display_folded = true
+margin_right = 200.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 0, 64 )
+align = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Tabs/WeaponMain"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/Tabs/WeaponMain/HBoxContainer"]
+margin_right = 64.0
+margin_bottom = 64.0
+texture = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/Tabs/WeaponMain/HBoxContainer"]
+margin_left = 68.0
+margin_right = 218.0
+margin_bottom = 64.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_fonts/font = ExtResource( 3 )
+text = "btn_main_weapon"
+align = 1
+valign = 1
 
 [node name="WeaponSecondary" type="Button" parent="MarginContainer/HBoxContainer/Tabs"]
+editor/display_folded = true
 visible = false
-margin_top = 60.0
-margin_right = 133.0
-margin_bottom = 110.0
-rect_min_size = Vector2( 0, 50 )
-text = "Weapon secondary"
+margin_top = 74.0
+margin_right = 200.0
+margin_bottom = 138.0
+rect_min_size = Vector2( 0, 64 )
+align = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Tabs/WeaponSecondary"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/Tabs/WeaponSecondary/HBoxContainer"]
+margin_right = 64.0
+margin_bottom = 64.0
+texture = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/Tabs/WeaponSecondary/HBoxContainer"]
+margin_left = 68.0
+margin_right = 271.0
+margin_bottom = 64.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_fonts/font = ExtResource( 3 )
+text = "btn_secondary_weapon"
+align = 1
+valign = 1
 
 [node name="Ammo" type="Button" parent="MarginContainer/HBoxContainer/Tabs"]
-visible = false
-margin_top = 120.0
-margin_right = 125.0
-margin_bottom = 170.0
-rect_min_size = Vector2( 0, 50 )
-text = "Ammo"
+margin_top = 74.0
+margin_right = 200.0
+margin_bottom = 138.0
+rect_min_size = Vector2( 0, 64 )
+align = 2
 
-[node name="Jetpack" type="Button" parent="MarginContainer/HBoxContainer/Tabs"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Tabs/Ammo"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/Tabs/Ammo/HBoxContainer"]
+margin_right = 64.0
+margin_bottom = 64.0
+texture = ExtResource( 4 )
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/Tabs/Ammo/HBoxContainer"]
+margin_left = 68.0
+margin_right = 271.0
+margin_bottom = 64.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_fonts/font = ExtResource( 3 )
+text = "btn_ammo"
+align = 1
+valign = 1
+
+[node name="Jetpack2" type="Button" parent="MarginContainer/HBoxContainer/Tabs"]
 visible = false
-margin_top = 60.0
-margin_right = 125.0
-margin_bottom = 110.0
-rect_min_size = Vector2( 0, 50 )
+margin_top = 74.0
+margin_right = 200.0
+margin_bottom = 138.0
+rect_min_size = Vector2( 0, 64 )
 text = "Jetpack"
 
+[node name="Jetpack" type="Button" parent="MarginContainer/HBoxContainer/Tabs"]
+editor/display_folded = true
+margin_top = 148.0
+margin_right = 200.0
+margin_bottom = 212.0
+rect_min_size = Vector2( 0, 64 )
+align = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Tabs/Jetpack"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/Tabs/Jetpack/HBoxContainer"]
+margin_right = 64.0
+margin_bottom = 64.0
+texture = ExtResource( 5 )
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/Tabs/Jetpack/HBoxContainer"]
+margin_left = 68.0
+margin_right = 200.0
+margin_bottom = 64.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_fonts/font = ExtResource( 3 )
+text = "btn_jetpack"
+align = 1
+valign = 1
+
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/HBoxContainer"]
-margin_left = 129.0
-margin_right = 574.0
+editor/display_folded = true
+margin_left = 204.0
+margin_right = 612.0
 margin_bottom = 600.0
 size_flags_horizontal = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer"]
-margin_right = 445.0
+margin_right = 408.0
 size_flags_horizontal = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-margin_left = 578.0
+editor/display_folded = true
+margin_left = 616.0
 margin_right = 1024.0
 margin_bottom = 600.0
 size_flags_horizontal = 3
 custom_constants/separation = 20
 
 [node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_right = 446.0
+margin_right = 408.0
 margin_bottom = 290.0
 size_flags_vertical = 3
 
 [node name="Panel2" type="Panel" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 margin_top = 310.0
-margin_right = 446.0
+margin_right = 408.0
 margin_bottom = 600.0
 size_flags_vertical = 3
 [connection signal="pressed" from="MarginContainer/HBoxContainer/Tabs/WeaponMain" to="." method="_on_WeaponMain_pressed"]

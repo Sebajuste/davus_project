@@ -67,10 +67,9 @@ tick_count = 10
 ticks_on_borders = true
 
 [node name="SoundEffects" type="HBoxContainer" parent="."]
-visible = false
-margin_top = 110.0
+margin_top = 112.0
 margin_right = 394.0
-margin_bottom = 140.0
+margin_bottom = 142.0
 
 [node name="Label" type="Label" parent="SoundEffects"]
 margin_right = 125.0
