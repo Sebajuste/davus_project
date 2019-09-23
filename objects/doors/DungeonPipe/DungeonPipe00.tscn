@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://models/Doors/DungeonPipe/PipeDoor00.tscn" type="PackedScene" id=1]
 [ext_resource path="res://objects/doors/DungeonPipe/DungeonPipe.gd" type="Script" id=2]
+[ext_resource path="res://objects/doors/DungeonPipe/Area.gd" type="Script" id=3]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 1.22484
@@ -14,20 +15,28 @@ height = 2.22626
 ] instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2 )
 script = ExtResource( 2 )
+auto_open = true
+auto_closed = false
 
 [node name="door" parent="." index="0"]
 editor/display_folded = true
 
 [node name="Area" type="Area" parent="." index="1"]
+editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 2 )
 collision_layer = 0
 collision_mask = 2
+script = ExtResource( 3 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Area" index="0"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-008, -1, 0, 1, -4.37114e-008, 0, 0, -1.19209e-007 )
 shape = SubResource( 1 )
 
-[node name="AnimationTree" parent="." index="4"]
+[node name="CloseTimer" type="Timer" parent="." index="3"]
+one_shot = true
+
+[node name="AnimationTree" parent="." index="5"]
 parameters/playback = SubResource( 2 )
 [connection signal="body_entered" from="Area" to="." method="_on_Area_body_entered"]
 [connection signal="body_exited" from="Area" to="." method="_on_Area_body_exited"]
+[connection signal="timeout" from="CloseTimer" to="." method="close"]

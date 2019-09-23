@@ -12,7 +12,9 @@
 "door",
 ] instance=ExtResource( 1 )]
 script = ExtResource( 2 )
-auto_closed = false
+
+[node name="Entrance" parent="." index="0"]
+editor/display_folded = true
 
 [node name="DoorBot" parent="Entrance/Door" index="2"]
 visible = false
@@ -26,6 +28,7 @@ light_color = Color( 0, 1, 0, 1 )
 omni_range = 2.36857
 
 [node name="CloseTimer" type="Timer" parent="." index="1"]
+one_shot = true
 
 [node name="Area" type="Area" parent="." index="2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75503, 2.01 )

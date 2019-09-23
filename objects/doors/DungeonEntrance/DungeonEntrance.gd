@@ -29,7 +29,8 @@ func close() -> bool:
 
 
 func use(actor) -> void:
-	open()
+	if open():
+		return
 	if opened:
 		loading.load_scene("res://tileset/DungeonGenerator/Dungeon.tscn")
 
@@ -40,15 +41,3 @@ func set_locked(value: bool) -> void:
 		$Entrance/DoorPanel/OmniLight.light_color = Color.red
 	else:
 		$Entrance/DoorPanel/OmniLight.light_color = Color.green
-
-
-func _on_Area_body_entered(body):
-	if body.is_in_group("player"):
-		open()
-	
-
-
-func _on_Area_body_exited(body):
-	if body.is_in_group("player"):
-		close()
-	

@@ -32,13 +32,3 @@ func set_locked(value: bool) -> void:
 		$OmniLight.light_color = Color.red
 	else:
 		$OmniLight.light_color = Color.green
-
-
-func _on_Area_body_entered(body):
-	if body.is_in_group("player"):
-		open()
-
-
-func _on_Area_body_exited(body):
-	if body.is_in_group("player"):
-		close()
