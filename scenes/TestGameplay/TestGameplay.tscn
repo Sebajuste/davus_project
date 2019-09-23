@@ -115,14 +115,14 @@ editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22544, 0 )
 
 [node name="Skeleton" parent="Player" index="1"]
-bones/5/bound_children = [ NodePath("Head") ]
-bones/22/bound_children = [ NodePath("RightHand") ]
+bones/5/bound_children = [  ]
+bones/22/bound_children = [  ]
 
 [node name="Head" parent="Player/Skeleton" index="1"]
-transform = Transform( 0.999296, 0.0234433, 0.0292551, -0.0221045, 0.998729, -0.0452762, -0.0302794, 0.0445978, 0.998546, -0.0207895, 1.56012, -0.0573539 )
+transform = Transform( 0.999513, 0.0177219, 0.0256986, -0.0168033, 0.999227, -0.0355246, -0.0263083, 0.0350756, 0.999037, -0.0350048, 1.55938, -0.0607291 )
 
 [node name="RightHand" parent="Player/Skeleton" index="2"]
-transform = Transform( 0.32075, 0.094056, 0.942481, 0.128933, -0.99013, 0.0549333, 0.938346, 0.103897, -0.329713, -0.218464, 0.953402, -0.0158877 )
+transform = Transform( 0.341915, 0.0862194, 0.935768, 0.130404, -0.9905, 0.0436157, 0.930638, 0.107116, -0.349912, -0.232758, 0.952803, -0.0169673 )
 
 [node name="AnimationTree" parent="Player" index="11"]
 parameters/StateMachine/playback = SubResource( 3 )

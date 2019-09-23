@@ -1,21 +1,15 @@
 extends Node
 
 
+var _control_camera := true
+
 func _enter_tree():
-	_init_level( $World/Level/WorldPlanet )
+	_init_level( $World/Level/Dungeon )
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
 	$Menu.visible = false
-	
-	loading.connect("scene_loading", self, "_on_scene_loading")
-	loading.connect("scene_load_progress", self, "_on_scene_load_progress")
-	loading.connect("scene_loaded", self, "_on_scene_loaded")
-	
-	
-	
-	
 	
 	
 	var ui_inventory = $Menu/MarginContainer/TabContainer/Inventory/Inventory
@@ -24,13 +18,6 @@ func _ready():
 	
 	$Menu/MarginContainer/TabContainer/Options/Options.enable_savegame = true
 	
-	var game_loaded = save.load_game()
-	
-	print("game_loaded: ", game_loaded)
-	
-	if game_loaded:
-		return
-	
 	#
 	# Add default Weapon
 	#
@@ -38,7 +25,9 @@ func _ready():
 	default_weapon.type = "gun"
 	default_weapon.properties["damage"] = 1.0
 	default_weapon.properties["rate"] = 60
+	
 	$World/Player.give_item(default_weapon)
+	#$World/Player/Inventory.equip(default_weapon)
 	
 	#
 	# Add default ammo
@@ -46,8 +35,12 @@ func _ready():
 	var default_ammo := Item.new()
 	default_ammo.type = "ammo"
 	default_ammo.properties["ammo_type"] = "normal"
+	
 	$World/Player.give_item(default_ammo)
 	
+	
+	
+	pass # Replace with function body.
 
 
 func _exit_tree():
@@ -83,6 +76,11 @@ func _input(event):
 		else:
 			$Menu.visible = false
 	
+	if event is InputEventKey and not event.is_pressed():
+		if event.scancode == KEY_9:
+			_select_camera()
+		if event.scancode == KEY_8:
+			$World/Level/Dungeon.create_dungeon()
 
 
 func set_map(map):
@@ -91,11 +89,19 @@ func set_map(map):
 	
 
 
-func _init_level(scene: Node, context: Dictionary = {}):
+func _select_camera():
+	$World/CameraPlayer.current = not _control_camera
+	$World/CameraMap.current = _control_camera
+	_control_camera = not _control_camera
+
+
+
+
+
+func _init_level(scene: Node):
 	print("_init_level")
 	scene.player = $World/Player
-	scene.camera = $World/Camera
-	scene.context = context
+	scene.camera = $World/CameraPlayer
 	
 	for map in $Menu/MarginContainer/TabContainer/Map.get_children():
 		map.queue_free()
@@ -107,34 +113,12 @@ func _init_level(scene: Node, context: Dictionary = {}):
 	
 
 
-func _remove_level():
-	for child in $World/Level.get_children():
-		$World/Level.remove_child(child)
-
-
-func _on_scene_loading():
-	print("on scene loading")
-	$Loading.visible = true
-	pass
-
-
-func _on_scene_loaded(scene, context):
-	print("_on_scene_loaded")
-	_remove_level()
-	_init_level(scene, context)
-	$World/Level.add_child(scene)
-	$Loading.visible = false
-
-
-func _on_scene_load_progress(current_stage, stage_count):
-	$Loading.set_progress(0, stage_count, current_stage)
-
 
 func _on_Player_died():
 	
 	var level = $World/Level.get_child(0)
 	
-	if level and level.has_method("reset_player"):
+	if level:
 		level.reset_player()
 	
 	pass # Replace with function body.

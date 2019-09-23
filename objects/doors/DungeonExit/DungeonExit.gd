@@ -1,5 +1,7 @@
 extends "res://objects/doors/Door.gd"
 
+var spawn_position: Vector3
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
@@ -29,7 +31,10 @@ func use(actor) -> void:
 	if open():
 		return
 	if opened:
-		loading.load_scene("res://scenes/WorldPlanet/WorldPlanet.tscn")
+		var context = {
+			"player_position": spawn_position
+		}
+		loading.load_scene("res://scenes/WorldPlanet/WorldPlanet.tscn", context)
 
 
 func set_locked(value: bool) -> void:

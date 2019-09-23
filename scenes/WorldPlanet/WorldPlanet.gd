@@ -2,25 +2,23 @@ extends Spatial
 
 var player setget set_player
 
+var camera: Camera
+
+var context: Dictionary
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
-	#$Player.global_transform.origin = Vector3(0, 30, 0)
 	
-	$StreamingLevel.update($Camera.global_transform.origin.x, $Camera.global_transform.origin.y)
+	$StreamingLevel.update(camera.global_transform.origin.x, camera.global_transform.origin.y)
 	$StreamingLevel._load_queued_batch()
 	$StreamingLevel._process(0)
 	
-	# TODO : send streaming level for world map
 	
-	# xxxx.streaming_level_node = $StreamingLevel
+	if context and context.has("player_position"):
+		var pos: Vector3 = context["player_position"]
+		player.global_transform.origin = pos
 	
-	var root = get_tree().get_root()
-	
-	#var map = $WorldMap
-	#remove_child(map)
-	
-	#root.get_child(0).set_map(map)
 	
 
 
@@ -43,14 +41,14 @@ func _process(delta):
 	"""
 	
 	
-	$StreamingLevel.update($Camera.global_transform.origin.x, $Camera.global_transform.origin.y)
+	$StreamingLevel.update(camera.global_transform.origin.x, camera.global_transform.origin.y)
 	
 
 
 func set_player(p):
 	player = p
 	player.global_transform.origin = Vector3(0, 30, 0)
-	$Camera.target_node = player
+	#$Camera.target_node = player
 
 
 func _on_PlayerRespawnTimer_timeout():

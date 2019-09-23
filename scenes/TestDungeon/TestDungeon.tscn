@@ -1,0 +1,38 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://scenes/TestDungeon/TestDungeon.gd" type="Script" id=1]
+[ext_resource path="res://scenes/Dungeon/Dungeon.tscn" type="PackedScene" id=2]
+[ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/MainGame/Camera.gd" type="Script" id=4]
+[ext_resource path="res://scenes/TestDungeon/CameraMap.gd" type="Script" id=5]
+[ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=6]
+[ext_resource path="res://ui/Loading/Loading.tscn" type="PackedScene" id=7]
+
+[node name="TestDungeon" type="Node"]
+script = ExtResource( 1 )
+
+[node name="World" type="Spatial" parent="."]
+
+[node name="Level" type="Spatial" parent="World"]
+
+[node name="Dungeon" parent="World/Level" instance=ExtResource( 2 )]
+
+[node name="Player" parent="World" instance=ExtResource( 3 )]
+
+[node name="CameraPlayer" type="Camera" parent="World"]
+fov = 30.0
+script = ExtResource( 4 )
+target = NodePath("../../../TestDungeon/World/Player")
+distance = 20.0
+target_y_offset = 2.0
+
+[node name="CameraMap" type="Camera" parent="World"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 80 )
+script = ExtResource( 5 )
+
+[node name="Menu" parent="." instance=ExtResource( 6 )]
+visible = true
+
+[node name="Loading" parent="." instance=ExtResource( 7 )]
+visible = false
+[connection signal="died" from="World/Player" to="." method="_on_Player_died"]

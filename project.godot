@@ -27,7 +27,7 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "DungeonResource",
 "language": "GDScript",
-"path": "res://tileset/DungeonGenerator/DungeonResource.gd"
+"path": "res://scripts/dungeon/DungeonResource.gd"
 }, {
 "base": "Reference",
 "class": "GeometryHelper",
@@ -37,12 +37,17 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "GraphGenerator",
 "language": "GDScript",
-"path": "res://tileset/DungeonGenerator/GraphGenerator.gd"
+"path": "res://scripts/dungeon/GraphGenerator.gd"
 }, {
 "base": "Reference",
 "class": "Hit",
 "language": "GDScript",
 "path": "res://tools/combat/Hit.gd"
+}, {
+"base": "Reference",
+"class": "Item",
+"language": "GDScript",
+"path": "res://objects/items/item.gd"
 }, {
 "base": "Reference",
 "class": "Room",
@@ -57,6 +62,7 @@ _global_script_class_icons={
 "GeometryHelper": "",
 "GraphGenerator": "",
 "Hit": "",
+"Item": "",
 "Room": ""
 }
 
@@ -70,6 +76,7 @@ config/icon="res://icon.png"
 
 configuration="*res://scripts/singletons/configuration.gd"
 loading="*res://scripts/singletons/loading.gd"
+save="*res://scripts/singletons/save.gd"
 
 [input]
 

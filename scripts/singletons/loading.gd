@@ -15,6 +15,7 @@ var _poll_index: int
 
 var _loading := false
 var _switch_scene := false
+var _loading_context: Dictionary
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -35,7 +36,7 @@ func _process(delta):
 			_poll_index = 0
 			_loading = false
 			var scene = resource.instance()
-			emit_signal("scene_loaded", scene)
+			emit_signal("scene_loaded", scene, _loading_context)
 			if _switch_scene:
 				current_scene = scene
 				get_tree().get_root().remove_child( _loading_ui )
@@ -51,10 +52,11 @@ func change_scene(path: String):
 		call_deferred("_deferred_load_scene", path)
 
 
-func load_scene(path: String):
+func load_scene(path: String, context: Dictionary = {}):
 	if not _loading:
 		_loading = true
 		_switch_scene = false
+		_loading_context = context
 		emit_signal("scene_loading")
 		call_deferred("_deferred_load_scene", path)
 

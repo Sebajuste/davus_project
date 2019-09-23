@@ -1,6 +1,6 @@
 extends "res://objects/doors/Door.gd"
 
-
+var dungeon_seed := randi()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -32,7 +32,11 @@ func use(actor) -> void:
 	if open():
 		return
 	if opened:
-		loading.load_scene("res://tileset/DungeonGenerator/Dungeon.tscn")
+		var context = {
+			"spawn_position": Vector3(self.global_transform.origin.x, self.global_transform.origin.y+2, 0),
+			"dungeon_seed": dungeon_seed
+		}
+		loading.load_scene("res://scenes/Dungeon/Dungeon.tscn", context)
 
 
 func set_locked(value: bool) -> void:

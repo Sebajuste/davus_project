@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://scenes/WorldPlanet/WorldPlanet.gd" type="Script" id=1]
 [ext_resource path="res://tools/StreamingLevel/StreamingLevel.tscn" type="PackedScene" id=2]
@@ -8,10 +8,9 @@
 [ext_resource path="res://tools/StreamingLevel/DoorsLayout/DoorsLevelLayout.tscn" type="PackedScene" id=6]
 [ext_resource path="res://tools/StreamingLevel/KeysLayout/KeysLevelLayout.tscn" type="PackedScene" id=7]
 [ext_resource path="res://tileset/Jungle/JungleBackgroundLevelLayout.tscn" type="PackedScene" id=8]
-[ext_resource path="res://scenes/TestWorldGameplay/Camera.gd" type="Script" id=9]
-[ext_resource path="res://scenes/TestWorldGameplay/DirectionalLight.gd" type="Script" id=10]
-[ext_resource path="res://music/exploring_the_dungeon.ogg" type="AudioStream" id=11]
-[ext_resource path="res://ui/WorldMap/WorldMap.tscn" type="PackedScene" id=12]
+[ext_resource path="res://scenes/TestWorldGameplay/DirectionalLight.gd" type="Script" id=9]
+[ext_resource path="res://music/exploring_the_dungeon.ogg" type="AudioStream" id=10]
+[ext_resource path="res://ui/WorldMap/WorldMap.tscn" type="PackedScene" id=11]
 
 [sub_resource type="ProceduralSky" id=1]
 sky_top_color = Color( 0.937255, 0.619608, 0.0784314, 1 )
@@ -39,6 +38,7 @@ script = ExtResource( 1 )
 environment = SubResource( 2 )
 
 [node name="StreamingLevel" parent="." instance=ExtResource( 2 )]
+editor/display_folded = true
 multithreading = false
 
 [node name="JungleLevelLayout" parent="StreamingLevel" instance=ExtResource( 3 )]
@@ -66,32 +66,23 @@ cap = 0.15
 top_max_y = 0
 end_max_y = 1
 
-[node name="Camera" type="Camera" parent="."]
-transform = Transform( 1, -9.43685e-009, 5.87452e-009, 9.43685e-009, 1, 5.15538e-009, -5.87452e-009, -5.15538e-009, 1, 0, 0, 5.52072 )
-current = true
-fov = 20.0
-script = ExtResource( 9 )
-target = NodePath("../../WorldPlanet/Player")
-distance = 30.0
-target_y_offset = 2.0
-
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
 transform = Transform( 0.736818, 0.52042, -0.43158, -0.00878779, 0.645664, 0.763571, 0.676033, -0.558821, 0.480311, -5.78711, 4.03172, 0 )
 light_color = Color( 0.894118, 0.917647, 0.815686, 1 )
 light_energy = 2.0
 shadow_enabled = true
-script = ExtResource( 10 )
+script = ExtResource( 9 )
 min_y = -30
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 11 )
+stream = ExtResource( 10 )
 autoplay = true
 
 [node name="PlayerRespawnTimer" type="Timer" parent="."]
 wait_time = 5.0
 one_shot = true
 
-[node name="WorldMap" parent="." instance=ExtResource( 12 )]
+[node name="Map" parent="." instance=ExtResource( 11 )]
 streaming_level = NodePath("../StreamingLevel")
 zoom = 3.5
 [connection signal="timeout" from="PlayerRespawnTimer" to="." method="_on_PlayerRespawnTimer_timeout"]

@@ -41,6 +41,8 @@ func load_game() -> bool:
 		else:
 			buffer += json
 			data_list.append( node_data )
+	if data_list.empty():
+		return false
 	buffer += SALT
 	var hash_calculated = buffer.sha256_text()
 	save_game.close()
