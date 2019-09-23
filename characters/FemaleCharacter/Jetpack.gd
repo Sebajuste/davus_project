@@ -1,4 +1,4 @@
-extends Node
+extends Spatial
 
 
 export var max_power := 1.0
@@ -38,8 +38,6 @@ func _process(delta):
 	
 	if _start_jetpack:
 		_start_timer += delta
-	#elif not _character.is_falling():
-	#	_start_timer = 0.0
 	
 	if Input.is_action_pressed("jetpack") and _start_timer > activation_delay and power > 0.0:
 		power -= consumption * delta
@@ -58,9 +56,6 @@ func _process(delta):
 	if power == 0.0:
 		jetpack_on = false
 		$AudioStreamPlayer3D.stop()
-	
-	if $AudioStreamPlayer3D.playing:
-		$AudioStreamPlayer3D.global_transform.origin = get_parent().get_parent().global_transform.origin
 	
 
 

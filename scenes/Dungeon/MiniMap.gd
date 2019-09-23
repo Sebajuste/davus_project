@@ -6,10 +6,17 @@ var _geometry := GeometryHelper.new()
 
 var scale2D:int
 var draw_room_index:bool
-var graph_generator:GraphGenerator
+var graph_generator:GraphGenerator setget set_graph_generator
+
 
 func gen():
 	update()
+
+
+func set_graph_generator(v):
+	graph_generator = v
+	update()
+
 
 func _draw():
 	if not graph_generator:
@@ -18,7 +25,7 @@ func _draw():
 	for point in graph_generator.rooms_areas.keys():
 		var room:Room = graph_generator.rooms_areas[point]
 		var rect = _geometry.scale_rectangle(room.area, scale2D, true, graph_generator.map_height)
-		draw_rect(rect, Color.white, false)						# draw room
+		draw_rect(rect, Color.white, false)
 		var color = Color.blue
 		if room == graph_generator.starting_room:
 			color = Color.green
@@ -37,6 +44,7 @@ func _draw():
 		if draw_room_index:
 			var pos = room.get_middle()
 			draw_string(f, _geometry.reverse_y_axis(pos, graph_generator.map_height) * scale2D, str(point), Color.red)
+
 
 func _draw_path(path: AStar):
 	if path:

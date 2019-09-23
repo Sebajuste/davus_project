@@ -29,16 +29,14 @@ var _control_camera:bool = true
 var _rnd := RandomNumberGenerator.new()
 var _graph_generator := GraphGenerator.new()
 
+var _map
 
 func _ready():
 	
 	if context and context.has("dungeon_seed"):
 		map_seed = context["dungeon_seed"]
 	
-	
 	_rnd.seed = map_seed
-	
-	_graph_generator.connect("graph_gen_finished", self, "_graph_gen_finished")
 	
 	# Initiate graph generator
 	_graph_generator.rnd = _rnd
@@ -61,31 +59,18 @@ func _ready():
 	dg.rnd = _rnd
 	
 	# Initiate Mini map
-	#$Map/Viewport/MiniMap.scale2D = scale2D
-	#$Map/Viewport/MiniMap.draw_room_index = DRAW_ROOMS_INDEX
+	$Map/Viewport/MiniMap.scale2D = scale2D
+	$Map/Viewport/MiniMap.draw_room_index = DRAW_ROOMS_INDEX
+	$Map/Viewport/MiniMap.graph_generator = _graph_generator
+	
+	_map = $Map/Viewport/MiniMap
 	
 	create_dungeon()
 
-"""
-func _input(event):
-	if event is InputEventKey and not event.is_pressed():
-		if event.scancode == KEY_9:
-			_select_camera()
-		if event.scancode == KEY_8:
-			create_dungeon()
-"""
 
 func set_player(p):
 	player = p
-	#player.global_transform.origin = Vector3(0, 30, 0)
-	#$Camera.target_node = player
 
-"""
-func _select_camera():
-	$CameraPlayer.current = not _control_camera
-	#$CameraMap.current = _control_camera
-	_control_camera = not _control_camera
-"""
 
 func create_dungeon():
 	var mg := $MapGenerator
@@ -93,19 +78,15 @@ func create_dungeon():
 	mg.clear_all()
 	_graph_generator.gen_graph()
 	mg.gen_dungeon(_graph_generator)
-	#$Map/Viewport/MiniMap.graph_generator = _graph_generator
-	#$Map/Viewport/MiniMap.gen()
+	
+	_map.graph_generator = _graph_generator
+	_map.gen()
 
 
-func _graph_gen_finished():
-	#$CameraMap.translation.x = _graph_generator.map_width
-	#$CameraMap.translation.y = _graph_generator.map_height
-	#$CameraMap.translation.z = _graph_generator.map_width
-	pass
+func _on_MapGenerator_dungeon_gen_finished(graph_generator):
+	if player:
+		player.global_transform.origin = $MapGenerator.spawn_position
 
-func _on_MapGenerator_dungeon_gen_finished():
-	player.global_transform.origin = $MapGenerator.spawn_position
-	#$Player/CombatStats.heal( $Player/CombatStats.max_health )
 
 func _on_MapGenerator_request_new_dungeon():
 	create_dungeon()

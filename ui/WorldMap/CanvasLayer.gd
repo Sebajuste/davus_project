@@ -32,6 +32,8 @@ func _process(delta):
 
 func _draw():
 	
+	print("_draw()")
+	
 	var players = get_tree().get_nodes_in_group("player")
 	
 	var viewport_size: Vector2 = get_viewport().size

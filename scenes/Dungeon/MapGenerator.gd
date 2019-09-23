@@ -1,7 +1,7 @@
 extends Spatial
 
 signal request_new_dungeon
-signal dungeon_gen_finished
+signal dungeon_gen_finished(graph_generator)
 
 # Parameters
 var rnd:RandomNumberGenerator
@@ -142,7 +142,7 @@ func gen_dungeon(graph_generator:GraphGenerator):
 			else:
 				print("seed_counter = ", _seed_counter)
 		
-		emit_signal("dungeon_gen_finished")
+		emit_signal("dungeon_gen_finished", _graph_generator)
 
 
 func _fill_the_map():

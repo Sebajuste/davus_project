@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://scenes/Dungeon/Dungeon.gd" type="Script" id=1]
 [ext_resource path="res://scenes/Dungeon/MapGenerator.gd" type="Script" id=2]
@@ -17,7 +17,8 @@
 [ext_resource path="res://tileset/test/LeftLadder.tres" type="CubeMesh" id=15]
 [ext_resource path="res://tileset/test/RightLadder.tres" type="CubeMesh" id=16]
 [ext_resource path="res://music/exploring_the_dungeon2.ogg" type="AudioStream" id=17]
-[ext_resource path="res://scenes/Dungeon/MiniMap.gd" type="Script" id=18]
+[ext_resource path="res://scenes/Dungeon/Map.gd" type="Script" id=18]
+[ext_resource path="res://scenes/Dungeon/MiniMap.gd" type="Script" id=19]
 
 [sub_resource type="MultiMesh" id=1]
 mesh = ExtResource( 3 )
@@ -177,15 +178,21 @@ stream = ExtResource( 17 )
 autoplay = true
 
 [node name="Map" type="ViewportContainer" parent="."]
-editor/display_folded = true
-margin_right = 40.0
-margin_bottom = 40.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+stretch = true
+script = ExtResource( 18 )
+map_generator = NodePath("../MapGenerator")
 
 [node name="Viewport" type="Viewport" parent="Map"]
+size = Vector2( 1024, 600 )
 handle_input_locally = false
+hdr = false
+disable_3d = true
 render_target_update_mode = 3
+gui_disable_input = true
 
 [node name="MiniMap" type="Node2D" parent="Map/Viewport"]
-script = ExtResource( 18 )
+script = ExtResource( 19 )
 [connection signal="dungeon_gen_finished" from="MapGenerator" to="." method="_on_MapGenerator_dungeon_gen_finished"]
 [connection signal="request_new_dungeon" from="MapGenerator" to="." method="_on_MapGenerator_request_new_dungeon"]

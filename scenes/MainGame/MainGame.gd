@@ -2,7 +2,7 @@ extends Node
 
 
 func _enter_tree():
-	_init_level( $World/Level/WorldPlanet )
+	_start_init_level( $World/Level/WorldPlanet )
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -13,10 +13,7 @@ func _ready():
 	loading.connect("scene_load_progress", self, "_on_scene_load_progress")
 	loading.connect("scene_loaded", self, "_on_scene_loaded")
 	
-	
-	
-	
-	
+	_end_init_level( $World/Level/WorldPlanet )
 	
 	var ui_inventory = $Menu/MarginContainer/TabContainer/Inventory/Inventory
 	$World/Player/Inventory.connect("item_added", ui_inventory, "add_item")
@@ -91,20 +88,22 @@ func set_map(map):
 	
 
 
-func _init_level(scene: Node, context: Dictionary = {}):
+func _start_init_level(scene: Node, context: Dictionary = {}):
 	print("_init_level")
 	scene.player = $World/Player
 	scene.camera = $World/Camera
 	scene.context = context
-	
+
+
+func _end_init_level(scene: Node, context: Dictionary = {}):
 	for map in $Menu/MarginContainer/TabContainer/Map.get_children():
 		map.queue_free()
 	
 	var map = scene.find_node("Map")
+	print("attach map to ui: ", map)
 	if map:
 		scene.remove_child(map)
 		$Menu/MarginContainer/TabContainer/Map.add_child(map)
-	
 
 
 func _remove_level():
@@ -121,8 +120,9 @@ func _on_scene_loading():
 func _on_scene_loaded(scene, context):
 	print("_on_scene_loaded")
 	_remove_level()
-	_init_level(scene, context)
+	_start_init_level(scene, context)
 	$World/Level.add_child(scene)
+	_end_init_level(scene, context)
 	$Loading.visible = false
 
 

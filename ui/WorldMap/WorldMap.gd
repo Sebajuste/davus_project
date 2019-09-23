@@ -9,6 +9,7 @@ var streaming_level_node setget set_streaming_level_node
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	
 	$Viewport/CanvasLayer.zoom = zoom
 	$Viewport/CanvasLayer.walls_color = walls_color
 	$Viewport/CanvasLayer.player_color = player_color

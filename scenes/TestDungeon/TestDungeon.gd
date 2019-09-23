@@ -4,13 +4,14 @@ extends Node
 var _control_camera := true
 
 func _enter_tree():
-	_init_level( $World/Level/Dungeon )
+	_start_init_level( $World/Level/Dungeon )
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
 	$Menu.visible = false
 	
+	_end_init_level( $World/Level/Dungeon )
 	
 	var ui_inventory = $Menu/MarginContainer/TabContainer/Inventory/Inventory
 	$World/Player/Inventory.connect("item_added", ui_inventory, "add_item")
@@ -95,23 +96,19 @@ func _select_camera():
 	_control_camera = not _control_camera
 
 
-
-
-
-func _init_level(scene: Node):
-	print("_init_level")
+func _start_init_level(scene: Node, context: Dictionary = {}):
 	scene.player = $World/Player
-	scene.camera = $World/CameraPlayer
-	
+	scene.camera = $World/Camera
+	scene.context = context
+
+
+func _end_init_level(scene: Node, context: Dictionary = {}):
 	for map in $Menu/MarginContainer/TabContainer/Map.get_children():
 		map.queue_free()
-	
 	var map = scene.find_node("Map")
 	if map:
 		scene.remove_child(map)
 		$Menu/MarginContainer/TabContainer/Map.add_child(map)
-	
-
 
 
 func _on_Player_died():
