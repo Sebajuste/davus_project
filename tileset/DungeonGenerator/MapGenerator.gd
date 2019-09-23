@@ -523,7 +523,7 @@ func _should_lock() ->bool:
 func _should_drop_key(is_dead_end:bool) ->bool:
 	_totalRoomsCounter += 1
 	if _keys_of_doors_to_drop.size() > 0:
-		var remainingRooms:int = _rooms_areas.size() - 1 - _pathRoomsCounter
+		var remainingRooms:int = _rooms_areas.size() - 2 - _pathRoomsCounter
 		if remainingRooms <= 0:
 			print("Check the _should_drop_key algorithm, the number of remainingRooms isn't correct.")
 		if is_dead_end || rnd.randf() < (1 / float(remainingRooms)) * _keys_of_doors_to_drop.size():
@@ -533,11 +533,15 @@ func _should_drop_key(is_dead_end:bool) ->bool:
 
 func _drop_key(pos:Vector3):
 	if _keys_of_doors_to_drop.size() > 0:
-		var index = rnd.randi() % _keys_of_doors_to_drop.size()
-		var id = _keys_of_doors_to_drop[index]
+		#var index = rnd.randi() % _keys_of_doors_to_drop.size()
+		var id = _keys_of_doors_to_drop.front()
 		_dropped_keys[id] = pos
-		if _place_object(pos, _resourceMgr.KEYS_RESOURCES) == null:
+		var key = _place_object(pos, _resourceMgr.KEYS_RESOURCES)
+		if key == null:
 			print("No key find in the resources : ", _resourceMgr.KEYS_RESOURCES)
+		else:
+			key.door_id = id
+			_keys_of_doors_to_drop.erase(id)
 
 func _add_mob_spawn(pos:Vector3):
 	if _place_object(pos, _resourceMgr.MOB_RESOURCES) == null:
