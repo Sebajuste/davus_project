@@ -21,14 +21,27 @@ func _ready():
 	$World/Player/Inventory.connect("item_added", ui_inventory, "add_item")
 	ui_inventory.connect("item_equiped", $World/Player/Inventory, "equip")
 	
-	var default_weapon = {
-		"type": "gun",
-		"damage": 1.0,
-		"rate": 60
-	}
+	#
+	# Add default Weapon
+	#
+	var default_weapon := Item.new()
+	default_weapon.type = "gun"
+	default_weapon.properties["damage"] = 1.0
+	default_weapon.properties["rate"] = 60
 	
-	$World/Player.give_object(default_weapon)
-	$World/Player/Inventory.equip(default_weapon)
+	$World/Player.give_item(default_weapon)
+	#$World/Player/Inventory.equip(default_weapon)
+	
+	#
+	# Add default ammo
+	# 
+	var default_ammo := Item.new()
+	default_ammo.type = "ammo"
+	default_ammo.properties["ammo_type"] = "normal"
+	
+	$World/Player.give_item(default_ammo)
+	
+	
 	
 	pass # Replace with function body.
 

@@ -33,7 +33,7 @@ func _ready():
 #	pass
 
 
-func add_item(item) -> bool:
+func add_item(item: Item) -> bool:
 	match item.type:
 		"gun":
 			weapons.append(item)
@@ -42,7 +42,7 @@ func add_item(item) -> bool:
 			return false
 
 
-func remove_item(item) -> void:
+func remove_item(item: Item) -> void:
 	var index = weapons.find(item)
 	if index != -1:
 		weapons.remove(index)
@@ -62,7 +62,7 @@ func select_weapons() -> void:
 		_list.add_child(weapon_panel)
 
 
-func _item_selected(item):
+func _item_selected(item: Item):
 	if item.equiped:
 		return
 	

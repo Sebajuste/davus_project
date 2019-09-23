@@ -154,7 +154,7 @@ func _input(event) -> void:
 	pass
 
 
-func give_object(item) -> void:
+func give_item(item: Item) -> void:
 	$Inventory.add_item(item)
 
 

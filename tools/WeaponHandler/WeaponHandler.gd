@@ -26,6 +26,7 @@ func _ready():
 	_right_hand_node.add_child(weapon)
 	_weapon_ref = weakref( weapon )
 	"""
+	pass
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -55,10 +56,10 @@ func remove():
 	set_aiming( false )
 
 
-func equip_weapon(item):
+func equip_weapon(item: Item):
 	remove()
 	weapon = Pistol.instance()
-	weapon.firing_rate = item.rate
+	weapon.firing_rate = item.properties.rate
 	_right_hand_node.add_child(weapon)
 	item.equiped = true
 

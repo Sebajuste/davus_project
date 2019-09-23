@@ -15,12 +15,7 @@ func _ready():
 	
 	#emit_signal("ammo_selected", "normal")
 	
-	var item = {
-		"type": "ammo",
-		"ammo_type": "normal"
-	}
-	ammo_available_list.append(item)
-	select_next()
+	
 	pass # Replace with function body.
 
 
@@ -38,10 +33,14 @@ func _input(event):
 
 
 func select_next():
-	current_ammo += 1
-	if current_ammo >= ammo_available_list.size():
-		current_ammo = 0
-	emit_signal("ammo_selected", ammo_available_list[current_ammo])
+	var index = current_ammo + 1
+	if index >= ammo_available_list.size():
+		index = 0
+	ammo_available_list[current_ammo].equiped = false
+	current_ammo = index
+	var ammo = ammo_available_list[current_ammo]
+	ammo.equiped = true
+	emit_signal("ammo_selected", ammo)
 	pass
 
 
@@ -49,7 +48,7 @@ func select_previous():
 	pass
 
 
-func add_ammo(ammo):
+func add_ammo(ammo: Item):
 	
 	if ammo_available_list.find(ammo) == -1:
 		ammo_available_list.append(ammo)

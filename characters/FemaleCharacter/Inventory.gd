@@ -26,7 +26,7 @@ func equip(item):
 	pass
 
 
-func add_item(item):
+func add_item(item: Item):
 	item["equiped"] = false
 	if item.type == "gun":
 		weapons.append(item)
@@ -41,3 +41,15 @@ func add_item(item):
 	else:
 		items.append(item)
 
+
+func save():
+	var data = {
+		"weapons": weapons,
+		"items": items
+	}
+	return data
+
+
+func restore( data ):
+	weapons = data["weapons"]
+	items = data["items"]
