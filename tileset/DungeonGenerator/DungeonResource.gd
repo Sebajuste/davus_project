@@ -56,13 +56,20 @@ const ROOM_PREFAB:Dictionary = {
 		},
 	}
 
+const KEYS_RESOURCES:Array = [
+		preload("res://objects/keys/DoorKey/DoorKey.tscn"),
+	]
+
 const MOB_RESOURCES:Array = [
 		preload("res://characters/Mobs/MobTentacle/MobTentacle.tscn"),
 		preload("res://characters/Mobs/Drone/Drone.tscn"),
 		preload("res://characters/Mobs/Fly/Fly.tscn"),
 	]
 
-const IN_OUT_DOOR = preload("res://objects/doors/DungeonExit/DungeonExit.tscn")
+const IN_OUT_DOOR:Array = [
+		preload("res://objects/doors/DungeonExit/DungeonExit.tscn")
+	]
+	
 const INTERIOR_DOORS:Array = [
 		preload("res://objects/doors/DungeonPipe/DungeonPipe00.tscn"),
 	]

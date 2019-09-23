@@ -110,7 +110,7 @@ func _calculate_distantest_rooms(rooms_locations: Dictionary):
 	ending_room = a2
 
 
-func _reorder_rooms(rooms_locations: Dictionary) -> Dictionary:
+func _reorder_rooms(rooms_locations: Dictionary) -> Dictionary:	# <point, room>
 	var reordered := Dictionary()
 	
 	var startMiddle:Vector3 = _geometry.to_vector3(starting_room.get_middle())

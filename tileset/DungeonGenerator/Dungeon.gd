@@ -7,7 +7,7 @@ export var scale2D:int = 2
 export var room_margin:int = 2
 export (int, 2, 10) var number_of_rooms:int = 12
 export var min_nb_key:int = 1
-export (float, 0, 1) var key_occupation = 0.5
+export (float, 0, 1) var key_occupation = 1
 export var map_width:int = 80
 export var map_height:int = 50
 export var min_room_width:int = 9
@@ -20,7 +20,7 @@ const TILE_SIZE = 2
 const USE_GRIDMAP = false
 const DRAW_ROOMS_INDEX = true
 
-var _control_camera:bool = false
+var _control_camera:bool = true
 var _rnd := RandomNumberGenerator.new()
 var _graph_generator := GraphGenerator.new()
 

@@ -7,8 +7,8 @@ signal dungeon_gen_finished
 var rnd:RandomNumberGenerator
 var _graph_generator:GraphGenerator
 var mob_chance_corridors:float
-var min_nb_key:int = 1
-var key_occupation:float = 0.25
+var min_nb_key:int
+var key_occupation:float
 
 ########################################## A VIRER après debug.
 var avirer = preload("res://tileset/test/MobSpawn.tscn")
@@ -20,28 +20,31 @@ var _resourceMgr:DungeonResource = DungeonResource.new()
 var _eTilesType := _resourceMgr.eTilesType
 var _eDirection := DirectionHelper.eDirection
 var _pathfinding:AStar
-var _rooms_areas:Dictionary
+var _rooms_areas:Dictionary		# <point, room>
 var _currentDoorID:int = 0
 var _pathRoomsCounter:int = 0
-var _number_of_keys:int = 0
-var _closed_doors:Dictionary
+var _totalRoomsCounter:int = 0
+var _desired_nb_of_keys:int = 0
+var _closed_doors:Dictionary		# <id, position>
+var _keys_of_doors_to_drop:Array	# <id>
+var _dropped_keys:Dictionary		# <id, position>
 
 var use_gridmap:bool
 var tile_size:int
 var spawn_position:Vector3
 
 ##################### DEBUG AREA #####################
-const DEBUG:bool = false
+const DEBUG:bool = true
 const FORCE_START_DOOR:bool = false
 const FORCE_END_DOOR:bool = false
-const DISABLE_COLLISION:bool = false
+const DISABLE_COLLISION:bool = true
 const SHOW_DOOR_INSERTIONS:bool = false
 const SHOW_STARTING_ROOM:bool = false
 const SHOW_ENDING_ROOM:bool = false
 const DRAW_ROOMS_INDEX:bool = false
 const PRINT_REFUSED_DUNGEON:bool = true
 const PRINT_LADDER:bool = false
-const PRINT_ROOMS_TRAVEL:bool = false
+const PRINT_ROOMS_TRAVEL:bool = true
 const PRINT_DOOR_LOCATION:bool = false
 const PRINT_DOOR_KEYS:bool = true
 const DESIRED_SEED_STEP_COUNTER:int = 50
@@ -49,7 +52,7 @@ var _desired_seed_counter:int = 0
 var _seed_counter:int = 1
 
 var testCase := Dictionary()
-var nbOfCase:int = 10
+var nbOfCase:int = 0
 var _continue_looping = false
 var _timer_value:float = 1
 var _timer_looping:Timer
@@ -101,8 +104,8 @@ func gen_dungeon(graph_generator:GraphGenerator):
 	_graph_generator = graph_generator
 	_pathfinding = _graph_generator.pathfinding
 	_rooms_areas = _graph_generator.rooms_areas
-	_number_of_keys = _get_number_of_keys(_graph_generator.shortest_path.size())
-	if PRINT_DOOR_KEYS: print("nbKeys = ", _number_of_keys)
+	_desired_nb_of_keys = _get_number_of_keys(_graph_generator.shortest_path.size())
+	if PRINT_DOOR_KEYS: print("nbKeys = ", _desired_nb_of_keys)
 	var startMiddle:Vector3 = _geometry.to_vector3(_graph_generator.starting_room.get_middle())
 	_fill_the_map()
 	_write_rooms_on_map()
@@ -128,7 +131,9 @@ func gen_dungeon(graph_generator:GraphGenerator):
 		
 		_seed_counter += 1
 		if DEBUG:
-			print("testCase = ",testCase)
+			if _closed_doors.size() != _desired_nb_of_keys:
+				print("Desired = ",_desired_nb_of_keys, " closed doors = ", _closed_doors.size())
+				_continue_looping = false
 			if _continue_looping:
 				if _seed_counter < _desired_seed_counter:
 					emit_signal("request_new_dungeon")
@@ -152,14 +157,9 @@ func _write_rooms_on_map():
 		var room_rect:Rect2 = room.get_room_rect()
 		var w:Dictionary = _resourceMgr.ROOM_PREFAB.get(int(room_rect.size.x))
 		if w:
-			var h = w.get(int(room_rect.size.y))
+			var h:Array = w.get(int(room_rect.size.y))
 			if h:
-				if h.size() > 0:
-					var variant:int = rnd.randi() % h.size()
-					var prefab:Spatial = h[variant].instance()
-					prefab.translate(_geometry.to_vector3(room.get_middle()) * tile_size - Vector3(1, 1, 0))
-					prefab.add_to_group("MapElements")
-					add_child(prefab)
+				var prefab:Spatial = _place_object(_geometry.to_vector3(_geometry.vector2_floor(room.get_middle())), h)
 		
 		var left = room_rect.position.x
 		var right = left + room_rect.size.x
@@ -186,11 +186,25 @@ func _write_corridors_on_map() -> bool:	# Return true on error
 				var end = _rooms_areas[connection].gen_door_location(_geometry.to_vector2(posRoom1))
 				var s:bool = false
 				var e:bool = false
+				var deadEnd:bool = false
 				if point in shortest_path && connection in shortest_path:
+					var closeEndingRoom:bool = _rooms_areas[point] == _graph_generator.ending_room && _desired_nb_of_keys > 0
 					if rnd.randi() % 2 == 0:
-						s = _should_lock() || _rooms_areas[point] == _graph_generator.ending_room
+						s = _should_lock() || closeEndingRoom
 					else:
-						e = _should_lock() || _rooms_areas[point] == _graph_generator.ending_room
+						e = _should_lock() || closeEndingRoom
+				elif _pathfinding.get_point_connections(connection).size() == 1:
+					deadEnd = true
+				
+				if s || e:
+					print("Close door = ", point, " -> ", connection)
+				
+				var dropKey:bool = _should_drop_key(deadEnd)
+				if dropKey:
+					print("drop key = ", point, " -> ", connection)
+					_drop_key(Vector3.ZERO)
+				
+					
 				var error:bool = _dig_path(start, end, s || FORCE_START_DOOR, e || FORCE_END_DOOR)
 				if error:
 					return error
@@ -215,13 +229,7 @@ func _add_outside_door(room:Room):
 ##########################################
 				var out_rect:Rect2 = Rect2(out - vectorTileSize, vectorTileSize * 2)
 				if not v_rect.intersects(out_rect):
-					var door = _resourceMgr.IN_OUT_DOOR.instance()
-					door.translate(_geometry.to_vector3(v) * tile_size)
-					door.add_to_group("MapElements")
-					add_child(door)
-					return door
-				else:
-					print("intersects ", v_rect, out_rect)
+					return _place_object(_geometry.to_vector3(v), _resourceMgr.IN_OUT_DOOR)
 	return null
 
 func _dig_path(start: Dictionary, end: Dictionary, lockDoorOnStart: bool = false, lockDoorOnEnd: bool = false) -> bool:	# Return true on error
@@ -299,14 +307,14 @@ func _dig_horizontally(startPos: Vector3, endPos: Vector3, mobSpawn: bool, lockD
 			v = Vector3(x, endPos.y, 0)
 		if x == startPos.x + step.x:
 			if step.x > 0:
-				_apply_tile_on_tilemap(v, _eTilesType.Door, PI * 1.5, { "lock":lockDoorOnStart })
-			else:
 				_apply_tile_on_tilemap(v, _eTilesType.Door, PI * 0.5, { "lock":lockDoorOnStart })
+			else:
+				_apply_tile_on_tilemap(v, _eTilesType.Door, PI * 1.5, { "lock":lockDoorOnStart })
 		if x == endPos.x - step.x:
 			if step.x > 0:
-				_apply_tile_on_tilemap(v, _eTilesType.Door, PI * 0.5, { "lock":lockDoorOnEnd })
-			else:
 				_apply_tile_on_tilemap(v, _eTilesType.Door, PI * 1.5, { "lock":lockDoorOnEnd })
+			else:
+				_apply_tile_on_tilemap(v, _eTilesType.Door, PI * 0.5, { "lock":lockDoorOnEnd })
 		else:
 			if x != middlePos.x || step.y == 0:
 				_apply_tile_on_tilemap(v, _eTilesType.PipeStraight, PI * 0.5)
@@ -411,12 +419,10 @@ func _dig_vertically(startPos: Vector3, endPos: Vector3, mobSpawn: bool, lockDoo
 				toggleRight = _first_step_is_on_right(delta, step)
 				
 		if y == bottom.y + step.y:
-			testCase[4] = true
 			_apply_tile_on_tilemap(v, _eTilesType.Door, 0, { "lock":lockDoorOnBottom })
 			toggleRight = not toggleRight
 			
 		if y == top.y - step.y:
-			testCase[5] = true
 			_apply_tile_on_tilemap(v, _eTilesType.Door, PI, { "lock":lockDoorOnTop })
 			toggleRight = not toggleRight
 		else:
@@ -457,11 +463,9 @@ func _dig_mixed_directions(horizontalPos: Vector3, verticalPos: Vector3, mobSpaw
 		var v = Vector3(x, horizontalPos.y, 0)
 		if x == horizontalPos.x + step.x:
 			if step.x > 0:
-				testCase[6] = true
-				_apply_tile_on_tilemap(v, _eTilesType.Door, PI * 1.5, {"lock":lockDoorOnHorizontal })
-			else:
-				testCase[7] = true
 				_apply_tile_on_tilemap(v, _eTilesType.Door, PI * 0.5, {"lock":lockDoorOnHorizontal })
+			else:
+				_apply_tile_on_tilemap(v, _eTilesType.Door, PI * 1.5, {"lock":lockDoorOnHorizontal })
 		else:
 			_apply_tile_on_tilemap(v, _eTilesType.PipeStraight, PI * 0.5)
 	
@@ -470,10 +474,8 @@ func _dig_mixed_directions(horizontalPos: Vector3, verticalPos: Vector3, mobSpaw
 		var v = Vector3(verticalPos.x, y, 0)
 		if y == verticalPos.y - step.y:
 			if step.y > 0:
-				testCase[8] = true
 				_apply_tile_on_tilemap(v, _eTilesType.Door, PI, {"lock":lockDoorOnVertical })
 			else:
-				testCase[9] = true
 				_apply_tile_on_tilemap(v, _eTilesType.Door, 0, {"lock":lockDoorOnVertical })
 		else:
 			if y != horizontalPos.y:
@@ -503,28 +505,58 @@ func _dig_mixed_directions(horizontalPos: Vector3, verticalPos: Vector3, mobSpaw
 				toggleRight = not toggleRight
 
 func _get_number_of_keys(nb_rooms_on_path:int) ->int:
-	return min_nb_key + (rnd.randi() % int(round(key_occupation * (nb_rooms_on_path - 1) - min_nb_key)))
+	var valrange = int(round(key_occupation * (nb_rooms_on_path - 1) - min_nb_key))
+	if valrange > 0:
+		return min_nb_key + (rnd.randi() % valrange)
+	return 0
 
 func _should_lock() ->bool:
 	_pathRoomsCounter += 1
 	var remainingDoorsOnPath:int = _graph_generator.shortest_path.size() - 1 - _pathRoomsCounter
-	var remainingRoomsToClose:int = _number_of_keys - _closed_doors.size()
-	if remainingDoorsOnPath > 0 && _closed_doors.size() < _number_of_keys:
+	var remainingRoomsToClose:int = _desired_nb_of_keys - _closed_doors.size()
+	if remainingDoorsOnPath > 0 && _closed_doors.size() < _desired_nb_of_keys:
 		if rnd.randf() < (1 / float(remainingDoorsOnPath)) * remainingRoomsToClose:
-			if PRINT_DOOR_KEYS: print("Should lock")
 			return true
-	if PRINT_DOOR_KEYS: print("Should not lock")
 	return false
 
+
+func _should_drop_key(is_dead_end:bool) ->bool:
+	_totalRoomsCounter += 1
+	if _keys_of_doors_to_drop.size() > 0:
+		var remainingRooms:int = _rooms_areas.size() - 1 - _pathRoomsCounter
+		if remainingRooms <= 0:
+			print("Check the _should_drop_key algorithm, the number of remainingRooms isn't correct.")
+		if is_dead_end || rnd.randf() < (1 / float(remainingRooms)) * _keys_of_doors_to_drop.size():
+			return true
+	return false
+
+
+func _drop_key(pos:Vector3):
+	if _keys_of_doors_to_drop.size() > 0:
+		var index = rnd.randi() % _keys_of_doors_to_drop.size()
+		var id = _keys_of_doors_to_drop[index]
+		_dropped_keys[id] = pos
+		if _place_object(pos, _resourceMgr.KEYS_RESOURCES) == null:
+			print("No key find in the resources : ", _resourceMgr.KEYS_RESOURCES)
+
 func _add_mob_spawn(pos:Vector3):
-	var mob_resources = _resourceMgr.MOB_RESOURCES
-	var variant = rnd.randi() % mob_resources.size()
-	var mob_resource = mob_resources[variant]
-	if mob_resource:
-		var mob = mob_resource.instance()
-		mob.translate(pos * tile_size)
-		mob.add_to_group("MapElements")
-		add_child(mob)
+	if _place_object(pos, _resourceMgr.MOB_RESOURCES) == null:
+		print("No mob find in the resources : ", _resourceMgr.MOB_RESOURCES)
+
+
+func _place_object(pos:Vector3, resources:Array, dir:Vector3 = Vector3.ZERO, angle:float = 0):
+	if resources.size() > 0:
+		var variant = rnd.randi() % resources.size()
+		var resource = resources[variant]
+		if resource:
+			var object = resource.instance()
+			object.translate(pos * tile_size)
+			if angle != 0:
+				object.rotate(dir, angle)
+			object.add_to_group("MapElements")
+			add_child(object)
+			return object
+	return null
 
 
 func _apply_tile_on_tilemap(pos: Vector3, tileType: int, angle_z:float = 0, parameter = null):
@@ -541,18 +573,17 @@ func _apply_tile_on_tilemap(pos: Vector3, tileType: int, angle_z:float = 0, para
 						$Wall0.insert(v, angle_z)
 			
 			_eTilesType.Door:
-				var variant:int = rnd.randi() % _resourceMgr.INTERIOR_DOORS.size()
-				var door:Spatial = _resourceMgr.INTERIOR_DOORS[variant].instance()
-				door.translate(v)
-				door.rotate_z(angle_z)
-				door.add_to_group("MapElements")
-				if parameter != null:
-					door.set_locked(parameter.lock)
-					if parameter.lock:
-						door.id = _currentDoorID
-						_closed_doors[_currentDoorID] = v
-						_currentDoorID += 1
-				add_child(door)
+				var door = _place_object(pos, _resourceMgr.INTERIOR_DOORS, Vector3.FORWARD, angle_z)
+				if door == null:
+					print("No door found in the resources : ", _resourceMgr.INTERIOR_DOORS)
+				else:
+					if parameter != null:
+						door.set_locked(parameter.lock)
+						if parameter.lock:
+							door.id = _currentDoorID
+							_closed_doors[_currentDoorID] = v
+							_keys_of_doors_to_drop.append(_currentDoorID)
+							_currentDoorID += 1
 			
 			_eTilesType.Ladder:
 				match rnd.randi() % 2:
@@ -592,7 +623,8 @@ func clear_all():
 	_closed_doors.clear()
 	_currentDoorID = 0
 	_pathRoomsCounter = 0
-	_number_of_keys = 0
+	_totalRoomsCounter = 0
+	_desired_nb_of_keys = 0
 	
 	var mapElements = get_tree().get_nodes_in_group("MapElements")
 	for element in mapElements:

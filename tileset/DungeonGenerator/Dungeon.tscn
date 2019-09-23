@@ -185,10 +185,6 @@ __meta__ = {
 
 [node name="Player" parent="." instance=ExtResource( 19 )]
 
-[node name="MapElements" type="Spatial" parent="." groups=[
-"MapElements",
-]]
-
 [node name="MiniMap" type="Node2D" parent="."]
 script = ExtResource( 20 )
 [connection signal="dungeon_gen_finished" from="MapGenerator" to="." method="_on_MapGenerator_dungeon_gen_finished"]
