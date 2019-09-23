@@ -17,7 +17,7 @@ func save_game():
 		save_game.store_line( json )
 	buffer += SALT
 	var security = {
-		"hash": buffer.sha256_text()
+		"hash_file": buffer.sha256_text()
 	}
 	save_game.store_line( to_json(security) )
 	save_game.close()
@@ -25,24 +25,26 @@ func save_game():
 
 func load_game() -> bool:
 	var save_game = File.new()
-	if not save_game.file_exists("user://savegame.save"):
+	if not save_game.file_exists("user://davus.save"):
 		return false
-	var security: Dictionary
+	var hash_readed: String
 	var buffer := ""
 	var data_list := []
 	save_game.open("user://davus.save", File.READ)
 	while not save_game.eof_reached():
 		var json = save_game.get_line()
 		var node_data = parse_json(json)
-		if node_data["hash"]:
-			security = node_data
+		if node_data == null:
+			pass
+		elif node_data.get("hash_file") != null:
+			hash_readed = node_data.get("hash_file")
 		else:
 			buffer += json
 			data_list.append( node_data )
 	buffer += SALT
 	var hash_calculated = buffer.sha256_text()
 	save_game.close()
-	if not security or hash_calculated != security["hash"]:
+	if not hash_readed or hash_calculated != hash_readed:
 		return false
 	for node_data in data_list:
 		var item = get_node( node_data["path"] )

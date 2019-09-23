@@ -21,6 +21,15 @@ func _ready():
 	$World/Player/Inventory.connect("item_added", ui_inventory, "add_item")
 	ui_inventory.connect("item_equiped", $World/Player/Inventory, "equip")
 	
+	$Menu/MarginContainer/TabContainer/Options/Options.enable_savegame = true
+	
+	var game_loaded = save.load_game()
+	
+	print("game_loaded: ", game_loaded)
+	
+	if game_loaded:
+		return
+	
 	#
 	# Add default Weapon
 	#
@@ -44,6 +53,11 @@ func _ready():
 	
 	
 	pass # Replace with function body.
+
+
+func _exit_tree():
+	save.save_game()
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

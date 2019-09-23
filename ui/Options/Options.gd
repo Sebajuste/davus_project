@@ -3,6 +3,8 @@ extends Control
 
 signal on_close
 
+var enable_savegame := false setget set_enable_savegame
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -17,6 +19,11 @@ func reload():
 	for option in $Panel/MarginContainer/VBoxContainer/HBoxContainer/OptionsContainer.get_children():
 		if option.has_method("reload"):
 			option.reload()
+
+
+func set_enable_savegame(value):
+	enable_savegame = value
+	$Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/SaveGame.visible = enable_savegame
 
 
 func _hide_all():
@@ -63,4 +70,10 @@ func _on_ApplySaveButton_pressed():
 func _on_ReturnButton_pressed():
 	
 	emit_signal("on_close")
+	
+
+
+func _on_SaveGame_pressed():
+	
+	save.save_game()
 	
