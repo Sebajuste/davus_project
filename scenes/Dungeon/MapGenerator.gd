@@ -230,7 +230,8 @@ func _add_outside_door(room:Room):
 				var out_rect:Rect2 = Rect2(out - vectorTileSize, vectorTileSize * 2)
 				if not v_rect.intersects(out_rect):
 					var door = _place_object(_geometry.to_vector3(v), _resourceMgr.IN_OUT_DOOR)
-					door.spawn_position = get_parent().context.spawn_position
+					if get_parent().context and get_parent().context.has("spawn_position"):
+						door.spawn_position = get_parent().context.spawn_position
 					return door
 	return null
 
