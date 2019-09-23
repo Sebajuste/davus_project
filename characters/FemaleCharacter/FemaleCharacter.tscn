@@ -555,14 +555,14 @@ material/0 = null
 
 [node name="Head" type="BoneAttachment" parent="Skeleton"]
 editor/display_folded = true
-transform = Transform( 0.999359, 0.0174125, 0.031293, -0.0150163, 0.997052, -0.075237, -0.0325108, 0.0747187, 0.996675, -0.0287189, 1.56081, -0.0448011 )
+transform = Transform( 0.999578, 0.0172646, 0.0233136, -0.016629, 0.999492, -0.0271932, -0.0237713, 0.0267944, 0.999359, -0.0322621, 1.55932, -0.0631436 )
 bone_name = "mixamorig_Head"
 
 [node name="HairTail" parent="Skeleton/Head" instance=ExtResource( 3 )]
 transform = Transform( 0.998199, -0.0278291, 0.0532083, 0.0272939, 0.999569, 0.0107601, -0.053485, -0.00928839, 0.998525, 0.0482045, -1.51198, 0.0532389 )
 
 [node name="RightHand" type="BoneAttachment" parent="Skeleton"]
-transform = Transform( 0.331298, 0.088323, 0.939382, 0.126095, -0.990822, 0.04869, 0.935061, 0.102321, -0.339395, -0.22115, 0.941937, -0.00710532 )
+transform = Transform( 0.338339, 0.0853021, 0.937149, 0.130862, -0.99047, 0.0429108, 0.931879, 0.108119, -0.346279, -0.231292, 0.954847, -0.0192815 )
 bone_name = "mixamorig_RightHand"
 
 [node name="Position" type="Spatial" parent="Skeleton/RightHand"]
@@ -600,8 +600,7 @@ right_hand = NodePath("../Skeleton/RightHand/Position")
 script = ExtResource( 9 )
 inventory = NodePath("../Inventory")
 
-[node name="JetpackHandler" type="Node" parent="."]
-editor/display_folded = true
+[node name="JetpackHandler" type="Spatial" parent="."]
 script = ExtResource( 10 )
 max_power = 0.8
 activation_delay = 0.1
