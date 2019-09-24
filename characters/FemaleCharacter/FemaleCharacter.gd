@@ -21,9 +21,6 @@ var _fall_time := 0.0
 var _anim_update := false
 
 
-#var _pistol_aiming := false
-
-
 var _jump_event := false
 var _jump_action := false
 var _jump_count := MAX_JUMP
@@ -37,9 +34,6 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	
-	#var valid_target := false
-	
 	
 	_jump_event = false
 	
@@ -154,8 +148,16 @@ func _input(event) -> void:
 	pass
 
 
+func get_items() -> Array:
+	return $Inventory.get_items()
+
+
 func give_item(item: Item) -> void:
 	$Inventory.add_item(item)
+
+
+func remove_item(item: Item) -> bool:
+	return $Inventory.remove_item(item)
 
 
 func is_falling() -> bool:

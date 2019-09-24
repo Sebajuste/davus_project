@@ -1,6 +1,6 @@
 extends Spatial
 
-export var door_id := 0
+export var id_door := 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -12,12 +12,9 @@ func _ready():
 
 
 func _on_Area_body_entered(body):
-	print("test")
-	if body.is_in_group("player") and body.has_method("give_object"):
-		var item = {
-			"type": "key"
-		}
-		body.give_object(item)
+	if body.is_in_group("player") and body.has_method("give_item"):
+		var item = Item.new()
+		item.type = "key"
+		item.properties["id_door"] = id_door
+		body.give_item(item)
 		queue_free()
-	
-	

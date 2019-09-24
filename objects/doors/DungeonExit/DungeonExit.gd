@@ -27,14 +27,16 @@ func close() -> bool:
 	return false
 
 
-func use(actor) -> void:
-	if open():
-		return
+func use(actor) -> bool:
+	if .use(actor):
+		return false
 	if opened:
 		var context = {
 			"player_position": spawn_position
 		}
 		loading.load_scene("res://scenes/WorldPlanet/WorldPlanet.tscn", context)
+		return true
+	return false
 
 
 func set_locked(value: bool) -> void:
