@@ -148,7 +148,7 @@ func gen_dungeon(graph_generator:GraphGenerator) -> bool:
 			else:
 				print("seed_counter = ", _seed_counter)
 		
-		emit_signal("dungeon_gen_finished")
+		emit_signal("dungeon_gen_finished", _graph_generator)
 		return true
 
 
@@ -225,11 +225,19 @@ func _write_corridors_on_map() -> bool:	# Return true on error
 				var dropKey:bool = _should_drop_key(pointDeadEnd || connectionDeadEnd)
 				if dropKey:
 					var key_position:Vector3
+					var prefab
 					if pointDeadEnd:
-						key_position = _rooms_areas[point].prefab.get_key_spot(rnd)
+						prefab = _rooms_areas[point].prefab
 					else:
-						key_position = _rooms_areas[connection].prefab.get_key_spot(rnd)
-					_drop_key(key_position)
+						prefab = _rooms_areas[connection].prefab
+					
+					print("drop key / prefab = ", prefab)
+					if prefab:
+						key_position = prefab.get_key_spot(rnd)
+						print("key position = ", key_position)
+						_drop_key(key_position)
+					else:
+						print("No prefab found")
 				
 				var error:bool = _dig_path(start, end, s || FORCE_START_DOOR, e || FORCE_END_DOOR)
 				if error:
@@ -569,7 +577,7 @@ func _drop_key(pos:Vector3):
 	if _keys_of_doors_to_drop.size() > 0:
 		var id = _keys_of_doors_to_drop.front()
 		_dropped_keys[id] = pos
-		var key = _place_object(pos, _resourceMgr.KEYS_RESOURCES)
+		var key = _place_object(pos, _resourceMgr.KEYS_RESOURCES, Vector3.ZERO, 0, false)
 		if key == null:
 			print("No key find in the resources : ", _resourceMgr.KEYS_RESOURCES)
 		else:
@@ -581,13 +589,16 @@ func _add_mob_spawn(pos:Vector3):
 		print("No mob find in the resources : ", _resourceMgr.MOB_RESOURCES)
 
 
-func _place_object(pos:Vector3, resources:Array, dir:Vector3 = Vector3.ZERO, angle:float = 0): # -> Spatial:
+func _place_object(pos:Vector3, resources:Array, dir:Vector3 = Vector3.ZERO, angle:float = 0, scale_by_tilesize = true) -> Spatial:
 	if resources.size() > 0:
 		var variant = rnd.randi() % resources.size()
 		var resource = resources[variant]
 		if resource:
 			var object = resource.instance()
-			object.translate(pos * tile_size)
+			if scale_by_tilesize:
+				object.translate(pos * tile_size)
+			else:
+				object.translate(pos)
 			if angle != 0:
 				object.rotate(dir, angle)
 			object.add_to_group("MapElements")
