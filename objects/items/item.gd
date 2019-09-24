@@ -2,7 +2,7 @@ class_name Item
 
 var ID : int
 var type : String
-var equiped : bool
+var equiped : bool = false
 var properties := {}
 
 func _init():

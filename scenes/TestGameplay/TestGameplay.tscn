@@ -81,12 +81,18 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, 0 )
 
 [node name="DungeonExit" parent="Doors" instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -1 )
+id = 1
+locked = true
 
 [node name="DungeonPipe00" parent="Doors" instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 8, -2 )
 
+[node name="DungeonPipe01" parent="Doors" instance=ExtResource( 4 )]
+transform = Transform( -0.0245443, -0.999699, 0, 0.999699, -0.0245443, 0, 0, 0, 1, -15.5547, 0, -2 )
+id = 1
+locked = true
+
 [node name="Items" type="Spatial" parent="."]
-editor/display_folded = true
 
 [node name="Ammo" parent="Items" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.88394, 2.12825, 0 )
@@ -97,6 +103,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.06597, 3.89488, 0 )
 
 [node name="DoorKey" parent="Items" instance=ExtResource( 7 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75829, 0, 0 )
+id_door = 1
 
 [node name="Mobs" type="Spatial" parent="."]
 
@@ -117,11 +124,15 @@ distance = 20.0
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22544, 0 )
 
+[node name="Skeleton" parent="Player" index="1"]
+bones/5/bound_children = [ NodePath("Head") ]
+bones/22/bound_children = [ NodePath("RightHand") ]
+
 [node name="Head" parent="Player/Skeleton" index="1"]
-transform = Transform( 0.999471, 0.0168798, 0.0277764, -0.0147878, 0.997157, -0.0738702, -0.0289443, 0.0734206, 0.996881, -0.0300619, 1.56067, -0.045431 )
+transform = Transform( 0.99935, 0.0189944, 0.0306737, -0.0174902, 0.998665, -0.0485843, -0.0315556, 0.048016, 0.998348, -0.0350162, 1.55945, -0.057472 )
 
 [node name="RightHand" parent="Player/Skeleton" index="2"]
-transform = Transform( 0.33123, 0.0889766, 0.939344, 0.125603, -0.99084, 0.0495651, 0.935151, 0.101568, -0.339374, -0.22222, 0.942008, -0.00817201 )
+transform = Transform( 0.33182, 0.0875786, 0.939268, 0.131392, -0.990265, 0.0459168, 0.934146, 0.108177, -0.340098, -0.229604, 0.946188, -0.0149413 )
 
 [node name="AnimationTree" parent="Player" index="11"]
 parameters/StateMachine/playback = SubResource( 3 )
@@ -131,9 +142,6 @@ editor/display_folded = true
 
 [node name="MarginContainer" parent="Menu" index="0"]
 editor/display_folded = true
-
-[node name="Options" parent="Menu/MarginContainer/TabContainer" index="0"]
-visible = true
 
 [node name="UI" type="Control" parent="."]
 editor/display_folded = true
