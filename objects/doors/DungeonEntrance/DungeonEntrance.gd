@@ -28,15 +28,17 @@ func close() -> bool:
 	return false
 
 
-func use(actor) -> void:
+func use(actor) -> bool:
 	if open():
-		return
+		return true
 	if opened:
 		var context = {
 			"spawn_position": Vector3(self.global_transform.origin.x, self.global_transform.origin.y+2, 0),
 			"dungeon_seed": dungeon_seed
 		}
 		loading.load_scene("res://scenes/Dungeon/Dungeon.tscn", context)
+		return true
+	return false
 
 
 func set_locked(value: bool) -> void:

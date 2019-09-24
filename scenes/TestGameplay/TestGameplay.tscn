@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://scenes/TestGameplay/TestGameplay.gd" type="Script" id=1]
 [ext_resource path="res://tileset/test/Test.tscn" type="PackedScene" id=2]
@@ -13,6 +13,7 @@
 [ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=11]
 [ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=12]
 [ext_resource path="res://scenes/TestGameplay/Ammo.gd" type="Script" id=13]
+[ext_resource path="res://tools/Notifications/Notifications.tscn" type="PackedScene" id=14]
 
 [sub_resource type="CubeMesh" id=1]
 
@@ -78,12 +79,20 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 2, 0 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, 0 )
 
 [node name="Doors" type="Spatial" parent="."]
+editor/display_folded = true
 
 [node name="DungeonExit" parent="Doors" instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -1 )
+id = 1
+locked = true
 
 [node name="DungeonPipe00" parent="Doors" instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 8, -2 )
+
+[node name="DungeonPipe01" parent="Doors" instance=ExtResource( 4 )]
+transform = Transform( -0.0245443, -0.999699, 0, 0.999699, -0.0245443, 0, 0, 0, 1, -15.5547, 0, -2 )
+id = 1
+locked = true
 
 [node name="Items" type="Spatial" parent="."]
 editor/display_folded = true
@@ -97,6 +106,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.06597, 3.89488, 0 )
 
 [node name="DoorKey" parent="Items" instance=ExtResource( 7 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75829, 0, 0 )
+id_door = 1
 
 [node name="Mobs" type="Spatial" parent="."]
 
@@ -117,11 +127,15 @@ distance = 20.0
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22544, 0 )
 
+[node name="Skeleton" parent="Player" index="1"]
+bones/5/bound_children = [ NodePath("Head") ]
+bones/22/bound_children = [ NodePath("RightHand") ]
+
 [node name="Head" parent="Player/Skeleton" index="1"]
-transform = Transform( 0.999471, 0.0168798, 0.0277764, -0.0147878, 0.997157, -0.0738702, -0.0289443, 0.0734206, 0.996881, -0.0300619, 1.56067, -0.045431 )
+transform = Transform( 0.999338, 0.0173783, 0.0319699, -0.015023, 0.997254, -0.0725009, -0.0331421, 0.0719729, 0.996856, -0.0322828, 1.55999, -0.0508194 )
 
 [node name="RightHand" parent="Player/Skeleton" index="2"]
-transform = Transform( 0.33123, 0.0889766, 0.939344, 0.125603, -0.99084, 0.0495651, 0.935151, 0.101568, -0.339374, -0.22222, 0.942008, -0.00817201 )
+transform = Transform( 0.327054, 0.0889325, 0.940812, 0.127674, -0.990592, 0.0492556, 0.936341, 0.104009, -0.335333, -0.223743, 0.940187, -0.0122557 )
 
 [node name="AnimationTree" parent="Player" index="11"]
 parameters/StateMachine/playback = SubResource( 3 )
@@ -131,9 +145,6 @@ editor/display_folded = true
 
 [node name="MarginContainer" parent="Menu" index="0"]
 editor/display_folded = true
-
-[node name="Options" parent="Menu/MarginContainer/TabContainer" index="0"]
-visible = true
 
 [node name="UI" type="Control" parent="."]
 editor/display_folded = true
@@ -157,6 +168,8 @@ margin_top = 13.0
 margin_right = 77.0
 margin_bottom = 27.0
 text = "Type"
+
+[node name="Notifications" parent="." instance=ExtResource( 14 )]
 [connection signal="died" from="Player" to="." method="_on_Player_died"]
 [connection signal="ammo_selected" from="Player/AmmoHandler" to="UI/Ammo" method="_on_AmmoHandler_ammo_selected"]
 
