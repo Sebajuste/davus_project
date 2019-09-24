@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://scenes/TestGameplay/TestGameplay.gd" type="Script" id=1]
 [ext_resource path="res://tileset/test/Test.tscn" type="PackedScene" id=2]
@@ -8,10 +8,11 @@
 [ext_resource path="res://objects/items/Gun/Gun.tscn" type="PackedScene" id=6]
 [ext_resource path="res://objects/keys/DoorKey/DoorKey.tscn" type="PackedScene" id=7]
 [ext_resource path="res://characters/Mobs/MobTentacle/MobTentacle.tscn" type="PackedScene" id=8]
-[ext_resource path="res://scenes/TestGameplay/Camera.gd" type="Script" id=9]
-[ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=10]
-[ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=11]
-[ext_resource path="res://scenes/TestGameplay/Ammo.gd" type="Script" id=12]
+[ext_resource path="res://characters/Mobs/Fly/Fly.tscn" type="PackedScene" id=9]
+[ext_resource path="res://scenes/TestGameplay/Camera.gd" type="Script" id=10]
+[ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=11]
+[ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=12]
+[ext_resource path="res://scenes/TestGameplay/Ammo.gd" type="Script" id=13]
 
 [sub_resource type="CubeMesh" id=1]
 
@@ -98,40 +99,41 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.06597, 3.89488, 0 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75829, 0, 0 )
 
 [node name="Mobs" type="Spatial" parent="."]
-editor/display_folded = true
 
 [node name="MobTentacle" parent="Mobs" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.157, 0, 0 )
 
+[node name="Fly" parent="Mobs" instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 18.104, 0, 0 )
+
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.999289, 0.0377137, 0, -0.0377137, 0.999289, 0, 1.61902, 8.05316 )
 fov = 40.0
-script = ExtResource( 9 )
+script = ExtResource( 10 )
 target = NodePath("../Player")
 distance = 20.0
 
-[node name="Player" parent="." instance=ExtResource( 10 )]
+[node name="Player" parent="." instance=ExtResource( 11 )]
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22544, 0 )
 
-[node name="Skeleton" parent="Player" index="1"]
-bones/5/bound_children = [  ]
-bones/22/bound_children = [  ]
-
 [node name="Head" parent="Player/Skeleton" index="1"]
-transform = Transform( 0.999513, 0.0177219, 0.0256986, -0.0168033, 0.999227, -0.0355246, -0.0263083, 0.0350756, 0.999037, -0.0350048, 1.55938, -0.0607291 )
+transform = Transform( 0.999471, 0.0168798, 0.0277764, -0.0147878, 0.997157, -0.0738702, -0.0289443, 0.0734206, 0.996881, -0.0300619, 1.56067, -0.045431 )
 
 [node name="RightHand" parent="Player/Skeleton" index="2"]
-transform = Transform( 0.341915, 0.0862194, 0.935768, 0.130404, -0.9905, 0.0436157, 0.930638, 0.107116, -0.349912, -0.232758, 0.952803, -0.0169673 )
+transform = Transform( 0.33123, 0.0889766, 0.939344, 0.125603, -0.99084, 0.0495651, 0.935151, 0.101568, -0.339374, -0.22222, 0.942008, -0.00817201 )
 
 [node name="AnimationTree" parent="Player" index="11"]
 parameters/StateMachine/playback = SubResource( 3 )
 
-[node name="Menu" parent="." instance=ExtResource( 11 )]
+[node name="Menu" parent="." instance=ExtResource( 12 )]
 editor/display_folded = true
 
 [node name="MarginContainer" parent="Menu" index="0"]
 editor/display_folded = true
+
+[node name="Options" parent="Menu/MarginContainer/TabContainer" index="0"]
+visible = true
 
 [node name="UI" type="Control" parent="."]
 editor/display_folded = true
@@ -141,7 +143,7 @@ margin_bottom = 40.0
 [node name="Ammo" type="HBoxContainer" parent="UI"]
 margin_right = 40.0
 margin_bottom = 40.0
-script = ExtResource( 12 )
+script = ExtResource( 13 )
 
 [node name="Label" type="Label" parent="UI/Ammo"]
 margin_top = 13.0

@@ -13,8 +13,8 @@ func _ready():
 #	pass
 
 
-func _on_AmmoHandler_ammo_selected(ammo):
+func _on_AmmoHandler_ammo_selected(ammo: Item):
 	print("ammo: ", ammo)
-	$Value.text = ammo.ammo_type
+	$Value.text = ammo.properties["ammo_type"]
 	
 	pass # Replace with function body.

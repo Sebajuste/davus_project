@@ -635,7 +635,7 @@ func clear_all():
 	
 	var mapElements = get_tree().get_nodes_in_group("MapElements")
 	for element in mapElements:
-		element.free()
+		element.queue_free()
 	
 	var tiles = get_tree().get_nodes_in_group("Tiles")
 	for tile in tiles:
