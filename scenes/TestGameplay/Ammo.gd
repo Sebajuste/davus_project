@@ -14,7 +14,21 @@ func _ready():
 
 
 func _on_AmmoHandler_ammo_selected(ammo: Item):
-	print("ammo: ", ammo)
-	$Value.text = ammo.properties["ammo_type"]
+	
+	match ammo.properties["ammo_type"]:
+		"Normal":
+			$Normal.visible = true
+			$Fire.visible = false
+			$Ice.visible = false
+		"Fire":
+			$Normal.visible = false
+			$Fire.visible = true
+			$Ice.visible = false
+		"Ice":
+			$Normal.visible = false
+			$Fire.visible = false
+			$Ice.visible = true
+	
+	#$Value.text = ammo.properties["ammo_type"]
 	
 	pass # Replace with function body.

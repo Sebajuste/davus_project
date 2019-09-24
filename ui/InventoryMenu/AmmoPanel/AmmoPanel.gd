@@ -19,9 +19,18 @@ func set_ammo(item: Item) -> void:
 	ammo = item
 	match ammo.type:
 		"ammo":
-			$MarginContainer/HBoxContainer/Ammo.visible = true
+			$MarginContainer/HBoxContainer/Icon.visible = true
+			print( ammo.properties )
+			match ammo.properties["ammo_type"]:
+				"Normal":
+					$MarginContainer/HBoxContainer/Icon.texture = preload("res://ui/Icons/IconClipRegular64x64.png")
+				"Fire":
+					$MarginContainer/HBoxContainer/Icon.texture = preload("res://ui/Icons/IconClipFire64x64.png")
+				"Ice":
+					pass
+			
 		_:
-			$MarginContainer/HBoxContainer/Ammo.visible = false
+			$MarginContainer/HBoxContainer/Icon.visible = false
 	
 	$MarginContainer/HBoxContainer/Stats/Effect/Value.text = str(ammo.properties["ammo_type"])
 	$MarginContainer/HBoxContainer/Equiped.visible = ammo.equiped
