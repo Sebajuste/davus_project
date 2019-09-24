@@ -13,6 +13,11 @@ func _ready():
 	$Player/Inventory.connect("item_added", ui_inventory, "add_item")
 	ui_inventory.connect("item_equiped", $Player/Inventory, "equip")
 	
+	var options = {
+		"auto_hide": false
+	}
+	notifications.create_notification("Hello World", "This is a text message", options)
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
