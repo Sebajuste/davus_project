@@ -39,6 +39,7 @@ func add_item(item: Item):
 			$"../WeaponHandler".equip_weapon(item)
 	elif item.type == "ammo":
 		items.append(item)
+		emit_signal("item_added", item)
 		$"../AmmoHandler".add_ammo(item)
 		if auto_equip and $"../AmmoHandler".ammo_available_list.size() == 1:
 			$"../AmmoHandler".select_next()

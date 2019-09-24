@@ -82,6 +82,7 @@ align = 1
 valign = 1
 
 [node name="Ammo" type="Button" parent="MarginContainer/HBoxContainer/Tabs"]
+editor/display_folded = true
 margin_top = 74.0
 margin_right = 200.0
 margin_bottom = 138.0
@@ -99,7 +100,7 @@ texture = ExtResource( 4 )
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/Tabs/Ammo/HBoxContainer"]
 margin_left = 68.0
-margin_right = 271.0
+margin_right = 200.0
 margin_bottom = 64.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -107,14 +108,6 @@ custom_fonts/font = ExtResource( 3 )
 text = "btn_ammo"
 align = 1
 valign = 1
-
-[node name="Jetpack2" type="Button" parent="MarginContainer/HBoxContainer/Tabs"]
-visible = false
-margin_top = 74.0
-margin_right = 200.0
-margin_bottom = 138.0
-rect_min_size = Vector2( 0, 64 )
-text = "Jetpack"
 
 [node name="Jetpack" type="Button" parent="MarginContainer/HBoxContainer/Tabs"]
 editor/display_folded = true
@@ -175,3 +168,5 @@ margin_bottom = 600.0
 size_flags_vertical = 3
 [connection signal="pressed" from="MarginContainer/HBoxContainer/Tabs/WeaponMain" to="." method="_on_WeaponMain_pressed"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/Tabs/WeaponSecondary" to="." method="_on_WeaponSecondary_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Tabs/Ammo" to="." method="_on_Ammo_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Tabs/Jetpack" to="." method="_on_Jetpack_pressed"]

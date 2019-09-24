@@ -4,9 +4,10 @@ const Pistol = preload("res://objects/weapons/Pistol/Pistol.tscn")
 
 export var right_hand: NodePath
 
+export var ammo: NodePath
 
 onready var _right_hand_node: Node = get_node(right_hand)
-
+onready var _ammo_node: Node = get_node(ammo)
 
 var aiming := false setget set_aiming
 
@@ -21,11 +22,7 @@ var valid_target := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	"""
-	var weapon = Pistol.instance()
-	_right_hand_node.add_child(weapon)
-	_weapon_ref = weakref( weapon )
-	"""
+
 	pass
 
 
@@ -33,7 +30,10 @@ func _ready():
 func _process(delta):
 	if Input.is_action_pressed("shoot") and shoot_ready:
 		if weapon:
-			weapon.shoot(target)
+			var ammo = null
+			if _ammo_node:
+				ammo = _ammo_node.get_ammo()
+			weapon.shoot(target, ammo)
 	
 	if aiming:
 		aiming_pistol()

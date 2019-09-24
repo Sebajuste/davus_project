@@ -10,6 +10,7 @@ var _fire_ready := true
 
 var _shoot := false
 var _target_pos: Vector3
+var _ammo: Item
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -28,9 +29,10 @@ func _physics_process(delta):
 	pass
 
 
-func shoot(target: Vector3):
+func shoot(target: Vector3, ammo: Item):
 	_shoot = true
 	_target_pos = target
+	_ammo = ammo
 
 
 func _shoot():

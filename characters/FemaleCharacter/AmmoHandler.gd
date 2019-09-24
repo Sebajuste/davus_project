@@ -32,6 +32,12 @@ func _input(event):
 	pass
 
 
+func get_ammo() -> Item:
+	if not ammo_available_list.empty():
+		return ammo_available_list[current_ammo]
+	return null
+
+
 func select_next():
 	var index = current_ammo + 1
 	if index >= ammo_available_list.size():

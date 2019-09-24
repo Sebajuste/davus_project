@@ -3,17 +3,20 @@ extends Control
 signal item_equiped(item)
 
 const WeaponPanel = preload("WeaponPanel/WeaponPanel.tscn")
+const AmmoPanel = preload("AmmoPanel/AmmoPanel.tscn")
 
-enum EquipmentType { WEAPON_MAIN, WEAPON_SECONDARY, JETPACK }
+enum EquipmentType { WEAPON_MAIN, WEAPON_SECONDARY, AMMO, JETPACK }
 
 var weapons := []
 
+var ammos := []
 
 var _current_equipment_type
 
 var equipment := {
 	"weapon_main": null,
 	"weapon_secondary": null,
+	"ammo": null,
 	"jetpack": null
 }
 
@@ -34,9 +37,13 @@ func _ready():
 
 
 func add_item(item: Item) -> bool:
+	print("add item: ", item.save() )
 	match item.type:
 		"gun":
 			weapons.append(item)
+			return true
+		"ammo":
+			ammos.append(item)
 			return true
 		_:
 			return false
@@ -62,6 +69,16 @@ func select_weapons() -> void:
 		_list.add_child(weapon_panel)
 
 
+func select_ammos() -> void:
+	deselect()
+	for ammo in ammos:
+		var panel = AmmoPanel.instance()
+		panel.ammo = ammo
+		panel.connect("item_selected", self, "_item_selected")
+		_list.add_child(panel)
+		
+
+
 func _item_selected(item: Item):
 	if item.equiped:
 		return
@@ -79,6 +96,13 @@ func _item_selected(item: Item):
 			item.equiped = true
 			equipment["weapon_secondary"] = item
 			select_weapons()
+		EquipmentType.AMMO:
+			if equipment["ammo"]:
+				equipment["ammo"].equiped = false
+			item.equiped = true
+			equipment["ammo"] = item
+			select_ammos()
+
 		EquipmentType.JETPACK:
 			if equipment["jetpack"]:
 				equipment["jetpack"].equiped = false
@@ -94,12 +118,20 @@ func _item_selected(item: Item):
 
 
 func _on_WeaponMain_pressed():
-	print("select main")
 	_current_equipment_type = EquipmentType.WEAPON_MAIN
 	select_weapons()
 
 
 func _on_WeaponSecondary_pressed():
-	print("select secondary")
 	_current_equipment_type = EquipmentType.WEAPON_SECONDARY
 	select_weapons()
+
+
+func _on_Ammo_pressed():
+	_current_equipment_type = EquipmentType.AMMO
+	select_ammos()
+
+
+func _on_Jetpack_pressed():
+	_current_equipment_type = EquipmentType.JETPACK
+	deselect()
