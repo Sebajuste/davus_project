@@ -3,6 +3,8 @@ class_name Room
 var area:Rect2
 var room_margin:int
 var output_locations:Array
+var background
+var prefab# := "res://prefabs/environment/dungeon/room/RoomsPrefab.gd"
 
 var geometry:GeometryHelper = GeometryHelper.new()
 var direction:DirectionHelper = DirectionHelper.new()
