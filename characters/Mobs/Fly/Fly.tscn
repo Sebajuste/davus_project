@@ -25,7 +25,6 @@ transform = Transform( 1, 0, 0, 0, -4.37114e-008, -1, 0, 1, -4.37114e-008, 0, 0.
 shape = SubResource( 1 )
 
 [node name="HitBox" parent="." index="1"]
-editor/display_folded = true
 combat_stats = NodePath("../CombatStats")
 
 [node name="CollisionShape" parent="HitBox" index="0"]
@@ -35,12 +34,11 @@ shape = SubResource( 2 )
 transform = Transform( -1, 0, -8.74228e-008, 0, 1, 0, 8.74228e-008, 0, -1, 0, 0, 0 )
 
 [node name="Detection" type="Area" parent="." index="3"]
-editor/display_folded = true
 
 [node name="CollisionShape" type="CollisionShape" parent="Detection" index="0"]
 shape = SubResource( 3 )
 
-[node name="AttachPosition" type="Position3D" parent="." index="4"]
+[node name="AttackPosition" type="Position3D" parent="." index="4"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36998, -0.960488 )
 
 [node name="CombatStats" parent="." index="5" instance=ExtResource( 4 )]

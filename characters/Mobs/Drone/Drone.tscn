@@ -1,20 +1,53 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://characters/Mobs/Mob.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/Mobs/Drone/Drone.gd" type="Script" id=2]
 [ext_resource path="res://models/MobDrone/MobDrone.tscn" type="PackedScene" id=3]
+[ext_resource path="res://tools/combat/CombatStats/CombatStats.tscn" type="PackedScene" id=4]
 
-[sub_resource type="CylinderShape" id=1]
-radius = 0.346634
-height = 0.304132
+[sub_resource type="BoxShape" id=1]
+extents = Vector3( 0.266466, 0.270786, 0.147112 )
 
-[node name="Drone" index="0" instance=ExtResource( 1 )]
+[sub_resource type="BoxShape" id=2]
+extents = Vector3( 0.312692, 0.153666, 0.298392 )
+
+[sub_resource type="SphereShape" id=3]
+radius = 8.13823
+
+[node name="Drone" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 
-[node name="MobDrone" parent="." index="1" instance=ExtResource( 3 )]
+[node name="CollisionShape" parent="." index="0"]
+visible = false
+shape = SubResource( 1 )
+
+[node name="HitBox" parent="." index="1"]
+combat_stats = NodePath("../CombatStats")
 
 [node name="CollisionShape" parent="HitBox" index="0"]
 transform = Transform( 1, 0, 0, 0, 0.999246, 0.0388372, 0, -0.0388372, 0.999246, 0, 0, 0 )
-shape = SubResource( 1 )
+shape = SubResource( 2 )
+
+[node name="MobDrone" parent="." index="2" instance=ExtResource( 3 )]
+
+[node name="Detection" type="Area" parent="." index="3"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Detection" index="0"]
+shape = SubResource( 3 )
+
+[node name="AttackPosition" type="Position3D" parent="." index="4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.6 )
+
+[node name="CombatStats" parent="." index="5" instance=ExtResource( 4 )]
+max_health = 10
+
+[node name="RemoveTimer" type="Timer" parent="." index="6"]
+wait_time = 5.0
+one_shot = true
+[connection signal="body_entered" from="Detection" to="." method="_on_Detection_body_entered"]
+[connection signal="body_exited" from="Detection" to="." method="_on_Detection_body_exited"]
+[connection signal="damage_taken" from="CombatStats" to="." method="_on_CombatStats_damage_taken"]
+[connection signal="health_depleted" from="CombatStats" to="." method="_on_CombatStats_health_depleted"]
+[connection signal="timeout" from="RemoveTimer" to="." method="_on_RemoveTimer_timeout"]
 
 [editable path="HitBox"]
