@@ -32,7 +32,7 @@ func set_direction(dir):
 	direction = dir.normalized()
 
 
-func set_damage(damage: float) -> void:
+func set_damage(damage: int) -> void:
 	$DamageSource.damage = damage
 
 
