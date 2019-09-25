@@ -7,6 +7,18 @@ export(String, "Fire", "Ice", "Normal") var ammo_type := "Normal"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	
+	match ammo_type:
+		"Fire":
+			$Spatial/Normal.visible = false
+			$Spatial/Ice.visible = false
+		"Ice":
+			$Spatial/Normal.visible = false
+			$Spatial/Fire.visible = false
+		_:
+			$Spatial/Ice.visible = false
+			$Spatial/Fire.visible = false
+	
 	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

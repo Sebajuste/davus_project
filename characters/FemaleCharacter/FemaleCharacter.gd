@@ -1,6 +1,7 @@
 extends KinematicBody
 
 signal died
+signal health_changed(health, max_health)
 
 const GRAVITY := 9.8
 const MAX_JUMP := 1
@@ -52,6 +53,8 @@ func _process(delta):
 		$WeaponHandler.target = $CursorSelector.get_target_pos()
 	else:
 		$WeaponHandler.shoot_ready = false
+	
+	emit_signal("health_changed", $CombatStats.health, $CombatStats.max_health)
 	
 
 
@@ -194,6 +197,7 @@ func _on_CombatStats_health_depleted():
 func _on_CombatStats_health_changed(new_value, old_value):
 	if new_value > 0:
 		$AnimationTree.set("parameters/Alive/current", 0)
+	emit_signal("health_changed", new_value, $CombatStats.max_health)
 
 
 func _on_Inventory_item_equiped(item):
