@@ -7,7 +7,7 @@ signal health_depleted()
 signal damage_taken()
 
 export var max_health: int = 1 setget set_max_health
-
+export var armor: int = 0 setget set_armor
 export var fire_resistance: int = 0 setget set_fire_resistance
 export var ice_resistance: int = 0 setget set_ice_resistance
 
@@ -31,7 +31,7 @@ func take_damage(hit: Hit) -> void:
 		"Ice":
 			damage = hit.damage - ice_resistance
 		_:
-			damage = hit.damage
+			damage = hit.damage - armor
 	
 	health -= damage
 	emit_signal("damage_taken")
@@ -53,6 +53,11 @@ func set_max_health(value: int) -> void:
 		return
 	max_health = max(1, value)
 
+
+func set_armor(value: int) -> void:
+	if value == null:
+		return
+	armor = max(0, value)
 
 func set_fire_resistance(value: int) -> void:
 	if value == null:
