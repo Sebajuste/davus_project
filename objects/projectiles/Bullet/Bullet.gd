@@ -32,8 +32,12 @@ func set_direction(dir):
 	direction = dir.normalized()
 
 
-func set_damage(damage):
+func set_damage(damage: float) -> void:
 	$DamageSource.damage = damage
+
+
+func set_type(type: String) -> void:
+	$DamageSource.type = type
 
 
 func _destroy():
