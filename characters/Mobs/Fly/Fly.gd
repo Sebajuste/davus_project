@@ -152,6 +152,9 @@ func _on_CombatStats_damage_taken():
 
 func _on_CombatStats_health_depleted():
 	
+	$FlySound.stop()
+	$DieSound.play()
+	
 	if anim_state_machine.is_playing():
 		anim_state_machine.travel("Death")
 	else:
@@ -162,8 +165,6 @@ func _on_CombatStats_health_depleted():
 	
 	$RemoveTimer.start()
 	
-	$AudioStreamPlayer3D.stop()
-
 
 
 func _on_RemoveTimer_timeout():

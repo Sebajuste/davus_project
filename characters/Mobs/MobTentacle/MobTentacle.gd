@@ -10,13 +10,14 @@ var _current_target = null
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	anim_state_machine = $MobTentacle/AnimationTree["parameters/StateMachine/playback"]
-	
 	face_to(self.global_transform.origin + Vector3(1, 0, 0) )
-	
+	anim_state_machine.start("Idle")
+	"""
 	if anim_state_machine.is_playing():
 		anim_state_machine.travel("Idle")
 	else:
 		anim_state_machine.start("Idle")
+	"""
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -32,10 +33,13 @@ func _process(delta):
 		var distance = target.global_transform.origin - self.global_transform.origin
 		
 		if distance.length() < 2.5:
+			anim_state_machine.travel("Attack")
+			"""
 			if anim_state_machine.is_playing():
 				anim_state_machine.travel("Attack")
 			else:
 				anim_state_machine.start("Attack")
+			"""
 		
 	else:
 		_current_target = null
@@ -73,11 +77,15 @@ func _on_Detection_body_exited(body):
 
 func _on_CombatStats_health_depleted():
 	
+	$AttackSound.stop()
+	$DieSound.play()
+	anim_state_machine.travel("Death")
+	"""
 	if anim_state_machine.is_playing():
 		anim_state_machine.travel("Death")
 	else:
 		anim_state_machine.start("Death")
-	
+	"""
 	self.set_collision_layer(0x00)
 	self.set_collision_mask(0x00)
 	
