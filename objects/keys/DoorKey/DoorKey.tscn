@@ -21,7 +21,7 @@ tracks/0/keys = PoolRealArray( 0, 1, 0, 0.340628, 0, 0, 0, 0, 1, 1, 1, 1, 0.5, 1
 script = ExtResource( 1 )
 
 [node name="Spatial" type="Spatial" parent="."]
-transform = Transform( 0.998994, 0, 0.0448329, 0, 1, 0, -0.0448329, 0, 0.998994, 0, 0.340628, 0 )
+transform = Transform( 0.244726, 0, 0.969592, 0, 1, 0, -0.969592, 0, 0.244726, 0, 0.340628, 0 )
 
 [node name="Scene Root" parent="Spatial" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 0.891962, 0.45211, 0, -0.45211, 0.891962, 0, 0, 0 )

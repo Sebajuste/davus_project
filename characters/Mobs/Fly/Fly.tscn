@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://characters/Mobs/Mob.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/Mobs/Fly/Fly.gd" type="Script" id=2]
 [ext_resource path="res://models/RangedInsectMob/Fly.tscn" type="PackedScene" id=3]
 [ext_resource path="res://tools/combat/CombatStats/CombatStats.tscn" type="PackedScene" id=4]
-[ext_resource path="res://sounds/mobs/fly.wav" type="AudioStream" id=5]
+[ext_resource path="res://sounds/mobs/fly/fly.wav" type="AudioStream" id=5]
+[ext_resource path="res://sounds/mobs/fly/die_fly.wav" type="AudioStream" id=6]
 
 [sub_resource type="SphereShape" id=1]
 radius = 0.265279
@@ -44,7 +45,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36998, -0.960488 )
 [node name="CombatStats" parent="." index="5" instance=ExtResource( 4 )]
 max_health = 2
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." index="6"]
+[node name="FlySound" type="AudioStreamPlayer3D" parent="." index="6"]
 stream = ExtResource( 5 )
 attenuation_model = 1
 unit_size = 20.0
@@ -53,7 +54,15 @@ autoplay = true
 max_distance = 25.0
 bus = "SoundEffects"
 
-[node name="RemoveTimer" type="Timer" parent="." index="7"]
+[node name="DieSound" type="AudioStreamPlayer3D" parent="." index="7"]
+stream = ExtResource( 6 )
+attenuation_model = 1
+unit_size = 20.0
+pitch_scale = 1.2
+max_distance = 40.0
+bus = "SoundEffects"
+
+[node name="RemoveTimer" type="Timer" parent="." index="8"]
 wait_time = 5.0
 one_shot = true
 [connection signal="body_entered" from="Detection" to="." method="_on_Detection_body_entered"]
