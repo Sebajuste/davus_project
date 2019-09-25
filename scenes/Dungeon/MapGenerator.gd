@@ -331,11 +331,10 @@ func _dig_horizontally(startPos: Vector3, endPos: Vector3, mobSpawn: bool, lockD
 	var step = Vector2(sign(dif.x), sign(dif.y))
 	
 	if mobSpawn:
-		if step.y > 0:
-			_add_mob_spawn(Vector3(middlePos.x, startPos.y, 0))
+		if step.y == 0:
+			_add_mob_spawn(middlePos, _resourceMgr.eMobType.Floor)
 		else:
-			_add_mob_spawn(Vector3(middlePos.x, endPos.y, 0))
-	
+			_add_mob_spawn(middlePos, _resourceMgr.eMobType.Fly)
 	
 	for x in range(startPos.x + step.x, endPos.x, step.x):
 		var v : Vector3
@@ -423,10 +422,10 @@ func _dig_vertically(startPos: Vector3, endPos: Vector3, mobSpawn: bool, lockDoo
 		step = - step
 	
 	if mobSpawn:
-		if step.x == 0:
-			_add_mob_spawn(middlePos, _resourceMgr.eMobType.Fly)
+		if abs(dif.x) > 1:
+			_add_mob_spawn(middlePos, _resourceMgr.eMobType.Floor)
 		else:
-			_add_mob_spawn(Vector3(top.x, middlePos.y, 0))
+			_add_mob_spawn(middlePos, _resourceMgr.eMobType.Fly)
 	
 	for x in range(bottom.x, top.x + step.x, step.x):
 		var v = Vector3(x, middlePos.y, 0)
