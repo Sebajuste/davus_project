@@ -39,6 +39,7 @@ func _input(event):
 	
 	pass
 
+
 func _on_Player_died():
 	
 	_reset_timer = 5.0

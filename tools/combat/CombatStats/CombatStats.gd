@@ -27,12 +27,13 @@ func take_damage(hit: Hit) -> void:
 	var damage : int
 	match hit.type:
 		"Fire":
-			damage = hit.damage - fire_resistance
+			damage = max(0, hit.damage - fire_resistance)
 		"Ice":
-			damage = hit.damage - ice_resistance
+			damage = max(0, hit.damage - ice_resistance)
 		_:
-			damage = hit.damage - armor
-	
+			damage = max(0, hit.damage - armor)
+	if damage == 0:
+		return
 	health -= damage
 	emit_signal("damage_taken")
 	health = max(0, health)
