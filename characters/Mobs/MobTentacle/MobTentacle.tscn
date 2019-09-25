@@ -34,7 +34,7 @@ transform = Transform( -1.74846e-008, 0, 0.4, 0, 0.4, 0, -0.4, 0, -1.74846e-008,
 editor/display_folded = true
 
 [node name="BoneAttachment" type="BoneAttachment" parent="MobTentacle/TentacleMobSkeleton" index="0"]
-transform = Transform( -1.97517e-007, 1.85784, -0.439233, 3.61738e-007, 0.439233, 1.85784, 1.90906, 1.01589e-007, -4.46138e-007, 1.49433, 3.64023, 1.40977e-007 )
+transform = Transform( -1.39798e-007, 1.79707, -0.581907, 1.41601e-007, 0.581907, 1.79706, 1.88893, 7.81841e-008, -2.25178e-007, 1.28259, 3.72077, 4.35503e-007 )
 bone_name = "Bone.005"
 
 [node name="DamageSource" parent="MobTentacle/TentacleMobSkeleton/BoneAttachment" index="0" instance=ExtResource( 4 )]
@@ -63,7 +63,10 @@ collision_mask = 2
 shape = SubResource( 4 )
 
 [node name="CombatStats" parent="." index="3" instance=ExtResource( 6 )]
-max_health = 2
+max_health = 10
+armor = 5
+fire_resistance = 2
+ice_resistance = 5
 
 [node name="RemoveTimer" type="Timer" parent="." index="4"]
 wait_time = 5.0

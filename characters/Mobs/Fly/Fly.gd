@@ -38,13 +38,14 @@ func get_dist(x1,y1,x2,y2) -> float:
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	current_state = state.CHOOSE_TARGET
-	
 	anim_state_machine = $FlyModel/AnimationTree["parameters/StateMachine/playback"]
+	anim_state_machine.start("Idle")
+	"""
 	if anim_state_machine.is_playing():
 		anim_state_machine.travel("Idle")
 	else:
 		anim_state_machine.start("Idle")
-	pass
+	"""
 
 
 
@@ -83,11 +84,13 @@ func _process(delta):
 		
 		attack_timer -= delta
 		if attack_timer <= 0:
+			anim_state_machine.travel("Attack")
+			"""
 			if anim_state_machine.is_playing():
 				anim_state_machine.travel("Attack")
 			else:
 				anim_state_machine.start("Attack")
-			
+			"""
 			attack_timer = attack_speed
 			attack()
 		
@@ -154,12 +157,13 @@ func _on_CombatStats_health_depleted():
 	
 	$FlySound.stop()
 	$DieSound.play()
-	
+	anim_state_machine.travel("Death")
+	"""
 	if anim_state_machine.is_playing():
 		anim_state_machine.travel("Death")
 	else:
 		anim_state_machine.start("Death")
-	
+	"""
 	self.set_collision_layer(0x00)
 	self.set_collision_mask(0x01)
 	

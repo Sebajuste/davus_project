@@ -45,6 +45,7 @@ var target_visible : bool
 var timer_prepare
 var destruction : bool = false
 
+
 # Returns the angle between two points.
 func get_angle(x1,y1,x2,y2) -> float:
 	return atan2(y2-y1, x2-x1)
@@ -97,11 +98,8 @@ func change_direction() -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-#	anim_state_machine = $MobDrone/AnimationTree["parameters/StateMachine/playback"]
-#	if anim_state_machine.is_playing():
-#		anim_state_machine.travel("Idle")
-#	else:
-#		anim_state_machine.start("Idle")
+	var anim_state_machine = $MobDrone/AnimationTree["parameters/StateMachine/playback"]
+	anim_state_machine.start("Idle")
 	
 	current_state = state.SEARCH_TARGET
 	velocity = Vector2.ZERO
@@ -205,6 +203,9 @@ func _process(delta):
 	if current_target != null and target_visible and destruction == false:
 			attack_timer -= delta
 			if attack_timer <= 0:
+				
+				$MobDrone/AnimationTree.set("parameters/Attack/active", true)
+				
 	#			if anim_state_machine.is_playing():
 	#				anim_state_machine.travel("Attack")
 	#			else:

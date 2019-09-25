@@ -1,11 +1,15 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scenes/MainGame/MainGame.gd" type="Script" id=1]
 [ext_resource path="res://scenes/WorldPlanet/WorldPlanet.tscn" type="PackedScene" id=2]
 [ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/MainGame/Camera.gd" type="Script" id=4]
-[ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=5]
-[ext_resource path="res://ui/Loading/Loading.tscn" type="PackedScene" id=6]
+[ext_resource path="res://ui/Game/Ammo/Ammo.tscn" type="PackedScene" id=5]
+[ext_resource path="res://ui/Game/Health/Health.tscn" type="PackedScene" id=6]
+[ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=7]
+[ext_resource path="res://ui/Loading/Loading.tscn" type="PackedScene" id=8]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=1]
 
 [node name="MainGame" type="Node"]
 script = ExtResource( 1 )
@@ -18,6 +22,19 @@ script = ExtResource( 1 )
 
 [node name="Player" parent="World" instance=ExtResource( 3 )]
 
+[node name="Skeleton" parent="World/Player" index="1"]
+bones/5/bound_children = [ NodePath("Head") ]
+bones/22/bound_children = [ NodePath("RightHand") ]
+
+[node name="Head" parent="World/Player/Skeleton" index="1"]
+transform = Transform( 0.999537, 0.017027, 0.0252632, -0.0161975, 0.999335, -0.0326848, -0.0258029, 0.0322601, 0.999146, -0.0344011, 1.55933, -0.0614273 )
+
+[node name="RightHand" parent="World/Player/Skeleton" index="2"]
+transform = Transform( 0.343144, 0.0856878, 0.935368, 0.13094, -0.990471, 0.0427004, 0.93011, 0.107826, -0.351094, -0.232687, 0.95362, -0.0171247 )
+
+[node name="AnimationTree" parent="World/Player" index="11"]
+parameters/StateMachine/playback = SubResource( 1 )
+
 [node name="Camera" type="Camera" parent="World"]
 fov = 30.0
 script = ExtResource( 4 )
@@ -25,9 +42,20 @@ target = NodePath("../Player")
 distance = 20.0
 target_y_offset = 2.0
 
-[node name="Menu" parent="." instance=ExtResource( 5 )]
-visible = true
+[node name="UI" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
 
-[node name="Loading" parent="." instance=ExtResource( 6 )]
+[node name="Ammo" parent="UI" instance=ExtResource( 5 )]
+
+[node name="Health" parent="UI" instance=ExtResource( 6 )]
+
+[node name="Menu" parent="." instance=ExtResource( 7 )]
+
+[node name="Loading" parent="." instance=ExtResource( 8 )]
 visible = false
 [connection signal="died" from="World/Player" to="." method="_on_Player_died"]
+[connection signal="health_changed" from="World/Player" to="UI/Health" method="_on_health_changed"]
+[connection signal="ammo_selected" from="World/Player/AmmoHandler" to="UI/Ammo" method="_on_ammo_selected"]
+
+[editable path="World/Player"]

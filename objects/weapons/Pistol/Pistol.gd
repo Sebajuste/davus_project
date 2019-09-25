@@ -4,7 +4,7 @@ const Bullet = preload("../../projectiles/Bullet/Bullet.tscn")
 
 export(float, 60, 1200) var firing_rate := 60.0 setget _set_firing_rate
 
-export var damage := 1
+export var damage := 10
 
 var _fire_ready := true
 

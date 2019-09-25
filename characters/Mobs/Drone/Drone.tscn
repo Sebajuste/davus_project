@@ -22,6 +22,7 @@ visible = false
 shape = SubResource( 1 )
 
 [node name="HitBox" parent="." index="1"]
+editor/display_folded = true
 combat_stats = NodePath("../CombatStats")
 
 [node name="CollisionShape" parent="HitBox" index="0"]
@@ -29,8 +30,10 @@ transform = Transform( 1, 0, 0, 0, 0.999246, 0.0388372, 0, -0.0388372, 0.999246,
 shape = SubResource( 2 )
 
 [node name="MobDrone" parent="." index="2" instance=ExtResource( 3 )]
+transform = Transform( -1, 0, -8.74228e-008, 0, 1, 0, 8.74228e-008, 0, -1, 0, 0, 0 )
 
 [node name="Detection" type="Area" parent="." index="3"]
+editor/display_folded = true
 
 [node name="CollisionShape" type="CollisionShape" parent="Detection" index="0"]
 shape = SubResource( 3 )
@@ -39,7 +42,10 @@ shape = SubResource( 3 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.6 )
 
 [node name="CombatStats" parent="." index="5" instance=ExtResource( 4 )]
-max_health = 10
+max_health = 15
+armor = 5
+fire_resistance = 5
+ice_resistance = 2
 
 [node name="RemoveTimer" type="Timer" parent="." index="6"]
 wait_time = 5.0

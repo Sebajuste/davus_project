@@ -7,7 +7,7 @@ animation = "closed"
 animation = "opened"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=3]
-xfade_time = 1.0
+xfade_time = 0.3
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=4]
 xfade_time = 1.0
