@@ -29,7 +29,6 @@ var _closed_doors:Dictionary		# <id, position>
 var _keys_of_doors_to_drop:Array	# <id>
 var _dropped_keys:Dictionary		# <id, position>
 
-var use_gridmap:bool
 var tile_size:int
 var spawn_position:Vector3
 
@@ -41,13 +40,13 @@ const DISABLE_COLLISION:bool = false
 const SHOW_DOOR_INSERTIONS:bool = false
 const SHOW_STARTING_ROOM:bool = false
 const SHOW_ENDING_ROOM:bool = false
-const DRAW_ROOMS_INDEX:bool = false
+const DRAW_ROOMS_INDEX:bool = true
 const PRINT_REFUSED_DUNGEON:bool = true
 const PRINT_LADDER:bool = false
-const PRINT_ROOMS_TRAVEL:bool = true
+const PRINT_ROOMS_TRAVEL:bool = false
 const PRINT_DOOR_LOCATION:bool = false
-const PRINT_DOOR_KEYS:bool = true
-const TEST_DOOR_KEYS_EQUALITY:bool = true
+const PRINT_DOOR_KEYS:bool = false
+const TEST_DOOR_KEYS_EQUALITY:bool = false
 const DESIRED_SEED_STEP_COUNTER:int = 50
 var _desired_seed_counter:int = 0
 var _seed_counter:int = 1
@@ -117,19 +116,12 @@ func gen_dungeon(graph_generator:GraphGenerator) -> bool:
 		var door = _add_outside_door(_graph_generator.starting_room)
 		if door:
 			spawn_position = door.translation
-		#else:
-		#	emit_signal("request_new_dungeon")
-		_add_outside_door(_graph_generator.ending_room)
-		if DEBUG:
-			var endMiddle:Vector3 = _geometry.to_vector3(_graph_generator.ending_room.get_middle())
-			_apply_tile_on_tilemap(startMiddle, _eTilesType.Start)
-			_apply_tile_on_tilemap(endMiddle, _eTilesType.End)
+		door = _add_outside_door(_graph_generator.ending_room)
+		door.set_locked(true)
 		
-		if not use_gridmap:
-			var tiles = get_tree().get_nodes_in_group("Tiles")
-			for tile in tiles:
-				tile.translate_all()
-				pass
+		var tiles = get_tree().get_nodes_in_group("Tiles")
+		for tile in tiles:
+			tile.translate_all()
 		
 		_seed_counter += 1
 		if DEBUG:
@@ -174,7 +166,12 @@ func _write_rooms_on_map():
 		var prefab = _place_object(room_position, prefab_resource)
 		if prefab:
 			room.prefab = prefab
-		var background_resource:Array = _get_rooms_resource(_resourceMgr.ROOM_BACKGROUND, room_rect.size)
+		var background_resource:Array
+		if room == _graph_generator.starting_room || room == _graph_generator.ending_room:
+			background_resource = _get_rooms_resource(_resourceMgr.EXTREMITIES_ROOM_BACKGROUND, room_rect.size)
+		else:
+			background_resource = _get_rooms_resource(_resourceMgr.ROOM_BACKGROUND, room_rect.size)
+		
 		var background:Spatial = _place_object(room_position, background_resource)
 		if background:
 			room.background = background
@@ -334,7 +331,11 @@ func _dig_horizontally(startPos: Vector3, endPos: Vector3, mobSpawn: bool, lockD
 	var step = Vector2(sign(dif.x), sign(dif.y))
 	
 	if mobSpawn:
-		_add_mob_spawn(middlePos)
+		if step.y > 0:
+			_add_mob_spawn(Vector3(middlePos.x, startPos.y, 0))
+		else:
+			_add_mob_spawn(Vector3(middlePos.x, endPos.y, 0))
+	
 	
 	for x in range(startPos.x + step.x, endPos.x, step.x):
 		var v : Vector3
@@ -422,7 +423,10 @@ func _dig_vertically(startPos: Vector3, endPos: Vector3, mobSpawn: bool, lockDoo
 		step = - step
 	
 	if mobSpawn:
-		_add_mob_spawn(middlePos)
+		if step.x == 0:
+			_add_mob_spawn(middlePos, _resourceMgr.eMobType.Fly)
+		else:
+			_add_mob_spawn(Vector3(top.x, middlePos.y, 0))
 	
 	for x in range(bottom.x, top.x + step.x, step.x):
 		var v = Vector3(x, middlePos.y, 0)
@@ -494,7 +498,10 @@ func _dig_mixed_directions(horizontalPos: Vector3, verticalPos: Vector3, mobSpaw
 	var step = Vector2(sign(dif.x), sign(dif.y))
 	
 	if mobSpawn:
-		_add_mob_spawn(Vector3(verticalPos.x, horizontalPos.y, 0))
+		if step.y < 0:
+			_add_mob_spawn(Vector3(verticalPos.x, horizontalPos.y, 0), _resourceMgr.eMobType.Fly)		
+		else:
+			_add_mob_spawn(Vector3(verticalPos.x, horizontalPos.y, 0))
 	
 	for x in range(horizontalPos.x + step.x, verticalPos.x, step.x):
 		var v = Vector3(x, horizontalPos.y, 0)
@@ -584,9 +591,16 @@ func _drop_key(pos:Vector3):
 			key.id_door = id
 			_keys_of_doors_to_drop.erase(id)
 
-func _add_mob_spawn(pos:Vector3):
-	if _place_object(pos, _resourceMgr.MOB_RESOURCES) == null:
-		print("No mob find in the resources : ", _resourceMgr.MOB_RESOURCES)
+func _add_mob_spawn(pos:Vector3, mobType:int = -1):
+	if mobType == -1:
+		mobType = rnd.randi() % _resourceMgr.MOB_RESOURCES.size()
+	
+	var types = _resourceMgr.MOB_RESOURCES.get(mobType)
+	if types:
+		if _place_object(pos, types) == null:
+			print("No mob find in the resources : ", mobType, types)
+	else:
+		print("No mob type find in the resources : ", mobType)
 
 
 func _place_object(pos:Vector3, resources:Array, dir:Vector3 = Vector3.ZERO, angle:float = 0, scale_by_tilesize = true) -> Spatial:
@@ -608,63 +622,52 @@ func _place_object(pos:Vector3, resources:Array, dir:Vector3 = Vector3.ZERO, ang
 
 
 func _apply_tile_on_tilemap(pos: Vector3, tileType: int, angle_z:float = 0, parameter = null):
-	if use_gridmap:
-		$GridMap.set_cell_item(pos.x, pos.y, pos.z, tileType)
-	else:
-		var v:Vector3 = pos * tile_size
+	var v:Vector3 = pos * tile_size
+	
+	$Wall0.delete_tile_at(v)
+	match tileType:
+		_eTilesType.Wall:
+			match rnd.randi() % 1:
+				0:
+					$Wall0.insert(v, angle_z)
 		
-		$Wall0.delete_tile_at(v)
-		match tileType:
-			_eTilesType.Wall:
-				match rnd.randi() % 1:
-					0:
-						$Wall0.insert(v, angle_z)
-			
-			_eTilesType.Door:
-				var door = _place_object(pos, _resourceMgr.INTERIOR_DOORS, Vector3.FORWARD, angle_z)
-				if door == null:
-					print("No door found in the resources : ", _resourceMgr.INTERIOR_DOORS)
-				else:
-					if parameter != null:
-						door.set_locked(parameter.lock)
-						if parameter.lock:
-							door.id = _currentDoorID
-							_closed_doors[_currentDoorID] = v
-							_keys_of_doors_to_drop.append(_currentDoorID)
-							_currentDoorID += 1
-			
-			_eTilesType.Ladder:
-				match rnd.randi() % 2:
-					0:
-						$Ladder0.insert(v, angle_z)
-					1:
-						$Ladder1.insert(v, angle_z)
-			
-			_eTilesType.PipeStraight:
-				match rnd.randi() % 2:
-					0:
-						$PipeStraight0.insert(v, angle_z)
-					1:
-						$PipeStraight1.insert(v, angle_z)
-			
-			_eTilesType.PipeTurn:
-				match rnd.randi() % 2:
-					0:
-						$PipeTurn0.insert(v, angle_z)
-					1:
-						$PipeTurn1.insert(v, angle_z)
-			
-			_eTilesType.DoorInsertion:
-				if DEBUG && SHOW_DOOR_INSERTIONS:
-					$DoorInsertion0.insert(v, angle_z)
-			
-			_eTilesType.Start:
-				if DEBUG && SHOW_STARTING_ROOM:
-					$Start0.insert(v, angle_z)
-			
-			_eTilesType.End:
-				if DEBUG && SHOW_ENDING_ROOM:
-					$End0.insert(v, angle_z)
+		_eTilesType.Door:
+			var door = _place_object(pos, _resourceMgr.INTERIOR_DOORS, Vector3.FORWARD, angle_z)
+			if door == null:
+				print("No door found in the resources : ", _resourceMgr.INTERIOR_DOORS)
+			else:
+				if parameter != null:
+					door.set_locked(parameter.lock)
+					if parameter.lock:
+						door.id = _currentDoorID
+						_closed_doors[_currentDoorID] = v
+						_keys_of_doors_to_drop.append(_currentDoorID)
+						_currentDoorID += 1
+		
+		_eTilesType.Ladder:
+			match rnd.randi() % 2:
+				0:
+					$Ladder0.insert(v, angle_z)
+				1:
+					$Ladder1.insert(v, angle_z)
+		
+		_eTilesType.PipeStraight:
+			match rnd.randi() % 2:
+				0:
+					$PipeStraight0.insert(v, angle_z)
+				1:
+					$PipeStraight1.insert(v, angle_z)
+		
+		_eTilesType.PipeTurn:
+			match rnd.randi() % 2:
+				0:
+					$PipeTurn0.insert(v, angle_z)
+				1:
+					$PipeTurn1.insert(v, angle_z)
+		
+		_eTilesType.DoorInsertion:
+			if DEBUG && SHOW_DOOR_INSERTIONS:
+				$DoorInsertion0.insert(v, angle_z)
 
 
 func clear_all():
