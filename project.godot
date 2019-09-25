@@ -22,7 +22,7 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "DirectionHelper",
 "language": "GDScript",
-"path": "res://helper/DirectionHelper.gd"
+"path": "res://scripts/helper/DirectionHelper.gd"
 }, {
 "base": "Reference",
 "class": "DungeonResource",
@@ -32,7 +32,7 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "GeometryHelper",
 "language": "GDScript",
-"path": "res://helper/GeometryHelper.gd"
+"path": "res://scripts/helper/GeometryHelper.gd"
 }, {
 "base": "Reference",
 "class": "GraphGenerator",
@@ -52,7 +52,7 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "Room",
 "language": "GDScript",
-"path": "res://tileset/DungeonGenerator/Room.gd"
+"path": "res://scenes/Dungeon/Room.gd"
 } ]
 _global_script_class_icons={
 "CombatStats": "",
@@ -202,4 +202,5 @@ translations=PoolStringArray( "res://i18n/button.en.translation", "res://i18n/bu
 
 [rendering]
 
+quality/driver/driver_name="GLES2"
 environment/default_environment="res://default_env.tres"
