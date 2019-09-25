@@ -27,9 +27,13 @@ var attack_timer = 0
 func get_angle(x1,y1,x2,y2) -> float:
 	return atan2(y2-y1, x2-x1)
 
+
+
 # Returns the distance between two points.
 func get_dist(x1,y1,x2,y2) -> float:
 	return pow(pow(x2-x1,2)+pow(y2-y1,2),0.5)
+
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -41,6 +45,7 @@ func _ready():
 	else:
 		anim_state_machine.start("Idle")
 	pass
+
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -58,7 +63,7 @@ func _process(delta):
 	else:
 		current_state = state.CHOOSE_TARGET
 	
-	# AI
+	################ AI ################
 	if current_state == state.CHOOSE_TARGET:
 		
 		if not targets.empty():
@@ -104,6 +109,7 @@ func _process(delta):
 	move_and_slide(Vector3(velocity.x, velocity.y, 0))
 
 
+
 func _physics_process(delta):
 	
 	if $CombatStats.health > 0:
@@ -122,7 +128,7 @@ func attack():
 	var root_node = get_tree().get_root().get_child(0)
 	root_node.add_child(bullet)
 	
-	bullet.global_transform.origin = $AttachPosition.global_transform.origin
+	bullet.global_transform.origin = $AttackPosition.global_transform.origin
 	
 	# Modification des positions utilisées pour diriger le tir
 	var target_position = current_target.global_transform.origin
@@ -143,6 +149,7 @@ func _on_CombatStats_damage_taken():
 	
 
 
+
 func _on_CombatStats_health_depleted():
 	
 	if anim_state_machine.is_playing():
@@ -156,6 +163,7 @@ func _on_CombatStats_health_depleted():
 	$RemoveTimer.start()
 	
 	$AudioStreamPlayer3D.stop()
+
 
 
 func _on_RemoveTimer_timeout():

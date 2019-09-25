@@ -46,6 +46,8 @@ func _shoot():
 		root_node.add_child(bullet)
 		
 		bullet.set_damage(damage)
+		if _ammo and _ammo.type == "ammo":
+			bullet.set_type( _ammo.properties["ammo_type"] )
 		bullet.global_transform.origin = $Muzzle.global_transform.origin
 		bullet.global_transform.origin.z = 0
 		

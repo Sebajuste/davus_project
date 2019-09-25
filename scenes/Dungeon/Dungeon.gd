@@ -6,8 +6,8 @@ export var scale2D:int = 2
 # Dungeon Generator Parameters
 export var room_margin:int = 2
 export (int, 2, 10) var number_of_rooms:int = 12
-export var min_nb_key:int = 1
-export (float, 0, 1) var key_occupation = 1
+export var min_nb_key:int = 2
+export (float, 0, 0.75) var key_occupation = 0.6
 export var map_width:int = 80
 export var map_height:int = 50
 export var min_room_width:int = 9
@@ -65,23 +65,24 @@ func _ready():
 	
 	_map = $Map/Viewport/MiniMap
 	
-	create_dungeon()
+	while not create_dungeon():
+		pass
 
 
 func set_player(p):
 	player = p
 
 
-func create_dungeon():
+func create_dungeon() -> bool:
 	var mg := $MapGenerator
 	_graph_generator.clear_all()
 	mg.clear_all()
 	_graph_generator.gen_graph()
-	mg.gen_dungeon(_graph_generator)
-	
+	if not mg.gen_dungeon(_graph_generator):
+		return false
 	_map.graph_generator = _graph_generator
 	_map.gen()
-
+	return true
 
 func _on_MapGenerator_dungeon_gen_finished(graph_generator):
 	if player:
@@ -89,4 +90,4 @@ func _on_MapGenerator_dungeon_gen_finished(graph_generator):
 
 
 func _on_MapGenerator_request_new_dungeon():
-	create_dungeon()
+	return create_dungeon()

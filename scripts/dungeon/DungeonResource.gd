@@ -20,38 +20,24 @@ const STATIC_BODIES:Dictionary = {
 	}
 
 const ROOM_PREFAB:Dictionary = {
-	5:
-		{
-			3: [
-				preload("res://tileset/test/Prefab_5x3.tscn"),
-			],
-			4: [
-				preload("res://tileset/test/Prefab_5x4.tscn"),
-			],
-		},
-	6:
-		{
-			3: [
-				preload("res://tileset/test/Prefab_6x3.tscn"),
-			],
-		},
-	7:
-		{
-			3: [
-				preload("res://tileset/test/Prefab_7x3.tscn"),
-			],
-		},
-	8:
-		{
-			3: [
-				preload("res://tileset/test/Prefab_8x3.tscn"),
-			],
-		},
 	9:
 		{
 			5: [
-				preload("res://tileset/test/Prefab_9x5_0.tscn"),
-				preload("res://tileset/test/Prefab_9x5_1.tscn"),
+				preload("res://prefabs/environment/dungeon/room/Prefab_9x5_0.tscn"),
+				preload("res://prefabs/environment/dungeon/room/Prefab_9x5_1.tscn"),
+			],
+		},
+	}
+
+const ROOM_BACKGROUND:Dictionary = {
+	9:
+		{
+			5: [
+				preload("res://models/Rooms/room00.glb"),
+				preload("res://models/Rooms/room01.glb"),
+				preload("res://models/Rooms/room02.glb"),
+				preload("res://models/Rooms/room03.glb"),
+				preload("res://models/Rooms/room04.glb"),
 			],
 		},
 	}
@@ -62,7 +48,7 @@ const KEYS_RESOURCES:Array = [
 
 const MOB_RESOURCES:Array = [
 		preload("res://characters/Mobs/MobTentacle/MobTentacle.tscn"),
-		preload("res://characters/Mobs/Drone/Drone.tscn"),
+		#preload("res://characters/Mobs/Drone/Drone.tscn"),
 		preload("res://characters/Mobs/Fly/Fly.tscn"),
 	]
 
