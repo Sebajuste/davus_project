@@ -13,7 +13,7 @@ func _ready():
 #	pass
 
 
-func _on_AmmoHandler_ammo_selected(ammo: Item):
+func _on_ammo_selected(ammo: Item):
 	
 	match ammo.properties["ammo_type"]:
 		"Normal":

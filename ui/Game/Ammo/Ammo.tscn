@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://ui/Game/Ammo/Ammo.gd" type="Script" id=1]
+[ext_resource path="res://ui/Icons/IconClipRegular64x64.png" type="Texture" id=2]
+[ext_resource path="res://ui/Icons/IconClipFire64x64.png" type="Texture" id=3]
+[ext_resource path="res://ui/Icons/IconClipIce64x64.png" type="Texture" id=4]
+
+
+[node name="Ammo" type="HBoxContainer"]
+editor/display_folded = true
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 1 )
+
+[node name="Normal" type="TextureRect" parent="."]
+visible = false
+margin_right = 64.0
+margin_bottom = 64.0
+focus_mode = 1
+mouse_default_cursor_shape = 2
+texture = ExtResource( 2 )
+
+[node name="Fire" type="TextureRect" parent="."]
+visible = false
+margin_left = 68.0
+margin_right = 132.0
+margin_bottom = 64.0
+focus_mode = 1
+mouse_default_cursor_shape = 2
+texture = ExtResource( 3 )
+
+[node name="Ice" type="TextureRect" parent="."]
+visible = false
+margin_left = 68.0
+margin_right = 132.0
+margin_bottom = 64.0
+texture = ExtResource( 4 )

@@ -13,9 +13,8 @@ func _ready():
 #	pass
 
 
-func _on_Player_health_changed(value, max_value):
+func _on_health_changed(value, max_value):
 	
-	#$Life/ProgressBar.value = value
 	$Life/ProgressBar.max_value = max_value
 	
 	$Life/ProgressBar/Tween.interpolate_property(
@@ -25,4 +24,3 @@ func _on_Player_health_changed(value, max_value):
 	
 	$Life/ProgressBar/Tween.start()
 	
-	pass # Replace with function body.

@@ -32,7 +32,6 @@ func take_damage(hit: Hit) -> void:
 			damage = max(0, hit.damage - ice_resistance)
 		_:
 			damage = max(0, hit.damage - armor)
-	print("damage: ", damage)
 	if damage == 0:
 		return
 	health -= damage
