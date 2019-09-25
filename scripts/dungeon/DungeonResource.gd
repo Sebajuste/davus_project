@@ -48,7 +48,7 @@ const KEYS_RESOURCES:Array = [
 
 const MOB_RESOURCES:Array = [
 		preload("res://characters/Mobs/MobTentacle/MobTentacle.tscn"),
-		preload("res://characters/Mobs/Drone/Drone.tscn"),
+		#preload("res://characters/Mobs/Drone/Drone.tscn"),
 		preload("res://characters/Mobs/Fly/Fly.tscn"),
 	]
 

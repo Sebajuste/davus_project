@@ -581,7 +581,7 @@ func _drop_key(pos:Vector3):
 		if key == null:
 			print("No key find in the resources : ", _resourceMgr.KEYS_RESOURCES)
 		else:
-			key.door_id = id
+			key.id_door = id
 			_keys_of_doors_to_drop.erase(id)
 
 func _add_mob_spawn(pos:Vector3):
