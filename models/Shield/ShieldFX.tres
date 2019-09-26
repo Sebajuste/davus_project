@@ -1,0 +1,115 @@
+[gd_resource type="VisualShader" load_steps=10 format=2]
+
+[sub_resource type="VisualShaderNodeScalarUniform" id=1]
+uniform_name = "Power"
+
+[sub_resource type="VisualShaderNodeColorUniform" id=2]
+uniform_name = "Color"
+
+[sub_resource type="VisualShaderNodeScalarUniform" id=3]
+uniform_name = "Intensisy"
+
+[sub_resource type="VisualShaderNodeScalarOp" id=4]
+operator = 2
+
+[sub_resource type="VisualShaderNodeInput" id=5]
+input_name = "view"
+
+[sub_resource type="VisualShaderNodeInput" id=6]
+input_name = "normal"
+
+[sub_resource type="VisualShaderNodeDotProduct" id=7]
+
+[sub_resource type="VisualShaderNodeScalarOp" id=8]
+default_input_values = [ 0, 1.0, 1, 0.0 ]
+operator = 1
+
+[sub_resource type="VisualShaderNodeScalarOp" id=9]
+default_input_values = [ 0, 0.0, 1, 4.0 ]
+operator = 5
+
+[resource]
+code = "shader_type spatial;
+uniform vec4 Color : hint_color;
+uniform float Power;
+uniform float Intensisy;
+
+
+
+void vertex() {
+// Sortie:0
+
+}
+
+void fragment() {
+// ColorUniform:11
+	vec3 n_out11p0;
+	float n_out11p1;
+	n_out11p0 = Color.rgb;
+	n_out11p1 = Color.a;
+
+// Entrée:5
+	vec3 n_out5p0;
+	n_out5p0 = NORMAL;
+
+// Entrée:3
+	vec3 n_out3p0;
+	n_out3p0 = VIEW;
+
+// DotProduct:6
+	float n_out6p0;
+	n_out6p0 = dot( n_out5p0 , n_out3p0 );
+
+// ScalarOp:7
+	float n_in7p0 = 1.00000;
+	float n_out7p0;
+	n_out7p0 = n_in7p0 - n_out6p0;
+
+// ScalarUniform:10
+	float n_out10p0;
+	n_out10p0 = Power;
+
+// ScalarOp:9
+	float n_out9p0;
+	n_out9p0 = pow( n_out7p0 , n_out10p0 );
+
+// ScalarUniform:12
+	float n_out12p0;
+	n_out12p0 = Intensisy;
+
+// ScalarOp:13
+	float n_out13p0;
+	n_out13p0 = n_out9p0 * n_out12p0;
+
+// Sortie:0
+	ALBEDO = n_out11p0;
+	ALPHA = n_out13p0;
+
+}
+
+void light() {
+// Sortie:0
+
+}
+"
+graph_offset = Vector2( -204.2, -3.6 )
+nodes/fragment/0/position = Vector2( 640, 20 )
+nodes/fragment/3/node = SubResource( 5 )
+nodes/fragment/3/position = Vector2( -320, 220 )
+nodes/fragment/5/node = SubResource( 6 )
+nodes/fragment/5/position = Vector2( -320, 160 )
+nodes/fragment/6/node = SubResource( 7 )
+nodes/fragment/6/position = Vector2( -120, 180 )
+nodes/fragment/7/node = SubResource( 8 )
+nodes/fragment/7/position = Vector2( 60, 180 )
+nodes/fragment/9/node = SubResource( 9 )
+nodes/fragment/9/position = Vector2( 240, 180 )
+nodes/fragment/10/node = SubResource( 1 )
+nodes/fragment/10/position = Vector2( 60, 300 )
+nodes/fragment/11/node = SubResource( 2 )
+nodes/fragment/11/position = Vector2( 280, 20 )
+nodes/fragment/12/node = SubResource( 3 )
+nodes/fragment/12/position = Vector2( 260, 300 )
+nodes/fragment/13/node = SubResource( 4 )
+nodes/fragment/13/position = Vector2( 440, 180 )
+nodes/fragment/connections = PoolIntArray( 5, 0, 6, 0, 10, 0, 9, 1, 11, 0, 0, 0, 3, 0, 6, 1, 6, 0, 7, 1, 7, 0, 9, 0, 9, 0, 13, 0, 12, 0, 13, 1, 13, 0, 0, 1 )
