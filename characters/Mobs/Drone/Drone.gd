@@ -30,9 +30,9 @@ enum direction {
 	RIGHT
 }
 
-const OFFSET_Y = 1 # Equivaut à la moitié de la hauteur du joueur
+const OFFSET_Y = 1.2 # Equivaut à la moitié de la hauteur du joueur
 
-#var anim_state_machine
+var anim_state_machine
 var current_state
 var current_direction
 var position
@@ -44,7 +44,6 @@ var change_dir_timer
 var target_visible : bool
 var timer_prepare
 var destruction : bool = false
-
 
 # Returns the angle between two points.
 func get_angle(x1,y1,x2,y2) -> float:
@@ -182,7 +181,6 @@ func _process(delta):
 		velocity = Vector2.ZERO
 		
 		timer_prepare = timer_prepare - delta
-		print(timer_prepare)
 		if timer_prepare <= 0:
 			current_state = state.CHARGE
 			var angle = get_angle(position.x, position.y, target_position.x, target_position.y)
@@ -203,14 +201,7 @@ func _process(delta):
 	if current_target != null and target_visible and destruction == false:
 			attack_timer -= delta
 			if attack_timer <= 0:
-				
 				$MobDrone/AnimationTree.set("parameters/Attack/active", true)
-				
-	#			if anim_state_machine.is_playing():
-	#				anim_state_machine.travel("Attack")
-	#			else:
-	#				anim_state_machine.start("Attack")
-				
 				attack_timer = attack_speed
 				attack()
 	
@@ -230,9 +221,9 @@ func attack():
 	var new_position_target = Vector3(target_position.x, target_position.y + OFFSET_Y, target_position.z)
 	var new_position # du drone
 	if target_position.x > position.x:
-		new_position = Vector3(self.global_transform.origin.x + 1, self.global_transform.origin.y, 0)
+		new_position = Vector3(self.global_transform.origin.x + 0.7, self.global_transform.origin.y, 0)
 	else:
-		new_position = Vector3(self.global_transform.origin.x - 1, self.global_transform.origin.y, 0)
+		new_position = Vector3(self.global_transform.origin.x - 0.7, self.global_transform.origin.y, 0)
 		
 	bullet.direction = (new_position_target - new_position).normalized()
 
@@ -292,12 +283,6 @@ func _on_CombatStats_damage_taken():
 
 
 func _on_CombatStats_health_depleted():
-
-#	if anim_state_machine.is_playing():
-#		anim_state_machine.travel("Death")
-#	else:
-#		anim_state_machine.start("Death")
-	
 	self.set_collision_layer(0x00)
 	self.set_collision_mask(0x01)
 	
