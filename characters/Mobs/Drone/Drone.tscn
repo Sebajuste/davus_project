@@ -6,7 +6,7 @@
 [ext_resource path="res://tools/combat/CombatStats/CombatStats.tscn" type="PackedScene" id=4]
 
 [sub_resource type="BoxShape" id=1]
-extents = Vector3( 0.266466, 0.270786, 0.147112 )
+extents = Vector3( 0.309408, 0.34242, 0.147112 )
 
 [sub_resource type="BoxShape" id=2]
 extents = Vector3( 0.312692, 0.153666, 0.298392 )
@@ -18,17 +18,17 @@ radius = 6.01007
 script = ExtResource( 2 )
 
 [node name="CollisionShape" parent="." index="0"]
-visible = false
 shape = SubResource( 1 )
 
 [node name="HitBox" parent="." index="1"]
 combat_stats = NodePath("../CombatStats")
 
 [node name="CollisionShape" parent="HitBox" index="0"]
-transform = Transform( 1, 0, 0, 0, 0.999246, 0.0388372, 0, -0.0388372, 0.999246, 0, 0, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 shape = SubResource( 2 )
 
 [node name="MobDrone" parent="." index="2" instance=ExtResource( 3 )]
+transform = Transform( -1, 0, -8.74228e-008, 0, 1, 0, 8.74228e-008, 0, -1, 0, 0, 0 )
 
 [node name="Detection" type="Area" parent="." index="3"]
 
@@ -36,7 +36,7 @@ shape = SubResource( 2 )
 shape = SubResource( 3 )
 
 [node name="AttackPosition" type="Position3D" parent="." index="4"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.540152 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.369504 )
 
 [node name="CombatStats" parent="." index="5" instance=ExtResource( 4 )]
 max_health = 3

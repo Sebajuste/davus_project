@@ -83,7 +83,7 @@ func create_dungeon() -> bool:
 	return true
 
 func refresh_map():
-	if player:
+	if player and _map:
 		_map.gen(player.global_transform.origin / TILE_SIZE)
 
 func _on_MapGenerator_dungeon_gen_finished(graph_generator):
