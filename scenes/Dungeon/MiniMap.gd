@@ -21,35 +21,53 @@ func set_graph_generator(v):
 func _draw():
 	if not graph_generator:
 		return
-	_draw_path(graph_generator.pathfinding)
+	var viewportSize:Vector2 = get_parent().size
+	var scaledMap:Vector2 = Vector2(graph_generator.map_width * scale2D, graph_generator.map_height * scale2D)
+	var offset:Vector2 = (viewportSize - scaledMap) * 0.5
+	_draw_path(graph_generator.pathfinding, offset)
 	for point in graph_generator.rooms_areas.keys():
 		var room:Room = graph_generator.rooms_areas[point]
-		var rect = _geometry.scale_rectangle(room.area, scale2D, true, graph_generator.map_height)
-		draw_rect(rect, Color.white, false)
-		var color = Color.blue
+		var color = Color.white
 		if room == graph_generator.starting_room:
 			color = Color.green
 		elif room == graph_generator.ending_room:
 			color = Color.red
-		draw_rect(
-			_geometry.scale_rectangle(
+		
+		var scaled_room_rect = _geometry.scale_rectangle(
 				room.get_room_rect(), 
 				scale2D, 
 				true, 
 				graph_generator.map_height
-			), 
-			color, 
-			false
-		)	# draw room (without margin)
+			)
+		scaled_room_rect.position += offset
+		draw_rect(scaled_room_rect, color, false)
 		if draw_room_index:
 			var pos = room.get_middle()
-			draw_string(f, _geometry.reverse_y_axis(pos, graph_generator.map_height) * scale2D, str(point), Color.red)
+			draw_string(
+				f, 
+				offset + _geometry.reverse_y_axis(
+					pos, 
+					graph_generator.map_height
+				) * scale2D, 
+				str(point), 
+				Color.red)
 
 
-func _draw_path(path: AStar):
+func _draw_path(path: AStar, offset:Vector2):
 	if path:
 		for point in path.get_points():
-			for edges in path.get_point_connections(point):
+			for connection in path.get_point_connections(point):
 				var pointPosition = path.get_point_position(point)
-				var edgePosition = path.get_point_position(edges)
-				draw_line(_geometry.reverse_y_axis(_geometry.to_vector2(pointPosition), graph_generator.map_height) * scale2D, _geometry.reverse_y_axis(_geometry.to_vector2(edgePosition), graph_generator.map_height) * scale2D, Color.yellow)
+				var connectionPosition = path.get_point_position(connection)
+				var scaledPointPos:Vector2 = offset + _geometry.reverse_y_axis(
+						_geometry.to_vector2(pointPosition), 
+						graph_generator.map_height
+					) * scale2D
+				
+				var scaledConnectionPos:Vector2 = offset + _geometry.reverse_y_axis(
+						_geometry.to_vector2(connectionPosition), 
+						graph_generator.map_height
+					) * scale2D
+				
+				draw_line(scaledPointPos, scaledConnectionPos, Color.yellow)
+

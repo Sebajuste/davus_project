@@ -128,10 +128,12 @@ func gen_dungeon(graph_generator:GraphGenerator) -> bool:
 			if TEST_DOOR_KEYS_EQUALITY:
 				if _dropped_keys.size() != _closed_doors.size():
 					_continue_looping = false
-					print("================================ Desired = ",_desired_nb_of_keys, " dropped keys = ", _dropped_keys.size())
+					if PRINT_DOOR_KEYS: 
+						print("================================ Desired = ",_desired_nb_of_keys, " dropped keys = ", _dropped_keys.size())
 					
 				if _closed_doors.size() != _desired_nb_of_keys:
-					print("================================ Desired = ",_desired_nb_of_keys, " closed doors = ", _closed_doors.size())
+					if PRINT_DOOR_KEYS: 
+						print("================================ Desired = ",_desired_nb_of_keys, " closed doors = ", _closed_doors.size())
 			if _continue_looping:
 				if _seed_counter < _desired_seed_counter:
 					return false #emit_signal("request_new_dungeon")
@@ -217,7 +219,8 @@ func _write_corridors_on_map() -> bool:	# Return true on error
 					#print("dead end connection = ", connection)
 				
 				if s || e:
-					print("Close door = ", point, " -> ", connection)
+					if PRINT_DOOR_KEYS: 
+						print("Close door = ", point, " -> ", connection)
 				
 				var dropKey:bool = _should_drop_key(pointDeadEnd || connectionDeadEnd)
 				if dropKey:
@@ -228,11 +231,13 @@ func _write_corridors_on_map() -> bool:	# Return true on error
 					else:
 						prefab = _rooms_areas[connection].prefab
 					
-					print("drop key / prefab = ", prefab)
+					if PRINT_DOOR_KEYS: 
+						print("drop key / prefab = ", prefab)
 					if prefab:
 						key_position = prefab.get_key_spot(rnd)
-						print("key position = ", key_position)
 						_drop_key(key_position)
+						if PRINT_DOOR_KEYS: 
+							print("key position = ", key_position)
 					else:
 						print("No prefab found")
 				
@@ -550,7 +555,7 @@ func _dig_mixed_directions(horizontalPos: Vector3, verticalPos: Vector3, mobSpaw
 func _get_number_of_keys(nb_rooms_on_path:int) ->int:
 	var valrange = int(floor(key_occupation * (nb_rooms_on_path - 1) - min_nb_key))
 	if valrange > 0:
-		print("key range = ", valrange)
+		if PRINT_DOOR_KEYS: print("key range = ", valrange)
 		return min_nb_key + (rnd.randi() % valrange)
 	return 0
 
@@ -560,7 +565,8 @@ func _should_lock() ->bool:
 	var remainingDoorsOnPath:int = _graph_generator.shortest_path.size() - 2 - _pathRoomsCounter - remainingRoomsToClose
 	if remainingDoorsOnPath > 0 && _closed_doors.size() < _desired_nb_of_keys:
 		var hazard = rnd.randf()
-		print("Should lock : ",hazard, " <= ", remainingRoomsToClose, " / ", remainingDoorsOnPath)
+		if PRINT_DOOR_KEYS: 
+			print("Should lock : ",hazard, " <= ", remainingRoomsToClose, " / ", remainingDoorsOnPath)
 		if hazard <= (float(remainingRoomsToClose) / float(remainingDoorsOnPath)):
 			return true
 	return false
@@ -573,7 +579,8 @@ func _should_drop_key(is_dead_end:bool) ->bool:
 		if remainingRooms <= 0:
 			remainingRooms = 1
 		var hazard = rnd.randf()
-		print("_should_drop_key :", is_dead_end, " || ", hazard, " <= ", _keys_of_doors_to_drop.size(), " / ", remainingRooms)
+		if PRINT_DOOR_KEYS: 
+			print("_should_drop_key :", is_dead_end, " || ", hazard, " <= ", _keys_of_doors_to_drop.size(), " / ", remainingRooms)
 		if is_dead_end || hazard <= (float(_keys_of_doors_to_drop.size()) / float(remainingRooms)):
 			return true
 	return false

@@ -1,7 +1,7 @@
 extends Spatial
 
 # Minimap Parameters
-export var scale2D:int = 2
+export var scale2D:int = 10
 
 # Dungeon Generator Parameters
 export var room_margin:int = 2
@@ -17,7 +17,7 @@ export var max_room_height:int = 5
 export (float, 0, 1) var mob_chance_corridors:float = 0.5
 export var map_seed = 1
 const TILE_SIZE = 2
-const DRAW_ROOMS_INDEX = true
+const DRAW_ROOMS_INDEX = false
 
 var player setget set_player
 var camera: Camera

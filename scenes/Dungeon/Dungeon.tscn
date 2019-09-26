@@ -165,3 +165,4 @@ gui_disable_input = true
 script = ExtResource( 14 )
 [connection signal="dungeon_gen_finished" from="MapGenerator" to="." method="_on_MapGenerator_dungeon_gen_finished"]
 [connection signal="request_new_dungeon" from="MapGenerator" to="." method="_on_MapGenerator_request_new_dungeon"]
+[connection signal="size_changed" from="Map/Viewport" to="Map/Viewport/MiniMap" method="update"]

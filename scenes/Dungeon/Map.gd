@@ -6,7 +6,7 @@ var map_generator_node setget set_map_generator_node
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
+	#stretch = false
 	map_generator_node = get_node(map_generator)
 	
 	if map_generator_node:
