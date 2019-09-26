@@ -80,12 +80,16 @@ func create_dungeon() -> bool:
 	if not mg.gen_dungeon(_graph_generator):
 		return false
 	_map.graph_generator = _graph_generator
-	_map.gen()
 	return true
+
+func refresh_map():
+	if player:
+		_map.gen(player.global_transform.origin / TILE_SIZE)
 
 func _on_MapGenerator_dungeon_gen_finished(graph_generator):
 	if player:
 		player.global_transform.origin = $MapGenerator.spawn_position
+		refresh_map()
 
 
 func _on_MapGenerator_request_new_dungeon():
