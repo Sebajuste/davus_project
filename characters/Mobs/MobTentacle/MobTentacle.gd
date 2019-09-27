@@ -21,7 +21,6 @@ func _process(delta):
 	
 	if not targets.empty():
 		var target = targets[0]
-		print("target: ", target)
 		_current_target = target
 		
 		var distance = target.global_transform.origin - self.global_transform.origin

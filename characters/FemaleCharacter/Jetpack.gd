@@ -54,6 +54,9 @@ func _process(delta):
 		self.disable()
 		$AudioStreamPlayer3D.stop()
 	
+	if Input.is_action_just_released("jetpack"):
+		_start_timer = 0.0
+	
 	if power == 0.0:
 		self.disable()
 		$AudioStreamPlayer3D.stop()
