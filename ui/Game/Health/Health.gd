@@ -14,13 +14,18 @@ func _ready():
 
 
 func _on_health_changed(value, max_value):
-	
 	$Life/ProgressBar.max_value = max_value
-	
 	$Life/ProgressBar/Tween.interpolate_property(
 		$Life/ProgressBar, "value",
 		$Life/ProgressBar.value, value, 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT
 	)
-	
 	$Life/ProgressBar/Tween.start()
-	
+
+
+func _on_shield_changed(value, max_value):
+	$Shield/ProgressBar.max_value = max_value
+	$Shield/ProgressBar/Tween.interpolate_property(
+		$Shield/ProgressBar, "value",
+		$Shield/ProgressBar.value, value, 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT
+	)
+	$Shield/ProgressBar/Tween.start()

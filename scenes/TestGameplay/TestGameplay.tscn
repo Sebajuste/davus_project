@@ -11,9 +11,9 @@
 [ext_resource path="res://characters/Mobs/Fly/Fly.tscn" type="PackedScene" id=9]
 [ext_resource path="res://tools/Camera/Camera.gd" type="Script" id=10]
 [ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=11]
-[ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=12]
-[ext_resource path="res://ui/Game/Ammo/Ammo.tscn" type="PackedScene" id=13]
-[ext_resource path="res://ui/Game/Health/Health.tscn" type="PackedScene" id=14]
+[ext_resource path="res://ui/Game/Ammo/Ammo.tscn" type="PackedScene" id=12]
+[ext_resource path="res://ui/Game/Health/Health.tscn" type="PackedScene" id=13]
+[ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=14]
 [ext_resource path="res://tools/Notifications/Notifications.tscn" type="PackedScene" id=15]
 
 [sub_resource type="CubeMesh" id=1]
@@ -118,10 +118,7 @@ editor/display_folded = true
 [node name="MobTentacle" parent="Mobs" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.157, 0, 0 )
 
-[node name="MobTentacle" parent="Mobs/MobTentacle" index="1"]
-editor/display_folded = true
-
-[node name="CombatStats" parent="Mobs/MobTentacle" index="3"]
+[node name="CombatStats" parent="Mobs/MobTentacle" index="4"]
 armor = 2
 
 [node name="Fly" parent="Mobs" instance=ExtResource( 9 )]
@@ -135,42 +132,47 @@ target = NodePath("../Player")
 distance = 20.0
 
 [node name="Player" parent="." instance=ExtResource( 11 )]
-editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22544, 0 )
 
 [node name="Skeleton" parent="Player" index="1"]
-editor/display_folded = true
 bones/5/bound_children = [ NodePath("Head") ]
 bones/22/bound_children = [ NodePath("RightHand") ]
+bones/35/bound_children = [ NodePath("LeftFoot") ]
+bones/40/bound_children = [ NodePath("RightFoot") ]
 
 [node name="Head" parent="Player/Skeleton" index="1"]
-transform = Transform( 0.999363, 0.0172612, 0.0312353, -0.014861, 0.997034, -0.0755032, -0.032446, 0.0749909, 0.996657, -0.028769, 1.56082, -0.0447175 )
+transform = Transform( 0.999516, 0.0153671, 0.0270443, -0.0138759, 0.998417, -0.0544924, -0.0278389, 0.0540904, 0.998147, -0.0270385, 1.5603, -0.052183 )
 
 [node name="RightHand" parent="Player/Skeleton" index="2"]
-transform = Transform( 0.331193, 0.0886122, 0.939392, 0.126156, -0.990799, 0.0489847, 0.93509, 0.102287, -0.339326, -0.221097, 0.941849, -0.0070413 )
+transform = Transform( 0.332516, 0.0892521, 0.938864, 0.130522, -0.990286, 0.0479142, 0.93402, 0.106611, -0.340937, -0.222366, 0.94814, -0.0106842 )
 
-[node name="AnimationTree" parent="Player" index="11"]
+[node name="RightFoot" parent="Player/Skeleton" index="3"]
+transform = Transform( 0.991681, 0.00145137, -0.128711, -2.54288e-005, 0.999938, 0.0110792, 0.128719, -0.0109842, 0.991619, 0.0819502, -0.00123, -0.0326249 )
+
+[node name="LeftFoot" parent="Player/Skeleton" index="4"]
+transform = Transform( 0.867894, 0.0177513, 0.496433, -0.0322322, 0.999269, 0.0206213, -0.495704, -0.0338959, 0.867831, 0.161403, 0.00600117, 0.104318 )
+
+[node name="AnimationTree" parent="Player" index="12"]
 parameters/StateMachine/playback = SubResource( 3 )
 
-[node name="Menu" parent="." instance=ExtResource( 12 )]
-editor/display_folded = true
-
-[node name="MarginContainer" parent="Menu" index="0"]
-editor/display_folded = true
-
 [node name="UI" type="Control" parent="."]
-editor/display_folded = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="Ammo" parent="UI" instance=ExtResource( 13 )]
+[node name="Ammo" parent="UI" instance=ExtResource( 12 )]
 
-[node name="Health" parent="UI" instance=ExtResource( 14 )]
+[node name="Health" parent="UI" instance=ExtResource( 13 )]
+
+[node name="Menu" parent="." instance=ExtResource( 14 )]
+
+[node name="MarginContainer" parent="Menu" index="0"]
+editor/display_folded = true
 
 [node name="Notifications" parent="." instance=ExtResource( 15 )]
 [connection signal="died" from="Player" to="." method="_on_Player_died"]
 [connection signal="health_changed" from="Player" to="UI/Health" method="_on_health_changed"]
 [connection signal="ammo_selected" from="Player/AmmoHandler" to="UI/Ammo" method="_on_ammo_selected"]
+[connection signal="shield_changed" from="Player/ShieldHandler/Shield" to="UI/Health" method="_on_shield_changed"]
 
 [editable path="Mobs/MobTentacle"]
 
