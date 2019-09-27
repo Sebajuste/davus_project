@@ -7,7 +7,7 @@ uniform_name = "Power"
 uniform_name = "Color"
 
 [sub_resource type="VisualShaderNodeScalarUniform" id=3]
-uniform_name = "Intensisy"
+uniform_name = "Intensity"
 
 [sub_resource type="VisualShaderNodeScalarOp" id=4]
 operator = 2
@@ -32,7 +32,7 @@ operator = 5
 code = "shader_type spatial;
 uniform vec4 Color : hint_color;
 uniform float Power;
-uniform float Intensisy;
+uniform float Intensity;
 
 
 
@@ -75,7 +75,7 @@ void fragment() {
 
 // ScalarUniform:12
 	float n_out12p0;
-	n_out12p0 = Intensisy;
+	n_out12p0 = Intensity;
 
 // ScalarOp:13
 	float n_out13p0;
@@ -92,7 +92,7 @@ void light() {
 
 }
 "
-graph_offset = Vector2( -204.2, -3.6 )
+graph_offset = Vector2( -363.2, 136 )
 nodes/fragment/0/position = Vector2( 640, 20 )
 nodes/fragment/3/node = SubResource( 5 )
 nodes/fragment/3/position = Vector2( -320, 220 )
