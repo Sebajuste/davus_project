@@ -16,7 +16,7 @@ const STATIC_BODIES:Dictionary = {
 		eTilesType.Wall: preload("res://tileset/Dungeon/Wall.tscn"),
 		eTilesType.Ladder: preload("res://tileset/Dungeon/RightLadder.tscn"),
 	}
-	
+
 # Doors
 const IN_OUT_DOOR:Array = [
 		preload("res://objects/doors/DungeonExit/DungeonExit.tscn")
@@ -29,6 +29,11 @@ const INTERIOR_DOORS:Array = [
 # Keys
 const KEYS_RESOURCES:Array = [
 		preload("res://objects/keys/DoorKey/DoorKey.tscn"),
+	]
+
+# Platforms
+const PLATFORMS_RESOURCES:Array = [
+		preload("res://models/Dungeon/Platform.glb"),
 	]
 
 # Rooms

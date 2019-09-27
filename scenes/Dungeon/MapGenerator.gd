@@ -167,6 +167,7 @@ func _write_rooms_on_map():
 		var prefab_resource:Array = _get_rooms_resource(_resourceMgr.ROOM_PREFAB, room_rect.size)
 		var prefab = _place_object(room_position, prefab_resource)
 		if prefab:
+			prefab.populate_platforms(rnd, _resourceMgr.PLATFORMS_RESOURCES)
 			room.prefab = prefab
 		var background_resource:Array
 		if room == _graph_generator.starting_room || room == _graph_generator.ending_room:
