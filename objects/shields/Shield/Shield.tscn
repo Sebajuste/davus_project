@@ -28,7 +28,6 @@ tracks/0/keys = {
 mesh = SubResource( 1 )
 material/0 = ExtResource( 1 )
 script = ExtResource( 2 )
-_shader_param_power = 3.0
 
 [node name="HitBox" parent="." instance=ExtResource( 3 )]
 editor/display_folded = true

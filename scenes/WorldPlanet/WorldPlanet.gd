@@ -60,7 +60,7 @@ func _on_PlayerRespawnTimer_timeout():
 	
 
 
-func reset_player():
+func reset_player(player: Spatial) -> void:
 	
 	$PlayerRespawnTimer.start()
 	

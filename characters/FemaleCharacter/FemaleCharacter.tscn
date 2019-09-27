@@ -36,7 +36,7 @@
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 0.226884
-height = 1.30243
+height = 1.50358
 
 [sub_resource type="ArrayMesh" id=2]
 surfaces/0 = {
@@ -340,7 +340,7 @@ fadein_time = 0.5
 fadeout_time = 0.5
 
 [sub_resource type="AnimationNodeBlendTree" id=12]
-graph_offset = Vector2( -776, 95.5 )
+graph_offset = Vector2( -719.25, 117.5 )
 nodes/Alive/node = SubResource( 8 )
 nodes/Alive/position = Vector2( 40, 200 )
 nodes/Animation/node = SubResource( 10 )
@@ -361,7 +361,7 @@ collision_mask = 3
 script = ExtResource( 1 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, -0.000659509, 1, 0, -1, -0.000659509, 0, 0.875013, 0 )
+transform = Transform( 1, 0, 0, 0, -0.000659509, 1, 0, -1, -0.000659509, 0, 0.966339, -6.02305e-005 )
 shape = SubResource( 1 )
 
 [node name="Skeleton" type="Skeleton" parent="."]
@@ -579,7 +579,7 @@ material/0 = null
 
 [node name="Head" type="BoneAttachment" parent="Skeleton"]
 editor/display_folded = true
-transform = Transform( 0.999229, 0.0228916, 0.031914, -0.0209573, 0.997997, -0.0596824, -0.0332164, 0.0589674, 0.997707, -0.0230115, 1.56041, -0.0526659 )
+transform = Transform( 0.999445, 0.0211818, 0.0257311, -0.0200428, 0.998841, -0.0437398, -0.0266278, 0.0431998, 0.998711, -0.0255933, 1.56025, -0.0569355 )
 bone_name = "mixamorig_Head"
 
 [node name="HairTail" parent="Skeleton/Head" instance=ExtResource( 3 )]
@@ -587,7 +587,7 @@ transform = Transform( 0.998199, -0.0278291, 0.0532083, 0.0272939, 0.999569, 0.0
 
 [node name="RightHand" type="BoneAttachment" parent="Skeleton"]
 editor/display_folded = true
-transform = Transform( 0.320175, 0.0949223, 0.942591, 0.125086, -0.990492, 0.0572582, 0.939062, 0.0995723, -0.329005, -0.218648, 0.949993, -0.0145198 )
+transform = Transform( 0.325814, 0.10057, 0.940069, 0.138465, -0.988679, 0.0577815, 0.935238, 0.111341, -0.336053, -0.216009, 0.949087, -0.0129328 )
 bone_name = "mixamorig_RightHand"
 
 [node name="Position" type="Spatial" parent="Skeleton/RightHand"]
@@ -595,7 +595,7 @@ transform = Transform( 0.0147597, 0.915448, -0.402164, 0.980249, 0.0660798, 0.18
 
 [node name="RightFoot" type="BoneAttachment" parent="Skeleton"]
 editor/display_folded = true
-transform = Transform( 0.991453, 0.00156349, -0.130455, -7.65398e-005, 0.999933, 0.0114012, 0.130464, -0.0112939, 0.991387, 0.0820423, -0.00129545, -0.0330132 )
+transform = Transform( 0.99162, 0.00180306, -0.129177, -0.000321165, 0.999933, 0.0114931, 0.129189, -0.0113552, 0.991553, 0.0819266, -0.00122686, -0.0325361 )
 bone_name = "mixamorig_RightToe_End"
 
 [node name="Particles" type="Particles" parent="Skeleton/RightFoot"]
@@ -610,7 +610,7 @@ process_material = SubResource( 4 )
 draw_pass_1 = SubResource( 5 )
 
 [node name="LeftFoot" type="BoneAttachment" parent="Skeleton"]
-transform = Transform( 0.867541, 0.0187116, 0.497012, -0.0320739, 0.999318, 0.0183648, -0.496329, -0.0318715, 0.86755, 0.161339, 0.00608159, 0.103649 )
+transform = Transform( 0.867697, 0.0189909, 0.496731, -0.0341716, 0.999186, 0.0214933, -0.495919, -0.0356216, 0.86764, 0.161344, 0.00604811, 0.104279 )
 bone_name = "mixamorig_LeftToe_End"
 
 [node name="Particles" type="Particles" parent="Skeleton/LeftFoot"]
@@ -658,14 +658,16 @@ script = ExtResource( 10 )
 inventory = NodePath("../Inventory")
 
 [node name="ShieldHandler" type="Spatial" parent="."]
+editor/display_folded = true
 script = ExtResource( 11 )
 
 [node name="Shield" parent="ShieldHandler" instance=ExtResource( 12 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.01914, 0 )
 
 [node name="JetpackHandler" type="Spatial" parent="."]
+editor/display_folded = true
 script = ExtResource( 13 )
-max_power = 0.8
+max_power = 1.3
 activation_delay = 0.2
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="JetpackHandler"]

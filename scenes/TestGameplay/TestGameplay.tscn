@@ -135,22 +135,22 @@ distance = 20.0
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22544, 0 )
 
 [node name="Skeleton" parent="Player" index="1"]
-bones/5/bound_children = [ NodePath("Head") ]
-bones/22/bound_children = [ NodePath("RightHand") ]
-bones/35/bound_children = [ NodePath("LeftFoot") ]
-bones/40/bound_children = [ NodePath("RightFoot") ]
+bones/5/bound_children = [  ]
+bones/22/bound_children = [  ]
+bones/35/bound_children = [  ]
+bones/40/bound_children = [  ]
 
 [node name="Head" parent="Player/Skeleton" index="1"]
-transform = Transform( 0.999516, 0.0153671, 0.0270443, -0.0138759, 0.998417, -0.0544924, -0.0278389, 0.0540904, 0.998147, -0.0270385, 1.5603, -0.052183 )
+transform = Transform( 0.999498, 0.0179849, 0.0260757, -0.0169995, 0.999151, -0.0375293, -0.0267285, 0.0370672, 0.998955, -0.0352097, 1.55935, -0.0602589 )
 
 [node name="RightHand" parent="Player/Skeleton" index="2"]
-transform = Transform( 0.332516, 0.0892521, 0.938864, 0.130522, -0.990286, 0.0479142, 0.93402, 0.106611, -0.340937, -0.222366, 0.94814, -0.0106842 )
+transform = Transform( 0.341612, 0.0875567, 0.935755, 0.131133, -0.990352, 0.0447942, 0.930646, 0.107407, -0.349799, -0.232082, 0.951911, -0.016343 )
 
 [node name="RightFoot" parent="Player/Skeleton" index="3"]
-transform = Transform( 0.991681, 0.00145137, -0.128711, -2.54288e-005, 0.999938, 0.0110792, 0.128719, -0.0109842, 0.991619, 0.0819502, -0.00123, -0.0326249 )
+transform = Transform( 0.991526, 0.00112423, -0.129899, 0.000226557, 0.999946, 0.0103832, 0.129904, -0.0103245, 0.991471, 0.0821832, -0.00109703, -0.0323528 )
 
 [node name="LeftFoot" parent="Player/Skeleton" index="4"]
-transform = Transform( 0.867894, 0.0177513, 0.496433, -0.0322322, 0.999269, 0.0206213, -0.495704, -0.0338959, 0.867831, 0.161403, 0.00600117, 0.104318 )
+transform = Transform( 0.867162, 0.0171812, 0.49773, -0.0323413, 0.999238, 0.0218559, -0.496975, -0.035048, 0.867059, 0.161267, 0.00592646, 0.104059 )
 
 [node name="AnimationTree" parent="Player" index="12"]
 parameters/StateMachine/playback = SubResource( 3 )

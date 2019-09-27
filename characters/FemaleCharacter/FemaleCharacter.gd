@@ -134,7 +134,7 @@ func _physics_process(delta):
 	velocity.z = hv.z
 	
 	velocity = move_and_slide( velocity , Vector3.UP )
-	
+	global_transform.origin.z = 0
 	velocity.y = max(MAX_FALL_SPEED, velocity.y)
 	
 	

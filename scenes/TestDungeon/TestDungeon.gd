@@ -116,6 +116,6 @@ func _on_Player_died():
 	var level = $World/Level.get_child(0)
 	
 	if level:
-		level.reset_player()
+		level.reset_player($World/player)
 	
 	pass # Replace with function body.

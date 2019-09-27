@@ -3,7 +3,7 @@
 [ext_resource path="res://scenes/MainGame/MainGame.gd" type="Script" id=1]
 [ext_resource path="res://scenes/WorldPlanet/WorldPlanet.tscn" type="PackedScene" id=2]
 [ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=3]
-[ext_resource path="res://scenes/MainGame/Camera.gd" type="Script" id=4]
+[ext_resource path="res://tools/Camera/Camera.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ui/Game/Ammo/Ammo.tscn" type="PackedScene" id=5]
 [ext_resource path="res://ui/Game/Health/Health.tscn" type="PackedScene" id=6]
 [ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=7]
@@ -17,30 +17,36 @@ script = ExtResource( 1 )
 [node name="World" type="Spatial" parent="."]
 
 [node name="Level" type="Spatial" parent="World"]
+editor/display_folded = true
 
 [node name="WorldPlanet" parent="World/Level" instance=ExtResource( 2 )]
 
 [node name="Player" parent="World" instance=ExtResource( 3 )]
+editor/display_folded = true
 
 [node name="Skeleton" parent="World/Player" index="1"]
-bones/5/bound_children = [ NodePath("Head") ]
-bones/22/bound_children = [ NodePath("RightHand") ]
+bones/5/bound_children = [  ]
+bones/22/bound_children = [  ]
+bones/35/bound_children = [  ]
+bones/40/bound_children = [  ]
 
 [node name="Head" parent="World/Player/Skeleton" index="1"]
-transform = Transform( 0.999537, 0.017027, 0.0252632, -0.0161975, 0.999335, -0.0326848, -0.0258029, 0.0322601, 0.999146, -0.0344011, 1.55933, -0.0614273 )
+transform = Transform( 0.999463, 0.0183264, 0.0271595, -0.0172333, 0.999053, -0.039955, -0.027866, 0.0394654, 0.998831, -0.0352778, 1.55932, -0.0597555 )
 
 [node name="RightHand" parent="World/Player/Skeleton" index="2"]
-transform = Transform( 0.343144, 0.0856878, 0.935368, 0.13094, -0.990471, 0.0427004, 0.93011, 0.107826, -0.351094, -0.232687, 0.95362, -0.0171247 )
+transform = Transform( 0.341533, 0.0881122, 0.93573, 0.130965, -0.990343, 0.0454545, 0.930699, 0.107024, -0.349776, -0.23151, 0.950923, -0.0160495 )
 
-[node name="AnimationTree" parent="World/Player" index="11"]
+[node name="RightFoot" parent="World/Player/Skeleton" index="3"]
+transform = Transform( 0.991506, 0.0013363, -0.130055, 2.08616e-007, 0.999946, 0.0102761, 0.130061, -0.0101894, 0.991452, 0.0820162, -0.00113997, -0.032552 )
+
+[node name="LeftFoot" parent="World/Player/Skeleton" index="4"]
+transform = Transform( 0.867015, 0.0173003, 0.497981, -0.0325537, 0.999228, 0.0219668, -0.497217, -0.0352544, 0.866911, 0.161215, 0.00589607, 0.104254 )
+
+[node name="AnimationTree" parent="World/Player" index="12"]
 parameters/StateMachine/playback = SubResource( 1 )
 
-[node name="Camera" type="Camera" parent="World"]
-fov = 30.0
-script = ExtResource( 4 )
+[node name="Camera" parent="World" instance=ExtResource( 4 )]
 target = NodePath("../Player")
-distance = 20.0
-target_y_offset = 2.0
 
 [node name="UI" type="Control" parent="."]
 anchor_right = 1.0
