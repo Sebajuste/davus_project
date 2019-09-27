@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://models/Doors/DungeonPipe/PipeDoor00.tscn" type="PackedScene" id=1]
 [ext_resource path="res://objects/doors/DungeonPipe/DungeonPipe.gd" type="Script" id=2]
 [ext_resource path="res://models/Doors/DungeonPipe/worldPalette.material" type="Material" id=3]
 [ext_resource path="res://objects/doors/DungeonPipe/Area.gd" type="Script" id=4]
+[ext_resource path="res://sounds/doors/door.wav" type="AudioStream" id=5]
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 1, 0.183917, 0.40681 )
@@ -69,14 +70,13 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.835009, 2.61601 )
 shape = SubResource( 2 )
 
 [node name="doorBack001" parent="doorFlat" index="2"]
-visible = false
 mesh = SubResource( 3 )
 
 [node name="doorFront001" parent="doorFlat" index="3"]
-visible = false
 mesh = SubResource( 4 )
 
 [node name="Area" type="Area" parent="." index="1"]
+editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 2 )
 collision_layer = 8
 collision_mask = 2
@@ -86,10 +86,17 @@ script = ExtResource( 4 )
 transform = Transform( 1, 0, 0, 0, -4.37114e-008, -1, 0, 1, -4.37114e-008, 0, 1.18541, -1.19209e-007 )
 shape = SubResource( 5 )
 
-[node name="CloseTimer" type="Timer" parent="." index="3"]
+[node name="OpenSound" type="AudioStreamPlayer3D" parent="." index="3"]
+stream = ExtResource( 5 )
+unit_db = 20.0
+pitch_scale = 0.3
+max_distance = 30.0
+bus = "SoundEffects"
+
+[node name="CloseTimer" type="Timer" parent="." index="4"]
 one_shot = true
 
-[node name="AnimationTree" parent="." index="5"]
+[node name="AnimationTree" parent="." index="6"]
 parameters/playback = SubResource( 6 )
 [connection signal="body_entered" from="Area" to="." method="_on_Area_body_entered"]
 [connection signal="body_exited" from="Area" to="." method="_on_Area_body_exited"]

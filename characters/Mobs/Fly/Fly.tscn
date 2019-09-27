@@ -11,12 +11,12 @@
 radius = 0.265279
 
 [sub_resource type="SphereShape" id=2]
-radius = 0.883535
+radius = 0.483899
 
 [sub_resource type="SphereShape" id=3]
 radius = 7.20149
 
-[node name="Fly" instance=ExtResource( 1 )]
+[node name="Fly" index="0" instance=ExtResource( 1 )]
 collision_layer = 2
 collision_mask = 3
 script = ExtResource( 2 )
@@ -26,6 +26,7 @@ transform = Transform( 1, 0, 0, 0, -4.37114e-008, -1, 0, 1, -4.37114e-008, 0, 0.
 shape = SubResource( 1 )
 
 [node name="HitBox" parent="." index="1"]
+editor/display_folded = true
 combat_stats = NodePath("../CombatStats")
 
 [node name="CollisionShape" parent="HitBox" index="0"]
@@ -35,6 +36,7 @@ shape = SubResource( 2 )
 transform = Transform( -1, 0, -8.74228e-008, 0, 1, 0, 8.74228e-008, 0, -1, 0, 0, 0 )
 
 [node name="Detection" type="Area" parent="." index="3"]
+editor/display_folded = true
 
 [node name="CollisionShape" type="CollisionShape" parent="Detection" index="0"]
 shape = SubResource( 3 )

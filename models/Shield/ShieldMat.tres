@@ -1,9 +1,0 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=2]
-
-[ext_resource path="res://models/Shield/ShieldFX.tres" type="Shader" id=1]
-
-[resource]
-shader = ExtResource( 1 )
-shader_param/Color = Color( 0, 1, 0.952941, 1 )
-shader_param/Power = 3.0
-shader_param/Intensisy = 1.0
