@@ -22,25 +22,27 @@ editor/display_folded = true
 [node name="WorldPlanet" parent="World/Level" instance=ExtResource( 2 )]
 
 [node name="Player" parent="World" instance=ExtResource( 3 )]
-editor/display_folded = true
 
 [node name="Skeleton" parent="World/Player" index="1"]
-bones/5/bound_children = [  ]
-bones/22/bound_children = [  ]
-bones/35/bound_children = [  ]
-bones/40/bound_children = [  ]
+bones/5/bound_children = [ NodePath("Head") ]
+bones/22/bound_children = [ NodePath("RightHand") ]
+bones/35/bound_children = [ NodePath("LeftFoot") ]
+bones/40/bound_children = [ NodePath("RightFoot") ]
 
 [node name="Head" parent="World/Player/Skeleton" index="1"]
-transform = Transform( 0.999463, 0.0183264, 0.0271595, -0.0172333, 0.999053, -0.039955, -0.027866, 0.0394654, 0.998831, -0.0352778, 1.55932, -0.0597555 )
+transform = Transform( 0.999482, 0.0192567, 0.0258182, -0.0185004, 0.999402, -0.0292211, -0.0263655, 0.0287282, 0.999239, -0.0277809, 1.55949, -0.0627276 )
 
 [node name="RightHand" parent="World/Player/Skeleton" index="2"]
-transform = Transform( 0.341533, 0.0881122, 0.93573, 0.130965, -0.990343, 0.0454545, 0.930699, 0.107024, -0.349776, -0.23151, 0.950923, -0.0160495 )
+transform = Transform( 0.32911, 0.106028, 0.93832, 0.142134, -0.987917, 0.0617802, 0.933533, 0.113036, -0.340205, -0.216563, 0.951369, -0.016146 )
 
 [node name="RightFoot" parent="World/Player/Skeleton" index="3"]
-transform = Transform( 0.991506, 0.0013363, -0.130055, 2.08616e-007, 0.999946, 0.0102761, 0.130061, -0.0101894, 0.991452, 0.0820162, -0.00113997, -0.032552 )
+transform = Transform( 0.991515, 0.00144269, -0.129981, -1.1839e-005, 0.999938, 0.0110082, 0.129989, -0.0109132, 0.991454, 0.0820094, -0.00121776, -0.0324809 )
 
 [node name="LeftFoot" parent="World/Player/Skeleton" index="4"]
-transform = Transform( 0.867015, 0.0173003, 0.497981, -0.0325537, 0.999228, 0.0219668, -0.497217, -0.0352544, 0.866911, 0.161215, 0.00589607, 0.104254 )
+transform = Transform( 0.867657, 0.0177772, 0.496846, -0.0336127, 0.999172, 0.0229514, -0.496027, -0.0366117, 0.867537, 0.161306, 0.0059393, 0.104036 )
+
+[node name="ShieldHandler" parent="World/Player" index="8"]
+editor/display_folded = false
 
 [node name="AnimationTree" parent="World/Player" index="12"]
 parameters/StateMachine/playback = SubResource( 1 )
@@ -63,5 +65,6 @@ visible = false
 [connection signal="died" from="World/Player" to="." method="_on_Player_died"]
 [connection signal="health_changed" from="World/Player" to="UI/Health" method="_on_health_changed"]
 [connection signal="ammo_selected" from="World/Player/AmmoHandler" to="UI/Ammo" method="_on_ammo_selected"]
+[connection signal="shield_changed" from="World/Player/ShieldHandler/Shield" to="UI/Health" method="_on_shield_changed"]
 
 [editable path="World/Player"]
