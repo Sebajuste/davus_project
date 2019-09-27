@@ -25,6 +25,8 @@ var _jump_event := false
 var _jump_action := false
 var _jump_count := MAX_JUMP
 var _jumping := false
+var _air_time := 0.0
+var _floor_time := 0.0
 var _walk_sound_ready := true
 var _look_dir = Vector3()
 var _lock_dir := false
@@ -56,7 +58,7 @@ func _process(delta):
 	_look_dir = Vector3()
 	
 	if controller.type == controller.Type.MOUSE_KEYBOARD:
-		_look_dir = ($CursorSelector.get_target_pos() - global_transform.origin).normalized()
+		_look_dir = ($CursorSelector.get_target_pos() - (global_transform.origin + Vector3(0, 1, 0)))
 	elif controller.type == controller.Type.GAMEPAD:
 		var look_dir = Vector3()
 		look_dir += Vector3.RIGHT * Input.get_action_strength("look_right")
@@ -64,18 +66,20 @@ func _process(delta):
 		look_dir += Vector3.UP * Input.get_action_strength("look_up")
 		look_dir += Vector3.DOWN * Input.get_action_strength("look_down")
 		if look_dir.length() > 0.2:
-			_look_dir = look_dir
+			_look_dir = look_dir * 5
 			_lock_dir = true
 		else:
-			_look_dir = global_transform.basis.z
 			_lock_dir = false
 	
-	if $WeaponHandler.aiming and velocity.y < 0.1:
+	if $WeaponHandler.aiming and _air_time < 0.1 and _floor_time > 0.2:
 		
 		if controller.type == controller.Type.MOUSE_KEYBOARD:
 			$WeaponHandler.target = $CursorSelector.get_target_pos()
 		elif controller.type == controller.Type.GAMEPAD:
-			$WeaponHandler.target = global_transform.origin + _look_dir * 100
+			var look_dir = _look_dir
+			if not _lock_dir:
+				look_dir = Vector3(global_transform.basis.z.x, 0, 0)
+			$WeaponHandler.target = global_transform.origin + look_dir * 100
 		
 		if $WeaponHandler.valid_target:
 				$WeaponHandler.shoot_ready = true
@@ -140,6 +144,11 @@ func _physics_process(delta):
 	if is_on_floor():
 		_jumping = false
 		_jump_count = MAX_JUMP
+		_air_time = 0.0
+		_floor_time += delta
+	else:
+		_floor_time = 0.0
+		_air_time += delta
 	
 	if is_on_floor() or velocity.y > 0:
 		_fall_time = 0.0
