@@ -1,6 +1,6 @@
 extends Spatial
 
-export var key_floor_distance:float = 0.25
+export var key_floor_distance:float = 0#.25
 
 func _ready():
 	pass

@@ -6,13 +6,21 @@ var targets := []
 
 var current_target = null
 
+var ammo_type:String
+var id_monster:int
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	$SpecialMonster.visible = false
 	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+func set_to_monster(ammoType:String, id:int):
+	ammo_type = ammoType
+	id_monster = id
+	$SpecialMonster.visible = true
 
 
 func face_to(position: Vector3):
