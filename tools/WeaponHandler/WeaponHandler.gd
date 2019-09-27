@@ -28,17 +28,18 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	
+	if aiming:
+		aiming_pistol()
+	else:
+		valid_target = false
+	
 	if Input.is_action_pressed("shoot") and shoot_ready and valid_target:
 		if weapon:
 			var ammo = null
 			if _ammo_node:
 				ammo = _ammo_node.get_ammo()
 			weapon.shoot(target, ammo)
-	
-	if aiming:
-		aiming_pistol()
-	else:
-		valid_target = false
 
 
 func _input(event):
