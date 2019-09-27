@@ -4,16 +4,20 @@ const RAY_LENGTH = 1000
 
 onready var camera = get_tree().get_root().get_camera() setget set_camera
 
+var enable := true
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
 	set_as_toplevel(true)
 	$Target.set_as_toplevel(true)
 	
+	controller.connect("controller_changed", self, "_on_controller_changed")
+	
 
 
 func _process(delta):
-	if camera:
+	if camera and enable:
 		var target_pos = _mouse_pos( get_viewport().get_mouse_position() )
 		$Target.global_transform.origin = target_pos
 
@@ -51,3 +55,13 @@ func _mouse_pos(mouse_pos) -> Vector3:
 		target_pos.z = 0
 	
 	return target_pos
+
+
+func _on_controller_changed(controller):
+	
+	if controller == Controller.Type.MOUSE_KEYBOARD:
+		enable = true
+	else:
+		enable = false
+	$Target.visible = enable
+	

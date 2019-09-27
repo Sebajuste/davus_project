@@ -1,10 +1,13 @@
 extends KinematicBody
 
+const GRAVITY := 9.8
+const MAX_JUMP := 1
+const MAX_FALL_SPEED := -20.0
+
 signal died
 signal health_changed(health, max_health)
 
-const GRAVITY := 9.8
-const MAX_JUMP := 1
+
 
 export var max_speed := 10
 
@@ -29,9 +32,15 @@ var _jumping := false
 
 var _walk_sound_ready := true
 
+var _look_dir = Vector3()
+var _lock_dir := false
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	
+	emit_signal("health_changed", $CombatStats.health, $CombatStats.max_health)
+	
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -47,15 +56,34 @@ func _process(delta):
 	if Input.is_action_just_released("jump"):
 		_jump_action =  false
 	
+	_look_dir = Vector3()
 	
-	if $WeaponHandler.aiming and velocity.y < 0.1 and $WeaponHandler.valid_target:
-		$WeaponHandler.shoot_ready = true
-		$WeaponHandler.target = $CursorSelector.get_target_pos()
+	if controller.type == controller.Type.MOUSE_KEYBOARD:
+		_look_dir = ($CursorSelector.get_target_pos() - global_transform.origin).normalized()
+	elif controller.type == controller.Type.GAMEPAD:
+		var look_dir = Vector3()
+		look_dir += Vector3.RIGHT * Input.get_action_strength("look_right")
+		look_dir += Vector3.LEFT * Input.get_action_strength("look_left")
+		look_dir += Vector3.UP * Input.get_action_strength("look_up")
+		look_dir += Vector3.DOWN * Input.get_action_strength("look_down")
+		if look_dir.length() > 0.2:
+			_look_dir = look_dir
+			_lock_dir = true
+		else:
+			_look_dir = global_transform.basis.z
+			_lock_dir = false
+	
+	if $WeaponHandler.aiming and velocity.y < 0.1:
+		
+		if controller.type == controller.Type.MOUSE_KEYBOARD:
+			$WeaponHandler.target = $CursorSelector.get_target_pos()
+		elif controller.type == controller.Type.GAMEPAD:
+			$WeaponHandler.target = global_transform.origin + _look_dir * 100
+		
+		if $WeaponHandler.valid_target:
+				$WeaponHandler.shoot_ready = true
 	else:
 		$WeaponHandler.shoot_ready = false
-	
-	emit_signal("health_changed", $CombatStats.health, $CombatStats.max_health)
-	
 
 
 func _physics_process(delta):
@@ -105,6 +133,9 @@ func _physics_process(delta):
 	
 	velocity = move_and_slide( velocity , Vector3.UP )
 	
+	velocity.y = max(MAX_FALL_SPEED, velocity.y)
+	
+	
 	if $CombatStats.health == 0:
 		return
 	
@@ -117,11 +148,27 @@ func _physics_process(delta):
 	else:
 		_fall_time += delta
 	
-	if dir.length() > 0.1:
+	if $WeaponHandler.aiming:
+		if controller.type == Controller.Type.GAMEPAD and not _lock_dir:
+			var look_pos = global_transform.origin - dir
+			if global_transform.origin != look_pos:
+				var rotTransform = global_transform.looking_at(look_pos, Vector3.UP)
+				global_transform = Transform(rotTransform.basis, global_transform.origin)
+				global_transform.origin.z = 0
+			
+		else:
+			var look_pos = global_transform.origin
+			look_pos.x -= _look_dir.x
+			if global_transform.origin != look_pos:
+				var rotTransform = global_transform.looking_at(look_pos, Vector3.UP)
+				global_transform = Transform(rotTransform.basis, global_transform.origin)
+				global_transform.origin.z = 0
+	else:
 		var look_pos = global_transform.origin - dir
-		var rotTransform = global_transform.looking_at(look_pos, Vector3.UP)
-		global_transform = Transform(rotTransform.basis, global_transform.origin)
-		global_transform.origin.z = 0
+		if global_transform.origin != look_pos:
+			var rotTransform = global_transform.looking_at(look_pos, Vector3.UP)
+			global_transform = Transform(rotTransform.basis, global_transform.origin)
+			global_transform.origin.z = 0
 	
 	if is_on_floor():
 		if abs(velocity.x) > 0.5:
@@ -148,7 +195,7 @@ func _input(event) -> void:
 		if usable != null and usable.has_method("use"):
 			usable.use(self)
 	
-	pass
+
 
 
 func get_items() -> Array:

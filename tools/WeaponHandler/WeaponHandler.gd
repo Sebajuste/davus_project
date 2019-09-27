@@ -28,7 +28,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if Input.is_action_pressed("shoot") and shoot_ready:
+	if Input.is_action_pressed("shoot") and shoot_ready and valid_target:
 		if weapon:
 			var ammo = null
 			if _ammo_node:
@@ -66,30 +66,19 @@ func equip_weapon(item: Item):
 
 func aiming_pistol():
 	
-	var target_pos = $"../CursorSelector".get_target_pos()
-	
 	var bone = $"../Skeleton".find_bone("mixamorig_Spine2")
 	
 	var bone_pos = $"../Skeleton".get_bone_global_pose(bone).origin
 	
 	var cur_dir = get_parent().global_transform.basis.z.normalized()
-	var target_dir = (target_pos - (get_parent().global_transform.origin+bone_pos)).normalized()
-	
-	var look_dir = Vector3()
-	
-	look_dir += Vector3.UP * Input.get_action_strength("look_up")
-	look_dir += Vector3.DOWN * Input.get_action_strength("look_down")
-	look_dir += Vector3.RIGHT * Input.get_action_strength("look_right")
-	look_dir += Vector3.LEFT * Input.get_action_strength("look_left")
-	
-	if look_dir.length() > 0.5:
-		target_dir = look_dir.normalized()
+	var target_pos = target - (get_parent().global_transform.origin+bone_pos)
+	var target_dir = target_pos.normalized()
 	
 	var look_dot = cur_dir.dot(target_dir)
 	
 	if look_dot > 0.2:
 		
-		valid_target = true
+		valid_target = target_pos.length() > 2.0
 		
 		var rotation_angle = acos(cur_dir.x) - acos(target_dir.x)
 		
