@@ -628,11 +628,12 @@ func _drop_unlockables(pos:Vector3):
 				else:
 					key.id_door = unlockable["id"]
 			_resourceMgr.eUnlockableTypes.Rack:
-				var rack = _place_object(pos, _resourceMgr.RACK_RESOURCES, Vector3.ZERO, 0, false)
+				var offset = pos + Vector3(0, 0, -1)
+				var rack = _place_object(offset, _resourceMgr.RACK_RESOURCES, Vector3.ZERO, 0, false)
 				if rack == null:
 					print("No key find in the resources : ", _resourceMgr.RACK_RESOURCES)
 				else:
-					rack.id_monster = unlockable["id"]
+					rack.id = unlockable["id"]
 					var prop:Dictionary = unlockable["properties"]
 					_insert_ammo(rack, prop["ammo_type"])
 			_:

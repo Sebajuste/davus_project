@@ -38,7 +38,7 @@ const KEYS_RESOURCES:Array = [
 		preload("res://objects/keys/DoorKey/DoorKey.tscn"),
 	]
 const RACK_RESOURCES:Array = [
-		preload("res://objects/weapons/WeaponRack.tscn"),
+		preload("res://objects/chests/WeaponRack/WeaponRack.tscn"),
 	]
 
 
