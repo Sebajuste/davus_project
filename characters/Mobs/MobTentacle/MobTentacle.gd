@@ -2,6 +2,16 @@ extends KinematicBody
 
 var anim_state_machine
 
+########################################## TODO : Faire dériver de Mob et retirer ces lignes
+var ammo_type:String
+var id_monster:int
+
+func set_to_monster(ammoType:String, id:int):
+	ammo_type = ammoType
+	id_monster = id
+	$SpecialMonster.visible = true
+##########################################
+
 
 var _targets := []
 
@@ -18,6 +28,9 @@ func _ready():
 	else:
 		anim_state_machine.start("Idle")
 	"""
+########################################## TODO : Faire dériver de Mob et retirer ces lignes
+	$SpecialMonster.visible = false
+##########################################
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

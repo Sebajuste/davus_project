@@ -26,10 +26,21 @@ const INTERIOR_DOORS:Array = [
 		preload("res://objects/doors/DungeonPipe/DungeonPipe00.tscn"),
 	]
 
-# Keys
+# Ammo
+const AMMO_TYPES:Array = [ 
+		"Fire", 
+		"Ice", 
+	]
+
+# Keys/Rack
+enum eUnlockableTypes { Key = 0, Rack = 1 }
 const KEYS_RESOURCES:Array = [
 		preload("res://objects/keys/DoorKey/DoorKey.tscn"),
 	]
+const RACK_RESOURCES:Array = [
+		preload("res://objects/weapons/WeaponRack.tscn"),
+	]
+
 
 # Platforms
 const PLATFORMS_RESOURCES:Array = [
@@ -79,4 +90,3 @@ const MOB_RESOURCES:Dictionary = {
 			preload("res://characters/Mobs/Fly/Fly.tscn"),
 		],
 	}
-

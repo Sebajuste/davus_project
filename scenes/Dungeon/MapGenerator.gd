@@ -7,6 +7,7 @@ signal dungeon_gen_finished(graph_generator)
 var rnd:RandomNumberGenerator
 var _graph_generator:GraphGenerator
 var mob_chance_corridors:float
+var chance_monster_or_door:float
 var min_nb_key:int
 var key_occupation:float
 
@@ -21,13 +22,13 @@ var _eTilesType := _resourceMgr.eTilesType
 var _eDirection := DirectionHelper.eDirection
 var _pathfinding:AStar
 var _rooms_areas:Dictionary		# <point, room>
-var _currentDoorID:int = 0
+var _currentLockableID:int = 0
 var _pathRoomsCounter:int = 0
 var _totalRoomsCounter:int = 0
-var _desired_nb_of_keys:int = 0
-var _closed_doors:Dictionary		# <id, position>
-var _keys_of_doors_to_drop:Array	# <id>
-var _dropped_keys:Dictionary		# <id, position>
+var _desired_nb_of_unlockables:int = 0
+var _closed_ways:Dictionary				# <id, position>
+var _unlockables_to_drop:Array			# Array of Dictionaries : <Dictionary(id =..., type = ..., properties = { ... = ... })>
+var _dropped_unlockables:Dictionary		# <Dictionary(id =..., type = ..., properties = { ... = ... }), position>
 
 var tile_size:int
 var spawn_position:Vector3
@@ -105,8 +106,8 @@ func gen_dungeon(graph_generator:GraphGenerator) -> bool:
 	_graph_generator = graph_generator
 	_pathfinding = _graph_generator.pathfinding
 	_rooms_areas = _graph_generator.rooms_areas
-	_desired_nb_of_keys = _get_number_of_keys(_graph_generator.shortest_path.size())
-	if PRINT_DOOR_KEYS: print("nbKeys = ", _desired_nb_of_keys)
+	_desired_nb_of_unlockables = _get_number_of_keys(_graph_generator.shortest_path.size())
+	if PRINT_DOOR_KEYS: print("nbKeys = ", _desired_nb_of_unlockables)
 	var startMiddle:Vector3 = _geometry.to_vector3(_graph_generator.starting_room.get_middle())
 	_fill_the_map()
 	_write_rooms_on_map()
@@ -126,14 +127,14 @@ func gen_dungeon(graph_generator:GraphGenerator) -> bool:
 		_seed_counter += 1
 		if DEBUG:
 			if TEST_DOOR_KEYS_EQUALITY:
-				if _dropped_keys.size() != _closed_doors.size():
+				if _dropped_unlockables.size() != _closed_ways.size():
 					_continue_looping = false
 					if PRINT_DOOR_KEYS: 
-						print("================================ Desired = ",_desired_nb_of_keys, " dropped keys = ", _dropped_keys.size())
+						print("================================ Desired = ",_desired_nb_of_unlockables, " dropped keys = ", _dropped_unlockables.size())
 					
-				if _closed_doors.size() != _desired_nb_of_keys:
+				if _closed_ways.size() != _desired_nb_of_unlockables:
 					if PRINT_DOOR_KEYS: 
-						print("================================ Desired = ",_desired_nb_of_keys, " closed doors = ", _closed_doors.size())
+						print("================================ Desired = ",_desired_nb_of_unlockables, " closed doors = ", _closed_ways.size())
 			if _continue_looping:
 				if _seed_counter < _desired_seed_counter:
 					return false #emit_signal("request_new_dungeon")
@@ -206,9 +207,10 @@ func _write_corridors_on_map() -> bool:	# Return true on error
 				var e:bool = false
 				var pointDeadEnd:bool = false
 				var connectionDeadEnd:bool = false
+				var closeEndingRoom:bool = false
 				if point in shortest_path && connection in shortest_path:
-					var closeEndingRoom:bool = _rooms_areas[point] == _graph_generator.ending_room && _desired_nb_of_keys > 0
-					if rnd.randi() % 2 == 0:
+					closeEndingRoom = _rooms_areas[point] == _graph_generator.ending_room && _desired_nb_of_unlockables > 0
+					if rnd.randi() % 2 == 0  || closeEndingRoom:
 						e = _should_lock() || closeEndingRoom
 					else:
 						s = _should_lock()
@@ -223,26 +225,23 @@ func _write_corridors_on_map() -> bool:	# Return true on error
 					if PRINT_DOOR_KEYS: 
 						print("Close door = ", point, " -> ", connection)
 				
-				var dropKey:bool = _should_drop_key(pointDeadEnd || connectionDeadEnd)
+				var prefab
+				var dropKey:bool = _should_drop_unlockable(pointDeadEnd || connectionDeadEnd)
 				if dropKey:
-					var key_position:Vector3
-					var prefab
 					if pointDeadEnd:
 						prefab = _rooms_areas[point].prefab
 					else:
 						prefab = _rooms_areas[connection].prefab
 					
-					if PRINT_DOOR_KEYS: 
-						print("drop key / prefab = ", prefab)
 					if prefab:
-						key_position = prefab.get_key_spot(rnd)
-						_drop_key(key_position)
+						var key_position:Vector3 = prefab.get_key_spot(rnd)
+						_drop_unlockables(key_position)
 						if PRINT_DOOR_KEYS: 
 							print("key position = ", key_position)
 					else:
 						print("No prefab found")
 				
-				var error:bool = _dig_path(start, end, s || FORCE_START_DOOR, e || FORCE_END_DOOR)
+				var error:bool = _dig_path(start, end, s || FORCE_START_DOOR, e || FORCE_END_DOOR, closeEndingRoom)
 				if error:
 					return error
 		rooms_done.append(point)
@@ -272,7 +271,7 @@ func _add_outside_door(room:Room):
 					return door
 	return null
 
-func _dig_path(start: Dictionary, end: Dictionary, lockDoorOnStart: bool = false, lockDoorOnEnd: bool = false) -> bool:	# Return true on error
+func _dig_path(start: Dictionary, end: Dictionary, lockDoorOnStart: bool = false, lockDoorOnEnd: bool = false, refuseMonster:bool = false) -> bool:	# Return true on error
 	if start.size() > 0 && end.size() > 0:
 		var startDir = start.keys()[0]
 		var endDir = end.keys()[0]
@@ -295,14 +294,14 @@ func _dig_path(start: Dictionary, end: Dictionary, lockDoorOnStart: bool = false
 			if startPoint == 10 :
 				startPoint=startPoint
 		if horizontalPath:		# Horizontal direction only
-			_dig_horizontally(startPos, endPos, putMobSpawn, lockDoorOnStart, lockDoorOnEnd)
+			_dig_horizontally(startPos, endPos, putMobSpawn, lockDoorOnStart, lockDoorOnEnd, refuseMonster)
 		elif verticalPath:		# Vertical direction only
-			_dig_vertically(startPos, endPos, putMobSpawn, lockDoorOnStart, lockDoorOnEnd)
+			_dig_vertically(startPos, endPos, putMobSpawn, lockDoorOnStart, lockDoorOnEnd, refuseMonster)
 		else:					# Mixed directions
 			if horizontalStart && verticalEnd:
-				_dig_mixed_directions(startPos, endPos, putMobSpawn, lockDoorOnStart, lockDoorOnEnd)
+				_dig_mixed_directions(startPos, endPos, putMobSpawn, lockDoorOnStart, lockDoorOnEnd, refuseMonster)
 			elif verticalStart && horizontalEnd:
-				_dig_mixed_directions(endPos, startPos, putMobSpawn, lockDoorOnEnd, lockDoorOnStart)
+				_dig_mixed_directions(endPos, startPos, putMobSpawn, lockDoorOnEnd, lockDoorOnStart, refuseMonster)
 		
 		if DEBUG:
 			_apply_tile_on_tilemap(_geometry.to_vector3(start.values()[0]), _eTilesType.DoorInsertion)
@@ -329,7 +328,7 @@ func _first_step_is_on_right(dif: Vector3, dir: Vector2) -> bool:
 			return yIndex % 2 == 0
 
 
-func _dig_horizontally(startPos: Vector3, endPos: Vector3, mobSpawn: bool, lockDoorOnStart: bool, lockDoorOnEnd: bool):
+func _dig_horizontally(startPos: Vector3, endPos: Vector3, mobSpawn: bool, lockDoorOnStart: bool, lockDoorOnEnd: bool, refuseMonster:bool):
 	startPos = _geometry.vector3_floor(startPos)
 	endPos = _geometry.vector3_floor(endPos)
 	var dif = _geometry.vector3_floor(endPos - startPos)
@@ -338,7 +337,14 @@ func _dig_horizontally(startPos: Vector3, endPos: Vector3, mobSpawn: bool, lockD
 	
 	if mobSpawn:
 		if step.y == 0:
-			_add_mob_spawn(middlePos, _resourceMgr.eMobType.Floor)
+			if (lockDoorOnStart || lockDoorOnEnd) && not refuseMonster:
+				var isMonster = rnd.randf() <= chance_monster_or_door
+				if isMonster:
+					_add_mob_spawn(middlePos, _resourceMgr.eMobType.Floor, true)
+					lockDoorOnStart = false
+					lockDoorOnEnd = false
+			else:
+				_add_mob_spawn(middlePos, _resourceMgr.eMobType.Floor)
 		else:
 			_add_mob_spawn(middlePos, _resourceMgr.eMobType.Fly)
 	
@@ -408,7 +414,7 @@ func _dig_horizontally(startPos: Vector3, endPos: Vector3, mobSpawn: bool, lockD
 			toggleRight = not toggleRight
 
 
-func _dig_vertically(startPos: Vector3, endPos: Vector3, mobSpawn: bool, lockDoorOnStart: bool, lockDoorOnEnd: bool):
+func _dig_vertically(startPos: Vector3, endPos: Vector3, mobSpawn: bool, lockDoorOnStart: bool, lockDoorOnEnd: bool, refuseMonster:bool):
 	startPos = _geometry.vector3_floor(startPos)
 	endPos = _geometry.vector3_floor(endPos)
 	var dif = _geometry.vector3_floor(endPos - startPos)
@@ -429,7 +435,14 @@ func _dig_vertically(startPos: Vector3, endPos: Vector3, mobSpawn: bool, lockDoo
 	
 	if mobSpawn:
 		if abs(dif.x) > 1:
-			_add_mob_spawn(middlePos, _resourceMgr.eMobType.Floor)
+			if (lockDoorOnStart || lockDoorOnEnd) && not refuseMonster:
+				var isMonster = rnd.randf() <= chance_monster_or_door
+				if isMonster:
+					_add_mob_spawn(middlePos, _resourceMgr.eMobType.Floor, true)
+					lockDoorOnBottom = false
+					lockDoorOnTop = false
+			else:
+				_add_mob_spawn(middlePos, _resourceMgr.eMobType.Floor)
 		else:
 			_add_mob_spawn(middlePos, _resourceMgr.eMobType.Fly)
 	
@@ -491,7 +504,7 @@ func _dig_vertically(startPos: Vector3, endPos: Vector3, mobSpawn: bool, lockDoo
 				#_apply_tile_on_tilemap(v, _eTilesType.Empty)
 
 
-func _dig_mixed_directions(horizontalPos: Vector3, verticalPos: Vector3, mobSpawn: bool, lockDoorOnHorizontal: bool, lockDoorOnVertical: bool):
+func _dig_mixed_directions(horizontalPos: Vector3, verticalPos: Vector3, mobSpawn: bool, lockDoorOnHorizontal: bool, lockDoorOnVertical: bool, refuseMonster:bool):
 	
 ################# debug #################
 	#_continue_looping = false
@@ -506,7 +519,14 @@ func _dig_mixed_directions(horizontalPos: Vector3, verticalPos: Vector3, mobSpaw
 		if step.y < 0:
 			_add_mob_spawn(Vector3(verticalPos.x, horizontalPos.y, 0), _resourceMgr.eMobType.Fly)		
 		else:
-			_add_mob_spawn(Vector3(verticalPos.x, horizontalPos.y, 0))
+			if (lockDoorOnHorizontal || lockDoorOnVertical) && not refuseMonster:
+				var isMonster = rnd.randf() <= chance_monster_or_door
+				if isMonster:
+					_add_mob_spawn(Vector3(verticalPos.x, horizontalPos.y, 0), _resourceMgr.eMobType.Floor, true)
+					lockDoorOnHorizontal = false
+					lockDoorOnVertical = false
+			else:
+				_add_mob_spawn(Vector3(verticalPos.x, horizontalPos.y, 0))
 	
 	for x in range(horizontalPos.x + step.x, verticalPos.x, step.x):
 		var v = Vector3(x, horizontalPos.y, 0)
@@ -562,50 +582,88 @@ func _get_number_of_keys(nb_rooms_on_path:int) ->int:
 
 func _should_lock() ->bool:
 	_pathRoomsCounter += 1
-	var remainingRoomsToClose:int = _desired_nb_of_keys - _closed_doors.size()
+	var remainingRoomsToClose:int = _desired_nb_of_unlockables - _closed_ways.size()
 	var remainingDoorsOnPath:int = _graph_generator.shortest_path.size() - 2 - _pathRoomsCounter - remainingRoomsToClose
-	if remainingDoorsOnPath > 0 && _closed_doors.size() < _desired_nb_of_keys:
+	if remainingDoorsOnPath > 0 && _closed_ways.size() < _desired_nb_of_unlockables:
 		var hazard = rnd.randf()
 		if PRINT_DOOR_KEYS: 
-			print("Should lock : ",hazard, " <= ", remainingRoomsToClose, " / ", remainingDoorsOnPath)
+			print("Should lock : ", hazard, " <= ", remainingRoomsToClose, " / ", remainingDoorsOnPath)
 		if hazard <= (float(remainingRoomsToClose) / float(remainingDoorsOnPath)):
 			return true
 	return false
 
 
-func _should_drop_key(is_dead_end:bool) ->bool:
+func _should_drop_unlockable(is_dead_end:bool) ->bool:
 	_totalRoomsCounter += 1
-	if _keys_of_doors_to_drop.size() > 0:
+	if _unlockables_to_drop.size() > 0:
 		var remainingRooms:int = _rooms_areas.size() - 1 - _totalRoomsCounter
 		if remainingRooms <= 0:
 			remainingRooms = 1
 		var hazard = rnd.randf()
 		if PRINT_DOOR_KEYS: 
-			print("_should_drop_key :", is_dead_end, " || ", hazard, " <= ", _keys_of_doors_to_drop.size(), " / ", remainingRooms)
-		if is_dead_end || hazard <= (float(_keys_of_doors_to_drop.size()) / float(remainingRooms)):
+			print("_should_drop_unlockable :", is_dead_end, " || ", hazard, " <= ", _unlockables_to_drop.size(), " / ", remainingRooms)
+		if is_dead_end || hazard <= (float(_unlockables_to_drop.size()) / float(remainingRooms)):
 			return true
 	return false
 
 
-func _drop_key(pos:Vector3):
-	if _keys_of_doors_to_drop.size() > 0:
-		var id = _keys_of_doors_to_drop.front()
-		_dropped_keys[id] = pos
-		var key = _place_object(pos, _resourceMgr.KEYS_RESOURCES, Vector3.ZERO, 0, false)
-		if key == null:
-			print("No key find in the resources : ", _resourceMgr.KEYS_RESOURCES)
-		else:
-			key.id_door = id
-			_keys_of_doors_to_drop.erase(id)
+func _create_unlockable(lockedPos:Vector3, type:int, properties:Dictionary = {}) -> int:		# Return the unlockable ID
+	var id:int = _currentLockableID
+	_currentLockableID += 1
+	_closed_ways[id] = lockedPos
+	_unlockables_to_drop.append({ "id":id, "type": type, "properties": properties })
+	return id
 
-func _add_mob_spawn(pos:Vector3, mobType:int = -1):
+
+func _drop_unlockables(pos:Vector3):
+	if _unlockables_to_drop.size() > 0:
+		var unlockable:Dictionary = _unlockables_to_drop.front()
+		_dropped_unlockables[unlockable] = pos
+		match unlockable["type"]:
+			_resourceMgr.eUnlockableTypes.Key:
+				var key = _place_object(pos, _resourceMgr.KEYS_RESOURCES, Vector3.ZERO, 0, false)
+				if key == null:
+					print("No key find in the resources : ", _resourceMgr.KEYS_RESOURCES)
+					return
+				else:
+					key.id_door = unlockable["id"]
+			_resourceMgr.eUnlockableTypes.Rack:
+				var rack = _place_object(pos, _resourceMgr.RACK_RESOURCES, Vector3.ZERO, 0, false)
+				if rack == null:
+					print("No key find in the resources : ", _resourceMgr.RACK_RESOURCES)
+				else:
+					rack.id_monster = unlockable["id"]
+					var prop:Dictionary = unlockable["properties"]
+					_insert_ammo(rack, prop["ammo_type"])
+			_:
+				print("unknow unlockable type")
+		_unlockables_to_drop.erase(unlockable)
+
+
+func _insert_ammo(weapon_rack:Spatial, ammoType:String):
+	var ammo = Item.new()
+	ammo.type = "ammo"
+	ammo.properties["ammo_type"] = ammoType
+	weapon_rack.add_item(ammo)
+
+
+func _add_mob_spawn(pos:Vector3, mobType:int = -1, lockableMonster:bool = false):
 	if mobType == -1:
 		mobType = rnd.randi() % _resourceMgr.MOB_RESOURCES.size()
 	
 	var types = _resourceMgr.MOB_RESOURCES.get(mobType)
 	if types:
-		if _place_object(pos, types) == null:
+		var mob = _place_object(pos, types)
+		if mob == null:
 			print("No mob find in the resources : ", mobType, types)
+		else:
+			if lockableMonster:
+				var variant:int = rnd.randi() % _resourceMgr.AMMO_TYPES.size()
+				var ammoType:String = _resourceMgr.AMMO_TYPES[variant]
+				var id:int = _create_unlockable(pos, _resourceMgr.eUnlockableTypes.Rack, { "ammo_type": ammoType } )
+				mob.set_to_monster(ammoType, id)
+				if PRINT_DOOR_KEYS:
+					print("Mob ID = ", mob.id_monster, " / Ammo type = ", mob.ammo_type)
 	else:
 		print("No mob type find in the resources : ", mobType)
 
@@ -646,10 +704,7 @@ func _apply_tile_on_tilemap(pos: Vector3, tileType: int, angle_z:float = 0, para
 				if parameter != null:
 					door.set_locked(parameter.lock)
 					if parameter.lock:
-						door.id = _currentDoorID
-						_closed_doors[_currentDoorID] = v
-						_keys_of_doors_to_drop.append(_currentDoorID)
-						_currentDoorID += 1
+						door.id = _create_unlockable(v, _resourceMgr.eUnlockableTypes.Key)
 		
 		_eTilesType.Ladder:
 			match rnd.randi() % 2:
@@ -679,13 +734,13 @@ func _apply_tile_on_tilemap(pos: Vector3, tileType: int, angle_z:float = 0, para
 
 func clear_all():
 	print("===============================================")
-	_closed_doors.clear()
-	_keys_of_doors_to_drop.clear()
-	_dropped_keys.clear()
-	_currentDoorID = 0
+	_closed_ways.clear()
+	_unlockables_to_drop.clear()
+	_dropped_unlockables.clear()
+	_currentLockableID = 0
 	_pathRoomsCounter = 0
 	_totalRoomsCounter = 0
-	_desired_nb_of_keys = 0
+	_desired_nb_of_unlockables = 0
 	
 	var mapElements = get_tree().get_nodes_in_group("MapElements")
 	for element in mapElements:
