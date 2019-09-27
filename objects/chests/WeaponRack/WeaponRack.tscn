@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://models/Props/WeaponRack/WeaponRack.tscn" type="PackedScene" id=1]
+[ext_resource path="res://objects/chests/WeaponRack/WeaponRack.gd" type="Script" id=2]
+[ext_resource path="res://objects/chests/WeaponRack/Area.gd" type="Script" id=3]
+
+[sub_resource type="SphereShape" id=1]
+radius = 1.00259
+
+[node name="WeaponRack" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="Area" type="Area" parent="." index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.10361, 1.54073 )
+collision_layer = 8
+collision_mask = 0
+script = ExtResource( 3 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Area" index="0"]
+shape = SubResource( 1 )

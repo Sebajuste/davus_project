@@ -15,6 +15,7 @@ func _ready():
 
 
 func set_weapon(item: Item) -> void:
+	print("set_weapon: ", item.properties)
 	weapon = item
 	match weapon.type:
 		"gun":

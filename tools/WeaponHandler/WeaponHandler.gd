@@ -59,7 +59,7 @@ func remove():
 func equip_weapon(item: Item):
 	remove()
 	weapon = Pistol.instance()
-	weapon.firing_rate = item.properties.rate
+	weapon.firing_rate = item.properties["rate"]
 	_right_hand_node.add_child(weapon)
 	item.equiped = true
 
