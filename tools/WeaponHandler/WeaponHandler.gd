@@ -103,6 +103,8 @@ func set_aiming(value):
 	if aiming:
 		$"../AnimationTree".set("parameters/StateMachine/Idle/Weapon/current", 1)
 		$"../AnimationTree".set("parameters/StateMachine/Locomotion/Weapon/current", 1)
+		$"../AnimationTree".set("parameters/StateMachine/Locomotion/WeaponBackward/current", 1)
 	else:
 		$"../AnimationTree".set("parameters/StateMachine/Idle/Weapon/current", 0)
 		$"../AnimationTree".set("parameters/StateMachine/Locomotion/Weapon/current", 0)
+		$"../AnimationTree".set("parameters/StateMachine/Locomotion/WeaponBackward/current", 0)
