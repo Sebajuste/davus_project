@@ -1,5 +1,7 @@
 extends Spatial
 
+const WeaponPickUpNotification = preload("res://tools/Notifications/NotificationPickUpWeapon/NotificationPickUpWeapon.tscn")
+
 const TYPE = "gun"
 
 export var damage := 1.0
@@ -33,5 +35,10 @@ func _on_Area_body_entered(body):
 		body.give_item(item)
 		$PickUpSound.play()
 		visible = false
+		
+		var notification = WeaponPickUpNotification.instance()
+		notification.damage = damage
+		notification.rate = rate
+		notifications.push_notification(notification)
 	
 	pass # Replace with function body.

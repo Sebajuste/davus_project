@@ -52,7 +52,7 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "Item",
 "language": "GDScript",
-"path": "res://objects/items/item.gd"
+"path": "res://scripts/items/item.gd"
 }, {
 "base": "Reference",
 "class": "Room",
@@ -212,7 +212,7 @@ shield={
 
 [locale]
 
-translations=PoolStringArray( "res://i18n/button.en.translation", "res://i18n/button.fr.translation", "res://i18n/label.en.translation", "res://i18n/label.fr.translation", "res://i18n/title.en.translation", "res://i18n/title.fr.translation" )
+translations=PoolStringArray( "res://i18n/button.en.translation", "res://i18n/button.fr.translation", "res://i18n/label.en.translation", "res://i18n/label.fr.translation", "res://i18n/title.en.translation", "res://i18n/title.fr.translation", "res://i18n/info.en.translation", "res://i18n/info.fr.translation" )
 
 [rendering]
 
