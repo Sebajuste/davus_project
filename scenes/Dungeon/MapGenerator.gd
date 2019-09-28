@@ -186,7 +186,8 @@ func _write_rooms_on_map():
 					if rnd.randf() <= mob_chance_rooms:
 						_add_mob_spawn(mobPos, _resourceMgr.eMobType.Fly, false, false)
 				else:
-					_place_object(datapadPos, _resourceMgr.ENDING_DATAPAD_RESOURCES, Vector3.ZERO, 0, false)
+					var datapad = _place_object(datapadPos, _resourceMgr.ENDING_DATAPAD_RESOURCES, Vector3.ZERO, 0, false)
+					datapad.message = tr("story_final")
 					_add_mob_spawn(mobPos, _resourceMgr.eMobType.Fly, false, false)
 		
 		var background_resource:Array
