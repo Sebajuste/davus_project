@@ -1,12 +1,14 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scenes/MainMenu/MainMenu.gd" type="Script" id=1]
 [ext_resource path="res://models/Spaceship/IntroInterior.glb" type="PackedScene" id=2]
 [ext_resource path="res://models/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=3]
-[ext_resource path="res://fonts/mechsuit_main_title.tres" type="DynamicFont" id=4]
-[ext_resource path="res://fonts/mechsuit.tres" type="DynamicFont" id=5]
-[ext_resource path="res://ui/Options/Options.tscn" type="PackedScene" id=6]
-[ext_resource path="res://music/main_menu.ogg" type="AudioStream" id=7]
+[ext_resource path="res://themes/default/default.theme" type="Theme" id=4]
+[ext_resource path="res://fonts/mechsuit_main_title.tres" type="DynamicFont" id=5]
+[ext_resource path="res://fonts/mechsuit.tres" type="DynamicFont" id=6]
+[ext_resource path="res://scenes/Credits/Credits.tscn" type="PackedScene" id=7]
+[ext_resource path="res://ui/Options/Options.tscn" type="PackedScene" id=8]
+[ext_resource path="res://music/main_menu.ogg" type="AudioStream" id=9]
 
 [sub_resource type="Environment" id=1]
 background_mode = 1
@@ -30,6 +32,7 @@ script = ExtResource( 1 )
 environment = SubResource( 1 )
 
 [node name="Spatial" type="Spatial" parent="."]
+editor/display_folded = true
 
 [node name="SpaceShip" parent="Spatial" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0499115, -0.0235028, -0.0199242 )
@@ -59,16 +62,16 @@ light_energy = 5.68
 spot_angle = 50.625
 
 [node name="MainControls" type="Control" parent="."]
-editor/display_folded = true
 anchor_right = 1.0
 anchor_bottom = 1.0
+theme = ExtResource( 4 )
 
 [node name="Label" type="Label" parent="MainControls"]
 margin_left = 80.0
 margin_top = 37.0
 margin_right = 507.0
 margin_bottom = 98.0
-custom_fonts/font = ExtResource( 4 )
+custom_fonts/font = ExtResource( 5 )
 text = "DAVUS"
 uppercase = true
 
@@ -87,34 +90,45 @@ custom_constants/separation = 50
 alignment = 1
 
 [node name="StartButton" type="Button" parent="MainControls/MarginContainer/VBoxContainer"]
-margin_top = 175.0
+margin_top = 125.0
 margin_right = 307.0
-margin_bottom = 225.0
+margin_bottom = 175.0
 rect_min_size = Vector2( 0, 50 )
-custom_fonts/font = ExtResource( 5 )
+custom_fonts/font = ExtResource( 6 )
 text = "btn_play"
 
 [node name="OptionsButton" type="Button" parent="MainControls/MarginContainer/VBoxContainer"]
-margin_top = 275.0
+margin_top = 225.0
 margin_right = 307.0
-margin_bottom = 325.0
+margin_bottom = 275.0
 rect_min_size = Vector2( 0, 50 )
-custom_fonts/font = ExtResource( 5 )
+custom_fonts/font = ExtResource( 6 )
 text = "btn_options"
 
-[node name="QuitButton" type="Button" parent="MainControls/MarginContainer/VBoxContainer"]
-margin_top = 375.0
+[node name="CreditsButton" type="Button" parent="MainControls/MarginContainer/VBoxContainer"]
+margin_top = 325.0
 margin_right = 307.0
-margin_bottom = 425.0
+margin_bottom = 375.0
 rect_min_size = Vector2( 0, 50 )
-custom_fonts/font = ExtResource( 5 )
+custom_fonts/font = ExtResource( 6 )
+text = "btn_credits"
+
+[node name="QuitButton" type="Button" parent="MainControls/MarginContainer/VBoxContainer"]
+margin_top = 425.0
+margin_right = 307.0
+margin_bottom = 475.0
+rect_min_size = Vector2( 0, 50 )
+custom_fonts/font = ExtResource( 6 )
 text = "btn_quit"
 
-[node name="Options" parent="." instance=ExtResource( 6 )]
+[node name="Credits" parent="." instance=ExtResource( 7 )]
+visible = false
+
+[node name="Options" parent="." instance=ExtResource( 8 )]
 visible = false
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 7 )
+stream = ExtResource( 9 )
 autoplay = true
 bus = "Music"
 
@@ -123,5 +137,6 @@ autoplay = "alarm"
 anims/alarm = SubResource( 2 )
 [connection signal="pressed" from="MainControls/MarginContainer/VBoxContainer/StartButton" to="." method="_on_StartButton_pressed"]
 [connection signal="pressed" from="MainControls/MarginContainer/VBoxContainer/OptionsButton" to="." method="_on_OptionsButton_pressed"]
+[connection signal="pressed" from="MainControls/MarginContainer/VBoxContainer/CreditsButton" to="." method="_on_CreditsButton_pressed"]
 [connection signal="pressed" from="MainControls/MarginContainer/VBoxContainer/QuitButton" to="." method="_on_QuitButton_pressed"]
 [connection signal="on_close" from="Options" to="." method="_on_Options_on_close"]

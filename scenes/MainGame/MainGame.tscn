@@ -34,16 +34,16 @@ bones/35/bound_children = [ NodePath("LeftFoot") ]
 bones/40/bound_children = [ NodePath("RightFoot") ]
 
 [node name="Head" parent="World/Player/Skeleton" index="1"]
-transform = Transform( 0.999346, 0.0210651, 0.0294199, -0.0192214, 0.997915, -0.0615964, -0.0306561, 0.0609906, 0.997666, -0.0265814, 1.56075, -0.0497853 )
+transform = Transform( 0.998812, 0.0259402, 0.0412552, -0.023085, 0.997402, -0.0682415, -0.0429182, 0.0672076, 0.996815, -0.026996, 1.5607, -0.0474684 )
 
 [node name="RightHand" parent="World/Player/Skeleton" index="2"]
-transform = Transform( 0.329318, 0.0897039, 0.939948, 0.129605, -0.990347, 0.0491071, 0.935281, 0.105651, -0.337766, -0.22028, 0.946204, -0.00973717 )
+transform = Transform( 0.329452, 0.0869334, 0.940161, 0.122262, -0.991297, 0.048819, 0.936221, 0.0988637, -0.337215, -0.222047, 0.944732, -0.00955065 )
 
 [node name="RightFoot" parent="World/Player/Skeleton" index="3"]
-transform = Transform( 0.991709, 0.00122981, -0.12851, 0.000193454, 0.999937, 0.0110601, 0.128515, -0.0109939, 0.991645, 0.0821065, -0.00117103, -0.032378 )
+transform = Transform( 0.99155, 0.00136161, -0.129716, 1.73599e-006, 0.999944, 0.0105092, 0.129723, -0.0104205, 0.991494, 0.0820203, -0.00116538, -0.0326686 )
 
 [node name="LeftFoot" parent="World/Player/Skeleton" index="4"]
-transform = Transform( 0.867694, 0.0191041, 0.496729, -0.0334846, 0.999239, 0.0200633, -0.495968, -0.0340386, 0.867674, 0.161345, 0.0061332, 0.104034 )
+transform = Transform( 0.86753, 0.0180622, 0.497056, -0.031474, 0.999332, 0.0186214, -0.496388, -0.031797, 0.867519, 0.161333, 0.00606848, 0.103876 )
 
 [node name="AmmoHandler" parent="World/Player" index="7"]
 inventory = null
@@ -67,11 +67,13 @@ anchor_bottom = 1.0
 
 [node name="Menu" parent="." instance=ExtResource( 8 )]
 editor/display_folded = true
+visible = false
 
 [node name="Inventory" parent="Menu/MarginContainer/TabContainer/Inventory" index="0"]
 inventory = NodePath("../../../../../World/Player/Inventory")
 
 [node name="DataPad" parent="." instance=ExtResource( 9 )]
+visible = false
 
 [node name="Loading" parent="." instance=ExtResource( 10 )]
 visible = false
