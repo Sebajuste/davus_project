@@ -1,8 +1,9 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://ui/InventoryMenu/AmmoPanel/AmmoPanel.gd" type="Script" id=1]
-[ext_resource path="res://ui/Icons/IconClipRegular64x64.png" type="Texture" id=2]
+[ext_resource path="res://ui/Icons/Ammo/IconClipRegular64x64.png" type="Texture" id=2]
 [ext_resource path="res://fonts/mechsuit_thin.tres" type="DynamicFont" id=3]
+
 
 [node name="AmmoPanel" type="Button"]
 margin_right = 445.0

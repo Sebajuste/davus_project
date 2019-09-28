@@ -1,12 +1,12 @@
 [gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://ui/Game/Ammo/Ammo.gd" type="Script" id=1]
-[ext_resource path="res://ui/Icons/IconClipRegular64x64.png" type="Texture" id=2]
-[ext_resource path="res://ui/Icons/IconClipFire64x64.png" type="Texture" id=3]
-[ext_resource path="res://ui/Icons/IconClipIce64x64.png" type="Texture" id=4]
+[ext_resource path="res://ui/Icons/Ammo/IconClipRegular64x64.png" type="Texture" id=2]
+[ext_resource path="res://ui/Icons/Ammo/IconClipFire64x64.png" type="Texture" id=3]
+[ext_resource path="res://ui/Icons/Ammo/IconClipIce64x64.png" type="Texture" id=4]
 [ext_resource path="res://ui/Game/Ammo/Keyboard_White_A.png" type="Texture" id=5]
 [ext_resource path="res://fonts/neuropol.tres" type="DynamicFont" id=6]
-[ext_resource path="res://ui/Game/Ammo/360_Dpad_Up.png" type="Texture" id=7]
+[ext_resource path="res://ui/Icons/Xbox/XboxOne_Dpad_Up.png" type="Texture" id=7]
 
 [node name="Ammo" type="VBoxContainer"]
 margin_left = 10.0
@@ -64,7 +64,6 @@ custom_fonts/font = ExtResource( 6 )
 text = "label_switch_ammo"
 
 [node name="HelperGamepad" type="HBoxContainer" parent="."]
-editor/display_folded = true
 margin_top = 38.0
 margin_right = 216.0
 margin_bottom = 68.0
