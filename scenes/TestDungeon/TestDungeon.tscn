@@ -32,16 +32,16 @@ bones/35/bound_children = [ NodePath("LeftFoot") ]
 bones/40/bound_children = [ NodePath("RightFoot") ]
 
 [node name="Head" parent="World/Player/Skeleton" index="1"]
-transform = Transform( 0.998935, 0.0242302, 0.0392482, -0.0215131, 0.997436, -0.0682323, -0.0408008, 0.0673155, 0.996897, -0.0276712, 1.56039, -0.0479163 )
+transform = Transform( 0.999338, 0.0222257, 0.0288097, -0.0210437, 0.99895, -0.0406993, -0.029684, 0.0400659, 0.998755, -0.0207749, 1.55989, -0.0586695 )
 
 [node name="RightHand" parent="World/Player/Skeleton" index="2"]
-transform = Transform( 0.327563, 0.0874806, 0.94077, 0.124459, -0.99102, 0.0488191, 0.936594, 0.101097, -0.335511, -0.222207, 0.943164, -0.00918737 )
+transform = Transform( 0.323781, 0.0898218, 0.941859, 0.129033, -0.990374, 0.0500921, 0.937289, 0.105313, -0.332255, -0.221055, 0.954967, -0.0157371 )
 
 [node name="RightFoot" parent="World/Player/Skeleton" index="3"]
-transform = Transform( 0.991426, 0.0018624, -0.130651, -0.000443436, 0.99994, 0.0108879, 0.130664, -0.0107365, 0.991366, 0.08163, -0.00127734, -0.032457 )
+transform = Transform( 0.991523, 0.00166385, -0.129921, -0.000141017, 0.999931, 0.0117279, 0.129931, -0.0116103, 0.991454, 0.0820499, -0.00131672, -0.0326326 )
 
 [node name="LeftFoot" parent="World/Player/Skeleton" index="4"]
-transform = Transform( 0.867523, 0.017865, 0.497075, -0.0311249, 0.999346, 0.018407, -0.496422, -0.0314377, 0.867513, 0.161428, 0.00607975, 0.104274 )
+transform = Transform( 0.86771, 0.0195944, 0.496684, -0.0329792, 0.999291, 0.0181956, -0.495976, -0.0321668, 0.867742, 0.161364, 0.00621991, 0.104248 )
 
 [node name="AnimationTree" parent="World/Player" index="12"]
 parameters/StateMachine/playback = SubResource( 1 )
@@ -63,6 +63,9 @@ anchor_bottom = 1.0
 
 [node name="Menu" parent="." instance=ExtResource( 8 )]
 
+[node name="Inventory" parent="Menu/MarginContainer/TabContainer/Inventory" index="0"]
+inventory = NodePath("../../../../../World/Player/Inventory")
+
 [node name="Loading" parent="." instance=ExtResource( 9 )]
 visible = false
 
@@ -73,3 +76,5 @@ visible = false
 [connection signal="shield_changed" from="World/Player/ShieldHandler/Shield" to="UI/Health" method="_on_shield_changed"]
 
 [editable path="World/Player"]
+
+[editable path="Menu"]

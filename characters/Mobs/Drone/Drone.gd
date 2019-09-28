@@ -68,28 +68,30 @@ func change_direction() -> void:
 		keep_direction = true
 		
 		var rndNumber = floor(rand_range(0,potential_direction.size()))
-		newDirection = potential_direction[rndNumber]
 		
-		if newDirection == current_direction: # Si la nouvelle direction est identique à l'ancienne, on la supprime de la liste des directions possibles et on recommence l'algo
-			keep_direction = false
-			potential_direction.remove(rndNumber)
-		else:
-			var destination = position
-			if newDirection == direction.UP:
-				destination = destination + Vector3(0, distance_collision, 0)
-			elif newDirection == direction.LEFT:
-				destination = destination + Vector3(-distance_collision, 0, 0)
-			elif newDirection == direction.DOWN:
-				destination = destination + Vector3(0, -distance_collision, 0)
-			else: # newDirection == direction.RIGHT
-				destination = destination + Vector3(distance_collision, 0, 0)
-			
-			var space_state = get_world().direct_space_state
-			var result_collision = space_state.intersect_ray(position, destination, [self], collision_mask) 
-			
-			if result_collision: # Si la nouvelle direction provoque une "collision" (par ray casting), on recommence l'algo et on la supprime de la liste des directions possibles
+		if potential_direction.size() > 0:
+			newDirection = potential_direction[rndNumber]
+		
+			if newDirection == current_direction: # Si la nouvelle direction est identique à l'ancienne, on la supprime de la liste des directions possibles et on recommence l'algo
 				keep_direction = false
 				potential_direction.remove(rndNumber)
+			else:
+				var destination = position
+				if newDirection == direction.UP:
+					destination = destination + Vector3(0, distance_collision, 0)
+				elif newDirection == direction.LEFT:
+					destination = destination + Vector3(-distance_collision, 0, 0)
+				elif newDirection == direction.DOWN:
+					destination = destination + Vector3(0, -distance_collision, 0)
+				else: # newDirection == direction.RIGHT
+					destination = destination + Vector3(distance_collision, 0, 0)
+				
+				var space_state = get_world().direct_space_state
+				var result_collision = space_state.intersect_ray(position, destination, [self], collision_mask) 
+				
+				if result_collision: # Si la nouvelle direction provoque une "collision" (par ray casting), on recommence l'algo et on la supprime de la liste des directions possibles
+					keep_direction = false
+					potential_direction.remove(rndNumber)
 		
 	current_direction = newDirection
 

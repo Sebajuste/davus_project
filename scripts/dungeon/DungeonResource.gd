@@ -42,6 +42,13 @@ const RACK_RESOURCES:Array = [
 	]
 
 
+const DATAPAD_RESOURCES:Array = [
+		preload("res://objects/items/DataPad/DataPad.tscn"),
+	]
+const ENDING_DATAPAD_RESOURCES:Array = [
+		preload("res://objects/items/DataPad/DataPad.tscn"),
+	]
+
 # Platforms
 const PLATFORMS_RESOURCES:Array = [
 		preload("res://models/Dungeon/Platform.glb"),
