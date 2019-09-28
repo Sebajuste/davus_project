@@ -51,7 +51,10 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if $CombatStats.health == 0:
+		queue_free()
 		return
+	
+	print($CombatStats.health)
 	
 	position = global_transform.origin
 	
@@ -204,5 +207,3 @@ func _on_CombatStats_damage_taken():
 func _on_CombatStats_health_depleted():
 	self.set_collision_layer(0x00)
 	self.set_collision_mask(0x01)
-	
-	queue_free()
