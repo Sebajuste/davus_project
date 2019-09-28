@@ -1,11 +1,11 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://tools/Notifications/NotificationItem.gd" type="Script" id=1]
+[ext_resource path="res://tools/Notifications/NotificationMessage/NotificationMessage.gd" type="Script" id=1]
 [ext_resource path="res://fonts/mechsuit.tres" type="DynamicFont" id=2]
 [ext_resource path="res://fonts/neuropol.tres" type="DynamicFont" id=3]
 [ext_resource path="res://fonts/mechsuit_thin.tres" type="DynamicFont" id=4]
 
-[node name="NotificationItem" type="Panel"]
+[node name="NotificationMessage" type="Panel"]
 margin_right = 280.0
 margin_bottom = 200.0
 rect_min_size = Vector2( 0, 200 )
@@ -13,6 +13,7 @@ size_flags_horizontal = 3
 script = ExtResource( 1 )
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
+editor/display_folded = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 20.0

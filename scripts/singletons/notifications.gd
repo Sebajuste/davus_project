@@ -1,6 +1,7 @@
 extends Node
 
-signal new_notification(title, message, options)
+signal notification_created(title, message, options)
+signal notification_pushed(notification, options)
 
 # Declare member variables here. Examples:
 # var a = 2
@@ -20,3 +21,8 @@ func create_notification(title: String, message: String, options: Dictionary = {
 	emit_signal("new_notification", title, message, options)
 	
 
+
+func push_notification(notification: Control, options: Dictionary = {}) -> void:
+	
+	emit_signal("notification_pushed", notification, options)
+	
