@@ -91,6 +91,7 @@ loading="*res://scripts/singletons/loading.gd"
 save="*res://scripts/singletons/save.gd"
 notifications="*res://scripts/singletons/notifications.gd"
 controller="*res://scripts/singletons/controller.gd"
+modal_message="*res://scripts/singletons/modal_message.gd"
 
 [input]
 
