@@ -54,6 +54,9 @@ const ROOM_PREFAB:Dictionary = {
 			5: [
 				preload("res://prefabs/environment/dungeon/room/Prefab_9x5_0.tscn"),
 				preload("res://prefabs/environment/dungeon/room/Prefab_9x5_1.tscn"),
+				preload("res://prefabs/environment/dungeon/room/Prefab_9x5_2.tscn"),
+				preload("res://prefabs/environment/dungeon/room/Prefab_9x5_3.tscn"),
+				preload("res://prefabs/environment/dungeon/room/Prefab_9x5_4.tscn"),
 			],
 		},
 	}
