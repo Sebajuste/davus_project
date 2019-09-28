@@ -182,15 +182,15 @@ func _write_rooms_on_map():
 						var rack = _place_object(rackPos + Vector3.FORWARD, _resourceMgr.RACK_RESOURCES, Vector3.ZERO, 0, false)
 						if rack:
 							prefab.rack = rack
-						
+					
 					if rnd.randf() <= chance_drop_datapad:
 						_place_object(datapadPos, _resourceMgr.DATAPAD_RESOURCES, Vector3.ZERO, 0, false)
 					
 					if rnd.randf() <= mob_chance_rooms:
-						_add_mob_spawn(mobPos, _resourceMgr.eMobType.Fly)
+						_add_mob_spawn(mobPos, _resourceMgr.eMobType.Fly, false, false)
 				else:
 					_place_object(datapadPos, _resourceMgr.ENDING_DATAPAD_RESOURCES, Vector3.ZERO, 0, false)
-					_add_mob_spawn(mobPos, _resourceMgr.eMobType.Fly)
+					_add_mob_spawn(mobPos, _resourceMgr.eMobType.Fly, false, false)
 		
 		var background_resource:Array
 		if room == _graph_generator.starting_room || room == _graph_generator.ending_room:
@@ -675,13 +675,13 @@ func _insert_ammo(weapon_rack:Spatial, ammoType:String):
 	weapon_rack.add_item(ammo)
 
 
-func _add_mob_spawn(pos:Vector3, mobType:int = -1, lockableMonster:bool = false):
+func _add_mob_spawn(pos:Vector3, mobType:int = -1, lockableMonster:bool = false, scale_by_tilesize = true):
 	if mobType == -1:
 		mobType = rnd.randi() % _resourceMgr.MOB_RESOURCES.size()
 	
 	var types = _resourceMgr.MOB_RESOURCES.get(mobType)
 	if types:
-		var mob = _place_object(pos, types)
+		var mob = _place_object(pos, types, Vector3.ZERO, 0, scale_by_tilesize)
 		if mob == null:
 			print("No mob find in the resources : ", mobType, types)
 		else:

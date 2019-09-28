@@ -43,10 +43,10 @@ const RACK_RESOURCES:Array = [
 
 
 const DATAPAD_RESOURCES:Array = [
-		preload(),
+		preload("res://objects/items/DataPad/DataPad.tscn"),
 	]
 const ENDING_DATAPAD_RESOURCES:Array = [
-		preload(),
+		preload("res://objects/items/DataPad/DataPad.tscn"),
 	]
 
 # Platforms

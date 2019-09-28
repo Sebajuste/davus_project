@@ -7,7 +7,7 @@ export(String, MULTILINE) var message := "" setget set_message
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
-	modal_message.connect("message_opened", self, "set_message")
+	#modal_message.connect("message_opened", self, "set_message")
 	
 	$MarginContainer/VBoxContainer/Footer/MarginContainer/HBoxContainer/CloseButton.grab_focus()
 	
