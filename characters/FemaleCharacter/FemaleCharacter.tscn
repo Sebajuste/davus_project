@@ -579,7 +579,7 @@ material/0 = null
 
 [node name="Head" type="BoneAttachment" parent="Skeleton"]
 editor/display_folded = true
-transform = Transform( 0.999445, 0.0211818, 0.0257311, -0.0200428, 0.998841, -0.0437398, -0.0266278, 0.0431998, 0.998711, -0.0255933, 1.56025, -0.0569355 )
+transform = Transform( 0.999331, 0.0178713, 0.0318794, -0.0155994, 0.997413, -0.0701436, -0.0330506, 0.0695997, 0.997026, -0.0323488, 1.55992, -0.0514888 )
 bone_name = "mixamorig_Head"
 
 [node name="HairTail" parent="Skeleton/Head" instance=ExtResource( 3 )]
@@ -587,7 +587,7 @@ transform = Transform( 0.998199, -0.0278291, 0.0532083, 0.0272939, 0.999569, 0.0
 
 [node name="RightHand" type="BoneAttachment" parent="Skeleton"]
 editor/display_folded = true
-transform = Transform( 0.325814, 0.10057, 0.940069, 0.138465, -0.988679, 0.0577815, 0.935238, 0.111341, -0.336053, -0.216009, 0.949087, -0.0129328 )
+transform = Transform( 0.326865, 0.0887801, 0.940891, 0.128593, -0.990496, 0.0487882, 0.936279, 0.105046, -0.335176, -0.224081, 0.94045, -0.0123579 )
 bone_name = "mixamorig_RightHand"
 
 [node name="Position" type="Spatial" parent="Skeleton/RightHand"]
@@ -595,7 +595,7 @@ transform = Transform( 0.0147597, 0.915448, -0.402164, 0.980249, 0.0660798, 0.18
 
 [node name="RightFoot" type="BoneAttachment" parent="Skeleton"]
 editor/display_folded = true
-transform = Transform( 0.99162, 0.00180306, -0.129177, -0.000321165, 0.999933, 0.0114931, 0.129189, -0.0113552, 0.991553, 0.0819266, -0.00122686, -0.0325361 )
+transform = Transform( 0.99139, 0.00140881, -0.130931, -5.37112e-005, 0.999945, 0.010351, 0.130939, -0.0102542, 0.991335, 0.0820561, -0.00112661, -0.0324263 )
 bone_name = "mixamorig_RightToe_End"
 
 [node name="Particles" type="Particles" parent="Skeleton/RightFoot"]
@@ -610,7 +610,7 @@ process_material = SubResource( 4 )
 draw_pass_1 = SubResource( 5 )
 
 [node name="LeftFoot" type="BoneAttachment" parent="Skeleton"]
-transform = Transform( 0.867697, 0.0189909, 0.496731, -0.0341716, 0.999186, 0.0214933, -0.495919, -0.0356216, 0.86764, 0.161344, 0.00604811, 0.104279 )
+transform = Transform( 0.867204, 0.0181563, 0.497622, -0.0333817, 0.999207, 0.0217195, -0.496834, -0.0354447, 0.867123, 0.161364, 0.00604573, 0.104175 )
 bone_name = "mixamorig_LeftToe_End"
 
 [node name="Particles" type="Particles" parent="Skeleton/LeftFoot"]
@@ -652,13 +652,13 @@ script = ExtResource( 8 )
 script = ExtResource( 9 )
 right_hand = NodePath("../Skeleton/RightHand/Position")
 ammo = NodePath("../AmmoHandler")
+shield_handler = NodePath("../ShieldHandler")
 
 [node name="AmmoHandler" type="Node" parent="."]
 script = ExtResource( 10 )
 inventory = NodePath("../Inventory")
 
 [node name="ShieldHandler" type="Spatial" parent="."]
-editor/display_folded = true
 script = ExtResource( 11 )
 
 [node name="Shield" parent="ShieldHandler" instance=ExtResource( 12 )]

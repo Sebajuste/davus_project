@@ -6,9 +6,11 @@ signal aimed(state)
 
 export var right_hand: NodePath
 export var ammo: NodePath
+export var shield_handler: NodePath
 
 onready var _right_hand_node: Node = get_node(right_hand)
 onready var _ammo_node: Node = get_node(ammo)
+onready var _shield_handler_node: Node = get_node(shield_handler)
 
 var aiming := false setget set_aiming
 var shoot_ready := true
@@ -29,6 +31,9 @@ func _process(delta):
 	if aiming:
 		aiming_pistol()
 	else:
+		valid_target = false
+	
+	if _shield_handler_node and _shield_handler_node.is_enable():
 		valid_target = false
 	
 	if Input.is_action_pressed("shoot") and shoot_ready and valid_target:

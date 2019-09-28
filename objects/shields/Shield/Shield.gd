@@ -24,6 +24,8 @@ func _ready():
 #	pass
 
 
+func is_enable() -> bool:
+	return visible
 
 
 func enable():

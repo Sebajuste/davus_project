@@ -19,3 +19,8 @@ func _process(delta):
 	
 	
 	pass
+
+
+func is_enable() -> bool:
+	return $Shield.is_enable()
+
