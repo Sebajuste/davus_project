@@ -1,18 +1,18 @@
 extends KinematicBody
 
 
-
 var targets := []
-
 var current_target = null
-
 var ammo_type:String
 var id_monster:int
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	
 	$SpecialMonster.visible = false
-	pass
+	
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
@@ -43,4 +43,3 @@ func _on_Detection_body_exited(body):
 	var index = targets.find(body)
 	if index >= 0:
 		targets.remove(index)
-	

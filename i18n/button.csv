@@ -11,3 +11,6 @@ btn_resume,Resume,Reprendre
 btn_back_main,Return Main Menu,Retour menu principal
 btn_restart,Restart,Recommencer
 btn_close,Close,Fermer
+btn_main_weapon,Weapon,Arme
+btn_ammo,Ammo,Munition
+btn_jetpack,Jetpack,Jetpack

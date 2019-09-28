@@ -16,6 +16,7 @@ func _ready():
 
 func open() -> bool:
 	if .open():
+		$OpenSound.play()
 		$AnimationTree["parameters/playback"].travel("opened")
 		return true
 	return false

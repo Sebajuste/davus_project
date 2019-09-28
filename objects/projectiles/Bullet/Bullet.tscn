@@ -42,5 +42,6 @@ material/0 = ExtResource( 2 )
 [node name="CollisionShape" parent="DamageSource" index="0"]
 shape = SubResource( 3 )
 [connection signal="body_entered" from="Area" to="." method="_on_Area_body_entered"]
+[connection signal="hit" from="DamageSource" to="." method="_on_DamageSource_hit"]
 
 [editable path="DamageSource"]

@@ -2,43 +2,55 @@ extends Node
 
 const Pistol = preload("res://objects/weapons/Pistol/Pistol.tscn")
 
+signal aimed(state)
+
 export var right_hand: NodePath
-
-export var ammo: NodePath
-
-onready var _right_hand_node: Node = get_node(right_hand)
-onready var _ammo_node: Node = get_node(ammo)
+export var inventory: NodePath
+export var ammo_handler: NodePath
+export var shield_handler: NodePath
+export var auto_equip := true
 
 var aiming := false setget set_aiming
-
 var shoot_ready := true
-
 var target: Vector3
-
 var current_item = null
 var weapon = null
-
 var valid_target := false
+
+onready var _right_hand_node: Node = get_node(right_hand)
+onready var _inventory_node: Node = get_node(inventory)
+onready var _ammo_node: Node = get_node(ammo_handler)
+onready var _shield_handler_node: Node = get_node(shield_handler)
+
+var _weapon_available_list := []
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-
-	pass
+	
+	_inventory_node.connect("item_added", self, "_on_add_weapon")
+	_inventory_node.connect("item_removed", self, "_on_remove_weapon")
+	_inventory_node.connect("item_updated", self, "_on_update_weapon")
+	
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if Input.is_action_pressed("shoot") and shoot_ready:
-		if weapon:
-			var ammo = null
-			if _ammo_node:
-				ammo = _ammo_node.get_ammo()
-			weapon.shoot(target, ammo)
 	
 	if aiming:
 		aiming_pistol()
 	else:
 		valid_target = false
+	
+	if _shield_handler_node and _shield_handler_node.is_enable():
+		valid_target = false
+	
+	if Input.is_action_pressed("shoot") and shoot_ready and valid_target:
+		if weapon:
+			var ammo = null
+			if _ammo_node:
+				ammo = _ammo_node.get_ammo()
+			weapon.shoot(target, ammo)
 
 
 func _input(event):
@@ -66,30 +78,19 @@ func equip_weapon(item: Item):
 
 func aiming_pistol():
 	
-	var target_pos = $"../CursorSelector".get_target_pos()
-	
 	var bone = $"../Skeleton".find_bone("mixamorig_Spine2")
 	
 	var bone_pos = $"../Skeleton".get_bone_global_pose(bone).origin
 	
 	var cur_dir = get_parent().global_transform.basis.z.normalized()
-	var target_dir = (target_pos - (get_parent().global_transform.origin+bone_pos)).normalized()
-	
-	var look_dir = Vector3()
-	
-	look_dir += Vector3.UP * Input.get_action_strength("look_up")
-	look_dir += Vector3.DOWN * Input.get_action_strength("look_down")
-	look_dir += Vector3.RIGHT * Input.get_action_strength("look_right")
-	look_dir += Vector3.LEFT * Input.get_action_strength("look_left")
-	
-	if look_dir.length() > 0.5:
-		target_dir = look_dir.normalized()
+	var target_pos = target - (get_parent().global_transform.origin+bone_pos)
+	var target_dir = target_pos.normalized()
 	
 	var look_dot = cur_dir.dot(target_dir)
 	
 	if look_dot > 0.2:
 		
-		valid_target = true
+		valid_target = target_pos.length() > 2.0
 		
 		var rotation_angle = acos(cur_dir.x) - acos(target_dir.x)
 		
@@ -114,6 +115,28 @@ func set_aiming(value):
 	if aiming:
 		$"../AnimationTree".set("parameters/StateMachine/Idle/Weapon/current", 1)
 		$"../AnimationTree".set("parameters/StateMachine/Locomotion/Weapon/current", 1)
+		$"../AnimationTree".set("parameters/StateMachine/Locomotion/WeaponBackward/current", 1)
 	else:
 		$"../AnimationTree".set("parameters/StateMachine/Idle/Weapon/current", 0)
 		$"../AnimationTree".set("parameters/StateMachine/Locomotion/Weapon/current", 0)
+		$"../AnimationTree".set("parameters/StateMachine/Locomotion/WeaponBackward/current", 0)
+	emit_signal("aimed", aiming)
+
+
+func _on_add_weapon(item: Item) -> void:
+	if item.type == "gun" and _weapon_available_list.find(item) == -1:
+		_weapon_available_list.append(item)
+		if auto_equip and _weapon_available_list.size() == 1:
+			equip_weapon(item)
+
+
+func _on_remove_weapon(item: Item) -> void:
+	var index = _weapon_available_list.find(item)
+	if index != -1:
+		_weapon_available_list.remove(index)
+
+
+func _on_update_weapon(item: Item) -> void:
+	if _weapon_available_list.find(item) != -1:
+		if item.equiped:
+			emit_signal("ammo_selected", item)

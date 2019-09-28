@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://objects/items/Gun/Gun.gd" type="Script" id=1]
 [ext_resource path="res://models/Weapons/Pistol/Pistol.tscn" type="PackedScene" id=2]
+[ext_resource path="res://sounds/ui/take_object.wav" type="AudioStream" id=3]
 
 [sub_resource type="SphereShape" id=1]
 
@@ -13,7 +14,7 @@ tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/keys = PoolRealArray( 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0.5, 1, 0, 0, 0, 0, 1, 0, -4.37114e-08, 1, 1, 1, 0.7, 1, 0, 0, 0, 0, 0.707107, 0, 0.707107, 1, 1, 1 )
+tracks/0/keys = PoolRealArray( 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0.5, 1, 0, 0, 0, 0, 1, 0, -4.37114e-008, 1, 1, 1, 0.7, 1, 0, 0, 0, 0, 0.707107, 0, 0.707107, 1, 1, 1 )
 
 [node name="Gun" type="Spatial"]
 script = ExtResource( 1 )
@@ -28,6 +29,11 @@ transform = Transform( -0.138307, 0, -0.99039, 0, 1, 0, 0.99039, 0, -0.138307, 0
 
 [node name="CollisionShape" type="CollisionShape" parent="Area"]
 shape = SubResource( 1 )
+
+[node name="PickUpSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+pitch_scale = 1.2
+bus = "SoundEffects"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "default"

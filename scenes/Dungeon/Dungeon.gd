@@ -74,6 +74,10 @@ func set_player(p):
 	player = p
 
 
+func reset_player(player: Spatial) -> void:
+	pass
+
+
 func create_dungeon() -> bool:
 	var mg := $MapGenerator
 	_graph_generator.clear_all()

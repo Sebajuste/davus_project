@@ -19,14 +19,11 @@ func _ready():
 	
 	pass # Replace with function body.
 
-var test := 0
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	
 	if not target_node:
-		print("oups ", test)
-		test += 1
 		return
 	
 	_target_posistion = Vector3(

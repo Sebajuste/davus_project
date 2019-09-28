@@ -1,19 +1,7 @@
-extends KinematicBody
+extends "res://characters/Mobs/Mob.gd"
 
 var anim_state_machine
 
-########################################## TODO : Faire dériver de Mob et retirer ces lignes
-var ammo_type:String
-var id_monster:int
-
-func set_to_monster(ammoType:String, id:int):
-	ammo_type = ammoType
-	id_monster = id
-	$SpecialMonster.visible = true
-##########################################
-
-
-var _targets := []
 
 var _current_target = null
 
@@ -22,15 +10,7 @@ func _ready():
 	anim_state_machine = $MobTentacle/AnimationTree["parameters/StateMachine/playback"]
 	face_to(self.global_transform.origin + Vector3(1, 0, 0) )
 	anim_state_machine.start("Idle")
-	"""
-	if anim_state_machine.is_playing():
-		anim_state_machine.travel("Idle")
-	else:
-		anim_state_machine.start("Idle")
-	"""
-########################################## TODO : Faire dériver de Mob et retirer ces lignes
-	$SpecialMonster.visible = false
-##########################################
+	
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -39,20 +19,14 @@ func _process(delta):
 	if $CombatStats.health == 0:
 		return
 	
-	if not _targets.empty():
-		var target = _targets[0]
+	if not targets.empty():
+		var target = targets[0]
 		_current_target = target
 		
 		var distance = target.global_transform.origin - self.global_transform.origin
 		
 		if distance.length() < 2.5:
 			anim_state_machine.travel("Attack")
-			"""
-			if anim_state_machine.is_playing():
-				anim_state_machine.travel("Attack")
-			else:
-				anim_state_machine.start("Attack")
-			"""
 		
 	else:
 		_current_target = null
@@ -78,30 +52,12 @@ func move_to(position: Vector3):
 	pass # Do nothing. tentacle cannot move
 
 
-func _on_Detection_body_entered(body):
-	_targets.append(body)
-
-
-func _on_Detection_body_exited(body):
-	var index = _targets.find(body)
-	if index >= 0:
-		_targets.remove(index)
-
-
 func _on_CombatStats_health_depleted():
-	
 	$AttackSound.stop()
 	$DieSound.play()
 	anim_state_machine.travel("Death")
-	"""
-	if anim_state_machine.is_playing():
-		anim_state_machine.travel("Death")
-	else:
-		anim_state_machine.start("Death")
-	"""
 	self.set_collision_layer(0x00)
 	self.set_collision_mask(0x00)
-	
 	$RemoveTimer.start()
 
 

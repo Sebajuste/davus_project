@@ -1,13 +1,15 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scenes/MainGame/MainGame.gd" type="Script" id=1]
 [ext_resource path="res://scenes/WorldPlanet/WorldPlanet.tscn" type="PackedScene" id=2]
 [ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=3]
-[ext_resource path="res://scenes/MainGame/Camera.gd" type="Script" id=4]
+[ext_resource path="res://tools/Camera/Camera.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ui/Game/Ammo/Ammo.tscn" type="PackedScene" id=5]
 [ext_resource path="res://ui/Game/Health/Health.tscn" type="PackedScene" id=6]
-[ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=7]
-[ext_resource path="res://ui/Loading/Loading.tscn" type="PackedScene" id=8]
+[ext_resource path="res://ui/Game/ControllerHelper/ControllerHelper.tscn" type="PackedScene" id=7]
+[ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=8]
+[ext_resource path="res://ui/Loading/Loading.tscn" type="PackedScene" id=9]
+[ext_resource path="res://tools/Notifications/Notifications.tscn" type="PackedScene" id=10]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=1]
 
@@ -15,8 +17,10 @@
 script = ExtResource( 1 )
 
 [node name="World" type="Spatial" parent="."]
+editor/display_folded = true
 
 [node name="Level" type="Spatial" parent="World"]
+editor/display_folded = true
 
 [node name="WorldPlanet" parent="World/Level" instance=ExtResource( 2 )]
 
@@ -25,22 +29,29 @@ script = ExtResource( 1 )
 [node name="Skeleton" parent="World/Player" index="1"]
 bones/5/bound_children = [ NodePath("Head") ]
 bones/22/bound_children = [ NodePath("RightHand") ]
+bones/35/bound_children = [ NodePath("LeftFoot") ]
+bones/40/bound_children = [ NodePath("RightFoot") ]
 
 [node name="Head" parent="World/Player/Skeleton" index="1"]
-transform = Transform( 0.999537, 0.017027, 0.0252632, -0.0161975, 0.999335, -0.0326848, -0.0258029, 0.0322601, 0.999146, -0.0344011, 1.55933, -0.0614273 )
+transform = Transform( 0.99948, 0.0173324, 0.0271844, -0.0161376, 0.99892, -0.0435642, -0.0279102, 0.0431027, 0.99868, -0.0235095, 1.56041, -0.056282 )
 
 [node name="RightHand" parent="World/Player/Skeleton" index="2"]
-transform = Transform( 0.343144, 0.0856878, 0.935368, 0.13094, -0.990471, 0.0427004, 0.93011, 0.107826, -0.351094, -0.232687, 0.95362, -0.0171247 )
+transform = Transform( 0.336305, 0.089143, 0.937523, 0.129053, -0.99048, 0.0478857, 0.932868, 0.104887, -0.344609, -0.222516, 0.955458, -0.0134855 )
 
-[node name="AnimationTree" parent="World/Player" index="11"]
+[node name="RightFoot" parent="World/Player/Skeleton" index="3"]
+transform = Transform( 0.991706, 0.00149582, -0.128517, 1.28224e-005, 0.99993, 0.0117343, 0.128525, -0.0116385, 0.991636, 0.0820116, -0.00126211, -0.0324048 )
+
+[node name="LeftFoot" parent="World/Player/Skeleton" index="4"]
+transform = Transform( 0.86791, 0.0190846, 0.496354, -0.0323668, 0.999312, 0.0181756, -0.495665, -0.0318375, 0.867931, 0.161412, 0.00621346, 0.104244 )
+
+[node name="AmmoHandler" parent="World/Player" index="7"]
+inventory = null
+
+[node name="AnimationTree" parent="World/Player" index="12"]
 parameters/StateMachine/playback = SubResource( 1 )
 
-[node name="Camera" type="Camera" parent="World"]
-fov = 30.0
-script = ExtResource( 4 )
+[node name="Camera" parent="World" instance=ExtResource( 4 )]
 target = NodePath("../Player")
-distance = 20.0
-target_y_offset = 2.0
 
 [node name="UI" type="Control" parent="."]
 anchor_right = 1.0
@@ -50,12 +61,23 @@ anchor_bottom = 1.0
 
 [node name="Health" parent="UI" instance=ExtResource( 6 )]
 
-[node name="Menu" parent="." instance=ExtResource( 7 )]
+[node name="ControllerHelper" parent="UI" instance=ExtResource( 7 )]
 
-[node name="Loading" parent="." instance=ExtResource( 8 )]
+[node name="Menu" parent="." instance=ExtResource( 8 )]
+
+[node name="Inventory" parent="Menu/MarginContainer/TabContainer/Inventory" index="0"]
+inventory = NodePath("../../../../../World/Player/Inventory")
+
+[node name="Loading" parent="." instance=ExtResource( 9 )]
 visible = false
+
+[node name="Notifications" parent="." instance=ExtResource( 10 )]
 [connection signal="died" from="World/Player" to="." method="_on_Player_died"]
 [connection signal="health_changed" from="World/Player" to="UI/Health" method="_on_health_changed"]
+[connection signal="aimed" from="World/Player/WeaponHandler" to="UI/ControllerHelper" method="_on_WeaponHandler_aimed"]
 [connection signal="ammo_selected" from="World/Player/AmmoHandler" to="UI/Ammo" method="_on_ammo_selected"]
+[connection signal="shield_changed" from="World/Player/ShieldHandler/Shield" to="UI/Health" method="_on_shield_changed"]
 
 [editable path="World/Player"]
+
+[editable path="Menu"]

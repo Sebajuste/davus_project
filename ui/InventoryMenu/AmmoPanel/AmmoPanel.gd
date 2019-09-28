@@ -23,9 +23,9 @@ func set_ammo(item: Item) -> void:
 			print( ammo.properties )
 			match ammo.properties["ammo_type"]:
 				"Normal":
-					$MarginContainer/HBoxContainer/Icon.texture = preload("res://ui/Icons/IconClipRegular64x64.png")
+					$MarginContainer/HBoxContainer/Icon.texture = preload("res://ui/Icons/Ammo/IconClipRegular64x64.png")
 				"Fire":
-					$MarginContainer/HBoxContainer/Icon.texture = preload("res://ui/Icons/IconClipFire64x64.png")
+					$MarginContainer/HBoxContainer/Icon.texture = preload("res://ui/Icons/Ammo/IconClipFire64x64.png")
 				"Ice":
 					pass
 			

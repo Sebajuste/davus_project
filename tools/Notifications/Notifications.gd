@@ -1,12 +1,13 @@
 extends CanvasLayer
 
-var NotificationItem = preload("NotificationItem.tscn")
+var NotificationItem = preload("NotificationMessage/NotificationMessage.tscn")
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
-	notifications.connect("new_notification", self, "create_notification")
+	notifications.connect("notification_created", self, "create_notification")
+	notifications.connect("notification_pushed", self, "push_notification")
 	
 	pass # Replace with function body.
 
@@ -34,6 +35,12 @@ func create_notification(title: String, message: String, options = {}) -> String
 	$MarginContainer/VBoxContainer.add_child(notification)
 	
 	return notification.get_name()
+
+
+func push_notification(notification: Control, options: Dictionary) -> void:
+	notification.connect("on_close", self, "_on_close_notification")
+	$MarginContainer/VBoxContainer.add_child(notification)
+
 
 
 func remove_notification(name: String) -> bool:

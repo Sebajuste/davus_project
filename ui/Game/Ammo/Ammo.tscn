@@ -1,18 +1,24 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://ui/Game/Ammo/Ammo.gd" type="Script" id=1]
-[ext_resource path="res://ui/Icons/IconClipRegular64x64.png" type="Texture" id=2]
-[ext_resource path="res://ui/Icons/IconClipFire64x64.png" type="Texture" id=3]
-[ext_resource path="res://ui/Icons/IconClipIce64x64.png" type="Texture" id=4]
+[ext_resource path="res://ui/Icons/Ammo/IconClipRegular64x64.png" type="Texture" id=2]
+[ext_resource path="res://ui/Icons/Ammo/IconClipFire64x64.png" type="Texture" id=3]
+[ext_resource path="res://ui/Icons/Ammo/IconClipIce64x64.png" type="Texture" id=4]
+[ext_resource path="res://ui/Game/Ammo/Keyboard_White_A.png" type="Texture" id=5]
+[ext_resource path="res://fonts/neuropol.tres" type="DynamicFont" id=6]
+[ext_resource path="res://ui/Icons/Xbox/XboxOne_Dpad_Up.png" type="Texture" id=7]
 
-
-[node name="Ammo" type="HBoxContainer"]
-editor/display_folded = true
-margin_right = 40.0
-margin_bottom = 40.0
+[node name="Ammo" type="VBoxContainer"]
+margin_left = 10.0
+margin_top = 9.0
+margin_right = 226.0
+margin_bottom = 87.0
 script = ExtResource( 1 )
 
-[node name="Normal" type="TextureRect" parent="."]
+[node name="Icon" type="HBoxContainer" parent="."]
+margin_right = 216.0
+
+[node name="Normal" type="TextureRect" parent="Icon"]
 visible = false
 margin_right = 64.0
 margin_bottom = 64.0
@@ -20,7 +26,7 @@ focus_mode = 1
 mouse_default_cursor_shape = 2
 texture = ExtResource( 2 )
 
-[node name="Fire" type="TextureRect" parent="."]
+[node name="Fire" type="TextureRect" parent="Icon"]
 visible = false
 margin_left = 68.0
 margin_right = 132.0
@@ -29,9 +35,50 @@ focus_mode = 1
 mouse_default_cursor_shape = 2
 texture = ExtResource( 3 )
 
-[node name="Ice" type="TextureRect" parent="."]
+[node name="Ice" type="TextureRect" parent="Icon"]
 visible = false
 margin_left = 68.0
 margin_right = 132.0
 margin_bottom = 64.0
 texture = ExtResource( 4 )
+
+[node name="HelperKeyboard" type="HBoxContainer" parent="."]
+editor/display_folded = true
+margin_top = 4.0
+margin_right = 216.0
+margin_bottom = 34.0
+
+[node name="TextureRect" type="TextureRect" parent="HelperKeyboard"]
+margin_right = 30.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+texture = ExtResource( 5 )
+expand = true
+
+[node name="Label" type="Label" parent="HelperKeyboard"]
+margin_left = 34.0
+margin_top = 7.0
+margin_right = 197.0
+margin_bottom = 22.0
+custom_fonts/font = ExtResource( 6 )
+text = "label_switch_ammo"
+
+[node name="HelperGamepad" type="HBoxContainer" parent="."]
+margin_top = 38.0
+margin_right = 216.0
+margin_bottom = 68.0
+
+[node name="TextureRect" type="TextureRect" parent="HelperGamepad"]
+margin_right = 30.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+texture = ExtResource( 7 )
+expand = true
+
+[node name="Label" type="Label" parent="HelperGamepad"]
+margin_left = 34.0
+margin_top = 7.0
+margin_right = 197.0
+margin_bottom = 22.0
+custom_fonts/font = ExtResource( 6 )
+text = "label_switch_ammo"

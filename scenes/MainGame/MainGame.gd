@@ -1,11 +1,16 @@
 extends Node
 
 
+var _map_node
+
+
 func _enter_tree():
 	_start_init_level( $World/Level/WorldPlanet )
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	
+	_map_node = $Menu/MarginContainer/TabContainer/Map
 	
 	$Menu.visible = false
 	
@@ -25,6 +30,11 @@ func _ready():
 	
 	print("game_loaded: ", game_loaded)
 	
+	$Menu/MarginContainer/TabContainer/Options.name = tr("title_options")
+	$Menu/MarginContainer/TabContainer/Inventory.name = tr("title_inventory")
+	$Menu/MarginContainer/TabContainer/Map.name = tr("title_map")
+	
+	
 	if game_loaded:
 		return
 	
@@ -35,7 +45,7 @@ func _ready():
 	default_weapon.type = "gun"
 	default_weapon.properties["damage"] = 1.0
 	default_weapon.properties["rate"] = 60
-	$World/Player.give_item(default_weapon)
+	$World/Player.give_item(default_weapon, false)
 	
 	#
 	# Add default ammo
@@ -43,7 +53,7 @@ func _ready():
 	var default_ammo := Item.new()
 	default_ammo.type = "ammo"
 	default_ammo.properties["ammo_type"] = "normal"
-	$World/Player.give_item(default_ammo)
+	$World/Player.give_item(default_ammo, false)
 	
 
 
@@ -84,7 +94,7 @@ func _input(event):
 
 func set_map(map):
 	
-	$Menu/MarginContainer/TabContainer/Map.add_child(map)
+	_map_node.add_child(map)
 	
 
 
@@ -96,14 +106,12 @@ func _start_init_level(scene: Node, context: Dictionary = {}):
 
 
 func _end_init_level(scene: Node, context: Dictionary = {}):
-	for map in $Menu/MarginContainer/TabContainer/Map.get_children():
+	for map in _map_node.get_children():
 		map.queue_free()
-	
 	var map = scene.find_node("Map")
-	print("attach map to ui: ", map)
 	if map:
 		scene.remove_child(map)
-		$Menu/MarginContainer/TabContainer/Map.add_child(map)
+		_map_node.add_child(map)
 
 
 func _remove_level():
@@ -112,13 +120,11 @@ func _remove_level():
 
 
 func _on_scene_loading():
-	print("on scene loading")
 	$Loading.visible = true
 	pass
 
 
 func _on_scene_loaded(scene, context):
-	print("_on_scene_loaded")
 	_remove_level()
 	_start_init_level(scene, context)
 	$World/Level.add_child(scene)
@@ -135,6 +141,6 @@ func _on_Player_died():
 	var level = $World/Level.get_child(0)
 	
 	if level and level.has_method("reset_player"):
-		level.reset_player()
+		level.reset_player($World/Player)
 	
 	pass # Replace with function body.

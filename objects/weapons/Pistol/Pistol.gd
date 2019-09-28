@@ -14,8 +14,8 @@ var _ammo: Item
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
-	$FireTimer.wait_time = firing_rate / 60
+	firing_rate = max(1, firing_rate)
+	$FireTimer.wait_time = 60.0 / firing_rate
 	
 
 
@@ -62,9 +62,10 @@ func _shoot():
 	
 
 
-func _set_firing_rate(fr):
-	firing_rate = fr
-	$FireTimer.wait_time = firing_rate / 60
+func _set_firing_rate(value):
+	firing_rate = max(1, value)
+	$FireTimer.wait_time = 60.0 / firing_rate
+	print("$FireTimer.wait_time: ", $FireTimer.wait_time)
 
 
 func _on_FireTimer_timeout():
