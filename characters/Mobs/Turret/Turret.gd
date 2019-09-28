@@ -54,7 +54,7 @@ func _process(delta):
 		queue_free()
 		return
 	
-	print($CombatStats.health)
+	#print($CombatStats.health)
 	
 	position = global_transform.origin
 	
