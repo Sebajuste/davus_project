@@ -42,6 +42,13 @@ const RACK_RESOURCES:Array = [
 	]
 
 
+const DATAPAD_RESOURCES:Array = [
+		preload(),
+	]
+const ENDING_DATAPAD_RESOURCES:Array = [
+		preload(),
+	]
+
 # Platforms
 const PLATFORMS_RESOURCES:Array = [
 		preload("res://models/Dungeon/Platform.glb"),
