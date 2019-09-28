@@ -26,17 +26,23 @@ editor/display_folded = true
 
 [node name="Player" parent="World" instance=ExtResource( 3 )]
 
+[node name="Skeleton" parent="World/Player" index="1"]
+bones/5/bound_children = [ NodePath("Head") ]
+bones/22/bound_children = [ NodePath("RightHand") ]
+bones/35/bound_children = [ NodePath("LeftFoot") ]
+bones/40/bound_children = [ NodePath("RightFoot") ]
+
 [node name="Head" parent="World/Player/Skeleton" index="1"]
-transform = Transform( 0.999447, 0.0171181, 0.0285087, -0.0149192, 0.997023, -0.0756302, -0.0297185, 0.0751634, 0.996728, -0.0297753, 1.56075, -0.0447397 )
+transform = Transform( 0.99948, 0.0173324, 0.0271844, -0.0161376, 0.99892, -0.0435642, -0.0279102, 0.0431027, 0.99868, -0.0235095, 1.56041, -0.056282 )
 
 [node name="RightHand" parent="World/Player/Skeleton" index="2"]
-transform = Transform( 0.331737, 0.089455, 0.939121, 0.126662, -0.990703, 0.049627, 0.934829, 0.102488, -0.339985, -0.221645, 0.941732, -0.00739585 )
+transform = Transform( 0.336305, 0.089143, 0.937523, 0.129053, -0.99048, 0.0478857, 0.932868, 0.104887, -0.344609, -0.222516, 0.955458, -0.0134855 )
 
 [node name="RightFoot" parent="World/Player/Skeleton" index="3"]
-transform = Transform( 0.991787, 0.00115743, -0.127895, 0.000176787, 0.999945, 0.0104196, 0.1279, -0.0103567, 0.991732, 0.0819513, -0.00108686, -0.0326886 )
+transform = Transform( 0.991706, 0.00149582, -0.128517, 1.28224e-005, 0.99993, 0.0117343, 0.128525, -0.0116385, 0.991636, 0.0820116, -0.00126211, -0.0324048 )
 
 [node name="LeftFoot" parent="World/Player/Skeleton" index="4"]
-transform = Transform( 0.867744, 0.0172863, 0.49671, -0.0320223, 0.999264, 0.0211687, -0.495979, -0.0342728, 0.86766, 0.161309, 0.00597447, 0.104003 )
+transform = Transform( 0.86791, 0.0190846, 0.496354, -0.0323668, 0.999312, 0.0181756, -0.495665, -0.0318375, 0.867931, 0.161412, 0.00621346, 0.104244 )
 
 [node name="AmmoHandler" parent="World/Player" index="7"]
 inventory = null
@@ -58,6 +64,9 @@ anchor_bottom = 1.0
 [node name="ControllerHelper" parent="UI" instance=ExtResource( 7 )]
 
 [node name="Menu" parent="." instance=ExtResource( 8 )]
+
+[node name="Inventory" parent="Menu/MarginContainer/TabContainer/Inventory" index="0"]
+inventory = NodePath("../../../../../World/Player/Inventory")
 
 [node name="Loading" parent="." instance=ExtResource( 9 )]
 visible = false
