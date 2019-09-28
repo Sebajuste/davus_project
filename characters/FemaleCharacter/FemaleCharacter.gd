@@ -31,6 +31,7 @@ var _walk_sound_ready := true
 var _look_dir = Vector3()
 var _lock_dir := false
 
+var _notification_message = NotificationMessageFactory.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -215,8 +216,12 @@ func get_items() -> Array:
 	return $Inventory.get_items()
 
 
-func give_item(item: Item) -> void:
+func give_item(item: Item, raise_notification: bool = true) -> void:
 	$Inventory.add_item(item)
+	
+	if raise_notification:
+		var notification = _notification_message.create_item_notification(item)
+		notifications.push_notification(notification)
 
 
 func remove_item(item: Item) -> bool:

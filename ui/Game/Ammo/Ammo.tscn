@@ -16,7 +16,6 @@ margin_bottom = 87.0
 script = ExtResource( 1 )
 
 [node name="Icon" type="HBoxContainer" parent="."]
-editor/display_folded = true
 margin_right = 216.0
 
 [node name="Normal" type="TextureRect" parent="Icon"]
@@ -44,6 +43,7 @@ margin_bottom = 64.0
 texture = ExtResource( 4 )
 
 [node name="HelperKeyboard" type="HBoxContainer" parent="."]
+editor/display_folded = true
 margin_top = 4.0
 margin_right = 216.0
 margin_bottom = 34.0
@@ -64,6 +64,7 @@ custom_fonts/font = ExtResource( 6 )
 text = "label_switch_ammo"
 
 [node name="HelperGamepad" type="HBoxContainer" parent="."]
+editor/display_folded = true
 margin_top = 38.0
 margin_right = 216.0
 margin_bottom = 68.0

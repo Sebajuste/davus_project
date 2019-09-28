@@ -50,9 +50,3 @@ func _on_Area_body_entered(body):
 		
 		$PickUpSound.play()
 		visible = false
-		
-		var notification = AmmoPickUpNotification.instance()
-		notification.type = ammo_type
-		notification.message = tr("info_ammo_type") + " : " + tr("label_"+ammo_type.to_lower ())
-		notifications.push_notification(notification)
-	

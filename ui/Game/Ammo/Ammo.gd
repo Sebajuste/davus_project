@@ -34,6 +34,8 @@ func _on_ammo_selected(ammo: Item):
 			$Icon/Fire.visible = true
 		"Ice":
 			$Icon/Ice.visible = true
+		_:
+			$Icon/Normal.visible = true
 	
 	_on_controller_changed(controller.type)
 

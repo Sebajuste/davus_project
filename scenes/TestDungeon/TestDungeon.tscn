@@ -1,12 +1,17 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scenes/TestDungeon/TestDungeon.gd" type="Script" id=1]
 [ext_resource path="res://scenes/Dungeon/Dungeon.tscn" type="PackedScene" id=2]
 [ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=3]
 [ext_resource path="res://tools/Camera/Camera.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/TestDungeon/CameraMap.gd" type="Script" id=5]
-[ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=6]
-[ext_resource path="res://ui/Loading/Loading.tscn" type="PackedScene" id=7]
+[ext_resource path="res://ui/Game/Health/Health.tscn" type="PackedScene" id=6]
+[ext_resource path="res://ui/Game/Ammo/Ammo.tscn" type="PackedScene" id=7]
+[ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=8]
+[ext_resource path="res://ui/Loading/Loading.tscn" type="PackedScene" id=9]
+[ext_resource path="res://tools/Notifications/Notifications.tscn" type="PackedScene" id=10]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=1]
 
 [node name="TestDungeon" type="Node"]
 script = ExtResource( 1 )
@@ -20,16 +25,51 @@ editor/display_folded = true
 
 [node name="Player" parent="World" instance=ExtResource( 3 )]
 
+[node name="Skeleton" parent="World/Player" index="1"]
+bones/5/bound_children = [ NodePath("Head") ]
+bones/22/bound_children = [ NodePath("RightHand") ]
+bones/35/bound_children = [ NodePath("LeftFoot") ]
+bones/40/bound_children = [ NodePath("RightFoot") ]
+
+[node name="Head" parent="World/Player/Skeleton" index="1"]
+transform = Transform( 0.998935, 0.0242302, 0.0392482, -0.0215131, 0.997436, -0.0682323, -0.0408008, 0.0673155, 0.996897, -0.0276712, 1.56039, -0.0479163 )
+
+[node name="RightHand" parent="World/Player/Skeleton" index="2"]
+transform = Transform( 0.327563, 0.0874806, 0.94077, 0.124459, -0.99102, 0.0488191, 0.936594, 0.101097, -0.335511, -0.222207, 0.943164, -0.00918737 )
+
+[node name="RightFoot" parent="World/Player/Skeleton" index="3"]
+transform = Transform( 0.991426, 0.0018624, -0.130651, -0.000443436, 0.99994, 0.0108879, 0.130664, -0.0107365, 0.991366, 0.08163, -0.00127734, -0.032457 )
+
+[node name="LeftFoot" parent="World/Player/Skeleton" index="4"]
+transform = Transform( 0.867523, 0.017865, 0.497075, -0.0311249, 0.999346, 0.018407, -0.496422, -0.0314377, 0.867513, 0.161428, 0.00607975, 0.104274 )
+
+[node name="AnimationTree" parent="World/Player" index="12"]
+parameters/StateMachine/playback = SubResource( 1 )
+
 [node name="CameraPlayer" parent="World" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 0.999289, 0.0377137, 0, -0.0377137, 0.999289, 0, 1.61902, 8.05316 )
 target = NodePath("../Player")
 
 [node name="CameraMap" type="Camera" parent="World"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 80 )
 script = ExtResource( 5 )
 
-[node name="Menu" parent="." instance=ExtResource( 6 )]
+[node name="UI" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
 
-[node name="Loading" parent="." instance=ExtResource( 7 )]
+[node name="Health" parent="UI" instance=ExtResource( 6 )]
+
+[node name="Ammo" parent="UI" instance=ExtResource( 7 )]
+
+[node name="Menu" parent="." instance=ExtResource( 8 )]
+
+[node name="Loading" parent="." instance=ExtResource( 9 )]
 visible = false
+
+[node name="Notifications" parent="." instance=ExtResource( 10 )]
 [connection signal="died" from="World/Player" to="." method="_on_Player_died"]
+[connection signal="health_changed" from="World/Player" to="UI/Health" method="_on_health_changed"]
+[connection signal="ammo_selected" from="World/Player/AmmoHandler" to="UI/Ammo" method="_on_ammo_selected"]
+[connection signal="shield_changed" from="World/Player/ShieldHandler/Shield" to="UI/Health" method="_on_shield_changed"]
+
+[editable path="World/Player"]
