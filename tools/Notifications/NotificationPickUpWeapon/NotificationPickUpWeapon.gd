@@ -1,8 +1,8 @@
 extends Panel
 
 
-export var damage := 0.0
-export var rate := 0
+export var damage : int = 0
+export var rate : int = 0
 
 
 # Called when the node enters the scene tree for the first time.
