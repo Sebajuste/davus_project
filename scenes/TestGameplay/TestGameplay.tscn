@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://scenes/TestGameplay/TestGameplay.gd" type="Script" id=1]
 [ext_resource path="res://tileset/test/Test.tscn" type="PackedScene" id=2]
@@ -13,8 +13,9 @@
 [ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=11]
 [ext_resource path="res://ui/Game/Ammo/Ammo.tscn" type="PackedScene" id=12]
 [ext_resource path="res://ui/Game/Health/Health.tscn" type="PackedScene" id=13]
-[ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=14]
-[ext_resource path="res://tools/Notifications/Notifications.tscn" type="PackedScene" id=15]
+[ext_resource path="res://ui/Game/ControllerHelper/ControllerHelper.tscn" type="PackedScene" id=14]
+[ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=15]
+[ext_resource path="res://tools/Notifications/Notifications.tscn" type="PackedScene" id=16]
 
 [sub_resource type="CubeMesh" id=1]
 
@@ -135,22 +136,22 @@ distance = 20.0
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22544, 0 )
 
 [node name="Skeleton" parent="Player" index="1"]
-bones/5/bound_children = [  ]
-bones/22/bound_children = [  ]
-bones/35/bound_children = [  ]
-bones/40/bound_children = [  ]
+bones/5/bound_children = [ NodePath("Head") ]
+bones/22/bound_children = [ NodePath("RightHand") ]
+bones/35/bound_children = [ NodePath("LeftFoot") ]
+bones/40/bound_children = [ NodePath("RightFoot") ]
 
 [node name="Head" parent="Player/Skeleton" index="1"]
-transform = Transform( 0.999498, 0.0179849, 0.0260757, -0.0169995, 0.999151, -0.0375293, -0.0267285, 0.0370672, 0.998955, -0.0352097, 1.55935, -0.0602589 )
+transform = Transform( 0.999496, 0.0186764, 0.0256733, -0.0179693, 0.99946, -0.0275018, -0.0261731, 0.0270268, 0.999292, -0.0284221, 1.55941, -0.063343 )
 
 [node name="RightHand" parent="Player/Skeleton" index="2"]
-transform = Transform( 0.341612, 0.0875567, 0.935755, 0.131133, -0.990352, 0.0447942, 0.930646, 0.107407, -0.349799, -0.232082, 0.951911, -0.016343 )
+transform = Transform( 0.330489, 0.104523, 0.938004, 0.141954, -0.988046, 0.0600852, 0.933072, 0.113296, -0.341378, -0.217954, 0.951927, -0.0164997 )
 
 [node name="RightFoot" parent="Player/Skeleton" index="3"]
-transform = Transform( 0.991526, 0.00112423, -0.129899, 0.000226557, 0.999946, 0.0103832, 0.129904, -0.0103245, 0.991471, 0.0821832, -0.00109703, -0.0323528 )
+transform = Transform( 0.991544, 0.00142877, -0.129762, -8.70973e-006, 0.999938, 0.0109428, 0.12977, -0.0108487, 0.991484, 0.0819855, -0.0012021, -0.0324671 )
 
 [node name="LeftFoot" parent="Player/Skeleton" index="4"]
-transform = Transform( 0.867162, 0.0171812, 0.49773, -0.0323413, 0.999238, 0.0218559, -0.496975, -0.035048, 0.867059, 0.161267, 0.00592646, 0.104059 )
+transform = Transform( 0.867654, 0.0177414, 0.496851, -0.033506, 0.999178, 0.0228369, -0.496038, -0.0364588, 0.867537, 0.161284, 0.00594336, 0.103868 )
 
 [node name="AnimationTree" parent="Player" index="12"]
 parameters/StateMachine/playback = SubResource( 3 )
@@ -163,14 +164,17 @@ anchor_bottom = 1.0
 
 [node name="Health" parent="UI" instance=ExtResource( 13 )]
 
-[node name="Menu" parent="." instance=ExtResource( 14 )]
+[node name="ControllerHelper" parent="UI" instance=ExtResource( 14 )]
+
+[node name="Menu" parent="." instance=ExtResource( 15 )]
 
 [node name="MarginContainer" parent="Menu" index="0"]
 editor/display_folded = true
 
-[node name="Notifications" parent="." instance=ExtResource( 15 )]
+[node name="Notifications" parent="." instance=ExtResource( 16 )]
 [connection signal="died" from="Player" to="." method="_on_Player_died"]
 [connection signal="health_changed" from="Player" to="UI/Health" method="_on_health_changed"]
+[connection signal="aimed" from="Player/WeaponHandler" to="UI/ControllerHelper" method="_on_WeaponHandler_aimed"]
 [connection signal="ammo_selected" from="Player/AmmoHandler" to="UI/Ammo" method="_on_ammo_selected"]
 [connection signal="shield_changed" from="Player/ShieldHandler/Shield" to="UI/Health" method="_on_shield_changed"]
 

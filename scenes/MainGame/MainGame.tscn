@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://scenes/MainGame/MainGame.gd" type="Script" id=1]
 [ext_resource path="res://scenes/WorldPlanet/WorldPlanet.tscn" type="PackedScene" id=2]
@@ -6,8 +6,9 @@
 [ext_resource path="res://tools/Camera/Camera.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ui/Game/Ammo/Ammo.tscn" type="PackedScene" id=5]
 [ext_resource path="res://ui/Game/Health/Health.tscn" type="PackedScene" id=6]
-[ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=7]
-[ext_resource path="res://ui/Loading/Loading.tscn" type="PackedScene" id=8]
+[ext_resource path="res://ui/Game/ControllerHelper/ControllerHelper.tscn" type="PackedScene" id=7]
+[ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=8]
+[ext_resource path="res://ui/Loading/Loading.tscn" type="PackedScene" id=9]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=1]
 
@@ -23,23 +24,17 @@ editor/display_folded = true
 
 [node name="Player" parent="World" instance=ExtResource( 3 )]
 
-[node name="Skeleton" parent="World/Player" index="1"]
-bones/5/bound_children = [ NodePath("Head") ]
-bones/22/bound_children = [ NodePath("RightHand") ]
-bones/35/bound_children = [ NodePath("LeftFoot") ]
-bones/40/bound_children = [ NodePath("RightFoot") ]
-
 [node name="Head" parent="World/Player/Skeleton" index="1"]
-transform = Transform( 0.999482, 0.0192567, 0.0258182, -0.0185004, 0.999402, -0.0292211, -0.0263655, 0.0287282, 0.999239, -0.0277809, 1.55949, -0.0627276 )
+transform = Transform( 0.999576, 0.0171591, 0.0234747, -0.0165148, 0.999488, -0.0273781, -0.0239325, 0.0269791, 0.99935, -0.032464, 1.55934, -0.0630412 )
 
 [node name="RightHand" parent="World/Player/Skeleton" index="2"]
-transform = Transform( 0.32911, 0.106028, 0.93832, 0.142134, -0.987917, 0.0617802, 0.933533, 0.113036, -0.340205, -0.216563, 0.951369, -0.016146 )
+transform = Transform( 0.338755, 0.0854066, 0.936989, 0.130844, -0.990469, 0.042977, 0.93173, 0.108041, -0.346703, -0.231397, 0.954782, -0.0191409 )
 
 [node name="RightFoot" parent="World/Player/Skeleton" index="3"]
-transform = Transform( 0.991515, 0.00144269, -0.129981, -1.1839e-005, 0.999938, 0.0110082, 0.129989, -0.0109132, 0.991454, 0.0820094, -0.00121776, -0.0324809 )
+transform = Transform( 0.991466, 0.00110526, -0.130365, 0.000276886, 0.999942, 0.0105845, 0.13037, -0.0105299, 0.991409, 0.0822346, -0.00112503, -0.0326311 )
 
 [node name="LeftFoot" parent="World/Player/Skeleton" index="4"]
-transform = Transform( 0.867657, 0.0177772, 0.496846, -0.0336127, 0.999172, 0.0229514, -0.496027, -0.0366117, 0.867537, 0.161306, 0.0059393, 0.104036 )
+transform = Transform( 0.86748, 0.0177433, 0.497155, -0.0335676, 0.999174, 0.0229134, -0.496338, -0.0365639, 0.867361, 0.161296, 0.00596391, 0.104059 )
 
 [node name="ShieldHandler" parent="World/Player" index="8"]
 editor/display_folded = false
@@ -58,12 +53,15 @@ anchor_bottom = 1.0
 
 [node name="Health" parent="UI" instance=ExtResource( 6 )]
 
-[node name="Menu" parent="." instance=ExtResource( 7 )]
+[node name="ControllerHelper" parent="UI" instance=ExtResource( 7 )]
 
-[node name="Loading" parent="." instance=ExtResource( 8 )]
+[node name="Menu" parent="." instance=ExtResource( 8 )]
+
+[node name="Loading" parent="." instance=ExtResource( 9 )]
 visible = false
 [connection signal="died" from="World/Player" to="." method="_on_Player_died"]
 [connection signal="health_changed" from="World/Player" to="UI/Health" method="_on_health_changed"]
+[connection signal="aimed" from="World/Player/WeaponHandler" to="UI/ControllerHelper" method="_on_WeaponHandler_aimed"]
 [connection signal="ammo_selected" from="World/Player/AmmoHandler" to="UI/Ammo" method="_on_ammo_selected"]
 [connection signal="shield_changed" from="World/Player/ShieldHandler/Shield" to="UI/Health" method="_on_shield_changed"]
 

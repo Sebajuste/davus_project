@@ -2,27 +2,24 @@ extends Node
 
 const Pistol = preload("res://objects/weapons/Pistol/Pistol.tscn")
 
-export var right_hand: NodePath
+signal aimed(state)
 
+export var right_hand: NodePath
 export var ammo: NodePath
 
 onready var _right_hand_node: Node = get_node(right_hand)
 onready var _ammo_node: Node = get_node(ammo)
 
 var aiming := false setget set_aiming
-
 var shoot_ready := true
-
 var target: Vector3
-
 var current_item = null
 var weapon = null
-
 var valid_target := false
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-
 	pass
 
 
@@ -109,3 +106,4 @@ func set_aiming(value):
 		$"../AnimationTree".set("parameters/StateMachine/Idle/Weapon/current", 0)
 		$"../AnimationTree".set("parameters/StateMachine/Locomotion/Weapon/current", 0)
 		$"../AnimationTree".set("parameters/StateMachine/Locomotion/WeaponBackward/current", 0)
+	emit_signal("aimed", aiming)
