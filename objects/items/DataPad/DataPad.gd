@@ -13,5 +13,5 @@ func _ready():
 #	pass
 
 func use(actor) -> bool:
-	modal_message.open_model_message(message)
+	#modal_message.open_model_message(message)
 	return true

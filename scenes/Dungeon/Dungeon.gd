@@ -15,7 +15,10 @@ export var max_room_width:int = 9
 export var min_room_height:int = 5
 export var max_room_height:int = 5
 export (float, 0, 1) var mob_chance_corridors:float = 0.5
+export (float, 0, 1) var mob_chance_rooms:float = 0.5
 export (float, 0, 1) var chance_monster_or_door:float = 1
+export (float, 0, 1) var chance_drop_rack:float = 0.5
+export (float, 0, 1) var chance_drop_datapad:float = 0.5
 export var map_seed = 1
 const TILE_SIZE = 2
 const DRAW_ROOMS_INDEX = false
@@ -56,7 +59,10 @@ func _ready():
 	dg.min_nb_key = min_nb_key
 	dg.key_occupation = key_occupation
 	dg.mob_chance_corridors = mob_chance_corridors
+	dg.mob_chance_rooms = mob_chance_rooms
 	dg.chance_monster_or_door = chance_monster_or_door
+	dg.chance_drop_rack = chance_drop_rack
+	dg.chance_drop_datapad = chance_drop_datapad
 	dg.rnd = _rnd
 	
 	# Initiate Mini map

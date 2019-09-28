@@ -7,7 +7,10 @@ signal dungeon_gen_finished(graph_generator)
 var rnd:RandomNumberGenerator
 var _graph_generator:GraphGenerator
 var mob_chance_corridors:float
+var mob_chance_rooms:float
 var chance_monster_or_door:float
+var chance_drop_rack:float
+var chance_drop_datapad:float
 var min_nb_key:int
 var key_occupation:float
 
@@ -170,6 +173,25 @@ func _write_rooms_on_map():
 		if prefab:
 			prefab.populate_platforms(rnd, _resourceMgr.PLATFORMS_RESOURCES)
 			room.prefab = prefab
+			if room != _graph_generator.starting_room:
+				var datapadPos:Vector3 = prefab.get_spot(rnd)
+				var mobPos:Vector3 = prefab.get_spot(rnd)
+				if room != _graph_generator.ending_room:
+					if rnd.randf() <= chance_drop_rack:
+						var rackPos:Vector3 = prefab.get_spot(rnd)
+						var rack = _place_object(rackPos + Vector3.FORWARD, _resourceMgr.RACK_RESOURCES, Vector3.ZERO, 0, false)
+						if rack:
+							prefab.rack = rack
+					
+					if rnd.randf() <= chance_drop_datapad:
+						_place_object(datapadPos, _resourceMgr.DATAPAD_RESOURCES, Vector3.ZERO, 0, false)
+					
+					if rnd.randf() <= mob_chance_rooms:
+						_add_mob_spawn(mobPos, _resourceMgr.eMobType.Fly, false, false)
+				else:
+					_place_object(datapadPos, _resourceMgr.ENDING_DATAPAD_RESOURCES, Vector3.ZERO, 0, false)
+					_add_mob_spawn(mobPos, _resourceMgr.eMobType.Fly, false, false)
+		
 		var background_resource:Array
 		if room == _graph_generator.starting_room || room == _graph_generator.ending_room:
 			background_resource = _get_rooms_resource(_resourceMgr.EXTREMITIES_ROOM_BACKGROUND, room_rect.size)
@@ -234,8 +256,8 @@ func _write_corridors_on_map() -> bool:	# Return true on error
 						prefab = _rooms_areas[connection].prefab
 					
 					if prefab:
-						var key_position:Vector3 = prefab.get_key_spot(rnd)
-						_drop_unlockables(key_position)
+						var key_position:Vector3 = prefab.get_spot(rnd)
+						_drop_unlockables(key_position, prefab)
 						if PRINT_DOOR_KEYS: 
 							print("key position = ", key_position)
 					else:
@@ -615,7 +637,7 @@ func _create_unlockable(lockedPos:Vector3, type:int, properties:Dictionary = {})
 	return id
 
 
-func _drop_unlockables(pos:Vector3):
+func _drop_unlockables(pos:Vector3, prefab):
 	if _unlockables_to_drop.size() > 0:
 		var unlockable:Dictionary = _unlockables_to_drop.front()
 		_dropped_unlockables[unlockable] = pos
@@ -628,11 +650,16 @@ func _drop_unlockables(pos:Vector3):
 				else:
 					key.id_door = unlockable["id"]
 			_resourceMgr.eUnlockableTypes.Rack:
-				var offset = pos + Vector3(0, 0, -1)
-				var rack = _place_object(offset, _resourceMgr.RACK_RESOURCES, Vector3.ZERO, 0, false)
+				
+				var rack
+				if prefab.rack:
+					rack = prefab.rack
+				else:
+					rack = _place_object(pos + Vector3.FORWARD, _resourceMgr.RACK_RESOURCES, Vector3.ZERO, 0, false)
 				if rack == null:
 					print("No key find in the resources : ", _resourceMgr.RACK_RESOURCES)
 				else:
+					prefab.rack = rack
 					rack.id = unlockable["id"]
 					var prop:Dictionary = unlockable["properties"]
 					_insert_ammo(rack, prop["ammo_type"])
@@ -648,13 +675,13 @@ func _insert_ammo(weapon_rack:Spatial, ammoType:String):
 	weapon_rack.add_item(ammo)
 
 
-func _add_mob_spawn(pos:Vector3, mobType:int = -1, lockableMonster:bool = false):
+func _add_mob_spawn(pos:Vector3, mobType:int = -1, lockableMonster:bool = false, scale_by_tilesize = true):
 	if mobType == -1:
 		mobType = rnd.randi() % _resourceMgr.MOB_RESOURCES.size()
 	
 	var types = _resourceMgr.MOB_RESOURCES.get(mobType)
 	if types:
-		var mob = _place_object(pos, types)
+		var mob = _place_object(pos, types, Vector3.ZERO, 0, scale_by_tilesize)
 		if mob == null:
 			print("No mob find in the resources : ", mobType, types)
 		else:
