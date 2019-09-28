@@ -17,6 +17,8 @@ func _ready():
 	}
 	notifications.create_notification("Hello World", "This is a text message", options)
 	
+	$Menu.visible = false
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

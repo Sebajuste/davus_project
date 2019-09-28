@@ -25,6 +25,11 @@ func _ready():
 	
 	print("game_loaded: ", game_loaded)
 	
+	$Menu/MarginContainer/TabContainer/Options.name = tr("title_options")
+	$Menu/MarginContainer/TabContainer/Inventory.name = tr("title_inventory")
+	$Menu/MarginContainer/TabContainer/Map.name = tr("title_map")
+	
+	
 	if game_loaded:
 		return
 	

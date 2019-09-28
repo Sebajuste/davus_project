@@ -55,6 +55,11 @@ _global_script_classes=[ {
 "path": "res://scripts/items/item.gd"
 }, {
 "base": "Reference",
+"class": "NotificationMessageFactory",
+"language": "GDScript",
+"path": "res://tools/Notifications/NotificationMessageFactory.gd"
+}, {
+"base": "Reference",
 "class": "Room",
 "language": "GDScript",
 "path": "res://scenes/Dungeon/Room.gd"
@@ -69,6 +74,7 @@ _global_script_class_icons={
 "GraphGenerator": "",
 "Hit": "",
 "Item": "",
+"NotificationMessageFactory": "",
 "Room": ""
 }
 
@@ -88,6 +94,18 @@ controller="*res://scripts/singletons/controller.gd"
 
 [input]
 
+ui_page_up={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777235,"unicode":0,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":6,"pressure":0.0,"pressed":false,"script":null)
+ ]
+}
+ui_page_down={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777236,"unicode":0,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":7,"pressure":0.0,"pressed":false,"script":null)
+ ]
+}
 move_right={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":68,"unicode":0,"echo":false,"script":null)

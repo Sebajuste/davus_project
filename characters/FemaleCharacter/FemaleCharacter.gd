@@ -211,7 +211,6 @@ func _input(event) -> void:
 	
 
 
-
 func get_items() -> Array:
 	return $Inventory.get_items()
 

@@ -97,7 +97,6 @@ id = 1
 locked = true
 
 [node name="Items" type="Spatial" parent="."]
-editor/display_folded = true
 
 [node name="Ammo" parent="Items" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.88394, 2.12825, 0 )
@@ -108,6 +107,10 @@ ammo_type = "Fire"
 
 [node name="Gun" parent="Items" instance=ExtResource( 6 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.06597, 3.89488, 0 )
+
+[node name="Gun2" parent="Items" instance=ExtResource( 6 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 0 )
+rate = 120
 
 [node name="DoorKey" parent="Items" instance=ExtResource( 7 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75829, 0, 0 )
@@ -133,6 +136,7 @@ target = NodePath("../Player")
 distance = 20.0
 
 [node name="Player" parent="." instance=ExtResource( 11 )]
+editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22544, 0 )
 
 [node name="Skeleton" parent="Player" index="1"]
@@ -142,16 +146,19 @@ bones/35/bound_children = [ NodePath("LeftFoot") ]
 bones/40/bound_children = [ NodePath("RightFoot") ]
 
 [node name="Head" parent="Player/Skeleton" index="1"]
-transform = Transform( 0.999496, 0.0186764, 0.0256733, -0.0179693, 0.99946, -0.0275018, -0.0261731, 0.0270268, 0.999292, -0.0284221, 1.55941, -0.063343 )
+transform = Transform( 0.999337, 0.0171201, 0.0321106, -0.0147337, 0.997212, -0.0731464, -0.0332733, 0.0726249, 0.996804, -0.0322727, 1.56002, -0.0506048 )
 
 [node name="RightHand" parent="Player/Skeleton" index="2"]
-transform = Transform( 0.330489, 0.104523, 0.938004, 0.141954, -0.988046, 0.0600852, 0.933072, 0.113296, -0.341378, -0.217954, 0.951927, -0.0164997 )
+transform = Transform( 0.32742, 0.0891373, 0.940665, 0.127312, -0.990623, 0.0495587, 0.936262, 0.103532, -0.335699, -0.223591, 0.94014, -0.0122201 )
 
 [node name="RightFoot" parent="Player/Skeleton" index="3"]
-transform = Transform( 0.991544, 0.00142877, -0.129762, -8.70973e-006, 0.999938, 0.0109428, 0.12977, -0.0108487, 0.991484, 0.0819855, -0.0012021, -0.0324671 )
+transform = Transform( 0.991358, 0.0012543, -0.13118, 9.49576e-005, 0.999946, 0.0102779, 0.131186, -0.010201, 0.991303, 0.082183, -0.0011, -0.0325493 )
 
 [node name="LeftFoot" parent="Player/Skeleton" index="4"]
-transform = Transform( 0.867654, 0.0177414, 0.496851, -0.033506, 0.999178, 0.0228369, -0.496038, -0.0364588, 0.867537, 0.161284, 0.00594336, 0.103868 )
+transform = Transform( 0.867396, 0.0178485, 0.4973, -0.0330288, 0.999218, 0.0217486, -0.496523, -0.0352883, 0.867307, 0.161379, 0.00602293, 0.103988 )
+
+[node name="ShieldHandler" parent="Player" index="8"]
+editor/display_folded = true
 
 [node name="AnimationTree" parent="Player" index="12"]
 parameters/StateMachine/playback = SubResource( 3 )
@@ -167,9 +174,11 @@ anchor_bottom = 1.0
 [node name="ControllerHelper" parent="UI" instance=ExtResource( 14 )]
 
 [node name="Menu" parent="." instance=ExtResource( 15 )]
-
-[node name="MarginContainer" parent="Menu" index="0"]
 editor/display_folded = true
+visible = false
+
+[node name="Inventory" parent="Menu/MarginContainer/TabContainer/Inventory" index="0"]
+inventory = NodePath("../../../../../Player/Inventory")
 
 [node name="Notifications" parent="." instance=ExtResource( 16 )]
 [connection signal="died" from="Player" to="." method="_on_Player_died"]

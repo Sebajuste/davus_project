@@ -2,8 +2,7 @@ extends Node
 
 signal item_added(item)
 signal item_removed(item)
-
-export var auto_equip := true
+signal item_updated(item)
 
 
 var items := []
@@ -36,21 +35,20 @@ func get_items() -> Array:
 
 
 func add_item(item: Item):
-	item["equiped"] = false
+	item.equiped = false
 	items.append(item)
+	"""
 	if item.type == "gun":
-		#weapons.append(item)
-		emit_signal("item_added", item)
 		if auto_equip and $"../WeaponHandler".weapon == null:
 			$"../WeaponHandler".equip_weapon(item)
 	elif item.type == "ammo":
-		#ammos.append(item)
-		emit_signal("item_added", item)
+		
 		$"../AmmoHandler".add_ammo(item)
 		if auto_equip and $"../AmmoHandler".ammo_available_list.size() == 1:
 			$"../AmmoHandler".select_next()
+	"""
 	
-	
+	emit_signal("item_added", item)
 
 
 func remove_item(item: Item) -> bool:
@@ -62,14 +60,11 @@ func remove_item(item: Item) -> bool:
 
 
 func save():
-	print("save weapons: ", items )
-	print("save weapons json: ", to_json(items) )
-	
 	var data = {
 		"items": [],
 	}
 	for item in items:
-		data.weapons.append( item.save() )
+		data.items.append( item.save() )
 	return data
 
 

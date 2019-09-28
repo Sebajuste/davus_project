@@ -5,6 +5,7 @@ signal on_close
 
 var enable_savegame := false setget set_enable_savegame
 
+var active := true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

@@ -1,16 +1,17 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://ui/InventoryMenu/InventoryMenu.gd" type="Script" id=1]
-[ext_resource path="res://ui/Icons/IconPistol64x64.png" type="Texture" id=2]
-[ext_resource path="res://fonts/mechsuit_thin.tres" type="DynamicFont" id=3]
-[ext_resource path="res://ui/Icons/Ammo/IconClipRegular64x64.png" type="Texture" id=4]
-[ext_resource path="res://ui/Icons/IconJetPack64x64.png" type="Texture" id=5]
-
+[ext_resource path="res://themes/default/default.theme" type="Theme" id=1]
+[ext_resource path="res://ui/InventoryMenu/InventoryMenu.gd" type="Script" id=2]
+[ext_resource path="res://ui/Icons/IconPistol64x64.png" type="Texture" id=3]
+[ext_resource path="res://fonts/mechsuit_thin.tres" type="DynamicFont" id=4]
+[ext_resource path="res://ui/Icons/Ammo/IconClipRegular64x64.png" type="Texture" id=5]
+[ext_resource path="res://ui/Icons/IconJetPack64x64.png" type="Texture" id=6]
 
 [node name="InventoryMenu" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource( 1 )
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 anchor_right = 1.0
@@ -40,45 +41,16 @@ anchor_bottom = 1.0
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/Tabs/WeaponMain/HBoxContainer"]
 margin_right = 64.0
 margin_bottom = 64.0
-texture = ExtResource( 2 )
+texture = ExtResource( 3 )
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/Tabs/WeaponMain/HBoxContainer"]
 margin_left = 68.0
-margin_right = 218.0
+margin_right = 249.0
 margin_bottom = 64.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
-custom_fonts/font = ExtResource( 3 )
+custom_fonts/font = ExtResource( 4 )
 text = "btn_main_weapon"
-align = 1
-valign = 1
-
-[node name="WeaponSecondary" type="Button" parent="MarginContainer/HBoxContainer/Tabs"]
-editor/display_folded = true
-visible = false
-margin_top = 74.0
-margin_right = 200.0
-margin_bottom = 138.0
-rect_min_size = Vector2( 0, 64 )
-align = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Tabs/WeaponSecondary"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/Tabs/WeaponSecondary/HBoxContainer"]
-margin_right = 64.0
-margin_bottom = 64.0
-texture = ExtResource( 2 )
-
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/Tabs/WeaponSecondary/HBoxContainer"]
-margin_left = 68.0
-margin_right = 271.0
-margin_bottom = 64.0
-size_flags_horizontal = 3
-size_flags_vertical = 1
-custom_fonts/font = ExtResource( 3 )
-text = "btn_secondary_weapon"
 align = 1
 valign = 1
 
@@ -97,7 +69,7 @@ anchor_bottom = 1.0
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/Tabs/Ammo/HBoxContainer"]
 margin_right = 64.0
 margin_bottom = 64.0
-texture = ExtResource( 4 )
+texture = ExtResource( 5 )
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/Tabs/Ammo/HBoxContainer"]
 margin_left = 68.0
@@ -105,13 +77,14 @@ margin_right = 200.0
 margin_bottom = 64.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
-custom_fonts/font = ExtResource( 3 )
+custom_fonts/font = ExtResource( 4 )
 text = "btn_ammo"
 align = 1
 valign = 1
 
 [node name="Jetpack" type="Button" parent="MarginContainer/HBoxContainer/Tabs"]
 editor/display_folded = true
+visible = false
 margin_top = 148.0
 margin_right = 200.0
 margin_bottom = 212.0
@@ -125,7 +98,7 @@ anchor_bottom = 1.0
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/Tabs/Jetpack/HBoxContainer"]
 margin_right = 64.0
 margin_bottom = 64.0
-texture = ExtResource( 5 )
+texture = ExtResource( 6 )
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/Tabs/Jetpack/HBoxContainer"]
 margin_left = 68.0
@@ -133,7 +106,7 @@ margin_right = 200.0
 margin_bottom = 64.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
-custom_fonts/font = ExtResource( 3 )
+custom_fonts/font = ExtResource( 4 )
 text = "btn_jetpack"
 align = 1
 valign = 1
@@ -168,6 +141,5 @@ margin_right = 408.0
 margin_bottom = 600.0
 size_flags_vertical = 3
 [connection signal="pressed" from="MarginContainer/HBoxContainer/Tabs/WeaponMain" to="." method="_on_WeaponMain_pressed"]
-[connection signal="pressed" from="MarginContainer/HBoxContainer/Tabs/WeaponSecondary" to="." method="_on_WeaponSecondary_pressed"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/Tabs/Ammo" to="." method="_on_Ammo_pressed"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/Tabs/Jetpack" to="." method="_on_Jetpack_pressed"]

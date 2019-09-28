@@ -26,23 +26,20 @@ editor/display_folded = true
 
 [node name="Player" parent="World" instance=ExtResource( 3 )]
 
-[node name="Skeleton" parent="World/Player" index="1"]
-bones/5/bound_children = [ NodePath("Head") ]
-bones/22/bound_children = [ NodePath("RightHand") ]
-bones/35/bound_children = [ NodePath("LeftFoot") ]
-bones/40/bound_children = [ NodePath("RightFoot") ]
-
 [node name="Head" parent="World/Player/Skeleton" index="1"]
-transform = Transform( 0.999503, 0.0172821, 0.0263566, -0.0161821, 0.999012, -0.0413862, -0.0270458, 0.040939, 0.998795, -0.0220889, 1.56, -0.0586165 )
+transform = Transform( 0.999447, 0.0171181, 0.0285087, -0.0149192, 0.997023, -0.0756302, -0.0297185, 0.0751634, 0.996728, -0.0297753, 1.56075, -0.0447397 )
 
 [node name="RightHand" parent="World/Player/Skeleton" index="2"]
-transform = Transform( 0.3296, 0.0882318, 0.939988, 0.128688, -0.99053, 0.0478528, 0.935308, 0.105193, -0.337834, -0.222683, 0.956481, -0.0155669 )
+transform = Transform( 0.331737, 0.089455, 0.939121, 0.126662, -0.990703, 0.049627, 0.934829, 0.102488, -0.339985, -0.221645, 0.941732, -0.00739585 )
 
 [node name="RightFoot" parent="World/Player/Skeleton" index="3"]
-transform = Transform( 0.991585, 0.00148134, -0.129447, 1.84029e-006, 0.999935, 0.0114571, 0.129455, -0.0113604, 0.99152, 0.082031, -0.00126834, -0.0326314 )
+transform = Transform( 0.991787, 0.00115743, -0.127895, 0.000176787, 0.999945, 0.0104196, 0.1279, -0.0103567, 0.991732, 0.0819513, -0.00108686, -0.0326886 )
 
 [node name="LeftFoot" parent="World/Player/Skeleton" index="4"]
-transform = Transform( 0.867896, 0.0191715, 0.496373, -0.0324734, 0.999308, 0.0181864, -0.495682, -0.0319003, 0.86792, 0.161305, 0.00616659, 0.103966 )
+transform = Transform( 0.867744, 0.0172863, 0.49671, -0.0320223, 0.999264, 0.0211687, -0.495979, -0.0342728, 0.86766, 0.161309, 0.00597447, 0.104003 )
+
+[node name="AmmoHandler" parent="World/Player" index="7"]
+inventory = null
 
 [node name="AnimationTree" parent="World/Player" index="12"]
 parameters/StateMachine/playback = SubResource( 1 )
@@ -73,3 +70,5 @@ visible = false
 [connection signal="shield_changed" from="World/Player/ShieldHandler/Shield" to="UI/Health" method="_on_shield_changed"]
 
 [editable path="World/Player"]
+
+[editable path="Menu"]

@@ -2,10 +2,11 @@
 
 [ext_resource path="res://tools/Notifications/NotificationPickUpAmmo/NotificationPickUpAmmo.gd" type="Script" id=1]
 [ext_resource path="res://fonts/mechsuit_thin.tres" type="DynamicFont" id=2]
-[ext_resource path="res://ui/Icons/IconClipRegular64x64.png" type="Texture" id=3]
-[ext_resource path="res://ui/Icons/IconClipFire64x64.png" type="Texture" id=4]
-[ext_resource path="res://ui/Icons/IconClipIce64x64.png" type="Texture" id=5]
+[ext_resource path="res://ui/Icons/Ammo/IconClipRegular64x64.png" type="Texture" id=3]
+[ext_resource path="res://ui/Icons/Ammo/IconClipFire64x64.png" type="Texture" id=4]
+[ext_resource path="res://ui/Icons/Ammo/IconClipIce64x64.png" type="Texture" id=5]
 [ext_resource path="res://fonts/neuropol.tres" type="DynamicFont" id=6]
+
 
 [node name="NotificationPickUpAmmo" type="Panel"]
 anchor_right = 1.0

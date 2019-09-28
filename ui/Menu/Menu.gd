@@ -6,6 +6,7 @@ extends Control
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	
 	pass # Replace with function body.
 
 
@@ -31,3 +32,22 @@ func _input(event):
 			previous_tab = $MarginContainer/TabContainer.get_child_count() - 1
 		$MarginContainer/TabContainer.current_tab = previous_tab
 	
+
+
+func _on_Menu_visibility_changed():
+	var tabs = $MarginContainer/TabContainer
+	
+	for panel in tabs.get_children():
+		if panel.get_child_count() > 0:
+			var child = panel.get_child(0)
+			if not panel.get_child(0).get("active") == null:
+				panel.get_child(0).active = false
+	
+	if visible:
+		var current_tab = tabs.current_tab
+		if tabs.get_child(current_tab).get_child_count() > 0:
+			var child = tabs.get_child(current_tab).get_child(0)
+			if child.get("active") != null:
+				child.set("active", true)
+	
+	pass # Replace with function body.

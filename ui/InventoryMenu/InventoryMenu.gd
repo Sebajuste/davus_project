@@ -7,11 +7,29 @@ const AmmoPanel = preload("AmmoPanel/AmmoPanel.tscn")
 
 enum EquipmentType { WEAPON_MAIN, WEAPON_SECONDARY, AMMO, JETPACK }
 
-var weapons := []
 
-var ammos := []
+export var inventory : NodePath
+
+onready var inventory_node: Node = get_node(inventory)
+
+
+var active := true setget set_active
+
+#var weapons := []
+
+#var ammos := []
 
 var _current_equipment_type
+
+onready var _equipment_type_list := [
+	$MarginContainer/HBoxContainer/Tabs/WeaponMain,
+	$MarginContainer/HBoxContainer/Tabs/Ammo,
+	#$MarginContainer/HBoxContainer/Tabs/Jetpack,
+]
+
+onready var _current_list = _equipment_type_list
+
+var _select_pos = 0
 
 var equipment := {
 	"weapon_main": null,
@@ -36,14 +54,51 @@ func _ready():
 #	pass
 
 
+func _input(event):
+	
+	if not active:
+		return
+	
+	if Input.is_action_just_pressed("ui_up"):
+		_select_pos -= 1
+		if _select_pos < 0:
+			_select_pos = _current_list.size() - 1
+		_current_list[_select_pos].grab_focus()
+		print("_select_pos: ", _select_pos, ", _current_list.size(): ", _current_list.size(), ", name: ", _current_list[_select_pos].name )
+	
+	if Input.is_action_just_pressed("ui_down"):
+		_select_pos += 1
+		if _select_pos >= _current_list.size():
+			_select_pos = 0
+		_current_list[_select_pos].grab_focus()
+		print("_select_pos: ", _select_pos, ", _current_list.size(): ", _current_list.size(), ", name: ", _current_list[_select_pos].name)
+	
+	if Input.is_action_just_pressed("ui_accept"):
+		_current_list[_select_pos].emit_signal("pressed")
+		print("_select_pos: ", _select_pos, ", _current_list.size(): ", _current_list.size(), ", name: ", _current_list[_select_pos].name)
+	
+
+
+func set_active(value):
+	active = value
+	if active:
+		_select_pos = 0
+		select_weapons()
+		_current_list[_select_pos].grab_focus()
+
+"""
 func add_item(item: Item) -> bool:
 	print("add item: ", item.save() )
 	match item.type:
 		"gun":
 			weapons.append(item)
+			if item.equiped:
+				equipment["weapon_main"] = item
 			return true
 		"ammo":
 			ammos.append(item)
+			if item.equiped:
+				equipment["ammo"] = item
 			return true
 		_:
 			return false
@@ -53,7 +108,7 @@ func remove_item(item: Item) -> void:
 	var index = weapons.find(item)
 	if index != -1:
 		weapons.remove(index)
-
+"""
 
 func deselect() -> void:
 	for child in _list.get_children():
@@ -62,7 +117,7 @@ func deselect() -> void:
 
 func select_weapons() -> void:
 	deselect()
-	for weapon in weapons:
+	for weapon in _get_weapons():
 		var weapon_panel = WeaponPanel.instance()
 		weapon_panel.weapon = weapon
 		weapon_panel.connect("item_selected", self, "_item_selected")
@@ -71,12 +126,31 @@ func select_weapons() -> void:
 
 func select_ammos() -> void:
 	deselect()
-	for ammo in ammos:
+	for ammo in _get_ammos():
 		var panel = AmmoPanel.instance()
 		panel.ammo = ammo
 		panel.connect("item_selected", self, "_item_selected")
 		_list.add_child(panel)
 		
+
+func _get_weapons() -> Array:
+	var weapons := []
+	for item in inventory_node.items:
+		if item.type == "gun":
+			if item.equiped:
+				equipment["weapon_main"] = item
+			weapons.append(item)
+	return weapons
+
+
+func _get_ammos() -> Array:
+	var ammos := []
+	for item in inventory_node.items:
+		if item.type == "ammo":
+			if item.equiped:
+				equipment["ammo"] = item
+			ammos.append(item)
+	return ammos
 
 
 func _item_selected(item: Item):
@@ -99,10 +173,10 @@ func _item_selected(item: Item):
 		EquipmentType.AMMO:
 			if equipment["ammo"]:
 				equipment["ammo"].equiped = false
-			item.equiped = true
 			equipment["ammo"] = item
+			equipment["ammo"].equiped = true
 			select_ammos()
-
+		
 		EquipmentType.JETPACK:
 			if equipment["jetpack"]:
 				equipment["jetpack"].equiped = false
@@ -112,9 +186,7 @@ func _item_selected(item: Item):
 			return
 	
 	emit_signal("item_equiped", item)
-	
-	pass
-
+	inventory_node.emit_signal("item_updated", item)
 
 
 func _on_WeaponMain_pressed():
