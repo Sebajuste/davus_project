@@ -1,12 +1,17 @@
-extends HBoxContainer
+extends Control
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
+var ammo_selected: Item
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	$Icon/Normal.visible = false
+	$Icon/Fire.visible = false
+	$Icon/Ice.visible = false
+	$HelperKeyboard.visible = false
+	$HelperGamepad.visible = false
+	controller.connect("controller_changed", self, "_on_controller_changed")
+	_on_controller_changed(controller.type)
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
@@ -14,21 +19,32 @@ func _ready():
 
 
 func _on_ammo_selected(ammo: Item):
-	
+	$Icon/Normal.visible = false
+	$Icon/Fire.visible = false
+	$Icon/Ice.visible = false
+	$HelperKeyboard.visible = false
+	$HelperGamepad.visible = false
+	ammo_selected = ammo
+	if ammo == null:
+		return
 	match ammo.properties["ammo_type"]:
 		"Normal":
-			$Normal.visible = true
-			$Fire.visible = false
-			$Ice.visible = false
+			$Icon/Normal.visible = true
 		"Fire":
-			$Normal.visible = false
-			$Fire.visible = true
-			$Ice.visible = false
+			$Icon/Fire.visible = true
 		"Ice":
-			$Normal.visible = false
-			$Fire.visible = false
-			$Ice.visible = true
+			$Icon/Ice.visible = true
 	
-	#$Value.text = ammo.properties["ammo_type"]
-	
-	pass # Replace with function body.
+	_on_controller_changed(controller.type)
+
+
+func _on_controller_changed(controller_type):
+	$HelperKeyboard.visible = false
+	$HelperGamepad.visible = false
+	if ammo_selected == null:
+		return
+	match controller_type:
+		Controller.Type.MOUSE_KEYBOARD:
+			$HelperKeyboard.visible = true
+		Controller.Type.GAMEPAD:
+			$HelperGamepad.visible = true
