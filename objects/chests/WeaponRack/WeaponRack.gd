@@ -8,7 +8,8 @@ var _items := []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	if _items.empty():
+		_hide_weapons()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -17,15 +18,16 @@ func _ready():
 
 
 func add_item(item: Item):
-	
 	_items.append(item)
-	
+	_show_weapons()
 
 
 func remove_item(item: Item):
 	var index = _items.find(item)
 	if index != -1:
 		_items.remove(index)
+	if _items.empty():
+		_hide_weapons()
 
 
 func give_all(actor):
