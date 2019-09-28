@@ -19,6 +19,14 @@ func _ready():
 	
 	$Menu.visible = false
 	
+	
+	var gun = Item.new()
+	gun.type = "gun"
+	gun.properties["damage"] = 10
+	gun.properties["rate"] = 400
+	
+	$Chests/WeaponRack.add_item(gun)
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
