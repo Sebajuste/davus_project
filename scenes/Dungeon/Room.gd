@@ -10,6 +10,7 @@ var geometry:GeometryHelper = GeometryHelper.new()
 var direction:DirectionHelper = DirectionHelper.new()
 
 func _init(rnd:RandomNumberGenerator, min_room_width:int, max_room_width:int, min_room_height:int, max_room_height:int, map_width:int, map_height:int, margin:int = 2):
+	output_locations = Array()
 	var width:int = (2 * margin + min_room_width + rnd.randi() % (max_room_width + 1 - min_room_width))
 	var height:int = (2 * margin + min_room_height + rnd.randi() % (max_room_height + 1 - min_room_height))
 	var x:int = rnd.randi() % (map_width - width)

@@ -91,7 +91,6 @@ loading="*res://scripts/singletons/loading.gd"
 save="*res://scripts/singletons/save.gd"
 notifications="*res://scripts/singletons/notifications.gd"
 controller="*res://scripts/singletons/controller.gd"
-modal_message="*res://scripts/singletons/modal_message.gd"
 
 [input]
 
@@ -235,4 +234,5 @@ translations=PoolStringArray( "res://i18n/button.en.translation", "res://i18n/bu
 
 [rendering]
 
+quality/driver/driver_name="GLES2"
 environment/default_environment="res://default_env.tres"

@@ -14,10 +14,6 @@ var chance_drop_datapad:float
 var min_nb_key:int
 var key_occupation:float
 
-########################################## A VIRER après debug.
-var avirer = preload("res://tileset/test/MobSpawn.tscn")
-##########################################
-
 var _geometry:GeometryHelper = GeometryHelper.new()
 var _resourceMgr:DungeonResource = DungeonResource.new()
 
@@ -273,24 +269,22 @@ func _add_outside_door(room:Room):
 	var room_rect:Rect2 = room.get_room_rect()
 	var bottom:Vector2 = room_rect.position
 	var middle:Vector2 = room.get_middle()
-	var vectorTileSize = Vector2(tile_size * 3, tile_size * 3)
+	var vectorTileSize = Vector2.ONE
 	for x in range (room_rect.size.x / 2):
 		for i in range(-1, 2, 2):
 			var v:Vector2 = Vector2(middle.x + i * x, bottom.y)
 			var v_rect:Rect2 = Rect2(v - vectorTileSize, vectorTileSize * 2)
+			var intersect:bool = false
 			for out in room.output_locations:
-########################################## A VIRER après debug.
-				var debug = avirer.instance()
-				debug.translate(_geometry.to_vector3(out) * tile_size)
-				debug.add_to_group("MapElements")
-				add_child(debug)
-##########################################
 				var out_rect:Rect2 = Rect2(out - vectorTileSize, vectorTileSize * 2)
-				if not v_rect.intersects(out_rect):
-					var door = _place_object(_geometry.to_vector3(v), _resourceMgr.IN_OUT_DOOR)
-					if get_parent().context and get_parent().context.has("spawn_position"):
-						door.spawn_position = get_parent().context.spawn_position
-					return door
+				if v_rect.intersects(out_rect):
+					intersect = true
+			
+			if not intersect:	
+				var door = _place_object(_geometry.to_vector3(v), _resourceMgr.IN_OUT_DOOR)
+				if get_parent().context and get_parent().context.has("spawn_position"):
+					door.spawn_position = get_parent().context.spawn_position
+				return door
 	return null
 
 func _dig_path(start: Dictionary, end: Dictionary, lockDoorOnStart: bool = false, lockDoorOnEnd: bool = false, refuseMonster:bool = false) -> bool:	# Return true on error

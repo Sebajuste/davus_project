@@ -32,16 +32,16 @@ bones/35/bound_children = [ NodePath("LeftFoot") ]
 bones/40/bound_children = [ NodePath("RightFoot") ]
 
 [node name="Head" parent="World/Player/Skeleton" index="1"]
-transform = Transform( 0.999492, 0.0172904, 0.0267771, -0.0160675, 0.998847, -0.0452386, -0.0275284, 0.0447853, 0.998617, -0.0237873, 1.56048, -0.0557448 )
+transform = Transform( 0.999338, 0.0222257, 0.0288097, -0.0210437, 0.99895, -0.0406993, -0.029684, 0.0400659, 0.998755, -0.0207749, 1.55989, -0.0586695 )
 
 [node name="RightHand" parent="World/Player/Skeleton" index="2"]
-transform = Transform( 0.336127, 0.090611, 0.937447, 0.129158, -0.990391, 0.0494189, 0.932918, 0.104468, -0.344602, -0.221802, 0.954831, -0.0133956 )
+transform = Transform( 0.323781, 0.0898218, 0.941859, 0.129033, -0.990374, 0.0500921, 0.937289, 0.105313, -0.332255, -0.221055, 0.954967, -0.0157371 )
 
 [node name="RightFoot" parent="World/Player/Skeleton" index="3"]
-transform = Transform( 0.991711, 0.00148623, -0.128481, -8.3819e-006, 0.999933, 0.011502, 0.12849, -0.0114052, 0.991644, 0.081988, -0.00125997, -0.0326082 )
+transform = Transform( 0.991523, 0.00166385, -0.129921, -0.000141017, 0.999931, 0.0117279, 0.129931, -0.0116103, 0.991454, 0.0820499, -0.00131672, -0.0326326 )
 
 [node name="LeftFoot" parent="World/Player/Skeleton" index="4"]
-transform = Transform( 0.867923, 0.0189755, 0.496337, -0.0322499, 0.999315, 0.0181922, -0.495652, -0.0317936, 0.867941, 0.161407, 0.00618845, 0.10416 )
+transform = Transform( 0.86771, 0.0195944, 0.496684, -0.0329792, 0.999291, 0.0181956, -0.495976, -0.0321668, 0.867742, 0.161364, 0.00621991, 0.104248 )
 
 [node name="AnimationTree" parent="World/Player" index="12"]
 parameters/StateMachine/playback = SubResource( 1 )

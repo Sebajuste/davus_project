@@ -25,8 +25,6 @@ func _draw():
 	var scaledMap:Vector2 = Vector2(graph_generator.map_width * scale2D, graph_generator.map_height * scale2D)
 	var offset:Vector2 = (viewportSize - scaledMap) * 0.5
 	var actual_room = graph_generator.pathfinding.get_closest_point(player_position)
-	var segment = graph_generator.pathfinding.get_closest_position_in_segment(player_position)
-	_draw_path(graph_generator.pathfinding, offset)
 	for point in graph_generator.rooms_areas.keys():
 		var room:Room = graph_generator.rooms_areas[point]
 		var room_rect:Rect2 = room.get_room_rect()
@@ -57,7 +55,16 @@ func _draw():
 				) * scale2D, 
 				str(point), 
 				Color.red)
-
+	_draw_path(graph_generator.pathfinding, offset)
+	"""
+	draw_circle(
+		offset + _geometry.reverse_y_axis(
+				_geometry.to_vector2(player_position - Vector3.DOWN), 
+				graph_generator.map_height
+				) * scale2D, 
+			5, 
+			Color.blue)
+	"""
 
 func _draw_path(path: AStar, offset:Vector2):
 	if path:
