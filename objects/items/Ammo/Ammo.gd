@@ -9,7 +9,6 @@ export(String, "Fire", "Ice", "Normal") var ammo_type := "Normal"
 
 
 var taken := false
-var destroy_timer := 1.0
 
 
 # Called when the node enters the scene tree for the first time.
@@ -30,11 +29,8 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	if taken:
-		destroy_timer -= delta
-		if destroy_timer < 0.0:
-			queue_free()
+#func _process(delta):
+#	pass
 
 
 func _on_Area_body_entered(body):
@@ -43,10 +39,8 @@ func _on_Area_body_entered(body):
 		taken = true
 		var item = Item.new()
 		item.type = TYPE
-		
 		item.properties["ammo_type"] = ammo_type
-		
 		body.give_item(item)
-		
 		$PickUpSound.play()
 		visible = false
+		$DestroyTimer.start()
