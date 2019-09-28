@@ -19,6 +19,10 @@ export (float, 0, 1) var mob_chance_rooms:float = 0.5
 export (float, 0, 1) var chance_monster_or_door:float = 1
 export (float, 0, 1) var chance_drop_rack:float = 0.5
 export (float, 0, 1) var chance_drop_datapad:float = 0.5
+export var min_gun_damage = 10
+export var max_gun_damage = 30
+export var min_gun_rate = 60
+export var max_gun_rate = 90
 export var map_seed = 1
 const TILE_SIZE = 2
 const DRAW_ROOMS_INDEX = false
@@ -63,6 +67,10 @@ func _ready():
 	dg.chance_monster_or_door = chance_monster_or_door
 	dg.chance_drop_rack = chance_drop_rack
 	dg.chance_drop_datapad = chance_drop_datapad
+	dg.min_gun_damage = min_gun_damage
+	dg.max_gun_damage = max_gun_damage
+	dg.min_gun_rate = min_gun_rate
+	dg.max_gun_rate = max_gun_rate
 	dg.rnd = _rnd
 	
 	# Initiate Mini map

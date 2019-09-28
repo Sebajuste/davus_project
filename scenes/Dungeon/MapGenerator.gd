@@ -13,6 +13,10 @@ var chance_drop_rack:float
 var chance_drop_datapad:float
 var min_nb_key:int
 var key_occupation:float
+var min_gun_damage:int
+var max_gun_damage:int
+var min_gun_rate:int
+var max_gun_rate:int
 
 var _geometry:GeometryHelper = GeometryHelper.new()
 var _resourceMgr:DungeonResource = DungeonResource.new()
@@ -45,7 +49,7 @@ const PRINT_REFUSED_DUNGEON:bool = true
 const PRINT_LADDER:bool = false
 const PRINT_ROOMS_TRAVEL:bool = false
 const PRINT_DOOR_LOCATION:bool = false
-const PRINT_DOOR_KEYS:bool = false
+const PRINT_DOOR_KEYS:bool = true
 const TEST_DOOR_KEYS_EQUALITY:bool = false
 const DESIRED_SEED_STEP_COUNTER:int = 50
 var _desired_seed_counter:int = 0
@@ -174,10 +178,7 @@ func _write_rooms_on_map():
 				var mobPos:Vector3 = prefab.get_spot(rnd)
 				if room != _graph_generator.ending_room:
 					if rnd.randf() <= chance_drop_rack:
-						var rackPos:Vector3 = prefab.get_spot(rnd)
-						var rack = _place_object(rackPos + Vector3.FORWARD, _resourceMgr.RACK_RESOURCES, Vector3.ZERO, 0, false)
-						if rack:
-							prefab.rack = rack
+						_add_rack_spawn(prefab)
 					
 					if rnd.randf() <= chance_drop_datapad:
 						_place_object(datapadPos, _resourceMgr.DATAPAD_RESOURCES, Vector3.ZERO, 0, false)
@@ -234,10 +235,10 @@ func _write_corridors_on_map() -> bool:	# Return true on error
 						s = _should_lock()
 				elif _pathfinding.get_point_connections(point).size() == 1:
 					pointDeadEnd = true
-					#print("dead end point = ", point)
+					
 				elif _pathfinding.get_point_connections(connection).size() == 1:
 					connectionDeadEnd = true
-					#print("dead end connection = ", connection)
+					
 				
 				if s || e:
 					if PRINT_DOOR_KEYS: 
@@ -252,10 +253,7 @@ func _write_corridors_on_map() -> bool:	# Return true on error
 						prefab = _rooms_areas[connection].prefab
 					
 					if prefab:
-						var key_position:Vector3 = prefab.get_spot(rnd)
-						_drop_unlockables(key_position, prefab)
-						if PRINT_DOOR_KEYS: 
-							print("key position = ", key_position)
+						_drop_unlockables(prefab)
 					else:
 						print("No prefab found")
 				
@@ -631,12 +629,13 @@ func _create_unlockable(lockedPos:Vector3, type:int, properties:Dictionary = {})
 	return id
 
 
-func _drop_unlockables(pos:Vector3, prefab):
+func _drop_unlockables(prefab):
 	if _unlockables_to_drop.size() > 0:
 		var unlockable:Dictionary = _unlockables_to_drop.front()
-		_dropped_unlockables[unlockable] = pos
+		var pos:Vector3
 		match unlockable["type"]:
 			_resourceMgr.eUnlockableTypes.Key:
+				pos = prefab.get_spot(rnd)
 				var key = _place_object(pos, _resourceMgr.KEYS_RESOURCES, Vector3.ZERO, 0, false)
 				if key == null:
 					print("No key find in the resources : ", _resourceMgr.KEYS_RESOURCES)
@@ -644,22 +643,36 @@ func _drop_unlockables(pos:Vector3, prefab):
 				else:
 					key.id_door = unlockable["id"]
 			_resourceMgr.eUnlockableTypes.Rack:
-				
-				var rack
-				if prefab.rack:
-					rack = prefab.rack
-				else:
-					rack = _place_object(pos + Vector3.FORWARD, _resourceMgr.RACK_RESOURCES, Vector3.ZERO, 0, false)
+				var rack = _add_rack_spawn(prefab)
 				if rack == null:
 					print("No key find in the resources : ", _resourceMgr.RACK_RESOURCES)
 				else:
-					prefab.rack = rack
 					rack.id = unlockable["id"]
 					var prop:Dictionary = unlockable["properties"]
 					_insert_ammo(rack, prop["ammo_type"])
 			_:
 				print("unknow unlockable type")
+		
+		_dropped_unlockables[unlockable] = pos
 		_unlockables_to_drop.erase(unlockable)
+
+
+func _add_rack_spawn(prefab:Spatial) -> Spatial:
+	var rack
+	if prefab.rack:
+		rack = prefab.rack
+	else:
+		var pos:Vector3 = prefab.get_spot(rnd, false)
+		rack = _place_object(pos + Vector3.FORWARD, _resourceMgr.RACK_RESOURCES, Vector3.ZERO, 0, false)
+		prefab.rack = rack
+	
+	if rack:
+		var weapon = Item.new()
+		weapon.type = "gun"
+		weapon.properties["damage"] = min_gun_damage + (rnd.randi() % (max_gun_damage - min_gun_damage + 1))
+		weapon.properties["rate"] = min_gun_rate + (rnd.randi() % (max_gun_rate - min_gun_rate + 1))
+		rack.add_item(weapon)
+	return rack
 
 
 func _insert_ammo(weapon_rack:Spatial, ammoType:String):

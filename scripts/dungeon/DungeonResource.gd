@@ -94,6 +94,7 @@ enum eMobType { Floor = 0, Fly = 1 }
 const MOB_RESOURCES:Dictionary = {
 		eMobType.Floor: [
 			preload("res://characters/Mobs/MobTentacle/MobTentacle.tscn"),
+			preload("res://characters/Mobs/Turret/Turret.tscn"),
 		],
 		eMobType.Fly: [
 			preload("res://characters/Mobs/Drone/Drone.tscn"),
