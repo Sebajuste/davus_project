@@ -35,7 +35,7 @@ func _ready():
 	default_weapon.type = "gun"
 	default_weapon.properties["damage"] = 1.0
 	default_weapon.properties["rate"] = 60
-	$World/Player.give_item(default_weapon)
+	$World/Player.give_item(default_weapon, false)
 	
 	#
 	# Add default ammo
@@ -43,7 +43,7 @@ func _ready():
 	var default_ammo := Item.new()
 	default_ammo.type = "ammo"
 	default_ammo.properties["ammo_type"] = "normal"
-	$World/Player.give_item(default_ammo)
+	$World/Player.give_item(default_ammo, false)
 	
 
 
