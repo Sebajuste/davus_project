@@ -5,6 +5,7 @@ signal start_game
 onready var _buttons := [
 	$MainControls/MarginContainer/VBoxContainer/StartButton,
 	$MainControls/MarginContainer/VBoxContainer/OptionsButton,
+	$MainControls/MarginContainer/VBoxContainer/CreditsButton,
 	$MainControls/MarginContainer/VBoxContainer/QuitButton,
 ]
 
@@ -36,7 +37,7 @@ func _physics_process(delta):
 			select_pos = 0
 		_buttons[select_pos].grab_focus()
 	
-	if Input.is_action_just_pressed("ui_accept"):
+	if Input.is_action_just_pressed("ui_accept") and not $Credits.visible:
 		_buttons[select_pos].emit_signal("pressed")
 	
 
@@ -58,3 +59,9 @@ func _on_QuitButton_pressed():
 func _on_Options_on_close():
 	$MainControls.visible = true
 	$Options.visible = false
+
+
+func _on_CreditsButton_pressed():
+	
+	$Credits.start()
+	

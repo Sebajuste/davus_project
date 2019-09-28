@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://scenes/WorldPlanet/WorldPlanet.gd" type="Script" id=1]
 [ext_resource path="res://tools/StreamingLevel/StreamingLevel.tscn" type="PackedScene" id=2]
@@ -6,11 +6,10 @@
 [ext_resource path="res://scenes/WorldPlanet/JungleNoise.tres" type="OpenSimplexNoise" id=4]
 [ext_resource path="res://tools/StreamingLevel/MonsterLayout/MonsterLevelLayout.tscn" type="PackedScene" id=5]
 [ext_resource path="res://tools/StreamingLevel/DoorsLayout/DoorsLevelLayout.tscn" type="PackedScene" id=6]
-[ext_resource path="res://tools/StreamingLevel/KeysLayout/KeysLevelLayout.tscn" type="PackedScene" id=7]
-[ext_resource path="res://tileset/Jungle/JungleBackgroundLevelLayout.tscn" type="PackedScene" id=8]
-[ext_resource path="res://scenes/TestWorldGameplay/DirectionalLight.gd" type="Script" id=9]
-[ext_resource path="res://music/exploring_the_dungeon.ogg" type="AudioStream" id=10]
-[ext_resource path="res://ui/WorldMap/WorldMap.tscn" type="PackedScene" id=11]
+[ext_resource path="res://tileset/Jungle/JungleBackgroundLevelLayout.tscn" type="PackedScene" id=7]
+[ext_resource path="res://scenes/TestWorldGameplay/DirectionalLight.gd" type="Script" id=8]
+[ext_resource path="res://music/exploring_the_dungeon.ogg" type="AudioStream" id=9]
+[ext_resource path="res://ui/WorldMap/WorldMap.tscn" type="PackedScene" id=10]
 
 [sub_resource type="ProceduralSky" id=1]
 sky_top_color = Color( 0.937255, 0.619608, 0.0784314, 1 )
@@ -38,7 +37,6 @@ script = ExtResource( 1 )
 environment = SubResource( 2 )
 
 [node name="StreamingLevel" parent="." instance=ExtResource( 2 )]
-editor/display_folded = true
 multithreading = false
 
 [node name="JungleLevelLayout" parent="StreamingLevel" instance=ExtResource( 3 )]
@@ -53,15 +51,9 @@ end_max_y = -5
 [node name="DoorsLevelLayout" parent="StreamingLevel" instance=ExtResource( 6 )]
 noise = ExtResource( 4 )
 cap = 0.2
-end_max_y = -20
+end_max_y = -40
 
-[node name="KeysLevelLayout" parent="StreamingLevel" instance=ExtResource( 7 )]
-noise = ExtResource( 4 )
-cap = 0.3
-end_max_y = -10
-drop_rate = 0.2
-
-[node name="JungleBackgroundLevelLayout" parent="StreamingLevel" instance=ExtResource( 8 )]
+[node name="JungleBackgroundLevelLayout" parent="StreamingLevel" instance=ExtResource( 7 )]
 cap = 0.15
 top_max_y = 0
 end_max_y = 1
@@ -71,18 +63,18 @@ transform = Transform( 0.736818, 0.52042, -0.43158, -0.00878779, 0.645664, 0.763
 light_color = Color( 0.894118, 0.917647, 0.815686, 1 )
 light_energy = 2.0
 shadow_enabled = true
-script = ExtResource( 9 )
+script = ExtResource( 8 )
 min_y = -30
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 10 )
+stream = ExtResource( 9 )
 autoplay = true
 
 [node name="PlayerRespawnTimer" type="Timer" parent="."]
 wait_time = 5.0
 one_shot = true
 
-[node name="Map" parent="." instance=ExtResource( 11 )]
+[node name="Map" parent="." instance=ExtResource( 10 )]
 streaming_level = NodePath("../StreamingLevel")
 zoom = 3.5
 [connection signal="timeout" from="PlayerRespawnTimer" to="." method="_on_PlayerRespawnTimer_timeout"]
