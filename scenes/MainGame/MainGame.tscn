@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://scenes/MainGame/MainGame.gd" type="Script" id=1]
 [ext_resource path="res://scenes/WorldPlanet/WorldPlanet.tscn" type="PackedScene" id=2]
@@ -8,8 +8,9 @@
 [ext_resource path="res://ui/Game/Health/Health.tscn" type="PackedScene" id=6]
 [ext_resource path="res://ui/Game/ControllerHelper/ControllerHelper.tscn" type="PackedScene" id=7]
 [ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=8]
-[ext_resource path="res://ui/Loading/Loading.tscn" type="PackedScene" id=9]
-[ext_resource path="res://tools/Notifications/Notifications.tscn" type="PackedScene" id=10]
+[ext_resource path="res://ui/DataPad/DataPad.tscn" type="PackedScene" id=9]
+[ext_resource path="res://ui/Loading/Loading.tscn" type="PackedScene" id=10]
+[ext_resource path="res://tools/Notifications/Notifications.tscn" type="PackedScene" id=11]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=1]
 
@@ -33,16 +34,16 @@ bones/35/bound_children = [ NodePath("LeftFoot") ]
 bones/40/bound_children = [ NodePath("RightFoot") ]
 
 [node name="Head" parent="World/Player/Skeleton" index="1"]
-transform = Transform( 0.99948, 0.0173324, 0.0271844, -0.0161376, 0.99892, -0.0435642, -0.0279102, 0.0431027, 0.99868, -0.0235095, 1.56041, -0.056282 )
+transform = Transform( 0.999346, 0.0210651, 0.0294199, -0.0192214, 0.997915, -0.0615964, -0.0306561, 0.0609906, 0.997666, -0.0265814, 1.56075, -0.0497853 )
 
 [node name="RightHand" parent="World/Player/Skeleton" index="2"]
-transform = Transform( 0.336305, 0.089143, 0.937523, 0.129053, -0.99048, 0.0478857, 0.932868, 0.104887, -0.344609, -0.222516, 0.955458, -0.0134855 )
+transform = Transform( 0.329318, 0.0897039, 0.939948, 0.129605, -0.990347, 0.0491071, 0.935281, 0.105651, -0.337766, -0.22028, 0.946204, -0.00973717 )
 
 [node name="RightFoot" parent="World/Player/Skeleton" index="3"]
-transform = Transform( 0.991706, 0.00149582, -0.128517, 1.28224e-005, 0.99993, 0.0117343, 0.128525, -0.0116385, 0.991636, 0.0820116, -0.00126211, -0.0324048 )
+transform = Transform( 0.991709, 0.00122981, -0.12851, 0.000193454, 0.999937, 0.0110601, 0.128515, -0.0109939, 0.991645, 0.0821065, -0.00117103, -0.032378 )
 
 [node name="LeftFoot" parent="World/Player/Skeleton" index="4"]
-transform = Transform( 0.86791, 0.0190846, 0.496354, -0.0323668, 0.999312, 0.0181756, -0.495665, -0.0318375, 0.867931, 0.161412, 0.00621346, 0.104244 )
+transform = Transform( 0.867694, 0.0191041, 0.496729, -0.0334846, 0.999239, 0.0200633, -0.495968, -0.0340386, 0.867674, 0.161345, 0.0061332, 0.104034 )
 
 [node name="AmmoHandler" parent="World/Player" index="7"]
 inventory = null
@@ -54,6 +55,7 @@ parameters/StateMachine/playback = SubResource( 1 )
 target = NodePath("../Player")
 
 [node name="UI" type="Control" parent="."]
+editor/display_folded = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 
@@ -64,14 +66,17 @@ anchor_bottom = 1.0
 [node name="ControllerHelper" parent="UI" instance=ExtResource( 7 )]
 
 [node name="Menu" parent="." instance=ExtResource( 8 )]
+editor/display_folded = true
 
 [node name="Inventory" parent="Menu/MarginContainer/TabContainer/Inventory" index="0"]
 inventory = NodePath("../../../../../World/Player/Inventory")
 
-[node name="Loading" parent="." instance=ExtResource( 9 )]
+[node name="DataPad" parent="." instance=ExtResource( 9 )]
+
+[node name="Loading" parent="." instance=ExtResource( 10 )]
 visible = false
 
-[node name="Notifications" parent="." instance=ExtResource( 10 )]
+[node name="Notifications" parent="." instance=ExtResource( 11 )]
 [connection signal="died" from="World/Player" to="." method="_on_Player_died"]
 [connection signal="health_changed" from="World/Player" to="UI/Health" method="_on_health_changed"]
 [connection signal="aimed" from="World/Player/WeaponHandler" to="UI/ControllerHelper" method="_on_WeaponHandler_aimed"]
