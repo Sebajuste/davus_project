@@ -39,7 +39,7 @@ func set_damage(damage: int) -> void:
 
 func set_type(type: String) -> void:
 	$DamageSource.type = type
-	print("bullet ", type)
+	#print("bullet ", type)
 	match type:
 		"Fire":
 			var mat = $Area/MeshInstance.material_override.duplicate()
