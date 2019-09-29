@@ -119,7 +119,7 @@ func gen_dungeon(graph_generator:GraphGenerator) -> bool:
 		if door:
 			spawn_position = door.translation
 		door = _add_outside_door(_graph_generator.ending_room)
-		door.set_locked(true)
+		#door.set_locked(true)
 		
 		var tiles = get_tree().get_nodes_in_group("Tiles")
 		for tile in tiles:
