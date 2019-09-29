@@ -36,11 +36,18 @@ var rotate_direction
 var look_at_destination # Direction vers laquelle doit regarder la tourelle après avoir effectuer une rotation
 var speed_rotation
 
+
+
+func get_dist(x1,y1,x2,y2) -> float:
+	return pow(pow(x2-x1,2)+pow(y2-y1,2),0.5)
+
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	current_state = state.WAIT
 	shoot_left = nb_shoot
-	timer_complete_loading = speed_complete_loading
+	timer_complete_loading = 1
 	timer_reloading = 0
 	timer_wait = wait_duration_min
 	look_at_destination = direction.LEFT
@@ -53,8 +60,6 @@ func _process(delta):
 	if $CombatStats.health == 0:
 		queue_free()
 		return
-	
-	#print($CombatStats.health)
 	
 	position = global_transform.origin
 	
@@ -120,6 +125,15 @@ func _process(delta):
 		old_angle_rotation = angle_rotation
 		
 	elif current_state == state.SHOOT:
+		
+		var target_position = current_target.global_transform.origin
+		if target_position.x < position.x and look_at_destination == direction.RIGHT:
+			current_state = state.ROTATE
+			look_at_destination = direction.LEFT
+		elif target_position.x > position.x and look_at_destination == direction.LEFT:
+			current_state = state.ROTATE
+			look_at_destination = direction.RIGHT
+		
 		if target_visible == false:
 			current_state = state.WAIT
 		
@@ -144,7 +158,10 @@ func attack():
 	var root_node = get_tree().get_root().get_child(0)
 	root_node.add_child(bullet)
 	
-	bullet.global_transform.origin = $AttackPosition.global_transform.origin
+	if look_at_destination == direction.LEFT:
+		bullet.global_transform.origin = $AttackPositionLeft.global_transform.origin
+	else:
+		bullet.global_transform.origin = $AttackPositionRight.global_transform.origin
 	
 	# Modification des positions utilisées pour diriger le tir
 	var target_position = current_target.global_transform.origin
