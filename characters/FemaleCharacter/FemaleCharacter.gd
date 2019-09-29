@@ -30,6 +30,7 @@ var _floor_time := 0.0
 var _walk_sound_ready := true
 var _look_dir = Vector3()
 var _lock_dir := false
+var _ennemies := []
 
 var _notification_message = NotificationMessageFactory.new()
 
@@ -80,7 +81,13 @@ func _process(delta):
 			var look_dir = _look_dir
 			if not _lock_dir:
 				look_dir = Vector3(global_transform.basis.z.x, 0, 0)
-			$WeaponHandler.target = global_transform.origin + look_dir * 100
+			
+			var target = _get_aimbot_target(global_transform.origin + Vector3(0, 1.2, 0), look_dir)
+			if target != null:
+				$WeaponHandler.target = target.global_transform.origin
+			else:
+				$WeaponHandler.target = global_transform.origin + look_dir * 100
+			
 		
 		if $WeaponHandler.valid_target:
 				$WeaponHandler.shoot_ready = true
@@ -102,8 +109,6 @@ func _physics_process(delta):
 	move_dir = move_dir.normalized()
 	
 	velocity.y += delta * -GRAVITY * 2
-	
-	
 	
 	if _jump_event:
 		if not is_falling() and _jump_count > 0:
@@ -237,6 +242,22 @@ func reset() -> void:
 	
 
 
+func _get_aimbot_target(from_position: Vector3, look_dir: Vector3) -> Spatial:
+	var near_dot = null
+	var near_distance = null
+	var target = null
+	for ennemy in _ennemies:
+		var distance_vector : Vector3 = ennemy.global_transform.origin - from_position
+		var ennemy_dir = distance_vector.normalized()
+		var r = ennemy_dir.dot( look_dir.normalized())
+		if r > 0.98:
+			var distance = distance_vector.length()
+			if near_distance == null or distance < near_distance:
+				near_distance = distance
+				target = ennemy
+	return target
+
+
 func _play_anim(name: String, force: bool = false):
 	if _anim_update:
 		return
@@ -274,3 +295,14 @@ func _on_Inventory_item_equiped(item):
 	
 	print("items : ", $Inventory._items )
 	
+
+
+func _on_DetectionArea_body_entered(body):
+	if body.is_in_group("mob"):
+		_ennemies.append(body)
+
+
+func _on_DetectionArea_body_exited(body):
+	var index = _ennemies.find(body)
+	if index != -1:
+		_ennemies.remove(index)

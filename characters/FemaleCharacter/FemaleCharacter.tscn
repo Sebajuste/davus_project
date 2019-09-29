@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=2]
+[gd_scene load_steps=47 format=2]
 
 [ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.gd" type="Script" id=1]
 [ext_resource path="res://models/FemaleCharacter/Palette.material" type="Material" id=2]
@@ -36,7 +36,7 @@
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 0.226884
-height = 1.50358
+height = 1.37828
 
 [sub_resource type="ArrayMesh" id=2]
 surfaces/0 = {
@@ -72,6 +72,9 @@ angular_velocity = 1.0
 [sub_resource type="QuadMesh" id=5]
 
 [sub_resource type="SphereShape" id=6]
+
+[sub_resource type="SphereShape" id=13]
+radius = 17.5667
 
 [sub_resource type="Animation" id=7]
 length = 0.033333
@@ -361,10 +364,11 @@ collision_mask = 3
 script = ExtResource( 1 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, -0.000659509, 1, 0, -1, -0.000659509, 0, 0.966339, -6.02305e-005 )
+transform = Transform( 1, 0, 0, 0, -0.000659509, 1, 0, -1, -0.000659509, 0, 0.916938, -2.76504e-005 )
 shape = SubResource( 1 )
 
 [node name="Skeleton" type="Skeleton" parent="."]
+editor/display_folded = true
 bones_in_world_transform = true
 bones/0/name = "mixamorig_Hips"
 bones/0/parent = -1
@@ -578,14 +582,14 @@ material/0 = null
 
 [node name="Head" type="BoneAttachment" parent="Skeleton"]
 editor/display_folded = true
-transform = Transform( 0.999564, 0.0171036, 0.023999, -0.016436, 0.999479, -0.0277461, -0.0244611, 0.02734, 0.999328, -0.0328385, 1.55935, -0.0628373 )
+transform = Transform( 0.999516, 0.0151899, 0.0271714, -0.0136993, 0.998434, -0.0542241, -0.0279526, 0.0538255, 0.998158, -0.0268653, 1.5603, -0.0523538 )
 bone_name = "mixamorig_Head"
 
 [node name="HairTail" parent="Skeleton/Head" instance=ExtResource( 3 )]
 transform = Transform( 0.998199, -0.0278291, 0.0532083, 0.0272939, 0.999569, 0.0107601, -0.053485, -0.00928839, 0.998525, 0.0482045, -1.51198, 0.0532389 )
 
 [node name="RightHand" type="BoneAttachment" parent="Skeleton"]
-transform = Transform( 0.339687, 0.0854985, 0.936642, 0.13087, -0.990467, 0.0429501, 0.931388, 0.10799, -0.34764, -0.231655, 0.95467, -0.0187903 )
+transform = Transform( 0.332597, 0.089325, 0.938829, 0.130486, -0.990286, 0.047995, 0.933996, 0.106541, -0.341023, -0.222291, 0.948397, -0.01087 )
 bone_name = "mixamorig_RightHand"
 
 [node name="Position" type="Spatial" parent="Skeleton/RightHand"]
@@ -593,7 +597,7 @@ transform = Transform( 0.0147597, 0.915448, -0.402164, 0.980249, 0.0660798, 0.18
 
 [node name="RightFoot" type="BoneAttachment" parent="Skeleton"]
 editor/display_folded = true
-transform = Transform( 0.991455, 0.00129183, -0.130445, 0.000100486, 0.999941, 0.0106642, 0.130452, -0.0105858, 0.991398, 0.0820862, -0.00115678, -0.0325369 )
+transform = Transform( 0.991676, 0.00148149, -0.128752, -2.12193e-005, 0.999935, 0.0113409, 0.128761, -0.011244, 0.99161, 0.0819491, -0.0012638, -0.0325372 )
 bone_name = "mixamorig_RightToe_End"
 
 [node name="Particles" type="Particles" parent="Skeleton/RightFoot"]
@@ -608,7 +612,7 @@ process_material = SubResource( 4 )
 draw_pass_1 = SubResource( 5 )
 
 [node name="LeftFoot" type="BoneAttachment" parent="Skeleton"]
-transform = Transform( 0.867485, 0.0176939, 0.497147, -0.0334328, 0.999181, 0.0227783, -0.496338, -0.036379, 0.867369, 0.161331, 0.00597847, 0.103905 )
+transform = Transform( 0.867921, 0.0177273, 0.496386, -0.0322978, 0.999263, 0.0207887, -0.495651, -0.0340727, 0.867854, 0.161501, 0.00601759, 0.104434 )
 bone_name = "mixamorig_LeftToe_End"
 
 [node name="Particles" type="Particles" parent="Skeleton/LeftFoot"]
@@ -638,6 +642,13 @@ script = ExtResource( 6 )
 
 [node name="CollisionShape" type="CollisionShape" parent="UsableArea"]
 shape = SubResource( 6 )
+
+[node name="DetectionArea" type="Area" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape" type="CollisionShape" parent="DetectionArea"]
+shape = SubResource( 13 )
 
 [node name="CursorSelector" parent="." instance=ExtResource( 7 )]
 
@@ -717,6 +728,8 @@ unit_size = 10.0
 bus = "SoundEffects"
 [connection signal="area_entered" from="UsableArea" to="UsableArea" method="_on_UsableArea_area_entered"]
 [connection signal="area_exited" from="UsableArea" to="UsableArea" method="_on_UsableArea_area_exited"]
+[connection signal="body_entered" from="DetectionArea" to="." method="_on_DetectionArea_body_entered"]
+[connection signal="body_exited" from="DetectionArea" to="." method="_on_DetectionArea_body_exited"]
 [connection signal="damage_taken" from="CombatStats" to="." method="_on_CombatStats_damage_taken"]
 [connection signal="health_changed" from="CombatStats" to="." method="_on_CombatStats_health_changed"]
 [connection signal="health_depleted" from="CombatStats" to="." method="_on_CombatStats_health_depleted"]
