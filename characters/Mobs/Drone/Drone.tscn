@@ -16,6 +16,8 @@ extents = Vector3( 0.331187, 0.336668, 0.154797 )
 radius = 6.01007
 
 [node name="Drone" instance=ExtResource( 1 )]
+collision_layer = 2
+collision_mask = 3
 script = ExtResource( 2 )
 
 [node name="CollisionShape" parent="." index="0"]

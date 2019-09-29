@@ -44,8 +44,9 @@ surfaces/0 = {
 "vertex_count": 2640
 }
 
-[node name="Turret" instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
+[node name="Turret" index="0" instance=ExtResource( 1 )]
+collision_layer = 2
+collision_mask = 3
 script = ExtResource( 2 )
 
 [node name="CollisionShape" parent="." index="0"]
