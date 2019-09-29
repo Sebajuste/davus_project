@@ -26,6 +26,7 @@ func _on_Area_body_entered(body):
 		var item = Item.new()
 		item.type = TYPE
 		
+		item.properties["type"] = "pistol"
 		item.properties["damage"] = damage
 		item.properties["rate"] = rate
 		

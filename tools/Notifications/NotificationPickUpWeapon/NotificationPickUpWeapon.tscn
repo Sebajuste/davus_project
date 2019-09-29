@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://tools/Notifications/NotificationPickUpWeapon/NotificationPickUpWeapon.gd" type="Script" id=1]
 [ext_resource path="res://fonts/mechsuit_thin.tres" type="DynamicFont" id=2]
 [ext_resource path="res://ui/Icons/IconPistol64x64.png" type="Texture" id=3]
-[ext_resource path="res://fonts/neuropol.tres" type="DynamicFont" id=4]
+[ext_resource path="res://ui/Icons/IconSMG64x64.png" type="Texture" id=4]
+[ext_resource path="res://ui/Icons/IconRiffle64x64.png" type="Texture" id=5]
+[ext_resource path="res://fonts/neuropol.tres" type="DynamicFont" id=6]
 
 [node name="NotificationPickUpAmmo" type="Panel"]
 anchor_right = 1.0
@@ -32,11 +34,29 @@ margin_top = 34.0
 margin_right = 280.0
 margin_bottom = 98.0
 
-[node name="Gun" type="TextureRect" parent="VBoxContainer/HBoxContainer"]
+[node name="Pistol" type="TextureRect" parent="VBoxContainer/HBoxContainer"]
 margin_right = 64.0
 margin_bottom = 64.0
 rect_min_size = Vector2( 64, 64 )
 texture = ExtResource( 3 )
+stretch_mode = 4
+
+[node name="SMG" type="TextureRect" parent="VBoxContainer/HBoxContainer"]
+visible = false
+margin_left = 68.0
+margin_right = 132.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 64, 64 )
+texture = ExtResource( 4 )
+stretch_mode = 4
+
+[node name="Rifle" type="TextureRect" parent="VBoxContainer/HBoxContainer"]
+visible = false
+margin_left = 68.0
+margin_right = 132.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 64, 64 )
+texture = ExtResource( 5 )
 stretch_mode = 4
 
 [node name="Control" type="Control" parent="VBoxContainer/HBoxContainer"]
@@ -69,7 +89,7 @@ margin_right = 117.0
 margin_bottom = 25.0
 rect_min_size = Vector2( 100, 0 )
 size_flags_vertical = 1
-custom_fonts/font = ExtResource( 4 )
+custom_fonts/font = ExtResource( 6 )
 text = "label_damage"
 valign = 1
 
@@ -95,7 +115,7 @@ margin_right = 115.0
 margin_bottom = 25.0
 rect_min_size = Vector2( 100, 0 )
 size_flags_vertical = 1
-custom_fonts/font = ExtResource( 4 )
+custom_fonts/font = ExtResource( 6 )
 text = "label_fire_rate"
 valign = 1
 

@@ -21,6 +21,7 @@ func create_item_notification(item: Item) -> Node:
 			return notification
 		"gun":
 			var notification = WeaponNotification.instance()
+			notification.type = item.properties["type"]
 			notification.damage = item.properties["damage"]
 			notification.rate = item.properties["rate"]
 			return notification

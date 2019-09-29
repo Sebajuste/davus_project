@@ -1,6 +1,8 @@
 extends Node
 
 const Pistol = preload("res://objects/weapons/Pistol/Pistol.tscn")
+const SMG = preload("res://objects/weapons/SMG/SMG.tscn")
+const AssaultRifle = preload("res://objects/weapons/AssaultRifle/AssaultRifle.tscn")
 
 signal aimed(state)
 
@@ -15,6 +17,7 @@ var shoot_ready := true
 var target: Vector3
 var current_item = null
 var weapon = null
+var weapon_item : Item
 var valid_target := false
 
 onready var _right_hand_node: Node = get_node(right_hand)
@@ -70,10 +73,21 @@ func remove():
 
 func equip_weapon(item: Item):
 	remove()
-	weapon = Pistol.instance()
+	weapon_item = item
+	if item.properties.has("type"):
+		match item.properties["type"]:
+			"pistol":
+				weapon = Pistol.instance()
+			"smg":
+				weapon = SMG.instance()
+			"rifle":
+				weapon = AssaultRifle.instance()
+	else:
+		weapon = Pistol.instance()
 	weapon.firing_rate = item.properties["rate"]
 	_right_hand_node.add_child(weapon)
 	item.equiped = true
+	_update_anim()
 
 
 func aiming_pistol():
@@ -112,15 +126,23 @@ func set_aiming(value):
 	if weapon == null:
 		return
 	aiming = value
+	_update_anim()
+	emit_signal("aimed", aiming)
+
+
+func _update_anim():
 	if aiming:
-		$"../AnimationTree".set("parameters/StateMachine/Idle/Weapon/current", 1)
-		$"../AnimationTree".set("parameters/StateMachine/Locomotion/Weapon/current", 1)
-		$"../AnimationTree".set("parameters/StateMachine/Locomotion/WeaponBackward/current", 1)
+		var weapon_type = 1
+		if weapon_item != null and weapon_item.properties.has("type") and weapon_item.properties["type"] != "pistol":
+			weapon_type = 2
+		$"../AnimationTree".set("parameters/StateMachine/Idle/Weapon/current", weapon_type)
+		$"../AnimationTree".set("parameters/StateMachine/Locomotion/Weapon/current", weapon_type)
+		$"../AnimationTree".set("parameters/StateMachine/Locomotion/WeaponBackward/current", weapon_type)
 	else:
 		$"../AnimationTree".set("parameters/StateMachine/Idle/Weapon/current", 0)
 		$"../AnimationTree".set("parameters/StateMachine/Locomotion/Weapon/current", 0)
 		$"../AnimationTree".set("parameters/StateMachine/Locomotion/WeaponBackward/current", 0)
-	emit_signal("aimed", aiming)
+
 
 
 func _on_add_weapon(item: Item) -> void:

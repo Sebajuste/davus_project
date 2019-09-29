@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://objects/items/Gun/Gun.gd" type="Script" id=1]
+[ext_resource path="res://objects/items/SMG/SMG.gd" type="Script" id=1]
 [ext_resource path="res://models/Weapons/SMG/SMG.tscn" type="PackedScene" id=2]
 [ext_resource path="res://sounds/ui/take_object.wav" type="AudioStream" id=3]
 

@@ -18,6 +18,10 @@ func _ready():
 
 
 func add_item(item: Item):
+	
+	if item.type == "gun" and not item.properties.has("type"):
+		item.properties["type"] = "pistol"
+	
 	_items.append(item)
 	_show_weapons()
 

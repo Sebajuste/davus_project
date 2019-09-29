@@ -365,7 +365,6 @@ transform = Transform( 1, 0, 0, 0, -0.000659509, 1, 0, -1, -0.000659509, 0, 0.96
 shape = SubResource( 1 )
 
 [node name="Skeleton" type="Skeleton" parent="."]
-editor/display_folded = true
 bones_in_world_transform = true
 bones/0/name = "mixamorig_Hips"
 bones/0/parent = -1
@@ -579,15 +578,14 @@ material/0 = null
 
 [node name="Head" type="BoneAttachment" parent="Skeleton"]
 editor/display_folded = true
-transform = Transform( 0.999379, 0.0176806, 0.0305045, -0.0152873, 0.996915, -0.0769658, -0.0317712, 0.076452, 0.996566, -0.0292736, 1.56081, -0.0445048 )
+transform = Transform( 0.999564, 0.0171036, 0.023999, -0.016436, 0.999479, -0.0277461, -0.0244611, 0.02734, 0.999328, -0.0328385, 1.55935, -0.0628373 )
 bone_name = "mixamorig_Head"
 
 [node name="HairTail" parent="Skeleton/Head" instance=ExtResource( 3 )]
 transform = Transform( 0.998199, -0.0278291, 0.0532083, 0.0272939, 0.999569, 0.0107601, -0.053485, -0.00928839, 0.998525, 0.0482045, -1.51198, 0.0532389 )
 
 [node name="RightHand" type="BoneAttachment" parent="Skeleton"]
-editor/display_folded = true
-transform = Transform( 0.33098, 0.0889055, 0.93944, 0.126478, -0.990748, 0.0492023, 0.935122, 0.102534, -0.339163, -0.220929, 0.941134, -0.00670046 )
+transform = Transform( 0.339687, 0.0854985, 0.936642, 0.13087, -0.990467, 0.0429501, 0.931388, 0.10799, -0.34764, -0.231655, 0.95467, -0.0187903 )
 bone_name = "mixamorig_RightHand"
 
 [node name="Position" type="Spatial" parent="Skeleton/RightHand"]
@@ -595,7 +593,7 @@ transform = Transform( 0.0147597, 0.915448, -0.402164, 0.980249, 0.0660798, 0.18
 
 [node name="RightFoot" type="BoneAttachment" parent="Skeleton"]
 editor/display_folded = true
-transform = Transform( 0.991717, 0.0013549, -0.128431, -2.864e-005, 0.999946, 0.0103284, 0.128438, -0.0102391, 0.991664, 0.081959, -0.00113676, -0.032695 )
+transform = Transform( 0.991455, 0.00129183, -0.130445, 0.000100486, 0.999941, 0.0106642, 0.130452, -0.0105858, 0.991398, 0.0820862, -0.00115678, -0.0325369 )
 bone_name = "mixamorig_RightToe_End"
 
 [node name="Particles" type="Particles" parent="Skeleton/RightFoot"]
@@ -610,7 +608,7 @@ process_material = SubResource( 4 )
 draw_pass_1 = SubResource( 5 )
 
 [node name="LeftFoot" type="BoneAttachment" parent="Skeleton"]
-transform = Transform( 0.867744, 0.0175333, 0.496702, -0.0321087, 0.999268, 0.0208225, -0.495974, -0.0340154, 0.867673, 0.161459, 0.00602976, 0.103981 )
+transform = Transform( 0.867485, 0.0176939, 0.497147, -0.0334328, 0.999181, 0.0227783, -0.496338, -0.036379, 0.867369, 0.161331, 0.00597847, 0.103905 )
 bone_name = "mixamorig_LeftToe_End"
 
 [node name="Particles" type="Particles" parent="Skeleton/LeftFoot"]
