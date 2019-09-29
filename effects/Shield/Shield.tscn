@@ -1,0 +1,19 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://effects/Shield/Shield.material" type="Material" id=1]
+[ext_resource path="res://effects/Shield/ShieldFX.tres" type="Shader" id=2]
+[ext_resource path="res://effects/Shield/Shield.gd" type="Script" id=3]
+
+[sub_resource type="SphereMesh" id=1]
+material = ExtResource( 1 )
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 2 )
+shader_param/Color = Color( 0, 1, 0.952941, 1 )
+shader_param/Power = 2.0
+shader_param/Intensity = 1.0
+
+[node name="Shield" type="MeshInstance"]
+mesh = SubResource( 1 )
+material/0 = SubResource( 2 )
+script = ExtResource( 3 )

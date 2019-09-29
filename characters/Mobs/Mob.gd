@@ -17,9 +17,8 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
-func set_to_monster(ammoType:String, id:int):
-	ammo_type = ammoType
-	id_monster = id
+func set_vulnerability(type: String):
+	ammo_type = type
 	$SpecialMonster.visible = true
 
 

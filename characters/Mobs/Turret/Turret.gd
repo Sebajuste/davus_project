@@ -9,6 +9,7 @@ export(float) var speed_rotation_idle = 0.5 # Vitesse de rotation de la tête de
 export(float) var speed_rotation_aim = 1.5 # Vitesse de rotation de la tête de la tourelle lorsqu'elle doit viser sa cible (en degrés)
 export(int) var wait_duration_min = 3 # Temps minimum que doit attendre la tourelle (en secondes)
 export(int) var wait_duration_max = 6 # Temps maximum que doit attendre la tourelle (en secondes)
+export var shield := false setget set_shield
 
 enum state {
 	WAIT,
@@ -52,13 +53,15 @@ func _ready():
 	timer_wait = wait_duration_min
 	look_at_destination = direction.LEFT
 	speed_rotation = speed_rotation_idle
+	
+	set_shield(shield)
+	
 
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if $CombatStats.health == 0:
-		queue_free()
 		return
 	
 	position = global_transform.origin
@@ -152,6 +155,20 @@ func _process(delta):
 			
 
 
+func set_shield(value: bool):
+	shield = value
+	$Shield.visible = shield
+
+
+func set_vulnerability(type: String):
+	.set_vulnerability(type)
+	Vunerability.new().add_vulnerability(type, $CombatStats)
+	set_shield( true )
+	match type:
+		"Fire":
+			$Shield.color = Color.orange
+		"Ice":
+			$Shield.color = Color.cyan
 
 func attack():
 	var bullet = Bullet.instance()
@@ -224,3 +241,12 @@ func _on_CombatStats_damage_taken():
 func _on_CombatStats_health_depleted():
 	self.set_collision_layer(0x00)
 	self.set_collision_mask(0x01)
+	$Smoke.visible = true
+	$Shield.visible = false
+	$RemoveTimer.start()
+
+
+func _on_RemoveTimer_timeout():
+	
+	queue_free()
+	

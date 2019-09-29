@@ -114,6 +114,10 @@ func _physics_process(delta):
 		pass
 
 
+func set_vulnerability(type: String):
+	.set_vulnerability(type)
+	Vunerability.new().add_vulnerability(type, $CombatStats)
+
 
 func attack():
 	var bullet = Bullet.instance()

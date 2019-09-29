@@ -1,9 +1,11 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://characters/Mobs/Mob.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/Mobs/Turret/Turret.gd" type="Script" id=2]
 [ext_resource path="res://tools/combat/CombatStats/CombatStats.tscn" type="PackedScene" id=3]
 [ext_resource path="res://models/MobTurret/worldPalette.material" type="Material" id=4]
+[ext_resource path="res://effects/Smoke/Smoke.tscn" type="PackedScene" id=5]
+[ext_resource path="res://effects/Shield/Shield.tscn" type="PackedScene" id=6]
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 0.760212, 0.752472, 0.840339 )
@@ -51,6 +53,7 @@ transform = Transform( 1, 0, 0, 0, -4.37114e-008, -1, 0, 1, -4.37114e-008, 0, 0.
 shape = SubResource( 1 )
 
 [node name="HitBox" parent="." index="1"]
+editor/display_folded = true
 combat_stats = NodePath("../CombatStats")
 
 [node name="CollisionShape2" type="CollisionShape" parent="HitBox" index="1"]
@@ -58,6 +61,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0 )
 shape = SubResource( 2 )
 
 [node name="Detection" type="Area" parent="." index="2"]
+editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Detection" index="0"]
@@ -82,7 +86,20 @@ material/0 = null
 transform = Transform( -1, 0, -8.74228e-008, 0, 1, 0, 8.74228e-008, 0, -1, 0.0332072, 1.39854, 0 )
 mesh = SubResource( 5 )
 material/0 = null
+
+[node name="Smoke" parent="." index="8" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.664875, 0 )
+visible = false
+
+[node name="RemoveTimer" type="Timer" parent="." index="9"]
+wait_time = 5.0
+one_shot = true
+
+[node name="Shield" parent="." index="10" instance=ExtResource( 6 )]
+transform = Transform( 1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 1, 0 )
+color = Color( 0.929412, 0.117647, 0.286275, 1 )
 [connection signal="body_entered" from="Detection" to="." method="_on_Detection_body_entered"]
 [connection signal="body_exited" from="Detection" to="." method="_on_Detection_body_exited"]
 [connection signal="damage_taken" from="CombatStats" to="." method="_on_CombatStats_damage_taken"]
 [connection signal="health_depleted" from="CombatStats" to="." method="_on_CombatStats_health_depleted"]
+[connection signal="timeout" from="RemoveTimer" to="." method="_on_RemoveTimer_timeout"]

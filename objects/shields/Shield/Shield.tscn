@@ -30,14 +30,12 @@ material/0 = ExtResource( 1 )
 script = ExtResource( 2 )
 
 [node name="HitBox" parent="." instance=ExtResource( 3 )]
-editor/display_folded = true
 combat_stats = NodePath("../CombatStats")
 
 [node name="CollisionShape" parent="HitBox" index="0"]
 shape = SubResource( 2 )
 
 [node name="CombatStats" parent="." instance=ExtResource( 4 )]
-max_health = 10
 
 [node name="ReloadTimer" type="Timer" parent="."]
 

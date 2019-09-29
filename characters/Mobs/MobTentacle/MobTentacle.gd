@@ -41,6 +41,13 @@ func _physics_process(delta):
 		face_to(_current_target.global_transform.origin)
 
 
+func set_vulnerability(type: String):
+	.set_vulnerability(type)
+	Vunerability.new().add_vulnerability(type, $CombatStats)
+	
+
+
+
 func face_to(position: Vector3):
 	var look_pos := self.global_transform.origin
 	look_pos.x = position.x

@@ -709,7 +709,9 @@ func _add_mob_spawn(pos:Vector3, mobType:int = -1, lockableMonster:bool = false,
 				var variant:int = rnd.randi() % _weaponMgr.AMMO_TYPES.size()
 				var ammoType:String = _weaponMgr.AMMO_TYPES[variant]
 				var id:int = _create_unlockable(pos, _resourceMgr.eUnlockableTypes.Rack, { "ammo_type": ammoType } )
-				mob.set_to_monster(ammoType, id)
+				print("ammoType: ", ammoType)
+				mob.set_vulnerability(ammoType)
+				mob.id_monster = id
 				if PRINT_DOOR_KEYS:
 					print("Mob ID = ", mob.id_monster, " / Ammo type = ", mob.ammo_type)
 	else:

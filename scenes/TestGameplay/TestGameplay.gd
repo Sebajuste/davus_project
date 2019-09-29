@@ -20,8 +20,15 @@ func _ready():
 	gun.type = "gun"
 	gun.properties["damage"] = 10
 	gun.properties["rate"] = 400
-	
 	$Chests/WeaponRack.add_item(gun)
+	
+	var ammo = Item.new()
+	ammo.type = "ammo"
+	ammo.properties["ammo_type"] = "Ice"
+	$Chests/WeaponRack.add_item(ammo)
+	
+	$Mobs/Turret.set_vulnerability("Ice")
+	$Mobs/Turret2.set_vulnerability("Fire")
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

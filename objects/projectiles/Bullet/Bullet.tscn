@@ -24,6 +24,7 @@ shape = SubResource( 1 )
 
 [node name="MeshInstance" type="MeshInstance" parent="Area"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0560527, 0, 0 )
+material_override = ExtResource( 2 )
 mesh = SubResource( 2 )
 material/0 = ExtResource( 2 )
 
@@ -41,6 +42,10 @@ material/0 = ExtResource( 2 )
 
 [node name="CollisionShape" parent="DamageSource" index="0"]
 shape = SubResource( 3 )
+
+[node name="OmniLight" type="OmniLight" parent="."]
+light_energy = 2.0
+omni_range = 1.33594
 [connection signal="body_entered" from="Area" to="." method="_on_Area_body_entered"]
 [connection signal="hit" from="DamageSource" to="." method="_on_DamageSource_hit"]
 

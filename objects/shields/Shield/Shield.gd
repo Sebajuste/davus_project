@@ -7,6 +7,7 @@ signal shield_changed(power, max_power)
 export var max_power = 10 setget set_max_power
 export var reload_timer := 1.0 setget set_reload_timer
 export var reload_value := 1
+export var active := false setget set_active
 
 var power = max_power setget set_power
 
@@ -16,7 +17,7 @@ export var _shader_param_power := 2.0 setget _set_shader_param_power
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
-	disable()
+	set_active(false)
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -28,17 +29,25 @@ func is_enable() -> bool:
 	return visible
 
 
+func set_active(value):
+	if value:
+		if $CombatStats.health > 0:
+			active = value
+			visible = true
+			$HitBox/CollisionShape.disabled = false
+			$ReloadTimer.stop()
+	else:
+		visible = false
+		$HitBox/CollisionShape.disabled = true
+		$ReloadTimer.start()
+
+
 func enable():
-	if $CombatStats.health > 0:
-		visible = true
-		$HitBox/CollisionShape.disabled = false
-		$ReloadTimer.stop()
+	set_active(true)
 
 
 func disable():
-	visible = false
-	$HitBox/CollisionShape.disabled = true
-	$ReloadTimer.start()
+	set_active(false)
 
 
 func set_max_power(value):

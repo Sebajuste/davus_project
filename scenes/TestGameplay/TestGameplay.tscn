@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://scenes/TestGameplay/TestGameplay.gd" type="Script" id=1]
 [ext_resource path="res://tileset/test/Test.tscn" type="PackedScene" id=2]
@@ -10,15 +10,16 @@
 [ext_resource path="res://objects/items/DataPad/DataPad.tscn" type="PackedScene" id=8]
 [ext_resource path="res://characters/Mobs/MobTentacle/MobTentacle.tscn" type="PackedScene" id=9]
 [ext_resource path="res://characters/Mobs/Fly/Fly.tscn" type="PackedScene" id=10]
-[ext_resource path="res://objects/chests/WeaponRack/WeaponRack.tscn" type="PackedScene" id=11]
-[ext_resource path="res://tools/Camera/Camera.gd" type="Script" id=12]
-[ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=13]
-[ext_resource path="res://ui/Game/Ammo/Ammo.tscn" type="PackedScene" id=14]
-[ext_resource path="res://ui/Game/Health/Health.tscn" type="PackedScene" id=15]
-[ext_resource path="res://ui/Game/ControllerHelper/ControllerHelper.tscn" type="PackedScene" id=16]
-[ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=17]
-[ext_resource path="res://ui/DataPad/DataPad.tscn" type="PackedScene" id=18]
-[ext_resource path="res://tools/Notifications/Notifications.tscn" type="PackedScene" id=19]
+[ext_resource path="res://characters/Mobs/Turret/Turret.tscn" type="PackedScene" id=11]
+[ext_resource path="res://objects/chests/WeaponRack/WeaponRack.tscn" type="PackedScene" id=12]
+[ext_resource path="res://tools/Camera/Camera.gd" type="Script" id=13]
+[ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=14]
+[ext_resource path="res://ui/Game/Ammo/Ammo.tscn" type="PackedScene" id=15]
+[ext_resource path="res://ui/Game/Health/Health.tscn" type="PackedScene" id=16]
+[ext_resource path="res://ui/Game/ControllerHelper/ControllerHelper.tscn" type="PackedScene" id=17]
+[ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=18]
+[ext_resource path="res://ui/DataPad/DataPad.tscn" type="PackedScene" id=19]
+[ext_resource path="res://tools/Notifications/Notifications.tscn" type="PackedScene" id=20]
 
 [sub_resource type="CubeMesh" id=1]
 
@@ -125,7 +126,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.93798, 8.18843, 0 )
 message = "Hello World"
 
 [node name="Mobs" type="Spatial" parent="."]
-editor/display_folded = true
 
 [node name="MobTentacle" parent="Mobs" instance=ExtResource( 9 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.157, 0, 0 )
@@ -136,19 +136,25 @@ armor = 2
 [node name="Fly" parent="Mobs" instance=ExtResource( 10 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 18.104, 0, 0 )
 
+[node name="Turret" parent="Mobs" instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 34.9055, -1, 0 )
+
+[node name="Turret2" parent="Mobs" instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 41.7027, -1, 0 )
+
 [node name="Chests" type="Spatial" parent="."]
 
-[node name="WeaponRack" parent="Chests" instance=ExtResource( 11 )]
+[node name="WeaponRack" parent="Chests" instance=ExtResource( 12 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -17.9425, -1.03039, -1.23468 )
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.999289, 0.0377137, 0, -0.0377137, 0.999289, 0, 1.61902, 8.05316 )
 fov = 40.0
-script = ExtResource( 12 )
+script = ExtResource( 13 )
 target = NodePath("../Player")
 distance = 20.0
 
-[node name="Player" parent="." instance=ExtResource( 13 )]
+[node name="Player" parent="." instance=ExtResource( 14 )]
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22544, 0 )
 
@@ -159,41 +165,40 @@ bones/35/bound_children = [ NodePath("LeftFoot") ]
 bones/40/bound_children = [ NodePath("RightFoot") ]
 
 [node name="Head" parent="Player/Skeleton" index="1"]
-transform = Transform( 0.999444, 0.0176535, 0.0282865, -0.0161023, 0.998402, -0.0541539, -0.0291974, 0.0536683, 0.998131, -0.0257876, 1.56061, -0.053349 )
+transform = Transform( 0.999324, 0.0209012, 0.0302452, -0.0188349, 0.997571, -0.0670499, -0.0315733, 0.0664349, 0.99729, -0.0271015, 1.56075, -0.0478279 )
 
 [node name="RightHand" parent="Player/Skeleton" index="2"]
-transform = Transform( 0.336745, 0.0896096, 0.937321, 0.128456, -0.990525, 0.0485478, 0.932791, 0.104057, -0.345067, -0.222143, 0.951081, -0.0122519 )
+transform = Transform( 0.330629, 0.0867745, 0.939762, 0.126737, -0.990825, 0.046902, 0.93521, 0.103596, -0.338594, -0.221822, 0.945136, -0.00881982 )
 
 [node name="RightFoot" parent="Player/Skeleton" index="3"]
-transform = Transform( 0.991739, 0.00134819, -0.128262, 0.000128277, 0.999933, 0.0115006, 0.128269, -0.0114222, 0.991672, 0.0820625, -0.00123646, -0.0324559 )
+transform = Transform( 0.991699, 0.00165138, -0.128572, -0.000295155, 0.999943, 0.0105643, 0.128582, -0.0104386, 0.991642, 0.0816808, -0.00122148, -0.0326735 )
 
 [node name="LeftFoot" parent="Player/Skeleton" index="4"]
-transform = Transform( 0.867893, 0.0183711, 0.496412, -0.0316332, 0.999333, 0.0183255, -0.495744, -0.0316049, 0.867895, 0.161409, 0.00611632, 0.103643 )
+transform = Transform( 0.867804, 0.0186199, 0.496557, -0.033003, 0.999252, 0.0202104, -0.495809, -0.0339243, 0.867769, 0.161233, 0.00605222, 0.104134 )
 
 [node name="AnimationTree" parent="Player" index="12"]
 parameters/StateMachine/playback = SubResource( 3 )
 
 [node name="UI" type="Control" parent="."]
-editor/display_folded = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="Ammo" parent="UI" instance=ExtResource( 14 )]
+[node name="Ammo" parent="UI" instance=ExtResource( 15 )]
 
-[node name="Health" parent="UI" instance=ExtResource( 15 )]
+[node name="Health" parent="UI" instance=ExtResource( 16 )]
 
-[node name="ControllerHelper" parent="UI" instance=ExtResource( 16 )]
+[node name="ControllerHelper" parent="UI" instance=ExtResource( 17 )]
 
-[node name="Menu" parent="." instance=ExtResource( 17 )]
+[node name="Menu" parent="." instance=ExtResource( 18 )]
 visible = false
 
 [node name="InventoryMenu" parent="Menu/MarginContainer/TabContainer/Inventory" index="0"]
 inventory = NodePath("../../../../../Player/Inventory")
 
-[node name="DataPad" parent="." instance=ExtResource( 18 )]
+[node name="DataPad" parent="." instance=ExtResource( 19 )]
 visible = false
 
-[node name="Notifications" parent="." instance=ExtResource( 19 )]
+[node name="Notifications" parent="." instance=ExtResource( 20 )]
 [connection signal="died" from="Player" to="." method="_on_Player_died"]
 [connection signal="health_changed" from="Player" to="UI/Health" method="_on_health_changed"]
 [connection signal="aimed" from="Player/WeaponHandler" to="UI/ControllerHelper" method="_on_WeaponHandler_aimed"]

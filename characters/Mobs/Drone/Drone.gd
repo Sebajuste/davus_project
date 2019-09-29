@@ -210,6 +210,10 @@ func _process(delta):
 	move_and_slide(Vector3(velocity.x, velocity.y, 0))
 
 
+func set_vulnerability(type: String):
+	.set_vulnerability(type)
+	Vunerability.new().add_vulnerability(type, $CombatStats)
+
 
 func attack():
 	var bullet = Bullet.instance()
@@ -289,6 +293,7 @@ func _on_CombatStats_health_depleted():
 	self.set_collision_mask(0x01)
 	
 	$RemoveTimer.start()
+	$Smoke.visible = true
 
 
 

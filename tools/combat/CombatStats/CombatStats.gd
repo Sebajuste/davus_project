@@ -6,10 +6,10 @@ signal health_changed(new_value, old_value)
 signal health_depleted()
 signal damage_taken()
 
-export var max_health: int = 1 setget set_max_health
-export var armor: int = 0 setget set_armor
-export var fire_resistance: int = 0 setget set_fire_resistance
-export var ice_resistance: int = 0 setget set_ice_resistance
+export var max_health: int = 10 setget set_max_health
+export var armor: int = 5 setget set_armor
+export var fire_resistance: int = 5 setget set_fire_resistance
+export var ice_resistance: int = 5 setget set_ice_resistance
 
 var health: int = max_health
 

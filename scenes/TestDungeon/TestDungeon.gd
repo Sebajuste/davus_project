@@ -13,10 +13,6 @@ func _ready():
 	
 	_end_init_level( $World/Level/Dungeon )
 	
-	var ui_inventory = $Menu/MarginContainer/TabContainer/Inventory/Inventory
-	$World/Player/Inventory.connect("item_added", ui_inventory, "add_item")
-	ui_inventory.connect("item_equiped", $World/Player/Inventory, "equip")
-	
 	$Menu/MarginContainer/TabContainer/Options/Options.enable_savegame = true
 	
 	#

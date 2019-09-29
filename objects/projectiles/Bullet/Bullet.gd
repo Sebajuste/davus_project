@@ -38,8 +38,26 @@ func set_damage(damage: int) -> void:
 
 
 func set_type(type: String) -> void:
-	
 	$DamageSource.type = type
+	print("bullet ", type)
+	match type:
+		"Fire":
+			var mat = $Area/MeshInstance.material_override.duplicate()
+			mat.albedo_color = Color.orange
+			$OmniLight.light_color = Color.orange
+			$Area/MeshInstance.material_override = mat
+			$Area/MeshInstance.material_override = mat
+			$Area/MeshInstance.material_override = mat
+			pass
+		"Ice":
+			var mat = $Area/MeshInstance.material_override.duplicate()
+			mat.albedo_color = Color.cyan
+			$OmniLight.light_color = Color.cyan
+			$Area/MeshInstance.material_override = mat
+			$Area/MeshInstance.material_override = mat
+			$Area/MeshInstance.material_override = mat
+			pass
+	
 	
 
 
