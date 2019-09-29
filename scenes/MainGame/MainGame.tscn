@@ -18,7 +18,6 @@
 script = ExtResource( 1 )
 
 [node name="World" type="Spatial" parent="."]
-editor/display_folded = true
 
 [node name="Level" type="Spatial" parent="World"]
 editor/display_folded = true
@@ -34,19 +33,16 @@ bones/35/bound_children = [ NodePath("LeftFoot") ]
 bones/40/bound_children = [ NodePath("RightFoot") ]
 
 [node name="Head" parent="World/Player/Skeleton" index="1"]
-transform = Transform( 0.999133, 0.023609, 0.0342619, -0.0213504, 0.997668, -0.0648516, -0.035713, 0.064064, 0.997308, -0.0242457, 1.56059, -0.0506738 )
+transform = Transform( 0.999343, 0.0179996, 0.0314416, -0.015622, 0.997114, -0.074288, -0.032688, 0.0737477, 0.996741, -0.0285508, 1.56079, -0.0450848 )
 
 [node name="RightHand" parent="World/Player/Skeleton" index="2"]
-transform = Transform( 0.320668, 0.094118, 0.942502, 0.123571, -0.990703, 0.0568897, 0.939095, 0.0982238, -0.329319, -0.220067, 0.948779, -0.0132027 )
+transform = Transform( 0.331419, 0.0869784, 0.939465, 0.125354, -0.990973, 0.0475268, 0.935117, 0.102015, -0.339331, -0.221832, 0.942409, -0.00745527 )
 
 [node name="RightFoot" parent="World/Player/Skeleton" index="3"]
-transform = Transform( 0.991538, 0.00108006, -0.129807, 0.000393882, 0.999934, 0.0113253, 0.129811, -0.0112804, 0.991473, 0.0820987, -0.0011988, -0.0325531 )
+transform = Transform( 0.991696, 0.00133531, -0.128601, 3.24696e-005, 0.999942, 0.0106299, 0.128608, -0.0105457, 0.991637, 0.0819547, -0.00115928, -0.0324675 )
 
 [node name="LeftFoot" parent="World/Player/Skeleton" index="4"]
-transform = Transform( 0.867669, 0.0181357, 0.496809, -0.0319505, 0.999304, 0.0193246, -0.496113, -0.0326394, 0.867645, 0.16131, 0.00604609, 0.103993 )
-
-[node name="AmmoHandler" parent="World/Player" index="7"]
-inventory = null
+transform = Transform( 0.867637, 0.0176472, 0.496886, -0.0323049, 0.99926, 0.0209224, -0.49615, -0.0342034, 0.867565, 0.16138, 0.00601374, 0.104047 )
 
 [node name="AnimationTree" parent="World/Player" index="12"]
 parameters/StateMachine/playback = SubResource( 1 )
@@ -65,9 +61,10 @@ anchor_bottom = 1.0
 [node name="ControllerHelper" parent="UI" instance=ExtResource( 7 )]
 
 [node name="Menu" parent="." instance=ExtResource( 8 )]
-
-[node name="MarginContainer" parent="Menu" index="0"]
 editor/display_folded = true
+
+[node name="InventoryMenu" parent="Menu/MarginContainer/TabContainer/Inventory" index="0"]
+inventory = NodePath("../../../../../World/Player/Inventory")
 
 [node name="DataPad" parent="." instance=ExtResource( 9 )]
 visible = false
