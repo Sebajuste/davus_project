@@ -15,7 +15,9 @@ extents = Vector3( 0.331187, 0.336668, 0.154797 )
 [sub_resource type="SphereShape" id=3]
 radius = 6.01007
 
-[node name="Drone" instance=ExtResource( 1 )]
+[node name="Drone" index="0" groups=[
+"mob",
+] instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 
 [node name="CollisionShape" parent="." index="0"]
