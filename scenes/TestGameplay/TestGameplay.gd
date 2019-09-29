@@ -8,10 +8,6 @@ var _reset_timer := 0.0
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
-	var ui_inventory = $Menu/MarginContainer/TabContainer/Inventory/Inventory
-	$Player/Inventory.connect("item_added", ui_inventory, "add_item")
-	ui_inventory.connect("item_equiped", $Player/Inventory, "equip")
-	
 	var options = {
 		"auto_hide": false
 	}

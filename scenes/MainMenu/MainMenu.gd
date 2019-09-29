@@ -53,15 +53,19 @@ func _on_OptionsButton_pressed():
 
 
 func _on_QuitButton_pressed():
+	
 	get_tree().quit()
-
-
-func _on_Options_on_close():
-	$MainControls.visible = true
-	$Options.visible = false
+	
 
 
 func _on_CreditsButton_pressed():
 	
 	$Credits.start()
+	
+
+
+func _on_Options_closed():
+	
+	$MainControls.visible = true
+	$Options.visible = false
 	

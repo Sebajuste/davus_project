@@ -34,16 +34,16 @@ bones/35/bound_children = [ NodePath("LeftFoot") ]
 bones/40/bound_children = [ NodePath("RightFoot") ]
 
 [node name="Head" parent="World/Player/Skeleton" index="1"]
-transform = Transform( 0.999558, 0.017138, 0.02424, -0.0164595, 0.999474, -0.0279196, -0.0247058, 0.0275086, 0.999317, -0.0329721, 1.55936, -0.062749 )
+transform = Transform( 0.99915, 0.0184442, 0.0368692, -0.0157027, 0.997184, -0.0733198, -0.0381178, 0.0726784, 0.996625, -0.0314695, 1.56016, -0.0492012 )
 
 [node name="RightHand" parent="World/Player/Skeleton" index="2"]
-transform = Transform( 0.340076, 0.0855074, 0.936501, 0.130877, -0.990468, 0.0429096, 0.931245, 0.107974, -0.348027, -0.231762, 0.954629, -0.0186432 )
+transform = Transform( 0.330463, 0.0892809, 0.939586, 0.125896, -0.990789, 0.0498674, 0.935382, 0.101811, -0.33866, -0.222895, 0.940309, -0.0108027 )
 
 [node name="RightFoot" parent="World/Player/Skeleton" index="3"]
-transform = Transform( 0.991461, 0.00135057, -0.130395, 4.14178e-005, 0.999941, 0.0106697, 0.130402, -0.0105836, 0.991404, 0.0820516, -0.00116432, -0.0325255 )
+transform = Transform( 0.991496, 0.00135257, -0.130131, 2.25976e-005, 0.999942, 0.010565, 0.130138, -0.0104772, 0.991438, 0.0820647, -0.00117991, -0.0326802 )
 
 [node name="LeftFoot" parent="World/Player/Skeleton" index="4"]
-transform = Transform( 0.86748, 0.0177312, 0.497155, -0.0334194, 0.999184, 0.0226791, -0.496349, -0.0362866, 0.867366, 0.161308, 0.00598098, 0.103854 )
+transform = Transform( 0.867516, 0.0177909, 0.497089, -0.0326417, 0.999242, 0.021206, -0.496335, -0.0346201, 0.867442, 0.161294, 0.00598481, 0.104041 )
 
 [node name="AnimationTree" parent="World/Player" index="12"]
 parameters/StateMachine/playback = SubResource( 1 )
@@ -65,9 +65,8 @@ anchor_bottom = 1.0
 [node name="Ammo" parent="UI" instance=ExtResource( 7 )]
 
 [node name="Menu" parent="." instance=ExtResource( 8 )]
-editor/display_folded = true
 
-[node name="Inventory" parent="Menu/MarginContainer/TabContainer/Inventory" index="0"]
+[node name="InventoryMenu" parent="Menu/MarginContainer/TabContainer/Inventory" index="0"]
 inventory = NodePath("../../../../../World/Player/Inventory")
 
 [node name="DataPad" parent="." instance=ExtResource( 9 )]

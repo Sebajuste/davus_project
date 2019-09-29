@@ -1,33 +1,35 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://ui/Menu/Menu.gd" type="Script" id=1]
-[ext_resource path="res://fonts/mechsuit.tres" type="DynamicFont" id=2]
-[ext_resource path="res://ui/Options/Options.tscn" type="PackedScene" id=3]
-[ext_resource path="res://ui/InventoryMenu/InventoryMenu.tscn" type="PackedScene" id=4]
+[ext_resource path="res://themes/default/default.theme" type="Theme" id=1]
+[ext_resource path="res://ui/Menu/Menu.gd" type="Script" id=2]
+[ext_resource path="res://fonts/mechsuit.tres" type="DynamicFont" id=3]
+[ext_resource path="res://ui/Options/Options.tscn" type="PackedScene" id=4]
+[ext_resource path="res://ui/InventoryMenu/InventoryMenu.tscn" type="PackedScene" id=5]
 
-[node name="Menu" type="Control"]
+[node name="InGameMenu" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = -1.36038
-margin_bottom = -1.36035
-script = ExtResource( 1 )
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 50.0
-margin_top = 50.0
-margin_right = -50.0
-margin_bottom = -50.0
+margin_left = 100.0
+margin_top = 100.0
+margin_right = -100.0
+margin_bottom = -100.0
+grow_horizontal = 2
+rect_min_size = Vector2( 800, 600 )
 
 [node name="Panel" type="Panel" parent="MarginContainer"]
-margin_right = 924.0
-margin_bottom = 500.0
+margin_right = 824.0
+margin_bottom = 600.0
 
 [node name="TabContainer" type="TabContainer" parent="MarginContainer"]
-margin_right = 924.0
-margin_bottom = 500.0
-custom_fonts/font = ExtResource( 2 )
+margin_right = 824.0
+margin_bottom = 600.0
+custom_fonts/font = ExtResource( 3 )
 
 [node name="Options" type="Tabs" parent="MarginContainer/TabContainer"]
 anchor_right = 1.0
@@ -37,7 +39,10 @@ margin_top = 50.0
 margin_right = -4.0
 margin_bottom = -4.0
 
-[node name="Options" parent="MarginContainer/TabContainer/Options" instance=ExtResource( 3 )]
+[node name="Options" parent="MarginContainer/TabContainer/Options" instance=ExtResource( 4 )]
+enable_savegame = true
+enable_return_main_menu = true
+enable_quit_game = true
 
 [node name="Inventory" type="Tabs" parent="MarginContainer/TabContainer"]
 visible = false
@@ -48,7 +53,7 @@ margin_top = 50.0
 margin_right = -4.0
 margin_bottom = -4.0
 
-[node name="Inventory" parent="MarginContainer/TabContainer/Inventory" instance=ExtResource( 4 )]
+[node name="InventoryMenu" parent="MarginContainer/TabContainer/Inventory" instance=ExtResource( 5 )]
 
 [node name="Map" type="Tabs" parent="MarginContainer/TabContainer"]
 visible = false

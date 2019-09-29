@@ -63,20 +63,23 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0 )
 [node name="CollisionShape" type="CollisionShape" parent="Detection" index="0"]
 shape = SubResource( 3 )
 
-[node name="AttackPosition" type="Position3D" parent="." index="3"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.40074, 1.1055, 0 )
+[node name="AttackPositionLeft" type="Position3D" parent="." index="3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 1.1, 0 )
 
-[node name="CombatStats" parent="." index="5" instance=ExtResource( 3 )]
+[node name="AttackPositionRight" type="Position3D" parent="." index="4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 1.1, 0 )
+
+[node name="CombatStats" parent="." index="6" instance=ExtResource( 3 )]
 max_health = 20
 
-[node name="MobTurret" type="Spatial" parent="." index="6"]
+[node name="MobTurret" type="Spatial" parent="." index="7"]
 
 [node name="Turret" type="MeshInstance" parent="MobTurret" index="0"]
 mesh = SubResource( 4 )
 material/0 = null
 
 [node name="Head" type="MeshInstance" parent="MobTurret/Turret" index="0"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0332072, 1.39854, 0 )
+transform = Transform( -1, 0, -8.74228e-008, 0, 1, 0, 8.74228e-008, 0, -1, 0.0332072, 1.39854, 0 )
 mesh = SubResource( 5 )
 material/0 = null
 [connection signal="body_entered" from="Detection" to="." method="_on_Detection_body_entered"]

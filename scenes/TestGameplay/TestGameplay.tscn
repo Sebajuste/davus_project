@@ -159,16 +159,16 @@ bones/35/bound_children = [ NodePath("LeftFoot") ]
 bones/40/bound_children = [ NodePath("RightFoot") ]
 
 [node name="Head" parent="Player/Skeleton" index="1"]
-transform = Transform( 0.999257, 0.0225965, 0.0312211, -0.0207988, 0.99817, -0.0567498, -0.0324465, 0.0560584, 0.997899, -0.0224584, 1.56035, -0.0536481 )
+transform = Transform( 0.999444, 0.0176535, 0.0282865, -0.0161023, 0.998402, -0.0541539, -0.0291974, 0.0536683, 0.998131, -0.0257876, 1.56061, -0.053349 )
 
 [node name="RightHand" parent="Player/Skeleton" index="2"]
-transform = Transform( 0.320869, 0.0962477, 0.94222, 0.126294, -0.990286, 0.0581493, 0.938664, 0.100339, -0.329909, -0.217995, 0.950601, -0.0148789 )
+transform = Transform( 0.336745, 0.0896096, 0.937321, 0.128456, -0.990525, 0.0485478, 0.932791, 0.104057, -0.345067, -0.222143, 0.951081, -0.0122519 )
 
 [node name="RightFoot" parent="Player/Skeleton" index="3"]
-transform = Transform( 0.991454, 0.00163779, -0.13045, -8.80361e-005, 0.999928, 0.0118841, 0.13046, -0.0117709, 0.991383, 0.0820318, -0.00132982, -0.0327812 )
+transform = Transform( 0.991739, 0.00134819, -0.128262, 0.000128277, 0.999933, 0.0115006, 0.128269, -0.0114222, 0.991672, 0.0820625, -0.00123646, -0.0324559 )
 
 [node name="LeftFoot" parent="Player/Skeleton" index="4"]
-transform = Transform( 0.867481, 0.0189484, 0.497109, -0.0322253, 0.999317, 0.0181459, -0.496425, -0.0317587, 0.867499, 0.1614, 0.00610935, 0.10357 )
+transform = Transform( 0.867893, 0.0183711, 0.496412, -0.0316332, 0.999333, 0.0183255, -0.495744, -0.0316049, 0.867895, 0.161409, 0.00611632, 0.103643 )
 
 [node name="AnimationTree" parent="Player" index="12"]
 parameters/StateMachine/playback = SubResource( 3 )
@@ -185,10 +185,9 @@ anchor_bottom = 1.0
 [node name="ControllerHelper" parent="UI" instance=ExtResource( 16 )]
 
 [node name="Menu" parent="." instance=ExtResource( 17 )]
-editor/display_folded = true
 visible = false
 
-[node name="Inventory" parent="Menu/MarginContainer/TabContainer/Inventory" index="0"]
+[node name="InventoryMenu" parent="Menu/MarginContainer/TabContainer/Inventory" index="0"]
 inventory = NodePath("../../../../../Player/Inventory")
 
 [node name="DataPad" parent="." instance=ExtResource( 18 )]

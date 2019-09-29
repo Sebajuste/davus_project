@@ -8,9 +8,9 @@ const AmmoPanel = preload("AmmoPanel/AmmoPanel.tscn")
 enum EquipmentType { WEAPON_MAIN, WEAPON_SECONDARY, AMMO, JETPACK }
 
 
-export var inventory : NodePath
+export(NodePath) var inventory = null
 
-onready var inventory_node: Node = get_node(inventory)
+onready var inventory_node: Node
 
 
 var active := true setget set_active
@@ -43,6 +43,9 @@ onready var _list = $MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	
+	if inventory:
+		inventory_node = get_node(inventory)
 	
 	_current_equipment_type = EquipmentType.WEAPON_MAIN
 	select_weapons()
@@ -86,29 +89,6 @@ func set_active(value):
 		select_weapons()
 		_current_list[_select_pos].grab_focus()
 
-"""
-func add_item(item: Item) -> bool:
-	print("add item: ", item.save() )
-	match item.type:
-		"gun":
-			weapons.append(item)
-			if item.equiped:
-				equipment["weapon_main"] = item
-			return true
-		"ammo":
-			ammos.append(item)
-			if item.equiped:
-				equipment["ammo"] = item
-			return true
-		_:
-			return false
-
-
-func remove_item(item: Item) -> void:
-	var index = weapons.find(item)
-	if index != -1:
-		weapons.remove(index)
-"""
 
 func deselect() -> void:
 	for child in _list.get_children():
@@ -135,21 +115,24 @@ func select_ammos() -> void:
 
 func _get_weapons() -> Array:
 	var weapons := []
-	for item in inventory_node.items:
-		if item.type == "gun":
-			if item.equiped:
-				equipment["weapon_main"] = item
-			weapons.append(item)
+	print("inventory_node: ", inventory_node)
+	if inventory_node != null:
+		for item in inventory_node.items:
+			if item.type == "gun":
+				if item.equiped:
+					equipment["weapon_main"] = item
+				weapons.append(item)
 	return weapons
 
 
 func _get_ammos() -> Array:
 	var ammos := []
-	for item in inventory_node.items:
-		if item.type == "ammo":
-			if item.equiped:
-				equipment["ammo"] = item
-			ammos.append(item)
+	if inventory_node != null:
+		for item in inventory_node.items:
+			if item.type == "ammo":
+				if item.equiped:
+					equipment["ammo"] = item
+				ammos.append(item)
 	return ammos
 
 

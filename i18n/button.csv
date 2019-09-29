@@ -6,7 +6,9 @@ btn_play,Play,Jouer
 btn_tuto,Tutorial,Tutoriel
 btn_apply,Apply,Appliquer
 btn_save_apply,Save & Apply,Sauvegarder & Appliquer
+btn_save_game,Sage Game,Sauvegarder la partie
 btn_back,Back,Retour
+btn_return_main_menu,Main Menu,Menu Principal
 btn_cancel,Cancel,Annuler
 btn_resume,Resume,Reprendre
 btn_back_main,Return Main Menu,Retour menu principal
