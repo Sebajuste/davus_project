@@ -22,6 +22,8 @@ onready var position = global_transform.origin # position de la mouche
 var velocity = Vector2(0,0)
 var attack_speed = 1 / attack_rate # Temps de "rechargement" de la mouche (en secondes) / calculé en fonction du Nombre de tirs par secondes
 var attack_timer = 0
+var sinus = 0
+
 
 
 # Returns the angle between two points.
@@ -48,6 +50,12 @@ func _ready():
 func _process(delta):
 	if $CombatStats.health == 0:
 		return
+	
+	if current_state != state.ATTACK:
+		sinus = sinus + 0.05
+		if sinus >= 2*PI:
+			sinus = 0
+		self.global_transform.origin = Vector3(self.global_transform.origin.x, self.global_transform.origin.y + sin(sinus)/250, self.global_transform.origin.z)
 	
 	position = global_transform.origin # Position de la mouche
 	var target_position
