@@ -67,6 +67,7 @@ script = ExtResource( 8 )
 min_y = -30
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+pause_mode = 2
 stream = ExtResource( 9 )
 autoplay = true
 

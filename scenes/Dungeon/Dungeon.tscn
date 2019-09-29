@@ -144,6 +144,7 @@ multimesh = SubResource( 11 )
 script = ExtResource( 4 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+pause_mode = 2
 stream = ExtResource( 12 )
 autoplay = true
 

@@ -68,26 +68,30 @@ func _input(event):
 	
 	if Input.is_action_just_pressed("menu"):
 		$Menu.visible = !$Menu.visible
+		get_tree().paused = $Menu.visible
 	
 	if Input.is_action_just_pressed("inventory"):
 		if not $Menu.visible:
 			$Menu.visible = true
 			$Menu/MarginContainer/TabContainer.current_tab = 1
-			pass
+			get_tree().paused = true
 		elif $Menu/MarginContainer/TabContainer.current_tab != 1:
 			$Menu/MarginContainer/TabContainer.current_tab = 1
+			get_tree().paused = true
 		else:
 			$Menu.visible = false
+			get_tree().paused = false
 	
 	if Input.is_action_just_pressed("map"):
 		if not $Menu.visible:
 			$Menu.visible = true
 			$Menu/MarginContainer/TabContainer.current_tab = 2
-			pass
+			get_tree().paused = true
 		elif $Menu/MarginContainer/TabContainer.current_tab != 2:
 			$Menu/MarginContainer/TabContainer.current_tab = 2
 		else:
 			$Menu.visible = false
+			get_tree().paused = false
 	
 
 

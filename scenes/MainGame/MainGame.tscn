@@ -15,9 +15,12 @@
 [sub_resource type="AnimationNodeStateMachinePlayback" id=1]
 
 [node name="MainGame" type="Node"]
+pause_mode = 2
 script = ExtResource( 1 )
 
 [node name="World" type="Spatial" parent="."]
+pause_mode = 1
+editor/display_folded = true
 
 [node name="Level" type="Spatial" parent="World"]
 editor/display_folded = true
@@ -26,23 +29,17 @@ editor/display_folded = true
 
 [node name="Player" parent="World" instance=ExtResource( 3 )]
 
-[node name="Skeleton" parent="World/Player" index="1"]
-bones/5/bound_children = [ NodePath("Head") ]
-bones/22/bound_children = [ NodePath("RightHand") ]
-bones/35/bound_children = [ NodePath("LeftFoot") ]
-bones/40/bound_children = [ NodePath("RightFoot") ]
-
 [node name="Head" parent="World/Player/Skeleton" index="1"]
-transform = Transform( 0.999343, 0.0179996, 0.0314416, -0.015622, 0.997114, -0.074288, -0.032688, 0.0737477, 0.996741, -0.0285508, 1.56079, -0.0450848 )
+transform = Transform( 0.999498, 0.0170552, 0.0266926, -0.0159398, 0.999013, -0.0414578, -0.0273734, 0.0410113, 0.998783, -0.0223602, 1.5601, -0.0582142 )
 
 [node name="RightHand" parent="World/Player/Skeleton" index="2"]
-transform = Transform( 0.331419, 0.0869784, 0.939465, 0.125354, -0.990973, 0.0475268, 0.935117, 0.102015, -0.339331, -0.221832, 0.942409, -0.00745527 )
+transform = Transform( 0.33153, 0.0877533, 0.939355, 0.129045, -0.990525, 0.0469893, 0.934576, 0.105641, -0.339714, -0.222856, 0.956409, -0.0150516 )
 
 [node name="RightFoot" parent="World/Player/Skeleton" index="3"]
-transform = Transform( 0.991696, 0.00133531, -0.128601, 3.24696e-005, 0.999942, 0.0106299, 0.128608, -0.0105457, 0.991637, 0.0819547, -0.00115928, -0.0324675 )
+transform = Transform( 0.991615, 0.00150441, -0.129213, 2.86847e-006, 0.999932, 0.0116641, 0.129222, -0.0115663, 0.991548, 0.0820033, -0.0012653, -0.0326027 )
 
 [node name="LeftFoot" parent="World/Player/Skeleton" index="4"]
-transform = Transform( 0.867637, 0.0176472, 0.496886, -0.0323049, 0.99926, 0.0209224, -0.49615, -0.0342034, 0.867565, 0.16138, 0.00601374, 0.104047 )
+transform = Transform( 0.867821, 0.0190557, 0.49651, -0.0323954, 0.999309, 0.0182726, -0.495819, -0.0319397, 0.86784, 0.161325, 0.00616045, 0.103984 )
 
 [node name="AnimationTree" parent="World/Player" index="12"]
 parameters/StateMachine/playback = SubResource( 1 )
@@ -51,6 +48,7 @@ parameters/StateMachine/playback = SubResource( 1 )
 target = NodePath("../Player")
 
 [node name="UI" type="Control" parent="."]
+pause_mode = 1
 anchor_right = 1.0
 anchor_bottom = 1.0
 
@@ -61,15 +59,18 @@ anchor_bottom = 1.0
 [node name="ControllerHelper" parent="UI" instance=ExtResource( 7 )]
 
 [node name="Menu" parent="." instance=ExtResource( 8 )]
+pause_mode = 2
 editor/display_folded = true
 
 [node name="InventoryMenu" parent="Menu/MarginContainer/TabContainer/Inventory" index="0"]
 inventory = NodePath("../../../../../World/Player/Inventory")
 
 [node name="DataPad" parent="." instance=ExtResource( 9 )]
+pause_mode = 2
 visible = false
 
 [node name="Loading" parent="." instance=ExtResource( 10 )]
+pause_mode = 2
 visible = false
 
 [node name="Notifications" parent="." instance=ExtResource( 11 )]
