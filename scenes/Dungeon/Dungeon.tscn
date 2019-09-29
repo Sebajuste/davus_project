@@ -163,7 +163,12 @@ gui_disable_input = true
 
 [node name="MiniMap" type="Node2D" parent="Map/Viewport"]
 script = ExtResource( 14 )
+
+[node name="PlayerRespawnTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
 [connection signal="dungeon_gen_finished" from="MapGenerator" to="." method="_on_MapGenerator_dungeon_gen_finished"]
 [connection signal="request_new_dungeon" from="MapGenerator" to="." method="_on_MapGenerator_request_new_dungeon"]
 [connection signal="visibility_changed" from="Map" to="." method="refresh_map"]
 [connection signal="size_changed" from="Map/Viewport" to="." method="refresh_map"]
+[connection signal="timeout" from="PlayerRespawnTimer" to="." method="_on_PlayerRespawnTimer_timeout"]

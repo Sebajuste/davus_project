@@ -41,8 +41,8 @@ surfaces/0 = {
 }
 
 [sub_resource type="CapsuleShape" id=5]
-radius = 1.22484
-height = 2.22626
+radius = 2.07554
+height = 0.410975
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=6]
 
@@ -76,7 +76,6 @@ mesh = SubResource( 3 )
 mesh = SubResource( 4 )
 
 [node name="Area" type="Area" parent="." index="1"]
-editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 2 )
 collision_layer = 8
 collision_mask = 2

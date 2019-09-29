@@ -32,7 +32,7 @@ const AMMO_TYPES:Array = [
 		"Ice", 
 	]
 
-# Keys/Rack
+# Unlockables (Keys/Rack)
 enum eUnlockableTypes { Key = 0, Rack = 1 }
 const KEYS_RESOURCES:Array = [
 		preload("res://objects/keys/DoorKey/DoorKey.tscn"),
@@ -41,11 +41,8 @@ const RACK_RESOURCES:Array = [
 		preload("res://objects/chests/WeaponRack/WeaponRack.tscn"),
 	]
 
-
+# DataPad
 const DATAPAD_RESOURCES:Array = [
-		preload("res://objects/items/DataPad/DataPad.tscn"),
-	]
-const ENDING_DATAPAD_RESOURCES:Array = [
 		preload("res://objects/items/DataPad/DataPad.tscn"),
 	]
 

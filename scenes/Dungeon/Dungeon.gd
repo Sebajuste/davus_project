@@ -4,6 +4,7 @@ extends Spatial
 export var scale2D:int = 10
 
 # Dungeon Generator Parameters
+export var player_lifes:int = 3
 export var room_margin:int = 2
 export (int, 2, 10) var number_of_rooms:int = 12
 export var min_nb_key:int = 2
@@ -17,8 +18,8 @@ export var max_room_height:int = 5
 export (float, 0, 1) var mob_chance_corridors:float = 0.5
 export (float, 0, 1) var mob_chance_rooms:float = 0.5
 export (float, 0, 1) var chance_monster_or_door:float = 1
-export (float, 0, 1) var chance_drop_rack:float = 0.5
-export (float, 0, 1) var chance_drop_datapad:float = 0.5
+export (float, 0, 1) var chance_drop_rack:float = 0.25
+export (float, 0, 1) var chance_drop_datapad:float = 0.25
 export var min_gun_damage = 10
 export var max_gun_damage = 30
 export var min_gun_rate = 60
@@ -35,13 +36,15 @@ var context: Dictionary
 var _control_camera:bool = true
 var _rnd := RandomNumberGenerator.new()
 var _graph_generator := GraphGenerator.new()
-
+var _remaining_lifes:int
 var _map
 
 func _ready():
 	
 	if context and context.has("dungeon_seed"):
 		map_seed = context["dungeon_seed"]
+	
+	_remaining_lifes = player_lifes
 	
 	_rnd.seed = map_seed
 	
@@ -88,9 +91,18 @@ func set_player(p):
 	player = p
 
 
-func reset_player(player: Spatial) -> void:
-	pass
 
+func reset_player(pPlayer: Spatial) -> void:
+	$PlayerRespawnTimer.start()
+	
+func _on_PlayerRespawnTimer_timeout():
+	_remaining_lifes -= 1
+	if _remaining_lifes > 0:
+		player.global_transform.origin = $MapGenerator.spawn_position
+		var combat_stats = player.find_node("CombatStats")
+		combat_stats.heal( combat_stats.max_health )
+	else:
+		loading.load_scene("res://scenes/WorldPlanet/WorldPlanet.tscn")
 
 func create_dungeon() -> bool:
 	var mg := $MapGenerator

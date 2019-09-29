@@ -49,7 +49,7 @@ const PRINT_REFUSED_DUNGEON:bool = true
 const PRINT_LADDER:bool = false
 const PRINT_ROOMS_TRAVEL:bool = false
 const PRINT_DOOR_LOCATION:bool = false
-const PRINT_DOOR_KEYS:bool = true
+const PRINT_DOOR_KEYS:bool = false
 const TEST_DOOR_KEYS_EQUALITY:bool = false
 const DESIRED_SEED_STEP_COUNTER:int = 50
 var _desired_seed_counter:int = 0
@@ -186,7 +186,7 @@ func _write_rooms_on_map():
 					if rnd.randf() <= mob_chance_rooms:
 						_add_mob_spawn(mobPos, _resourceMgr.eMobType.Fly, false, false)
 				else:
-					var datapad = _place_object(datapadPos, _resourceMgr.ENDING_DATAPAD_RESOURCES, Vector3.ZERO, 0, false)
+					var datapad = _place_object(datapadPos, _resourceMgr.DATAPAD_RESOURCES, Vector3.ZERO, 0, false)
 					datapad.message = tr("story_final")
 					_add_mob_spawn(mobPos, _resourceMgr.eMobType.Fly, false, false)
 		

@@ -8,7 +8,7 @@
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 0.760212, 0.752472, 0.840339 )
 
-[sub_resource type="BoxShape" id=6]
+[sub_resource type="BoxShape" id=2]
 extents = Vector3( 0.798897, 0.869073, 1 )
 
 [sub_resource type="SphereShape" id=3]
@@ -43,6 +43,7 @@ surfaces/0 = {
 }
 
 [node name="Turret" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
 script = ExtResource( 2 )
 
 [node name="CollisionShape" parent="." index="0"]
@@ -54,7 +55,7 @@ combat_stats = NodePath("../CombatStats")
 
 [node name="CollisionShape2" type="CollisionShape" parent="HitBox" index="1"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0 )
-shape = SubResource( 6 )
+shape = SubResource( 2 )
 
 [node name="Detection" type="Area" parent="." index="2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0 )
