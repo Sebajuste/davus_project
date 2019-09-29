@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://ui/InventoryMenu/WeaponPanel/WeaponPanel.gd" type="Script" id=1]
 [ext_resource path="res://ui/Icons/IconPistol64x64.png" type="Texture" id=2]
-[ext_resource path="res://fonts/mechsuit_thin.tres" type="DynamicFont" id=3]
+[ext_resource path="res://ui/Icons/IconSMG64x64.png" type="Texture" id=3]
+[ext_resource path="res://ui/Icons/IconRiffle64x64.png" type="Texture" id=4]
+[ext_resource path="res://fonts/mechsuit_thin.tres" type="DynamicFont" id=5]
 
 [node name="WeaponPanel" type="Button"]
 margin_right = 445.0
@@ -21,15 +23,33 @@ mouse_filter = 2
 mouse_default_cursor_shape = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
-margin_right = 435.0
+margin_right = 460.0
 margin_bottom = 90.0
 custom_constants/separation = 20
 
-[node name="Gun" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+[node name="Pistol" type="TextureRect" parent="MarginContainer/HBoxContainer"]
 margin_right = 64.0
 margin_bottom = 90.0
 rect_min_size = Vector2( 64, 64 )
 texture = ExtResource( 2 )
+stretch_mode = 4
+
+[node name="SMG" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+visible = false
+margin_left = 84.0
+margin_right = 148.0
+margin_bottom = 90.0
+rect_min_size = Vector2( 64, 64 )
+texture = ExtResource( 3 )
+stretch_mode = 4
+
+[node name="Rifle" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+visible = false
+margin_left = 84.0
+margin_right = 148.0
+margin_bottom = 90.0
+rect_min_size = Vector2( 64, 64 )
+texture = ExtResource( 4 )
 stretch_mode = 4
 
 [node name="Stats" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
@@ -43,11 +63,11 @@ margin_bottom = 43.0
 size_flags_vertical = 3
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/Stats/Damage"]
-margin_top = 12.0
+margin_top = 10.0
 margin_right = 100.0
-margin_bottom = 30.0
+margin_bottom = 33.0
 rect_min_size = Vector2( 100, 0 )
-custom_fonts/font = ExtResource( 3 )
+custom_fonts/font = ExtResource( 5 )
 text = "Damage"
 
 [node name="Value" type="Label" parent="MarginContainer/HBoxContainer/Stats/Damage"]
@@ -64,11 +84,11 @@ margin_bottom = 90.0
 size_flags_vertical = 3
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/Stats/Rate"]
-margin_top = 12.0
+margin_top = 10.0
 margin_right = 100.0
-margin_bottom = 30.0
+margin_bottom = 33.0
 rect_min_size = Vector2( 100, 0 )
-custom_fonts/font = ExtResource( 3 )
+custom_fonts/font = ExtResource( 5 )
 text = "Rate"
 
 [node name="Value" type="Label" parent="MarginContainer/HBoxContainer/Stats/Rate"]
@@ -80,16 +100,16 @@ text = "0"
 
 [node name="Equiped" type="HBoxContainer" parent="MarginContainer/HBoxContainer"]
 margin_left = 216.0
-margin_right = 435.0
+margin_right = 460.0
 margin_bottom = 90.0
 size_flags_horizontal = 3
 alignment = 2
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/Equiped"]
-margin_left = 156.0
-margin_top = 36.0
-margin_right = 219.0
-margin_bottom = 54.0
-custom_fonts/font = ExtResource( 3 )
+margin_left = 168.0
+margin_top = 33.0
+margin_right = 244.0
+margin_bottom = 56.0
+custom_fonts/font = ExtResource( 5 )
 text = "Equiped"
 [connection signal="pressed" from="." to="." method="_on_WeaponPanel_pressed"]

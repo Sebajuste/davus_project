@@ -25,7 +25,7 @@ func _on_Area_body_entered(body):
 		taken = true
 		var item = Item.new()
 		item.type = TYPE
-		
+		item.properties["type"] = "smg"
 		item.properties["damage"] = damage
 		item.properties["rate"] = rate
 		

@@ -15,13 +15,18 @@ func _ready():
 
 
 func set_weapon(item: Item) -> void:
-	print("set_weapon: ", item.properties)
 	weapon = item
-	match weapon.type:
-		"gun":
-			$MarginContainer/HBoxContainer/Gun.visible = true
-		_:
-			$MarginContainer/HBoxContainer/Gun.visible = false
+	if weapon.properties.has("type"):
+		$MarginContainer/HBoxContainer/Pistol.visible = false
+		$MarginContainer/HBoxContainer/SMG.visible = false
+		$MarginContainer/HBoxContainer/Rifle.visible = false
+		match weapon.properties["type"]:
+			"pistol":
+				$MarginContainer/HBoxContainer/Pistol.visible = true
+			"smg":
+				$MarginContainer/HBoxContainer/SMG.visible = true
+			"rifle":
+				$MarginContainer/HBoxContainer/Rifle.visible = true
 	$MarginContainer/HBoxContainer/Stats/Damage/Value.text = str(weapon.properties["damage"])
 	$MarginContainer/HBoxContainer/Stats/Rate/Value.text = str(weapon.properties["rate"])
 	$MarginContainer/HBoxContainer/Equiped.visible = weapon.equiped
