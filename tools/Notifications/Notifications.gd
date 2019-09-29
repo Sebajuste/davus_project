@@ -60,6 +60,5 @@ func clear():
 
 func _on_closed_notification(notification):
 	
-	print("_on_close_notification: ", notification)
-	
 	notification.queue_free()
+	

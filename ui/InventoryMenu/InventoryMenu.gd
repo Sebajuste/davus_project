@@ -64,18 +64,18 @@ func _input(event):
 		if _select_pos < 0:
 			_select_pos = _current_list.size() - 1
 		_current_list[_select_pos].grab_focus()
-		print("_select_pos: ", _select_pos, ", _current_list.size(): ", _current_list.size(), ", name: ", _current_list[_select_pos].name )
+		#print("_select_pos: ", _select_pos, ", _current_list.size(): ", _current_list.size(), ", name: ", _current_list[_select_pos].name )
 	
 	if Input.is_action_just_pressed("ui_down"):
 		_select_pos += 1
 		if _select_pos >= _current_list.size():
 			_select_pos = 0
 		_current_list[_select_pos].grab_focus()
-		print("_select_pos: ", _select_pos, ", _current_list.size(): ", _current_list.size(), ", name: ", _current_list[_select_pos].name)
+		#print("_select_pos: ", _select_pos, ", _current_list.size(): ", _current_list.size(), ", name: ", _current_list[_select_pos].name)
 	
 	if Input.is_action_just_pressed("ui_accept"):
 		_current_list[_select_pos].emit_signal("pressed")
-		print("_select_pos: ", _select_pos, ", _current_list.size(): ", _current_list.size(), ", name: ", _current_list[_select_pos].name)
+		#print("_select_pos: ", _select_pos, ", _current_list.size(): ", _current_list.size(), ", name: ", _current_list[_select_pos].name)
 	
 
 

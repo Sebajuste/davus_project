@@ -59,13 +59,11 @@ func _shoot():
 		
 		$ShootAudio.play()
 		
-	
 
 
 func _set_firing_rate(value):
 	firing_rate = max(1, value)
 	$FireTimer.wait_time = 60.0 / firing_rate
-	print("$FireTimer.wait_time: ", $FireTimer.wait_time)
 
 
 func _on_FireTimer_timeout():

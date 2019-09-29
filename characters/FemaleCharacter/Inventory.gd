@@ -37,16 +37,6 @@ func get_items() -> Array:
 func add_item(item: Item):
 	item.equiped = false
 	items.append(item)
-	"""
-	if item.type == "gun":
-		if auto_equip and $"../WeaponHandler".weapon == null:
-			$"../WeaponHandler".equip_weapon(item)
-	elif item.type == "ammo":
-		
-		$"../AmmoHandler".add_ammo(item)
-		if auto_equip and $"../AmmoHandler".ammo_available_list.size() == 1:
-			$"../AmmoHandler".select_next()
-	"""
 	
 	emit_signal("item_added", item)
 

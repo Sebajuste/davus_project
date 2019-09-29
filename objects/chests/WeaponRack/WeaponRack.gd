@@ -33,9 +33,10 @@ func remove_item(item: Item):
 func give_all(actor):
 	if not actor.has_method("give_item"):
 		return
+	print("Give all items (%d)" % [_items.size()] )
 	for item in _items:
 		actor.give_item(item)
-		self.remove_item(item)
+	_items.clear()
 	_hide_weapons()
 
 
