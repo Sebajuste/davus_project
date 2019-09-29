@@ -63,6 +63,16 @@ _global_script_classes=[ {
 "class": "Room",
 "language": "GDScript",
 "path": "res://scenes/Dungeon/Room.gd"
+}, {
+"base": "Reference",
+"class": "Stories",
+"language": "GDScript",
+"path": "res://scripts/quests/stories.gd"
+}, {
+"base": "Reference",
+"class": "WeaponResource",
+"language": "GDScript",
+"path": "res://scripts/dungeon/WeaponResource.gd"
 } ]
 _global_script_class_icons={
 "CombatStats": "",
@@ -75,7 +85,9 @@ _global_script_class_icons={
 "Hit": "",
 "Item": "",
 "NotificationMessageFactory": "",
-"Room": ""
+"Room": "",
+"Stories": "",
+"WeaponResource": ""
 }
 
 [application]
