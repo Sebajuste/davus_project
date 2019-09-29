@@ -193,6 +193,10 @@ func _write_rooms_on_map():
 					_add_mob_spawn(mobPos, _resourceMgr.eMobType.Fly, false, false)
 					var floorMob = _add_mob_spawn(mobPos, _resourceMgr.eMobType.Floor, false, false)
 					floorMob.translate(Vector3.UP)
+			else:
+				var datapadPos:Vector3 = prefab.get_spot(rnd)
+				var datapad = _place_object(datapadPos, _resourceMgr.DATAPAD_RESOURCES, Vector3.ZERO, 0, false)
+				datapad.message = tr("story_start")
 		
 		var background_resource:Array
 		if room == _graph_generator.starting_room || room == _graph_generator.ending_room:
