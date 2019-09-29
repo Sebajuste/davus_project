@@ -18,9 +18,9 @@ func _ready():
 
 
 func equip(item):
-	if item.type == "gun":
-		$"../WeaponHandler".equip_weapon(item)
-	pass
+	if item:
+		item.equiped = true
+		emit_signal("item_updated", item)
 
 
 func get_items() -> Array:

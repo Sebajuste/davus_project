@@ -38,7 +38,7 @@ func create_notification(title: String, message: String, options = {}) -> String
 
 
 func push_notification(notification: Control, options: Dictionary) -> void:
-	notification.connect("on_close", self, "_on_close_notification")
+	notification.connect("closed", self, "_on_closed_notification")
 	$MarginContainer/VBoxContainer.add_child(notification)
 
 
@@ -60,7 +60,7 @@ func clear():
 		notification.queue_free()
 
 
-func _on_close_notification(notification):
+func _on_closed_notification(notification):
 	
 	print("_on_close_notification: ", notification)
 	

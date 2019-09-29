@@ -1,6 +1,9 @@
 extends Panel
 
 
+signal closed(notification)
+
+
 export var damage : int = 0
 export var rate : int = 0
 
@@ -18,7 +21,7 @@ func _ready():
 #	pass
 
 
-func _on_Timer_timeout():
+func close():
 	
-	queue_free()
+	emit_signal("closed", self)
 	

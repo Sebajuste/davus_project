@@ -1,7 +1,7 @@
 extends Panel
 
 
-signal on_close
+signal closed(notification)
 
 
 export var title := "" setget set_title
@@ -51,5 +51,5 @@ func set_auto_hide(value):
 
 func close():
 	
-	emit_signal("on_close", self)
+	emit_signal("closed", self)
 	

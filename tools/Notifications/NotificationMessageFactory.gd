@@ -23,7 +23,6 @@ func create_item_notification(item: Item) -> Node:
 			var notification = WeaponNotification.instance()
 			notification.damage = item.properties["damage"]
 			notification.rate = item.properties["rate"]
-			notifications.push_notification(notification)
 			return notification
 		_:
 			return null

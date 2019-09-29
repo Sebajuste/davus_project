@@ -1,6 +1,9 @@
 extends Panel
 
 
+signal closed(notification)
+
+
 export var type := "Normal"
 export var message := "" setget set_message
 
@@ -31,7 +34,7 @@ func set_message(value):
 	$VBoxContainer/HBoxContainer/Label.text = message
 
 
-func _on_Timer_timeout():
+func close():
 	
-	queue_free()
+	emit_signal("closed", self)
 	

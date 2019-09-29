@@ -139,4 +139,4 @@ func _on_remove_weapon(item: Item) -> void:
 func _on_update_weapon(item: Item) -> void:
 	if _weapon_available_list.find(item) != -1:
 		if item.equiped:
-			emit_signal("ammo_selected", item)
+			equip_weapon(item)

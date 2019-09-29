@@ -173,8 +173,8 @@ func _item_selected(item: Item):
 		EquipmentType.AMMO:
 			if equipment["ammo"]:
 				equipment["ammo"].equiped = false
+			item.equiped = true
 			equipment["ammo"] = item
-			equipment["ammo"].equiped = true
 			select_ammos()
 		
 		EquipmentType.JETPACK:
@@ -185,8 +185,7 @@ func _item_selected(item: Item):
 		_:
 			return
 	
-	emit_signal("item_equiped", item)
-	inventory_node.emit_signal("item_updated", item)
+	inventory_node.equip(item)
 
 
 func _on_WeaponMain_pressed():
