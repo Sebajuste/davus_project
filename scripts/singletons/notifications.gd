@@ -18,7 +18,7 @@ func _ready():
 
 func create_notification(title: String, message: String, options: Dictionary = {}):
 	
-	emit_signal("new_notification", title, message, options)
+	emit_signal("notification_created", title, message, options)
 	
 
 

@@ -30,8 +30,7 @@ func create_notification(title: String, message: String, options = {}) -> String
 	if options.has("auto_hide"):
 		notification.auto_hide = options["auto_hide"]
 	
-	notification.connect("on_close", self, "_on_close_notification")
-	
+	notification.connect("closed", self, "_on_closed_notification")
 	$MarginContainer/VBoxContainer.add_child(notification)
 	
 	return notification.get_name()
@@ -56,7 +55,6 @@ func remove_notification(name: String) -> bool:
 func clear():
 	
 	for notification in $MarginContainer/VBoxContainer.get_children():
-		print("clear not")
 		notification.queue_free()
 
 
