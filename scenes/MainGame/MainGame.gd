@@ -77,24 +77,26 @@ func _input(event):
 		if not $Menu.visible:
 			$Menu.visible = true
 			$Menu/MarginContainer/TabContainer.current_tab = 1
-			get_tree().paused = true
 		elif $Menu/MarginContainer/TabContainer.current_tab != 1:
 			$Menu/MarginContainer/TabContainer.current_tab = 1
-			get_tree().paused = true
 		else:
 			$Menu.visible = false
-			get_tree().paused = false
 	
 	if Input.is_action_just_pressed("map"):
 		if not $Menu.visible:
 			$Menu.visible = true
 			$Menu/MarginContainer/TabContainer.current_tab = 2
-			get_tree().paused = true
 		elif $Menu/MarginContainer/TabContainer.current_tab != 2:
 			$Menu/MarginContainer/TabContainer.current_tab = 2
 		else:
 			$Menu.visible = false
-			get_tree().paused = false
+	
+	if $Menu.visible:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		get_tree().paused = true
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+		get_tree().paused = false
 	
 
 
@@ -119,7 +121,7 @@ func _end_init_level(scene: Node, context: Dictionary = {}):
 		_map_node.add_child(map)
 	
 	if scene.has_method("init_scene"):
-		scene.init_scene()
+		scene.init_scene(context)
 
 
 func _remove_level():

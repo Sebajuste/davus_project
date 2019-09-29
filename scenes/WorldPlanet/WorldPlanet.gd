@@ -32,13 +32,24 @@ func set_player(p):
 	
 
 
-func init_scene():
-	player.global_transform.origin = Vector3(0, 30, 0)
-	player.reset()
+func init_scene(context: Dictionary = {}):
+	
+	if context and context.has("player_position"):
+		var pos: Vector3 = context["player_position"]
+		player.global_transform.origin = pos
+	else:
+		player.global_transform.origin = Vector3(0, 30, 0)
 	
 
 
 func reset_player(player: Spatial) -> void:
 	
 	$PlayerRespawnTimer.start()
+	
+
+
+func _reset_player():
+	
+	player.global_transform.origin = Vector3(0, 30, 0)
+	player.reset()
 	

@@ -27,8 +27,8 @@ ambient_light_energy = 0.2
 ambient_light_sky_contribution = 0.2
 fog_depth_curve = 1.18921
 dof_blur_far_enabled = true
-dof_blur_far_distance = 32.0
-dof_blur_far_transition = 10.0
+dof_blur_far_transition = 35.0
+dof_blur_far_amount = 0.07
 
 [node name="WorldPlanet" type="Spatial"]
 script = ExtResource( 1 )
@@ -78,4 +78,4 @@ one_shot = true
 [node name="Map" parent="." instance=ExtResource( 10 )]
 streaming_level = NodePath("../StreamingLevel")
 zoom = 3.5
-[connection signal="timeout" from="PlayerRespawnTimer" to="." method="init_scene"]
+[connection signal="timeout" from="PlayerRespawnTimer" to="." method="_reset_player"]

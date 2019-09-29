@@ -29,19 +29,25 @@ editor/display_folded = true
 
 [node name="Player" parent="World" instance=ExtResource( 3 )]
 
+[node name="Skeleton" parent="World/Player" index="1"]
+bones/5/bound_children = [ NodePath("Head") ]
+bones/22/bound_children = [ NodePath("RightHand") ]
+bones/35/bound_children = [ NodePath("LeftFoot") ]
+bones/40/bound_children = [ NodePath("RightFoot") ]
+
 [node name="Head" parent="World/Player/Skeleton" index="1"]
-transform = Transform( 0.999402, 0.0198315, 0.0283336, -0.0187325, 0.999081, -0.038528, -0.0290717, 0.0379741, 0.998855, -0.0212114, 1.5597, -0.0597026 )
+transform = Transform( 0.999541, 0.0167615, 0.025248, -0.0159907, 0.999409, -0.030426, -0.0257431, 0.0300083, 0.999218, -0.0339205, 1.55933, -0.0618848 )
 
 [node name="RightHand" parent="World/Player/Skeleton" index="2"]
-transform = Transform( 0.325, 0.0879515, 0.941615, 0.130199, -0.990345, 0.0475656, 0.936706, 0.107139, -0.333315, -0.222367, 0.95604, -0.0156791 )
+transform = Transform( 0.342916, 0.0856452, 0.935453, 0.131083, -0.990454, 0.0426295, 0.930174, 0.108004, -0.35087, -0.232421, 0.954098, -0.0174327 )
 
 [node name="RightFoot" parent="World/Player/Skeleton" index="3"]
-transform = Transform( 0.991587, 0.00162287, -0.129438, -0.000182711, 0.999937, 0.0111361, 0.129448, -0.0110185, 0.991524, 0.0819677, -0.00131542, -0.0326761 )
+transform = Transform( 0.991567, 0.00119731, -0.129599, 9.54494e-005, 0.99995, 0.00996702, 0.129605, -0.00989458, 0.991515, 0.0820701, -0.00108857, -0.0326105 )
 
 [node name="LeftFoot" parent="World/Player/Skeleton" index="4"]
-transform = Transform( 0.867677, 0.0192993, 0.496751, -0.0328073, 0.999291, 0.0184845, -0.496043, -0.0323331, 0.867698, 0.161317, 0.00617402, 0.104136 )
+transform = Transform( 0.867274, 0.0176327, 0.497518, -0.0331621, 0.999199, 0.0223981, -0.496725, -0.0359218, 0.867166, 0.161325, 0.00597642, 0.104112 )
 
-[node name="AnimationTree" parent="World/Player" index="12"]
+[node name="AnimationTree" parent="World/Player" index="13"]
 parameters/StateMachine/playback = SubResource( 1 )
 
 [node name="Camera" parent="World" instance=ExtResource( 4 )]
@@ -73,6 +79,7 @@ pause_mode = 2
 visible = false
 
 [node name="Notifications" parent="." instance=ExtResource( 11 )]
+pause_mode = 2
 [connection signal="died" from="World/Player" to="." method="_on_Player_died"]
 [connection signal="health_changed" from="World/Player" to="UI/Health" method="_on_health_changed"]
 [connection signal="aimed" from="World/Player/WeaponHandler" to="UI/ControllerHelper" method="_on_WeaponHandler_aimed"]
