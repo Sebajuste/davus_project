@@ -34,16 +34,16 @@ bones/35/bound_children = [ NodePath("LeftFoot") ]
 bones/40/bound_children = [ NodePath("RightFoot") ]
 
 [node name="Head" parent="World/Player/Skeleton" index="1"]
-transform = Transform( 0.999342, 0.0220994, 0.028791, -0.0209246, 0.998961, -0.0404886, -0.0296558, 0.0398593, 0.998764, -0.0207996, 1.55988, -0.0587389 )
+transform = Transform( 0.999133, 0.023609, 0.0342619, -0.0213504, 0.997668, -0.0648516, -0.035713, 0.064064, 0.997308, -0.0242457, 1.56059, -0.0506738 )
 
 [node name="RightHand" parent="World/Player/Skeleton" index="2"]
-transform = Transform( 0.323863, 0.0894807, 0.941863, 0.129001, -0.990396, 0.0497348, 0.937265, 0.105395, -0.332297, -0.22132, 0.955086, -0.0157402 )
+transform = Transform( 0.320668, 0.094118, 0.942502, 0.123571, -0.990703, 0.0568897, 0.939095, 0.0982238, -0.329319, -0.220067, 0.948779, -0.0132027 )
 
 [node name="RightFoot" parent="World/Player/Skeleton" index="3"]
-transform = Transform( 0.991528, 0.00165362, -0.129886, -0.000135638, 0.999931, 0.0116943, 0.129896, -0.0115777, 0.991459, 0.0820658, -0.0013104, -0.0326471 )
+transform = Transform( 0.991538, 0.00108006, -0.129807, 0.000393882, 0.999934, 0.0113253, 0.129811, -0.0112804, 0.991473, 0.0820987, -0.0011988, -0.0325531 )
 
 [node name="LeftFoot" parent="World/Player/Skeleton" index="4"]
-transform = Transform( 0.867692, 0.019548, 0.496718, -0.0329508, 0.999291, 0.0182371, -0.49601, -0.0321893, 0.867722, 0.161406, 0.00622892, 0.10429 )
+transform = Transform( 0.867669, 0.0181357, 0.496809, -0.0319505, 0.999304, 0.0193246, -0.496113, -0.0326394, 0.867645, 0.16131, 0.00604609, 0.103993 )
 
 [node name="AmmoHandler" parent="World/Player" index="7"]
 inventory = null
@@ -65,10 +65,9 @@ anchor_bottom = 1.0
 [node name="ControllerHelper" parent="UI" instance=ExtResource( 7 )]
 
 [node name="Menu" parent="." instance=ExtResource( 8 )]
-visible = false
 
-[node name="Inventory" parent="Menu/MarginContainer/TabContainer/Inventory" index="0"]
-inventory = NodePath("../../../../../World/Player/Inventory")
+[node name="MarginContainer" parent="Menu" index="0"]
+editor/display_folded = true
 
 [node name="DataPad" parent="." instance=ExtResource( 9 )]
 visible = false
