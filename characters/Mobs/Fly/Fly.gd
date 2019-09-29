@@ -6,6 +6,7 @@ export(float) var distance_min = 2.5 # Distance minimum qu'il doit y avoir entre
 export(float) var distance_max = 3.0 # Distance maximum qu'il doit y avoir entre le joueur et la mouche lorsque la mouche attaque
 export(float) var speed = 3.0 # Vitesse de la mouche
 export(float) var attack_rate = 1.0 # Nombre de tirs de la mouche par secondes
+export(float) var attack_damage = 10 # Puissance de tirs de la mouche
 
 enum state { 
 	CHOOSE_TARGET, 
@@ -129,6 +130,7 @@ func set_vulnerability(type: String):
 
 func attack():
 	var bullet = Bullet.instance()
+	bullet.set_damage(attack_damage)
 	var root_node = get_tree().get_root().get_child(0)
 	root_node.add_child(bullet)
 	

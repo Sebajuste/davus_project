@@ -188,6 +188,9 @@ func _write_rooms_on_map():
 					var datapad = _place_object(datapadPos, _resourceMgr.DATAPAD_RESOURCES, Vector3.ZERO, 0, false)
 					datapad.message = tr("story_final")
 					_add_mob_spawn(mobPos, _resourceMgr.eMobType.Fly, false, false)
+					_add_mob_spawn(mobPos, _resourceMgr.eMobType.Fly, false, false)
+					var floorMob = _add_mob_spawn(mobPos, _resourceMgr.eMobType.Floor, false, false)
+					floorMob.translate(Vector3.UP)
 		
 		var background_resource:Array
 		if room == _graph_generator.starting_room || room == _graph_generator.ending_room:
@@ -257,7 +260,7 @@ func _write_corridors_on_map() -> bool:	# Return true on error
 					else:
 						print("No prefab found")
 				
-				var error:bool = _dig_path(start, end, s || FORCE_START_DOOR, e || FORCE_END_DOOR, closeEndingRoom)
+				var error:bool = _dig_path(start, end, s || FORCE_START_DOOR, e || FORCE_END_DOOR)
 				if error:
 					return error
 		rooms_done.append(point)
@@ -695,13 +698,14 @@ func _insert_ammo(weapon_rack:Spatial, ammoType:String):
 	weapon_rack.add_item(ammo)
 
 
-func _add_mob_spawn(pos:Vector3, mobType:int = -1, lockableMonster:bool = false, scale_by_tilesize = true):
+func _add_mob_spawn(pos:Vector3, mobType:int = -1, lockableMonster:bool = false, scale_by_tilesize = true) -> Spatial:
 	if mobType == -1:
 		mobType = rnd.randi() % _resourceMgr.MOB_RESOURCES.size()
 	
+	var mob
 	var types = _resourceMgr.MOB_RESOURCES.get(mobType)
 	if types:
-		var mob = _place_object(pos, types, Vector3.ZERO, 0, scale_by_tilesize)
+		mob = _place_object(pos, types, Vector3.ZERO, 0, scale_by_tilesize)
 		if mob == null:
 			print("No mob find in the resources : ", mobType, types)
 		else:
@@ -714,8 +718,8 @@ func _add_mob_spawn(pos:Vector3, mobType:int = -1, lockableMonster:bool = false,
 				mob.id_monster = id
 				if PRINT_DOOR_KEYS:
 					print("Mob ID = ", mob.id_monster, " / Ammo type = ", mob.ammo_type)
-	else:
-		print("No mob type find in the resources : ", mobType)
+			
+	return mob
 
 
 func _place_object(pos:Vector3, resources:Array, dir:Vector3 = Vector3.ZERO, angle:float = 0, scale_by_tilesize = true) -> Spatial:

@@ -11,6 +11,7 @@ export(float) var prepare_duration = 3 #Temps que met le drone pour se "prépare
 export(float) var speed = 2 # Vitesse du drone
 export(float) var speed_charge = 5 # Vitesse du drone quand il charge
 export(float) var attack_rate = 1 # Nombre de tirs du drone (par secondes)
+export(float) var attack_damage = 10 # Puissance de tirs du drone
 export(int) var health_max = 10 # Nombre de vies du drone
 export(float) var health_destruction = 0.2 # Pourcentage appliqué à health_max pour déterminer en dessous de combien de vies le drone s'auto detruit
 
@@ -217,6 +218,7 @@ func set_vulnerability(type: String):
 
 func attack():
 	var bullet = Bullet.instance()
+	bullet.set_damage(attack_damage)
 	var root_node = get_tree().get_root().get_child(0)
 	root_node.add_child(bullet)
 	
