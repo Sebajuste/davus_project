@@ -703,7 +703,7 @@ func _add_mob_spawn(pos:Vector3, mobType:int = -1, lockableMonster:bool = false,
 	if mobType == -1:
 		mobType = rnd.randi() % _resourceMgr.MOB_RESOURCES.size()
 	
-	var mob
+	var mob:Spatial
 	var types:Array
 	if lockableMonster:
 		types.append(_resourceMgr.MOB_RESOURCES.get(_resourceMgr.eMobType.Floor)[1])
@@ -724,7 +724,7 @@ func _add_mob_spawn(pos:Vector3, mobType:int = -1, lockableMonster:bool = false,
 				mob.id_monster = id
 				if PRINT_KEYS_CHECK:
 					print("Mob ID = ", mob.id_monster, " / Ammo type = ", mob.ammo_type)
-			
+	
 	return mob
 
 
@@ -741,6 +741,8 @@ func _place_object(pos:Vector3, resources:Array, dir:Vector3 = Vector3.ZERO, ang
 			if angle != 0:
 				object.rotate(dir, angle)
 			object.add_to_group("MapElements")
+			if _resourceMgr.MOB_RESOURCES.get(_resourceMgr.eMobType.Floor)[1] == resource:
+				object.translate(Vector3.DOWN)
 			add_child(object)
 			return object
 	return null
