@@ -231,6 +231,12 @@ func is_falling() -> bool:
 	return _fall_time > 0.2
 
 
+func reset() -> void:
+	
+	$CombatStats.heal( $CombatStats.max_health )
+	
+
+
 func _play_anim(name: String, force: bool = false):
 	if _anim_update:
 		return
@@ -246,7 +252,6 @@ func _on_CombatStats_damage_taken():
 	
 	$AnimationTree.set("parameters/Hit/active", true)
 	
-	pass # Replace with function body.
 
 
 func _on_CombatStats_health_depleted():
@@ -255,7 +260,6 @@ func _on_CombatStats_health_depleted():
 	$WeaponHandler.shoot_ready = false
 	
 	emit_signal("died")
-	
 
 
 func _on_CombatStats_health_changed(new_value, old_value):

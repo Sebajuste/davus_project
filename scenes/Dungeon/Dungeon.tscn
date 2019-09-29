@@ -86,6 +86,7 @@ light_energy = 0.5
 light_indirect_energy = 2.0
 
 [node name="MapGenerator" type="Spatial" parent="."]
+editor/display_folded = true
 script = ExtResource( 2 )
 
 [node name="Wall0" type="MultiMeshInstance" parent="MapGenerator" groups=[

@@ -5,7 +5,10 @@ var _map_node
 
 
 func _enter_tree():
+	
 	_start_init_level( $World/Level/WorldPlanet )
+	
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -20,9 +23,9 @@ func _ready():
 	
 	_end_init_level( $World/Level/WorldPlanet )
 	
-	var ui_inventory = $Menu/MarginContainer/TabContainer/Inventory/Inventory
-	$World/Player/Inventory.connect("item_added", ui_inventory, "add_item")
-	ui_inventory.connect("item_equiped", $World/Player/Inventory, "equip")
+	#var ui_inventory = $Menu/MarginContainer/TabContainer/Inventory/Inventory
+	#$World/Player/Inventory.connect("item_added", ui_inventory, "add_item")
+	#ui_inventory.connect("item_equiped", $World/Player/Inventory, "equip")
 	
 	$Menu/MarginContainer/TabContainer/Options/Options.enable_savegame = true
 	
@@ -99,7 +102,6 @@ func set_map(map):
 
 
 func _start_init_level(scene: Node, context: Dictionary = {}):
-	print("_init_level")
 	scene.player = $World/Player
 	scene.camera = $World/Camera
 	scene.context = context
@@ -124,11 +126,13 @@ func _on_scene_loading():
 	pass
 
 
-func _on_scene_loaded(scene, context):
+func _on_scene_loaded(scene, context: Dictionary):
 	_remove_level()
 	_start_init_level(scene, context)
 	$World/Level.add_child(scene)
 	_end_init_level(scene, context)
+	if context.has("reset_player") and context["reset_player"] == true:
+		$World/Player.reset()
 	$Loading.visible = false
 
 

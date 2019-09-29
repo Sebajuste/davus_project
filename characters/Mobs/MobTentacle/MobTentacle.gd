@@ -44,8 +44,9 @@ func _physics_process(delta):
 func face_to(position: Vector3):
 	var look_pos := self.global_transform.origin
 	look_pos.x = position.x
-	var rotTransform = global_transform.looking_at(look_pos, Vector3.UP)
-	global_transform = Transform(rotTransform.basis, global_transform.origin)
+	if global_transform.origin != look_pos:
+		var rotTransform = global_transform.looking_at(look_pos, Vector3.UP)
+		global_transform = Transform(rotTransform.basis, global_transform.origin)
 
 
 func move_to(position: Vector3):

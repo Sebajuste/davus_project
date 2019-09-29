@@ -11,12 +11,15 @@ export var armor: int = 0 setget set_armor
 export var fire_resistance: int = 0 setget set_fire_resistance
 export var ice_resistance: int = 0 setget set_ice_resistance
 
-var health: int
+var health: int = max_health
+
 
 # Called when the node enters the scene tree for the first time.
 
 func _ready() -> void:
+	
 	health = max_health
+	
 
 
 func take_damage(hit: Hit) -> void:

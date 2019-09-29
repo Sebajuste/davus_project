@@ -18,10 +18,11 @@ const OFFSET_Y = 1 # Equivaut à la moitié de la hauteur du joueur
 
 var anim_state_machine
 var current_state
-var position = global_transform.origin # position de la mouche
+onready var position = global_transform.origin # position de la mouche
 var velocity = Vector2(0,0)
 var attack_speed = 1 / attack_rate # Temps de "rechargement" de la mouche (en secondes) / calculé en fonction du Nombre de tirs par secondes
 var attack_timer = 0
+
 
 # Returns the angle between two points.
 func get_angle(x1,y1,x2,y2) -> float:
@@ -40,12 +41,6 @@ func _ready():
 	current_state = state.CHOOSE_TARGET
 	anim_state_machine = $FlyModel/AnimationTree["parameters/StateMachine/playback"]
 	anim_state_machine.start("Idle")
-	"""
-	if anim_state_machine.is_playing():
-		anim_state_machine.travel("Idle")
-	else:
-		anim_state_machine.start("Idle")
-	"""
 
 
 
@@ -85,12 +80,6 @@ func _process(delta):
 		attack_timer -= delta
 		if attack_timer <= 0:
 			anim_state_machine.travel("Attack")
-			"""
-			if anim_state_machine.is_playing():
-				anim_state_machine.travel("Attack")
-			else:
-				anim_state_machine.start("Attack")
-			"""
 			attack_timer = attack_speed
 			attack()
 		
@@ -158,12 +147,6 @@ func _on_CombatStats_health_depleted():
 	$FlySound.stop()
 	$DieSound.play()
 	anim_state_machine.travel("Death")
-	"""
-	if anim_state_machine.is_playing():
-		anim_state_machine.travel("Death")
-	else:
-		anim_state_machine.start("Death")
-	"""
 	self.set_collision_layer(0x00)
 	self.set_collision_mask(0x01)
 	

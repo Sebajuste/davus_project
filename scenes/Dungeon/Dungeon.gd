@@ -96,10 +96,9 @@ func _on_PlayerRespawnTimer_timeout():
 	_remaining_lifes -= 1
 	if _remaining_lifes > 0:
 		player.global_transform.origin = $MapGenerator.spawn_position
-		var combat_stats = player.find_node("CombatStats")
-		combat_stats.heal( combat_stats.max_health )
+		player.reset()
 	else:
-		loading.load_scene("res://scenes/WorldPlanet/WorldPlanet.tscn")
+		loading.load_scene("res://scenes/WorldPlanet/WorldPlanet.tscn", {"reset_player": true})
 
 func create_dungeon() -> bool:
 	var mg := $MapGenerator
