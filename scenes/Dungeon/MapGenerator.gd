@@ -17,6 +17,7 @@ var key_occupation:float
 var _geometry:GeometryHelper = GeometryHelper.new()
 var _resourceMgr:DungeonResource = DungeonResource.new()
 var _weaponMgr:WeaponResource = WeaponResource.new()
+var _stories = Stories.new()
 
 var _eTilesType := _resourceMgr.eTilesType
 var _eDirection := DirectionHelper.eDirection
@@ -178,7 +179,8 @@ func _write_rooms_on_map():
 						_add_rack_spawn(prefab)
 					
 					if rnd.randf() <= chance_drop_datapad:
-						_place_object(datapadPos, _resourceMgr.DATAPAD_RESOURCES, Vector3.ZERO, 0, false)
+						var datapad = _place_object(datapadPos, _resourceMgr.DATAPAD_RESOURCES, Vector3.ZERO, 0, false)
+						datapad.message = _stories.get_random_story()
 					
 					if rnd.randf() <= mob_chance_rooms:
 						_add_mob_spawn(mobPos, _resourceMgr.eMobType.Fly, false, false)
@@ -783,6 +785,7 @@ func clear_all():
 	_closed_ways.clear()
 	_unlockables_to_drop.clear()
 	_dropped_unlockables.clear()
+	_stories.reset()
 	_currentLockableID = 0
 	_pathRoomsCounter = 0
 	_totalRoomsCounter = 0
