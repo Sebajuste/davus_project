@@ -12,7 +12,6 @@ export(float) var speed = 2 # Vitesse du drone
 export(float) var speed_charge = 5 # Vitesse du drone quand il charge
 export(float) var attack_rate = 1 # Nombre de tirs du drone (par secondes)
 export(float) var attack_damage = 10 # Puissance de tirs du drone
-export(int) var health_max = 10 # Nombre de vies du drone
 export(float) var health_destruction = 0.2 # Pourcentage appliqué à health_max pour déterminer en dessous de combien de vies le drone s'auto detruit
 
 enum state {
@@ -45,6 +44,7 @@ var change_dir_timer
 var target_visible : bool
 var timer_prepare
 var destruction : bool = false
+var health_max # Nombre de vies du drone
 
 # Returns the angle between two points.
 func get_angle(x1,y1,x2,y2) -> float:
@@ -110,6 +110,7 @@ func _ready():
 	target_visible = false
 	
 	change_dir_speed = floor(rand_range(speed_change_dir_min, speed_change_dir_max))
+	health_max = $CombatStats.health
 	
 	change_direction()
 
