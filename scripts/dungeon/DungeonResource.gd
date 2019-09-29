@@ -11,7 +11,7 @@ enum eTilesType {
 		# DEBUG :
 			DoorInsertion = 5,
 	}
-	
+
 const STATIC_BODIES:Dictionary = { 
 		eTilesType.Wall: preload("res://tileset/Dungeon/Wall.tscn"),
 		eTilesType.Ladder: preload("res://tileset/Dungeon/RightLadder.tscn"),
@@ -24,12 +24,6 @@ const IN_OUT_DOOR:Array = [
 
 const INTERIOR_DOORS:Array = [
 		preload("res://objects/doors/DungeonPipe/DungeonPipe00.tscn"),
-	]
-
-# Ammo
-const AMMO_TYPES:Array = [ 
-		"Fire", 
-		"Ice", 
 	]
 
 # Unlockables (Keys/Rack)

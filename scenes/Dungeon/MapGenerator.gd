@@ -13,13 +13,10 @@ var chance_drop_rack:float
 var chance_drop_datapad:float
 var min_nb_key:int
 var key_occupation:float
-var min_gun_damage:int
-var max_gun_damage:int
-var min_gun_rate:int
-var max_gun_rate:int
 
 var _geometry:GeometryHelper = GeometryHelper.new()
 var _resourceMgr:DungeonResource = DungeonResource.new()
+var _weaponMgr:WeaponResource = WeaponResource.new()
 
 var _eTilesType := _resourceMgr.eTilesType
 var _eDirection := DirectionHelper.eDirection
@@ -668,12 +665,25 @@ func _add_rack_spawn(prefab:Spatial) -> Spatial:
 		prefab.rack = rack
 	
 	if rack:
-		var weapon = Item.new()
-		weapon.type = "gun"
-		weapon.properties["damage"] = min_gun_damage + (rnd.randi() % (max_gun_damage - min_gun_damage + 1))
-		weapon.properties["rate"] = min_gun_rate + (rnd.randi() % (max_gun_rate - min_gun_rate + 1))
-		rack.add_item(weapon)
+		var weapon = _create_weapon()
+		if weapon:
+			rack.add_item(weapon)
 	return rack
+
+
+func _create_weapon() -> Item:
+	var weapon = Item.new()
+	var variant = rnd.randi() % _weaponMgr.eWeaponsType.size() #_weaponMgr.WEAPONS_NAME.size()
+	var weaponType = _weaponMgr.WEAPONS_NAME.get(variant)
+	var settings:Dictionary = _weaponMgr.WEAPONS_SETTINGS.get(variant)
+	weapon.type = weaponType
+	var minDamage = settings["Damage"]["Min"]
+	var maxDamage = settings["Damage"]["Max"]
+	weapon.properties["damage"] = minDamage + (rnd.randi() % (maxDamage - minDamage + 1))
+	var minRate = settings["Rate"]["Min"]
+	var maxRate = settings["Rate"]["Max"]
+	weapon.properties["rate"] = minRate + (rnd.randi() % (maxRate - minRate + 1))
+	return weapon
 
 
 func _insert_ammo(weapon_rack:Spatial, ammoType:String):
@@ -694,8 +704,8 @@ func _add_mob_spawn(pos:Vector3, mobType:int = -1, lockableMonster:bool = false,
 			print("No mob find in the resources : ", mobType, types)
 		else:
 			if lockableMonster:
-				var variant:int = rnd.randi() % _resourceMgr.AMMO_TYPES.size()
-				var ammoType:String = _resourceMgr.AMMO_TYPES[variant]
+				var variant:int = rnd.randi() % _weaponMgr.AMMO_TYPES.size()
+				var ammoType:String = _weaponMgr.AMMO_TYPES[variant]
 				var id:int = _create_unlockable(pos, _resourceMgr.eUnlockableTypes.Rack, { "ammo_type": ammoType } )
 				mob.set_to_monster(ammoType, id)
 				if PRINT_DOOR_KEYS:
