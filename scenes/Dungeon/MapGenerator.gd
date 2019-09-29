@@ -681,7 +681,8 @@ func _create_weapon() -> Item:
 	var variant = rnd.randi() % _weaponMgr.eWeaponsType.size() #_weaponMgr.WEAPONS_NAME.size()
 	var weaponType = _weaponMgr.WEAPONS_NAME.get(variant)
 	var settings:Dictionary = _weaponMgr.WEAPONS_SETTINGS.get(variant)
-	weapon.type = weaponType
+	weapon.type = "gun"
+	weapon.properties["type"] = weaponType
 	var minDamage = settings["Damage"]["Min"]
 	var maxDamage = settings["Damage"]["Max"]
 	weapon.properties["damage"] = minDamage + (rnd.randi() % (maxDamage - minDamage + 1))

@@ -34,16 +34,16 @@ bones/35/bound_children = [ NodePath("LeftFoot") ]
 bones/40/bound_children = [ NodePath("RightFoot") ]
 
 [node name="Head" parent="World/Player/Skeleton" index="1"]
-transform = Transform( 0.999516, 0.0175579, 0.0256775, -0.0164939, 0.999018, -0.041071, -0.0263734, 0.0406277, 0.998826, -0.0216743, 1.55982, -0.0594307 )
+transform = Transform( 0.999444, 0.0212299, 0.0257244, -0.0201563, 0.998944, -0.0412876, -0.0265739, 0.0407464, 0.998816, -0.0256692, 1.56014, -0.0580129 )
 
 [node name="RightHand" parent="World/Player/Skeleton" index="2"]
-transform = Transform( 0.327058, 0.0881048, 0.940887, 0.129565, -0.990421, 0.0477062, 0.936079, 0.106304, -0.335342, -0.22234, 0.956434, -0.0159699 )
+transform = Transform( 0.326972, 0.101195, 0.939599, 0.139156, -0.988567, 0.0580449, 0.934732, 0.111773, -0.337317, -0.216058, 0.949554, -0.0134094 )
 
 [node name="RightFoot" parent="World/Player/Skeleton" index="3"]
-transform = Transform( 0.991596, 0.00144097, -0.129372, 2.47285e-005, 0.999935, 0.0113255, 0.12938, -0.0112332, 0.99153, 0.0820882, -0.00126641, -0.0326543 )
+transform = Transform( 0.991626, 0.00170842, -0.129132, -0.00021863, 0.999933, 0.0115506, 0.129142, -0.0114257, 0.991559, 0.08191, -0.00121946, -0.032579 )
 
 [node name="LeftFoot" parent="World/Player/Skeleton" index="4"]
-transform = Transform( 0.867938, 0.0192297, 0.4963, -0.0325176, 0.999307, 0.0181504, -0.495608, -0.0318904, 0.867962, 0.161269, 0.00616469, 0.103946 )
+transform = Transform( 0.867567, 0.0189687, 0.496959, -0.0341677, 0.999186, 0.0215127, -0.496147, -0.0356414, 0.867509, 0.16116, 0.00597674, 0.103985 )
 
 [node name="AnimationTree" parent="World/Player" index="12"]
 parameters/StateMachine/playback = SubResource( 1 )
@@ -69,6 +69,10 @@ anchor_bottom = 1.0
 [node name="InventoryMenu" parent="Menu/MarginContainer/TabContainer/Inventory" index="0"]
 inventory = NodePath("../../../../../World/Player/Inventory")
 
+[node name="HBoxContainer" parent="Menu/MarginContainer/TabContainer/Inventory/InventoryMenu/MarginContainer" index="0"]
+margin_right = 816.0
+margin_bottom = 546.0
+
 [node name="DataPad" parent="." instance=ExtResource( 9 )]
 visible = false
 
@@ -84,3 +88,5 @@ visible = false
 [editable path="World/Player"]
 
 [editable path="Menu"]
+
+[editable path="Menu/MarginContainer/TabContainer/Inventory/InventoryMenu"]
