@@ -27,17 +27,23 @@ editor/display_folded = true
 
 [node name="Player" parent="World" instance=ExtResource( 3 )]
 
+[node name="Skeleton" parent="World/Player" index="1"]
+bones/5/bound_children = [ NodePath("Head") ]
+bones/22/bound_children = [ NodePath("RightHand") ]
+bones/35/bound_children = [ NodePath("LeftFoot") ]
+bones/40/bound_children = [ NodePath("RightFoot") ]
+
 [node name="Head" parent="World/Player/Skeleton" index="1"]
-transform = Transform( 0.999255, 0.023622, 0.0305174, -0.0221099, 0.998555, -0.0489757, -0.0316302, 0.0482645, 0.998333, -0.0211623, 1.56016, -0.0561629 )
+transform = Transform( 0.999516, 0.0175579, 0.0256775, -0.0164939, 0.999018, -0.041071, -0.0263734, 0.0406277, 0.998826, -0.0216743, 1.55982, -0.0594307 )
 
 [node name="RightHand" parent="World/Player/Skeleton" index="2"]
-transform = Transform( 0.320902, 0.0960559, 0.942228, 0.128736, -0.990034, 0.0570857, 0.938321, 0.102981, -0.330071, -0.217614, 0.952312, -0.015803 )
+transform = Transform( 0.327058, 0.0881048, 0.940887, 0.129565, -0.990421, 0.0477062, 0.936079, 0.106304, -0.335342, -0.22234, 0.956434, -0.0159699 )
 
 [node name="RightFoot" parent="World/Player/Skeleton" index="3"]
-transform = Transform( 0.991486, 0.00161628, -0.130209, -2.30074e-005, 0.999925, 0.0122364, 0.130219, -0.0121293, 0.991409, 0.0820454, -0.00135742, -0.0325622 )
+transform = Transform( 0.991596, 0.00144097, -0.129372, 2.47285e-005, 0.999935, 0.0113255, 0.12938, -0.0112332, 0.99153, 0.0820882, -0.00126641, -0.0326543 )
 
 [node name="LeftFoot" parent="World/Player/Skeleton" index="4"]
-transform = Transform( 0.86768, 0.020146, 0.496714, -0.0327556, 0.999325, 0.0166902, -0.496043, -0.03075, 0.867756, 0.161361, 0.00621853, 0.103757 )
+transform = Transform( 0.867938, 0.0192297, 0.4963, -0.0325176, 0.999307, 0.0181504, -0.495608, -0.0318904, 0.867962, 0.161269, 0.00616469, 0.103946 )
 
 [node name="AnimationTree" parent="World/Player" index="12"]
 parameters/StateMachine/playback = SubResource( 1 )
