@@ -2,7 +2,7 @@ extends Spatial
 
 const Bullet = preload("../projectiles/Bullet/Bullet.tscn")
 
-export(float, 60, 1200) var firing_rate := 60.0 setget _set_firing_rate
+export(float, 60, 1200) var firing_rate := 90.0 setget _set_firing_rate
 
 export(int) var damage := 10
 

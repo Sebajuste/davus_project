@@ -4,8 +4,8 @@ const WeaponPickUpNotification = preload("res://tools/Notifications/Notification
 
 const TYPE = "gun"
 
-export(int) var damage := 1
-export(int) var rate := 60
+export(int) var damage := 5
+export(int) var rate := 90
 
 var taken := false
 

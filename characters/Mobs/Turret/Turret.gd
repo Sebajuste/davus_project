@@ -5,6 +5,7 @@ const Bullet = preload("res://objects/projectiles/Bullet/Bullet.tscn")
 export(float) var speed_complete_loading = 5 # Temps de rechargement entre deux salves (en secondes)
 export(float) var speed_reloading = 0.6 # Temps de rechargements entre deux tirs (en secondes)
 export(int) var nb_shoot = 5 # Nombre de tirs par salves
+export(int) var attack_damage = 10 # Puissance de tirs
 export(float) var speed_rotation_idle = 0.5 # Vitesse de rotation de la tête de la tourelle lorsqu'elle cherche une cible (en degrés)
 export(float) var speed_rotation_aim = 1.5 # Vitesse de rotation de la tête de la tourelle lorsqu'elle doit viser sa cible (en degrés)
 export(int) var wait_duration_min = 3 # Temps minimum que doit attendre la tourelle (en secondes)
@@ -172,6 +173,7 @@ func set_vulnerability(type: String):
 
 func attack():
 	var bullet = Bullet.instance()
+	bullet.set_damage(attack_damage)
 	var root_node = get_tree().get_root().get_child(0)
 	root_node.add_child(bullet)
 	

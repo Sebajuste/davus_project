@@ -77,7 +77,7 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "WeaponResource",
 "language": "GDScript",
-"path": "res://scripts/dungeon/WeaponResource.gd"
+"path": "res://scripts/combat/WeaponResource.gd"
 } ]
 _global_script_class_icons={
 "CombatStats": "",
@@ -253,4 +253,5 @@ translations=PoolStringArray( "res://i18n/button.en.translation", "res://i18n/bu
 
 [rendering]
 
+quality/driver/driver_name="GLES2"
 environment/default_environment="res://default_env.tres"

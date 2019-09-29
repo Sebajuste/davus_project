@@ -22,7 +22,6 @@ script = ExtResource( 2 )
 shape = SubResource( 1 )
 
 [node name="HitBox" parent="." index="1"]
-editor/display_folded = true
 combat_stats = NodePath("../CombatStats")
 
 [node name="CollisionShape" parent="HitBox" index="0"]

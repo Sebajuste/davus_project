@@ -18,10 +18,13 @@ func _ready():
 	#
 	# Add default Weapon
 	#
+	var _weapon_resource = WeaponResource.new()
 	var default_weapon := Item.new()
 	default_weapon.type = "gun"
-	default_weapon.properties["damage"] = 10
-	default_weapon.properties["rate"] = 60
+	var p = _weapon_resource.eWeaponsType.Pistol #SMG
+	default_weapon.properties["type"] = _weapon_resource.WEAPONS_NAME[p]
+	default_weapon.properties["damage"] = _weapon_resource.WEAPONS_SETTINGS[p]["Damage"]["Min"]
+	default_weapon.properties["rate"] = _weapon_resource.WEAPONS_SETTINGS[p]["Rate"]["Min"]
 	
 	$World/Player.give_item(default_weapon)
 	#$World/Player/Inventory.equip(default_weapon)

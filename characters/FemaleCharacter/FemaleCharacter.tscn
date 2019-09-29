@@ -675,6 +675,7 @@ unit_size = 20.0
 bus = "SoundEffects"
 
 [node name="CombatStats" parent="." instance=ExtResource( 15 )]
+max_health = 50
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "default"

@@ -45,7 +45,6 @@ bone_name = "Bone.005"
 
 [node name="DamageSource" parent="MobTentacle/TentacleMobSkeleton/BoneAttachment" index="0" instance=ExtResource( 4 )]
 transform = Transform( 1, -3.55271e-015, -8.88178e-015, 0, 1, 0, 6.21725e-015, 0, 1, 0, 0, 0 )
-damage = 10
 reactivation_timer = 1.1
 
 [node name="CollisionShape" parent="MobTentacle/TentacleMobSkeleton/BoneAttachment/DamageSource" index="0"]
@@ -65,6 +64,7 @@ collision_mask = 2
 shape = SubResource( 3 )
 
 [node name="CombatStats" parent="." index="4" instance=ExtResource( 5 )]
+max_health = 40
 fire_resistance = 2
 
 [node name="RemoveTimer" type="Timer" parent="." index="5"]
