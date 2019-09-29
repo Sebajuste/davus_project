@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://scenes/TestDungeon/TestDungeon.gd" type="Script" id=1]
 [ext_resource path="res://scenes/Dungeon/Dungeon.tscn" type="PackedScene" id=2]
@@ -8,8 +8,9 @@
 [ext_resource path="res://ui/Game/Health/Health.tscn" type="PackedScene" id=6]
 [ext_resource path="res://ui/Game/Ammo/Ammo.tscn" type="PackedScene" id=7]
 [ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=8]
-[ext_resource path="res://ui/Loading/Loading.tscn" type="PackedScene" id=9]
-[ext_resource path="res://tools/Notifications/Notifications.tscn" type="PackedScene" id=10]
+[ext_resource path="res://ui/DataPad/DataPad.tscn" type="PackedScene" id=9]
+[ext_resource path="res://ui/Loading/Loading.tscn" type="PackedScene" id=10]
+[ext_resource path="res://tools/Notifications/Notifications.tscn" type="PackedScene" id=11]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=1]
 
@@ -17,6 +18,7 @@
 script = ExtResource( 1 )
 
 [node name="World" type="Spatial" parent="."]
+editor/display_folded = true
 
 [node name="Level" type="Spatial" parent="World"]
 editor/display_folded = true
@@ -32,16 +34,16 @@ bones/35/bound_children = [ NodePath("LeftFoot") ]
 bones/40/bound_children = [ NodePath("RightFoot") ]
 
 [node name="Head" parent="World/Player/Skeleton" index="1"]
-transform = Transform( 0.998828, 0.0254382, 0.0411644, -0.0225708, 0.997383, -0.0686793, -0.0428038, 0.0676702, 0.99679, -0.0264173, 1.56074, -0.0477494 )
+transform = Transform( 0.999558, 0.017138, 0.02424, -0.0164595, 0.999474, -0.0279196, -0.0247058, 0.0275086, 0.999317, -0.0329721, 1.55936, -0.062749 )
 
 [node name="RightHand" parent="World/Player/Skeleton" index="2"]
-transform = Transform( 0.330506, 0.0882326, 0.93967, 0.1237, -0.991081, 0.049552, 0.935662, 0.0998603, -0.338474, -0.221865, 0.946044, -0.00954874 )
+transform = Transform( 0.340076, 0.0855074, 0.936501, 0.130877, -0.990468, 0.0429096, 0.931245, 0.107974, -0.348027, -0.231762, 0.954629, -0.0186432 )
 
 [node name="RightFoot" parent="World/Player/Skeleton" index="3"]
-transform = Transform( 0.991647, 0.00130238, -0.128967, -1.39326e-006, 0.999948, 0.0100875, 0.128973, -0.0100023, 0.991596, 0.0820232, -0.00114435, -0.0329097 )
+transform = Transform( 0.991461, 0.00135057, -0.130395, 4.14178e-005, 0.999941, 0.0106697, 0.130402, -0.0105836, 0.991404, 0.0820516, -0.00116432, -0.0325255 )
 
 [node name="LeftFoot" parent="World/Player/Skeleton" index="4"]
-transform = Transform( 0.86732, 0.0182658, 0.497417, -0.031468, 0.99934, 0.0181751, -0.496758, -0.0314141, 0.867321, 0.16141, 0.00606252, 0.103849 )
+transform = Transform( 0.86748, 0.0177312, 0.497155, -0.0334194, 0.999184, 0.0226791, -0.496349, -0.0362866, 0.867366, 0.161308, 0.00598098, 0.103854 )
 
 [node name="AnimationTree" parent="World/Player" index="12"]
 parameters/StateMachine/playback = SubResource( 1 )
@@ -54,6 +56,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 80 )
 script = ExtResource( 5 )
 
 [node name="UI" type="Control" parent="."]
+editor/display_folded = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 
@@ -62,14 +65,18 @@ anchor_bottom = 1.0
 [node name="Ammo" parent="UI" instance=ExtResource( 7 )]
 
 [node name="Menu" parent="." instance=ExtResource( 8 )]
+editor/display_folded = true
 
 [node name="Inventory" parent="Menu/MarginContainer/TabContainer/Inventory" index="0"]
 inventory = NodePath("../../../../../World/Player/Inventory")
 
-[node name="Loading" parent="." instance=ExtResource( 9 )]
+[node name="DataPad" parent="." instance=ExtResource( 9 )]
 visible = false
 
-[node name="Notifications" parent="." instance=ExtResource( 10 )]
+[node name="Loading" parent="." instance=ExtResource( 10 )]
+visible = false
+
+[node name="Notifications" parent="." instance=ExtResource( 11 )]
 [connection signal="died" from="World/Player" to="." method="_on_Player_died"]
 [connection signal="health_changed" from="World/Player" to="UI/Health" method="_on_health_changed"]
 [connection signal="ammo_selected" from="World/Player/AmmoHandler" to="UI/Ammo" method="_on_ammo_selected"]
