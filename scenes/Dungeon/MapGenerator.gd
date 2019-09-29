@@ -30,6 +30,7 @@ var _desired_nb_of_unlockables:int = 0
 var _closed_ways:Dictionary				# <id, position>
 var _unlockables_to_drop:Array			# Array of Dictionaries : <Dictionary(id =..., type = ..., properties = { ... = ... })>
 var _dropped_unlockables:Dictionary		# <Dictionary(id =..., type = ..., properties = { ... = ... }), position>
+var _ammo_bag:Array
 
 var tile_size:int
 var spawn_position:Vector3
@@ -47,6 +48,7 @@ const PRINT_REFUSED_DUNGEON:bool = true
 const PRINT_LADDER:bool = false
 const PRINT_ROOMS_TRAVEL:bool = false
 const PRINT_DOOR_LOCATION:bool = false
+const PRINT_AMMO_TYPE:bool = false
 const PRINT_KEYS_CHECK:bool = false
 const PRINT_DOOR_KEYS:bool = false
 const TEST_DOOR_KEYS_EQUALITY:bool = false
@@ -105,6 +107,7 @@ func _on_tile_translate(source:MultiMeshInstance, pos:Vector3, angle_z:float):
 
 func gen_dungeon(graph_generator:GraphGenerator) -> bool:
 	clear_all()
+	_ammo_bag = _weaponMgr.AMMO_TYPES.duplicate(true)
 	_graph_generator = graph_generator
 	_pathfinding = _graph_generator.pathfinding
 	_rooms_areas = _graph_generator.rooms_areas
@@ -355,7 +358,7 @@ func _dig_horizontally(startPos: Vector3, endPos: Vector3, mobSpawn: bool, lockD
 	
 	
 	if step.y == 0:
-		if (lockDoorOnStart || lockDoorOnEnd) && not refuseMonster:
+		if (lockDoorOnStart || lockDoorOnEnd) && not refuseMonster && _ammo_bag.size() > 0:
 			var isMonster = rnd.randf() <= chance_monster_or_door
 			if isMonster:
 				_add_mob_spawn(middlePos, _resourceMgr.eMobType.Floor, true)
@@ -453,7 +456,7 @@ func _dig_vertically(startPos: Vector3, endPos: Vector3, mobSpawn: bool, lockDoo
 	
 	
 	if abs(dif.x) > 1:
-		if (lockDoorOnStart || lockDoorOnEnd) && not refuseMonster:
+		if (lockDoorOnStart || lockDoorOnEnd) && not refuseMonster && _ammo_bag.size() > 0:
 			var isMonster = rnd.randf() <= chance_monster_or_door
 			if isMonster:
 				_add_mob_spawn(middlePos, _resourceMgr.eMobType.Floor, true)
@@ -534,7 +537,7 @@ func _dig_mixed_directions(horizontalPos: Vector3, verticalPos: Vector3, mobSpaw
 	var step = Vector2(sign(dif.x), sign(dif.y))
 	
 	if step.y >= 0:
-		if (lockDoorOnHorizontal || lockDoorOnVertical) && not refuseMonster:
+		if (lockDoorOnHorizontal || lockDoorOnVertical) && not refuseMonster && _ammo_bag.size() > 0:
 			var isMonster = rnd.randf() <= chance_monster_or_door
 			if isMonster:
 				_add_mob_spawn(Vector3(verticalPos.x, horizontalPos.y, 0), _resourceMgr.eMobType.Floor, true)
@@ -716,10 +719,11 @@ func _add_mob_spawn(pos:Vector3, mobType:int = -1, lockableMonster:bool = false,
 			print("No mob find in the resources : ", mobType, types)
 		else:
 			if lockableMonster:
-				var variant:int = rnd.randi() % _weaponMgr.AMMO_TYPES.size()
-				var ammoType:String = _weaponMgr.AMMO_TYPES[variant]
+				var variant:int = rnd.randi() % _ammo_bag.size()
+				var ammoType:String = _ammo_bag[variant]
+				_ammo_bag.erase(ammoType)
 				var id:int = _create_unlockable(pos, _resourceMgr.eUnlockableTypes.Rack, { "ammo_type": ammoType } )
-				print("ammoType: ", ammoType)
+				if PRINT_AMMO_TYPE: print("ammoType: ", ammoType)
 				mob.set_vulnerability(ammoType)
 				mob.id_monster = id
 				if PRINT_KEYS_CHECK:

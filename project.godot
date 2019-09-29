@@ -253,5 +253,4 @@ translations=PoolStringArray( "res://i18n/button.en.translation", "res://i18n/bu
 
 [rendering]
 
-quality/driver/driver_name="GLES2"
 environment/default_environment="res://default_env.tres"
