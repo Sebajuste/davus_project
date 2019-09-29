@@ -9,7 +9,10 @@ export var enable_close := false setget set_enable_close
 export var enable_return_main_menu := false setget set_enable_return_main_menu
 export var enable_quit_game := false setget set_enable_quit_game
 
-#var active := true
+
+var active := false setget set_active
+
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -18,6 +21,19 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+
+
+func _input(event):
+	if active:
+		if Input.is_action_just_pressed("ui_cancel"):
+			emit_signal("closed")
+
+
+
+func set_active(value):
+	active = value
+	if active:
+		$MarginContainer/VBoxContainer/HBoxContainer/OptionsList/VideoOptions.grab_focus()
 
 
 func reload():
@@ -44,6 +60,7 @@ func set_enable_return_main_menu(value):
 func set_enable_quit_game(value):
 	enable_quit_game = value
 	$MarginContainer/VBoxContainer/HBoxContainer/OptionsList/QuitGame.visible = value
+
 
 
 func _hide_all():
@@ -109,4 +126,4 @@ func _on_QuitGame_pressed():
 func _on_ReturnMainMenu_pressed():
 	
 	loading.change_scene("res://scenes/MainMenu/MainMenu.tscn")
-	
+	get_tree().paused = false

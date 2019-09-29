@@ -114,6 +114,9 @@ func _end_init_level(scene: Node, context: Dictionary = {}):
 	if map:
 		scene.remove_child(map)
 		_map_node.add_child(map)
+	
+	if scene.has_method("init_scene"):
+		scene.init_scene()
 
 
 func _remove_level():

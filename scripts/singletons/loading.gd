@@ -44,10 +44,11 @@ func _process(delta):
 				get_tree().set_current_scene( current_scene )
 
 
-func change_scene(path: String):
+func change_scene(path: String, context: Dictionary = {}):
 	if not _loading:
 		_loading = true
 		_switch_scene = true
+		_loading_context = context
 		emit_signal("scene_loading")
 		call_deferred("_deferred_load_scene", path)
 

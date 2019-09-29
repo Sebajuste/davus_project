@@ -24,9 +24,11 @@ func set_message(content):
 		$MarginContainer/VBoxContainer/Body/MarginContainer/RichTextLabel.text = content
 		$MarginContainer/VBoxContainer/Footer/MarginContainer/HBoxContainer/CloseButton.grab_focus()
 		visible = true
+		get_tree().paused = true
 
 
 func _on_CloseButton_pressed():
 	visible = false
+	get_tree().paused = false
 	emit_signal("closed")
 	

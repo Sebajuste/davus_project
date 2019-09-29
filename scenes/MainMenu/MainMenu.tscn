@@ -63,7 +63,6 @@ light_energy = 5.68
 spot_angle = 50.625
 
 [node name="MainControls" type="Control" parent="."]
-editor/display_folded = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 4 )
@@ -78,7 +77,6 @@ text = "DAVUS"
 uppercase = true
 
 [node name="MarginContainer" type="MarginContainer" parent="MainControls"]
-editor/display_folded = true
 anchor_top = 1.0
 anchor_bottom = 1.0
 margin_left = 100.0

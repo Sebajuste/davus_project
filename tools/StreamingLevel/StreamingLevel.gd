@@ -9,7 +9,7 @@ export var multithreading := true
 var _current_batch_x := 99999
 var _current_batch_y := 99999
 
-var _thread := Thread.new()
+var _thread : Thread
 var _stop_tread := false
 var _stop_thread_mutex := Mutex.new()
 
@@ -33,6 +33,7 @@ var _current_batch_loc := []
 
 func _ready():
 	if multithreading:
+		_thread = Thread.new()
 		_thread.start(self, "_thread_process")
 	for child in get_children():
 		if child != $Batches:
@@ -74,7 +75,8 @@ func _exit_tree():
 	_stop_thread_mutex.lock()
 	_stop_tread = true
 	_stop_thread_mutex.unlock()
-	_thread.wait_to_finish()
+	if multithreading:
+		_thread.wait_to_finish()
 	pass
 
 

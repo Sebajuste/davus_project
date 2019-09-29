@@ -41,6 +41,7 @@ margin_bottom = -4.0
 
 [node name="Options" parent="MarginContainer/TabContainer/Options" instance=ExtResource( 4 )]
 enable_savegame = true
+enable_close = true
 enable_return_main_menu = true
 enable_quit_game = true
 
@@ -64,3 +65,5 @@ margin_top = 50.0
 margin_right = -4.0
 margin_bottom = -4.0
 [connection signal="visibility_changed" from="." to="." method="_on_Menu_visibility_changed"]
+[connection signal="tab_changed" from="MarginContainer/TabContainer" to="." method="_on_TabContainer_tab_changed"]
+[connection signal="closed" from="MarginContainer/TabContainer/Options/Options" to="." method="_on_Options_closed"]

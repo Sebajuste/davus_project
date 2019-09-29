@@ -1,8 +1,6 @@
 extends Control
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
+var _current_tab := 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -24,14 +22,28 @@ func _input(event):
 		var next_tab = $MarginContainer/TabContainer.current_tab + 1
 		if next_tab >= $MarginContainer/TabContainer.get_child_count():
 			next_tab = 0
+		_set_active($MarginContainer/TabContainer.current_tab, false)
 		$MarginContainer/TabContainer.current_tab = next_tab
+		_set_active(next_tab, true)
+		_current_tab = next_tab
 	
 	if Input.is_action_just_pressed("ui_page_up"):
 		var previous_tab = $MarginContainer/TabContainer.current_tab - 1
 		if previous_tab < 0:
 			previous_tab = $MarginContainer/TabContainer.get_child_count() - 1
+		_set_active($MarginContainer/TabContainer.current_tab, false)
 		$MarginContainer/TabContainer.current_tab = previous_tab
+		_set_active(previous_tab, true)
+		_current_tab = previous_tab
 	
+
+
+func _set_active(index_tab: int, active: bool):
+	var tabs = $MarginContainer/TabContainer
+	if tabs.get_child(index_tab).get_child_count() > 0:
+		var child = tabs.get_child(index_tab).get_child(0)
+		if child.get("active") != null:
+			child.set("active", active)
 
 
 func _on_Menu_visibility_changed():
@@ -44,10 +56,17 @@ func _on_Menu_visibility_changed():
 				panel.get_child(0).active = false
 	
 	if visible:
-		var current_tab = tabs.current_tab
-		if tabs.get_child(current_tab).get_child_count() > 0:
-			var child = tabs.get_child(current_tab).get_child(0)
-			if child.get("active") != null:
-				child.set("active", true)
+		_set_active(tabs.current_tab, true)
+
+
+func _on_Options_closed():
 	
-	pass # Replace with function body.
+	visible = false
+	get_tree().paused = false
+	
+
+
+func _on_TabContainer_tab_changed(tab):
+	_set_active(_current_tab, false)
+	_set_active(tab, true)
+	_current_tab = tab
