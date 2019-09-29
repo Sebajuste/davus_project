@@ -78,4 +78,4 @@ one_shot = true
 [node name="Map" parent="." instance=ExtResource( 10 )]
 streaming_level = NodePath("../StreamingLevel")
 zoom = 3.5
-[connection signal="timeout" from="PlayerRespawnTimer" to="." method="_on_PlayerRespawnTimer_timeout"]
+[connection signal="timeout" from="PlayerRespawnTimer" to="." method="init_scene"]

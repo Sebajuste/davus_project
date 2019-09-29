@@ -2,44 +2,18 @@ extends Node
 
 signal start_game
 
-onready var _buttons := [
-	$MainControls/MarginContainer/VBoxContainer/StartButton,
-	$MainControls/MarginContainer/VBoxContainer/OptionsButton,
-	$MainControls/MarginContainer/VBoxContainer/CreditsButton,
-	$MainControls/MarginContainer/VBoxContainer/QuitButton,
-]
-
-var select_pos := 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
 	$Spatial/FemaleCharacter/AnimationPlayer.play("angry")
-	
-	_buttons[select_pos].grab_focus()
+	$MainControls/MarginContainer/VBoxContainer/StartButton.grab_focus()
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
 
-func _physics_process(delta):
-	
-	if Input.is_action_just_pressed("ui_up"):
-		select_pos -= 1
-		if select_pos < 0:
-			select_pos = _buttons.size() - 1
-		_buttons[select_pos].grab_focus()
-	
-	if Input.is_action_just_pressed("ui_down"):
-		select_pos += 1
-		if select_pos >= _buttons.size():
-			select_pos = 0
-		_buttons[select_pos].grab_focus()
-	
-	if Input.is_action_just_pressed("ui_accept") and not $Credits.visible:
-		_buttons[select_pos].emit_signal("pressed")
-	
 
 func _on_StartButton_pressed():
 	
@@ -50,6 +24,7 @@ func _on_StartButton_pressed():
 func _on_OptionsButton_pressed():
 	$MainControls.visible = false
 	$Options.visible = true
+	$Options/MarginContainer/Options.active = true
 
 
 func _on_QuitButton_pressed():
@@ -65,7 +40,7 @@ func _on_CreditsButton_pressed():
 
 
 func _on_Options_closed():
-	
 	$MainControls.visible = true
 	$Options.visible = false
-	
+	$Options/MarginContainer/Options.active = false
+	$MainControls/MarginContainer/VBoxContainer/OptionsButton.grab_focus()

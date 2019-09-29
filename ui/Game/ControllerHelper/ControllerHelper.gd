@@ -26,6 +26,7 @@ func _on_controller_changed(controller_type):
 	$UseKeyboard.visible = false
 	$ShootKeyboard.visible = false
 	$ShieldKeyboard.visible = false
+	$MenuKeyboard.visible = false
 	
 	$MoveGamepad.visible = false
 	$JumpGamepad.visible = false
@@ -33,6 +34,7 @@ func _on_controller_changed(controller_type):
 	$UseGamepad.visible = false
 	$ShootGamepad.visible = false
 	$ShieldGamepad.visible = false
+	$MenuGamepad.visible = false
 	
 	match controller_type:
 		Controller.Type.MOUSE_KEYBOARD:
@@ -44,6 +46,7 @@ func _on_controller_changed(controller_type):
 				$ShootKeyboard.visible = true
 			$UseKeyboard.visible = true
 			$ShieldKeyboard.visible = true
+			$MenuKeyboard.visible = true
 		Controller.Type.GAMEPAD:
 			$MoveGamepad.visible = true
 			$JumpGamepad.visible = true
@@ -53,6 +56,7 @@ func _on_controller_changed(controller_type):
 				$ShootGamepad.visible = true
 			$UseGamepad.visible = true
 			$ShieldGamepad.visible = true
+			$MenuGamepad.visible = true
 
 
 func _on_WeaponHandler_aimed(state):

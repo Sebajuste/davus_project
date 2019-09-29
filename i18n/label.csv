@@ -16,6 +16,7 @@ label_jump_jetpack,Jump / Jetpack,Sauter / Jetpack
 label_use_object,Use object,Utiliser un objet
 label_shield,Shield,Bouclier
 label_shoot,Shoot,Tirer
+label_menus,Menus / Map / Inventory,Menus / Cartes / Inventaires
 label_switch_ammo,Next ammo,Munition suivante
 label_normal,Normal,Normal
 label_fire,Fire,Feu

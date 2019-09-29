@@ -62,6 +62,11 @@ func _input(event):
 	if not active:
 		return
 	
+	if Input.is_action_just_pressed("ui_cancel"):
+		$MarginContainer/HBoxContainer/Tabs/WeaponMain.grab_focus()
+	
+	
+	return
 	if Input.is_action_just_pressed("ui_up"):
 		_select_pos -= 1
 		if _select_pos < 0:
@@ -85,9 +90,10 @@ func _input(event):
 func set_active(value):
 	active = value
 	if active:
-		_select_pos = 0
 		select_weapons()
-		_current_list[_select_pos].grab_focus()
+		$MarginContainer/HBoxContainer/Tabs/WeaponMain.grab_focus()
+		#_select_pos = 0
+		#_current_list[_select_pos].grab_focus()
 
 
 func deselect() -> void:
@@ -115,7 +121,6 @@ func select_ammos() -> void:
 
 func _get_weapons() -> Array:
 	var weapons := []
-	print("inventory_node: ", inventory_node)
 	if inventory_node != null:
 		for item in inventory_node.items:
 			if item.type == "gun":

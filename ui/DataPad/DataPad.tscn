@@ -5,6 +5,7 @@
 [ext_resource path="res://fonts/mechsuit.tres" type="DynamicFont" id=3]
 
 [node name="DataPad" type="Control"]
+pause_mode = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 1 )

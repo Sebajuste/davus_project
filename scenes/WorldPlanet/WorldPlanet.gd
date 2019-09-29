@@ -27,12 +27,12 @@ func _process(delta):
 
 
 func set_player(p):
-	player = p
-	player.global_transform.origin = Vector3(0, 30, 0)
-
-
-func _on_PlayerRespawnTimer_timeout():
 	
+	player = p
+	
+
+
+func init_scene():
 	player.global_transform.origin = Vector3(0, 30, 0)
 	player.reset()
 	

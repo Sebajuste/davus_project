@@ -30,16 +30,16 @@ editor/display_folded = true
 [node name="Player" parent="World" instance=ExtResource( 3 )]
 
 [node name="Head" parent="World/Player/Skeleton" index="1"]
-transform = Transform( 0.999349, 0.0183369, 0.0310598, -0.0167601, 0.998593, -0.050285, -0.0319382, 0.0497317, 0.998252, -0.034696, 1.55951, -0.0566696 )
+transform = Transform( 0.999402, 0.0198315, 0.0283336, -0.0187325, 0.999081, -0.038528, -0.0290717, 0.0379741, 0.998855, -0.0212114, 1.5597, -0.0597026 )
 
 [node name="RightHand" parent="World/Player/Skeleton" index="2"]
-transform = Transform( 0.331194, 0.0880466, 0.939444, 0.131682, -0.990205, 0.0463817, 0.934327, 0.108347, -0.339546, -0.228599, 0.945153, -0.014265 )
+transform = Transform( 0.325, 0.0879515, 0.941615, 0.130199, -0.990345, 0.0475656, 0.936706, 0.107139, -0.333315, -0.222367, 0.95604, -0.0156791 )
 
 [node name="RightFoot" parent="World/Player/Skeleton" index="3"]
-transform = Transform( 0.991456, 0.00145796, -0.130426, -6.23986e-005, 0.999941, 0.0107034, 0.130434, -0.0106044, 0.991399, 0.0820313, -0.00119282, -0.0325247 )
+transform = Transform( 0.991587, 0.00162287, -0.129438, -0.000182711, 0.999937, 0.0111361, 0.129448, -0.0110185, 0.991524, 0.0819677, -0.00131542, -0.0326761 )
 
 [node name="LeftFoot" parent="World/Player/Skeleton" index="4"]
-transform = Transform( 0.867139, 0.0180322, 0.497739, -0.0331535, 0.999219, 0.0215609, -0.496961, -0.0351961, 0.867059, 0.161273, 0.00602306, 0.104094 )
+transform = Transform( 0.867677, 0.0192993, 0.496751, -0.0328073, 0.999291, 0.0184845, -0.496043, -0.0323331, 0.867698, 0.161317, 0.00617402, 0.104136 )
 
 [node name="AnimationTree" parent="World/Player" index="12"]
 parameters/StateMachine/playback = SubResource( 1 )
@@ -66,7 +66,6 @@ editor/display_folded = true
 inventory = NodePath("../../../../../World/Player/Inventory")
 
 [node name="DataPad" parent="." instance=ExtResource( 9 )]
-pause_mode = 2
 visible = false
 
 [node name="Loading" parent="." instance=ExtResource( 10 )]

@@ -114,7 +114,7 @@ margin_right = 200.0
 margin_bottom = 176.0
 rect_min_size = Vector2( 0, 30 )
 custom_fonts/font = ExtResource( 4 )
-text = "btn_quit"
+text = "btn_quit_game"
 
 [node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 margin_left = 204.0
