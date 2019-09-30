@@ -1,5 +1,6 @@
 extends Control
 
+signal opened
 signal closed
 
 export(String, MULTILINE) var message := "" setget set_message
@@ -26,6 +27,7 @@ func set_message(content):
 		visible = true
 		get_tree().paused = true
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		emit_signal("opened")
 
 
 func _on_CloseButton_pressed():

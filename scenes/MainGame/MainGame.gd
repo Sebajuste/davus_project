@@ -71,7 +71,7 @@ func _input(event):
 	
 	if Input.is_action_just_pressed("menu"):
 		$Menu.visible = !$Menu.visible
-		get_tree().paused = $Menu.visible
+		_update_menu_state()
 	
 	if Input.is_action_just_pressed("inventory"):
 		if not $Menu.visible:
@@ -81,6 +81,7 @@ func _input(event):
 			$Menu/MarginContainer/TabContainer.current_tab = 1
 		else:
 			$Menu.visible = false
+		_update_menu_state()
 	
 	if Input.is_action_just_pressed("map"):
 		if not $Menu.visible:
@@ -90,13 +91,9 @@ func _input(event):
 			$Menu/MarginContainer/TabContainer.current_tab = 2
 		else:
 			$Menu.visible = false
+		_update_menu_state()
 	
-	if $Menu.visible:
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		get_tree().paused = true
-	else:
-		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-		get_tree().paused = false
+	
 	
 
 
@@ -104,6 +101,16 @@ func set_map(map):
 	
 	_map_node.add_child(map)
 	
+
+
+func _update_menu_state():
+	if $Menu.visible:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		get_tree().paused = true
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+		get_tree().paused = false
+
 
 
 func _start_init_level(scene: Node, context: Dictionary = {}):
@@ -156,3 +163,9 @@ func _on_Player_died():
 		level.reset_player($World/Player)
 	
 	pass # Replace with function body.
+
+
+func _on_DataPad_opened():
+	
+	get_tree().paused = true
+	
