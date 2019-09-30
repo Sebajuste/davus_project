@@ -209,7 +209,7 @@ func _process(delta):
 				attack_timer = attack_speed
 				attack()
 	
-	move_and_slide(Vector3(velocity.x, velocity.y, 0))
+	
 
 
 func set_vulnerability(type: String):
@@ -242,8 +242,11 @@ func _physics_process(delta):
 	if $CombatStats.health > 0:
 		if current_target:
 			face_to(current_target.global_transform.origin)
+		move_and_slide(Vector3(velocity.x, velocity.y, 0))
 	else:
 		move_and_slide(Vector3.DOWN * 5)
+	
+	global_transform.origin.z = 0
 	
 	var space_state = get_world().direct_space_state
 	
