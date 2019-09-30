@@ -1,7 +1,5 @@
 extends "res://objects/doors/Door.gd"
 
-var dungeon_seed := randi()
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
@@ -33,6 +31,7 @@ func use(actor) -> bool:
 	if open():
 		return true
 	if opened:
+		var dungeon_seed := hash( global_transform.origin )
 		var context = {
 			"spawn_position": Vector3(self.global_transform.origin.x, self.global_transform.origin.y+2, 0),
 			"dungeon_seed": dungeon_seed
