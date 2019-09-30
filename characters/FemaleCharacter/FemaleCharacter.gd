@@ -306,3 +306,15 @@ func _on_DetectionArea_body_exited(body):
 	var index = _ennemies.find(body)
 	if index != -1:
 		_ennemies.remove(index)
+
+func _on_WeaponHandler_aimed(state):
+	if not state:
+		$HealthRegen.start()
+	else:
+		$HealthRegen.stop()
+
+
+func _on_HealthRegen_timeout():
+	
+	$CombatStats.heal( 5 )
+	

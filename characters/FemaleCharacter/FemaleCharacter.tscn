@@ -73,10 +73,10 @@ angular_velocity = 1.0
 
 [sub_resource type="SphereShape" id=6]
 
-[sub_resource type="SphereShape" id=13]
+[sub_resource type="SphereShape" id=7]
 radius = 17.5667
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=8]
 length = 0.033333
 tracks/0/type = "transform"
 tracks/0/path = NodePath("Skeleton:mixamorig_Head")
@@ -324,7 +324,7 @@ tracks/34/imported = false
 tracks/34/enabled = true
 tracks/34/keys = PoolRealArray( 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 )
 
-[sub_resource type="AnimationNodeTransition" id=8]
+[sub_resource type="AnimationNodeTransition" id=9]
 input_count = 2
 xfade_time = 0.1
 input_0/name = "Alive"
@@ -332,25 +332,25 @@ input_0/auto_advance = false
 input_1/name = "Death"
 input_1/auto_advance = false
 
-[sub_resource type="AnimationNodeAnimation" id=9]
+[sub_resource type="AnimationNodeAnimation" id=10]
 animation = "hit"
 
-[sub_resource type="AnimationNodeAnimation" id=10]
+[sub_resource type="AnimationNodeAnimation" id=11]
 animation = "death"
 
-[sub_resource type="AnimationNodeOneShot" id=11]
+[sub_resource type="AnimationNodeOneShot" id=12]
 fadein_time = 0.5
 fadeout_time = 0.5
 
-[sub_resource type="AnimationNodeBlendTree" id=12]
+[sub_resource type="AnimationNodeBlendTree" id=13]
 graph_offset = Vector2( -719.25, 117.5 )
-nodes/Alive/node = SubResource( 8 )
+nodes/Alive/node = SubResource( 9 )
 nodes/Alive/position = Vector2( 40, 200 )
-nodes/Animation/node = SubResource( 10 )
+nodes/Animation/node = SubResource( 11 )
 nodes/Animation/position = Vector2( -280, 340 )
-"nodes/Animation 2/node" = SubResource( 9 )
+"nodes/Animation 2/node" = SubResource( 10 )
 "nodes/Animation 2/position" = Vector2( -640, 300 )
-nodes/Hit/node = SubResource( 11 )
+nodes/Hit/node = SubResource( 12 )
 nodes/Hit/position = Vector2( -345, 119 )
 nodes/StateMachine/node = ExtResource( 30 )
 nodes/StateMachine/position = Vector2( -680, 140 )
@@ -399,7 +399,7 @@ bones/5/name = "mixamorig_Head"
 bones/5/parent = 4
 bones/5/rest = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0560172, 0.0120709 )
 bones/5/enabled = true
-bones/5/bound_children = [  ]
+bones/5/bound_children = [ NodePath("Head") ]
 bones/6/name = "mixamorig_HeadTop_End"
 bones/6/parent = 5
 bones/6/rest = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.59258, 0.0437383 )
@@ -484,7 +484,7 @@ bones/22/name = "mixamorig_RightHand"
 bones/22/parent = 21
 bones/22/rest = Transform( 0.820071, 0.152838, -0.551476, -0.0493779, 0.97898, 0.19789, 0.570129, -0.135053, 0.810379, -7.30157e-007, 0.257955, -7.15256e-007 )
 bones/22/enabled = true
-bones/22/bound_children = [  ]
+bones/22/bound_children = [ NodePath("RightHand") ]
 bones/23/name = "mixamorig_RightHandThumb1"
 bones/23/parent = 22
 bones/23/rest = Transform( 0.83614, 0.548516, 1.01328e-006, -0.548517, 0.83614, 2.05636e-006, 1.49012e-008, -1.75834e-006, 1, 0.0307962, 0.0442578, 3.57628e-007 )
@@ -549,7 +549,7 @@ bones/35/name = "mixamorig_LeftToe_End"
 bones/35/parent = 34
 bones/35/rest = Transform( -0.978666, -0.067081, -0.194197, -0.194626, -0.000153002, 0.980878, -0.065828, 0.997748, -0.012906, 0.0753364, -0.0990375, -0.00108191 )
 bones/35/enabled = true
-bones/35/bound_children = [  ]
+bones/35/bound_children = [ NodePath("LeftFoot") ]
 bones/36/name = "mixamorig_RightUpLeg"
 bones/36/parent = 0
 bones/36/rest = Transform( -0.999797, 0.0201178, -2.35915e-007, -0.0201142, -0.999607, 0.0194969, 0.00039224, 0.019493, 0.99981, -0.0938779, -0.0544773, -0.00729455 )
@@ -574,7 +574,7 @@ bones/40/name = "mixamorig_RightToe_End"
 bones/40/parent = 39
 bones/40/rest = Transform( -0.978199, 0.065292, 0.19714, 0.197552, -0.000153999, 0.980292, 0.064035, 0.997866, -0.012748, -0.0753945, -0.0976469, -0.00121309 )
 bones/40/enabled = true
-bones/40/bound_children = [  ]
+bones/40/bound_children = [ NodePath("RightFoot") ]
 
 [node name="bodyMesh" type="MeshInstance" parent="Skeleton"]
 mesh = SubResource( 2 )
@@ -582,14 +582,14 @@ material/0 = null
 
 [node name="Head" type="BoneAttachment" parent="Skeleton"]
 editor/display_folded = true
-transform = Transform( 0.999516, 0.0151899, 0.0271714, -0.0136993, 0.998434, -0.0542241, -0.0279526, 0.0538255, 0.998158, -0.0268653, 1.5603, -0.0523538 )
+transform = Transform( 0.99879, 0.0258384, 0.0418462, -0.0229459, 0.997408, -0.0681852, -0.0434996, 0.0671428, 0.996795, -0.0266138, 1.5607, -0.0475866 )
 bone_name = "mixamorig_Head"
 
 [node name="HairTail" parent="Skeleton/Head" instance=ExtResource( 3 )]
 transform = Transform( 0.998199, -0.0278291, 0.0532083, 0.0272939, 0.999569, 0.0107601, -0.053485, -0.00928839, 0.998525, 0.0482045, -1.51198, 0.0532389 )
 
 [node name="RightHand" type="BoneAttachment" parent="Skeleton"]
-transform = Transform( 0.332597, 0.089325, 0.938829, 0.130486, -0.990286, 0.047995, 0.933996, 0.106541, -0.341023, -0.222291, 0.948397, -0.01087 )
+transform = Transform( 0.330502, 0.0878858, 0.939704, 0.123167, -0.991156, 0.0493794, 0.935733, 0.0994206, -0.338405, -0.221882, 0.945589, -0.00942857 )
 bone_name = "mixamorig_RightHand"
 
 [node name="Position" type="Spatial" parent="Skeleton/RightHand"]
@@ -597,7 +597,7 @@ transform = Transform( 0.0147597, 0.915448, -0.402164, 0.980249, 0.0660798, 0.18
 
 [node name="RightFoot" type="BoneAttachment" parent="Skeleton"]
 editor/display_folded = true
-transform = Transform( 0.991676, 0.00148149, -0.128752, -2.12193e-005, 0.999935, 0.0113409, 0.128761, -0.011244, 0.99161, 0.0819491, -0.0012638, -0.0325372 )
+transform = Transform( 0.991635, 0.0012442, -0.12907, 8.57562e-006, 0.999951, 0.00970487, 0.129076, -0.00962419, 0.991587, 0.0820688, -0.00114258, -0.0331388 )
 bone_name = "mixamorig_RightToe_End"
 
 [node name="Particles" type="Particles" parent="Skeleton/RightFoot"]
@@ -612,7 +612,7 @@ process_material = SubResource( 4 )
 draw_pass_1 = SubResource( 5 )
 
 [node name="LeftFoot" type="BoneAttachment" parent="Skeleton"]
-transform = Transform( 0.867921, 0.0177273, 0.496386, -0.0322978, 0.999263, 0.0207887, -0.495651, -0.0340727, 0.867854, 0.161501, 0.00601759, 0.104434 )
+transform = Transform( 0.867377, 0.0181526, 0.497321, -0.0314907, 0.999334, 0.0184492, -0.496656, -0.0316614, 0.867371, 0.161402, 0.00603614, 0.103868 )
 bone_name = "mixamorig_LeftToe_End"
 
 [node name="Particles" type="Particles" parent="Skeleton/LeftFoot"]
@@ -648,7 +648,7 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape" type="CollisionShape" parent="DetectionArea"]
-shape = SubResource( 13 )
+shape = SubResource( 7 )
 
 [node name="CursorSelector" parent="." instance=ExtResource( 7 )]
 
@@ -669,6 +669,7 @@ script = ExtResource( 10 )
 inventory = NodePath("../Inventory")
 
 [node name="ShieldHandler" type="Spatial" parent="."]
+editor/display_folded = true
 script = ExtResource( 11 )
 
 [node name="Shield" parent="ShieldHandler" instance=ExtResource( 12 )]
@@ -688,11 +689,17 @@ bus = "SoundEffects"
 [node name="CombatStats" parent="." instance=ExtResource( 15 )]
 max_health = 50
 
+[node name="WalkTimer" type="Timer" parent="."]
+wait_time = 0.4
+
+[node name="HealthRegen" type="Timer" parent="."]
+wait_time = 3.0
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "default"
 anims/angry = ExtResource( 16 )
 anims/death = ExtResource( 17 )
-anims/default = SubResource( 7 )
+anims/default = SubResource( 8 )
 anims/falling = ExtResource( 18 )
 anims/hit = ExtResource( 19 )
 anims/idle = ExtResource( 20 )
@@ -707,7 +714,7 @@ anims/rifle-run-backward = ExtResource( 28 )
 anims/slow_run = ExtResource( 29 )
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource( 12 )
+tree_root = SubResource( 13 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
 parameters/Alive/current = 0
@@ -719,9 +726,6 @@ parameters/StateMachine/Locomotion/Weapon/current = 0
 parameters/StateMachine/Locomotion/WeaponBackward/current = 0
 script = ExtResource( 32 )
 
-[node name="WalkTimer" type="Timer" parent="."]
-wait_time = 0.4
-
 [node name="WalkSound" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource( 33 )
 unit_size = 10.0
@@ -730,9 +734,11 @@ bus = "SoundEffects"
 [connection signal="area_exited" from="UsableArea" to="UsableArea" method="_on_UsableArea_area_exited"]
 [connection signal="body_entered" from="DetectionArea" to="." method="_on_DetectionArea_body_entered"]
 [connection signal="body_exited" from="DetectionArea" to="." method="_on_DetectionArea_body_exited"]
+[connection signal="aimed" from="WeaponHandler" to="." method="_on_WeaponHandler_aimed"]
 [connection signal="damage_taken" from="CombatStats" to="." method="_on_CombatStats_damage_taken"]
 [connection signal="health_changed" from="CombatStats" to="." method="_on_CombatStats_health_changed"]
 [connection signal="health_depleted" from="CombatStats" to="." method="_on_CombatStats_health_depleted"]
 [connection signal="timeout" from="WalkTimer" to="." method="_on_WalkTimer_timeout"]
+[connection signal="timeout" from="HealthRegen" to="." method="_on_HealthRegen_timeout"]
 
 [editable path="HitBox"]
