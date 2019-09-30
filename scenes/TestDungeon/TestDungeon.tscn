@@ -18,7 +18,6 @@
 script = ExtResource( 1 )
 
 [node name="World" type="Spatial" parent="."]
-editor/display_folded = true
 
 [node name="Level" type="Spatial" parent="World"]
 editor/display_folded = true
@@ -34,18 +33,19 @@ bones/35/bound_children = [ NodePath("LeftFoot") ]
 bones/40/bound_children = [ NodePath("RightFoot") ]
 
 [node name="Head" parent="World/Player/Skeleton" index="1"]
-transform = Transform( 0.999444, 0.0212299, 0.0257244, -0.0201563, 0.998944, -0.0412876, -0.0265739, 0.0407464, 0.998816, -0.0256692, 1.56014, -0.0580129 )
+transform = Transform( 0.999246, 0.0234994, 0.0309067, -0.0219007, 0.998454, -0.0510931, -0.0320596, 0.0503777, 0.998215, -0.0214592, 1.56018, -0.0555541 )
 
 [node name="RightHand" parent="World/Player/Skeleton" index="2"]
-transform = Transform( 0.326972, 0.101195, 0.939599, 0.139156, -0.988567, 0.0580449, 0.934732, 0.111773, -0.337317, -0.216058, 0.949554, -0.0134094 )
+transform = Transform( 0.321693, 0.0963297, 0.941931, 0.128266, -0.990074, 0.0574477, 0.938115, 0.102338, -0.330857, -0.217422, 0.95181, -0.0156303 )
 
 [node name="RightFoot" parent="World/Player/Skeleton" index="3"]
-transform = Transform( 0.991626, 0.00170842, -0.129132, -0.00021863, 0.999933, 0.0115506, 0.129142, -0.0114257, 0.991559, 0.08191, -0.00121946, -0.032579 )
+editor/display_folded = true
+transform = Transform( 0.991486, 0.00163525, -0.130203, -2.50638e-005, 0.999923, 0.0123685, 0.130213, -0.0122596, 0.991409, 0.0820231, -0.00138017, -0.0325016 )
 
 [node name="LeftFoot" parent="World/Player/Skeleton" index="4"]
-transform = Transform( 0.867567, 0.0189687, 0.496959, -0.0341677, 0.999186, 0.0215127, -0.496147, -0.0356414, 0.867509, 0.16116, 0.00597674, 0.103985 )
+transform = Transform( 0.867644, 0.0198162, 0.496791, -0.0324662, 0.999332, 0.0168432, -0.496125, -0.0307403, 0.867709, 0.161418, 0.00619642, 0.103526 )
 
-[node name="AnimationTree" parent="World/Player" index="12"]
+[node name="AnimationTree" parent="World/Player" index="13"]
 parameters/StateMachine/playback = SubResource( 1 )
 
 [node name="CameraPlayer" parent="World" instance=ExtResource( 4 )]

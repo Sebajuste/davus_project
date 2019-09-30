@@ -6,7 +6,7 @@ signal closed(notification)
 
 export var damage : int = 0
 export var rate : int = 0
-export(String, "pistol", "smg") var type = "pistol"
+export(String, "pistol", "smg", "rifle") var type = "pistol"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

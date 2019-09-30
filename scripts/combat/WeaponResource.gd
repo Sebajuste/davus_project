@@ -7,11 +7,11 @@ const AMMO_TYPES:Array = [
 	]
 
 # Weapons
-enum eWeaponsType { Pistol, SMG } # AssaultRifle,
+enum eWeaponsType { Pistol, SMG, AssaultRifle }
 const WEAPONS_NAME:Dictionary = {
 	eWeaponsType.Pistol : "pistol",
 	eWeaponsType.SMG : "smg",
-	#eWeaponsType.AssaultRifle : "rifle",
+	eWeaponsType.AssaultRifle : "rifle",
 }
 
 const WEAPONS_SETTINGS:Dictionary = {
@@ -35,17 +35,14 @@ const WEAPONS_SETTINGS:Dictionary = {
 			"Max": 350,
 		},
 	},
+	eWeaponsType.AssaultRifle: {
+		"Damage": {
+			"Min": 60,
+			"Max": 80,
+		},
+		"Rate": {
+			"Min": 100,
+			"Max": 120,
+		},
+	},
 }
-"""
-eWeaponsType.AssaultRifle: {
-	"Damage": {
-		"Min": 20,
-		"Max": 30,
-	},
-	"Rate": {
-		"Min": 60,
-		"Max": 70,
-	},
-},
-
-"""
