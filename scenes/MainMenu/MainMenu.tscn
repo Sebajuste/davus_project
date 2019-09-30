@@ -1,14 +1,17 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://scenes/MainMenu/MainMenu.gd" type="Script" id=1]
 [ext_resource path="res://models/Spaceship/IntroInterior.glb" type="PackedScene" id=2]
 [ext_resource path="res://models/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=3]
-[ext_resource path="res://themes/default/default.theme" type="Theme" id=4]
-[ext_resource path="res://fonts/mechsuit_main_title.tres" type="DynamicFont" id=5]
-[ext_resource path="res://fonts/mechsuit.tres" type="DynamicFont" id=6]
-[ext_resource path="res://scenes/Credits/Credits.tscn" type="PackedScene" id=7]
-[ext_resource path="res://ui/Options/Options.tscn" type="PackedScene" id=8]
-[ext_resource path="res://music/main_menu.ogg" type="AudioStream" id=9]
+[ext_resource path="res://models/Items/datapad.glb" type="PackedScene" id=4]
+[ext_resource path="res://scenes/MainMenu/console.material" type="Material" id=5]
+[ext_resource path="res://themes/default/default.theme" type="Theme" id=6]
+[ext_resource path="res://fonts/mechsuit_main_title.tres" type="DynamicFont" id=7]
+[ext_resource path="res://fonts/mechsuit.tres" type="DynamicFont" id=8]
+[ext_resource path="res://scenes/Credits/Credits.tscn" type="PackedScene" id=9]
+[ext_resource path="res://ui/Options/Options.tscn" type="PackedScene" id=10]
+[ext_resource path="res://fonts/game_cube_subtitle.tres" type="DynamicFont" id=11]
+[ext_resource path="res://music/main_menu.ogg" type="AudioStream" id=12]
 
 [sub_resource type="Environment" id=1]
 background_mode = 1
@@ -18,12 +21,204 @@ resource_name = "alarm"
 loop = true
 step = 0.05
 tracks/0/type = "transform"
-tracks/0/path = NodePath("Spatial/Alarm")
+tracks/0/path = NodePath("Spatial/AlarmLight")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = PoolRealArray( 0, 1, 2.674, 1.989, 0.502, 0.707107, 0, 0, 0.707107, 1, 1, 1, 0.25, 1, 2.674, 2.029, 0.502, 0.5, -0.5, -0.5, 0.5, 1, 1, 1, 0.5, 1, 2.674, 2.029, 0.502, -1.54543e-008, 0.707107, 0.707107, 4.63629e-008, 1, 1, 1, 0.75, 1, 2.674, 2.029, 0.502, 0.5, 0.5, 0.5, 0.5, 1, 1, 1 )
+
+[sub_resource type="Animation" id=3]
+resource_name = "intro"
+length = 23.0
+tracks/0/type = "transform"
+tracks/0/path = NodePath("Spatial/Camera")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = PoolRealArray( 0, 1, 7.81741, 0.916915, 5.70438, 0.00570611, 0.152377, -0.00117361, 0.988305, 1, 1, 1, 5.4, 1, 10.7909, 1.05317, 5.31434, 0.0409398, 0.0575494, 0.00140236, 0.997502, 1, 1, 1, 7.3, 1, 11.3146, 1.05317, 4.52594, 0.0409398, 0.0575494, 0.00140236, 0.997502, 1, 1, 1, 12.7, 1, 11.3146, 1.05317, 4.52594, 0.0409398, 0.0575494, 0.00140236, 0.997502, 1, 1, 1, 12.9, 1, 6.37741, 1.98106, 5.10638, 0.00540374, 0.326882, -0.00217639, 0.945047, 1, 1, 1, 16.8, 1, 6.37741, 1.98106, 5.10638, 0.00540374, 0.326882, -0.00217639, 0.945047, 1, 1, 1, 18.1, 1, 6.72587, 0.916915, 4.76622, 0.00570611, 0.152377, -0.00117361, 0.988305, 1, 1, 1 )
+tracks/1/type = "value"
+tracks/1/path = NodePath("Spatial/Camera:fov")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 6, 7.6, 12.9, 16.8, 18.1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 45.0, 30.0, 25.0, 20.0, 20.0, 45.0 ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 5.4, 13.9, 23 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"values": [ {
+"args": [ true ],
+"method": "set_console"
+}, {
+"args": [ true ],
+"method": "set_alarm"
+}, {
+"args": [  ],
+"method": "start_game"
+} ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Spatial/ConsoleLight:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 5.3 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("ConsoleText:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 6.9, 8.4, 9, 10.4, 10.9, 12.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ true, false, true, false, true, false ]
+}
+tracks/5/type = "transform"
+tracks/5/path = NodePath("Spatial/FemaleCharacter")
+tracks/5/interp = 0
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = PoolRealArray( 0, 1, 7.82781, -0.180615, 1.95367, 0, -0.253721, 0, 0.967278, 1, 1, 1, 15.6, 1, 5.45986, -0.0735184, 1.27946, -0.00608321, 0.980964, 0.00469894, -0.194038, 1, 1, 1 )
+tracks/6/type = "method"
+tracks/6/path = NodePath("Spatial/FemaleCharacter/AnimationPlayer")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 15.6 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [ "idle", -1, 1.0, false ],
+"method": "play"
+} ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("BlackScreen:color")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 20.1, 22.9 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 0 ), Color( 0, 0, 0, 1 ) ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "menu"
+length = 0.001
+tracks/0/type = "transform"
+tracks/0/path = NodePath("Spatial/Camera")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = PoolRealArray( 0, 1, 7.81741, 0.916915, 5.70438, 0.00570611, 0.152377, -0.00117361, 0.988305, 1, 1, 1 )
+tracks/1/type = "value"
+tracks/1/path = NodePath("Spatial/Camera:fov")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 45.0 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Spatial/ConsoleLight:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( -0.1 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Spatial/AlarmLight:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( -0.1 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("ConsoleText:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( -0.1 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+tracks/5/type = "transform"
+tracks/5/path = NodePath("Spatial/FemaleCharacter")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = PoolRealArray( 0, 1, 7.82781, -0.180615, 1.95367, 0, -0.253721, 0, 0.967278, 1, 1, 1 )
+tracks/6/type = "method"
+tracks/6/path = NodePath("Spatial/FemaleCharacter/AnimationPlayer")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [ "angry", -1, 1.0, false ],
+"method": "play"
+} ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("BlackScreen:color")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( -0.1 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 0 ) ]
+}
 
 [node name="MainMenu" type="Node"]
 pause_mode = 2
@@ -33,12 +228,13 @@ script = ExtResource( 1 )
 environment = SubResource( 1 )
 
 [node name="Spatial" type="Spatial" parent="."]
+editor/display_folded = true
 
 [node name="SpaceShip" parent="Spatial" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0499115, -0.0235028, -0.0199242 )
 
 [node name="Camera" type="Camera" parent="Spatial"]
-transform = Transform( 0.95356, 0.00405872, 0.301176, -0.000580815, 0.999932, -0.0116364, -0.301203, 0.0109211, 0.953497, 7.81741, 0.916915, 5.70438 )
+transform = Transform( 0.95356, 0.00405872, 0.301176, -0.000580813, 0.999932, -0.0116364, -0.301203, 0.0109211, 0.953497, 7.81741, 0.916915, 5.70438 )
 fov = 45.0
 
 [node name="SpotLight" type="SpotLight" parent="Spatial"]
@@ -56,23 +252,51 @@ light_color = Color( 0.301961, 0.301961, 0.301961, 1 )
 [node name="FemaleCharacter" parent="Spatial" instance=ExtResource( 3 )]
 transform = Transform( 0.871252, 0, -0.490837, 0, 1, 0, 0.490837, 0, 0.871252, 7.82781, -0.180615, 1.95367 )
 
-[node name="Alarm" type="SpotLight" parent="Spatial"]
-transform = Transform( -0.984893, -7.56144e-008, -0.173162, -0.173162, -1.94904e-010, 0.984893, -7.45058e-008, 1, -1.29016e-008, 2.67377, 2.02882, 0.502135 )
+[node name="Skeleton" parent="Spatial/FemaleCharacter" index="0"]
+bones/5/bound_children = [ NodePath("BoneAttachment") ]
+
+[node name="BoneAttachment" parent="Spatial/FemaleCharacter/Skeleton" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.59258, -0.0437383 )
+
+[node name="AlarmLight" type="SpotLight" parent="Spatial"]
+transform = Transform( 1, 0, 0, 0, 0, -1, 0, 1, 0, 2.674, 1.989, 0.502 )
+visible = false
 light_color = Color( 1, 0, 0, 1 )
 light_energy = 5.68
 spot_angle = 50.625
 
-[node name="MainControls" type="Control" parent="."]
+[node name="Console" parent="Spatial" instance=ExtResource( 4 )]
+editor/display_folded = true
+transform = Transform( 5, 0, 0, 0, 5, 0, 0, 0, 5, 10.8724, 1.38962, 0.38566 )
+
+[node name="Datapad" parent="Spatial/Console" index="0"]
+material/1 = ExtResource( 5 )
+
+[node name="ConsoleLight" type="SpotLight" parent="Spatial"]
+transform = Transform( 0.925318, -0.176496, 0.335611, -0.0142431, 0.86827, 0.495888, -0.378923, -0.463635, 0.800912, 12.1088, 3.12425, 3.09693 )
+visible = false
+light_energy = 2.0
+shadow_enabled = true
+spot_range = 5.82356
+spot_angle = 15.9788
+
+[node name="BlackScreen" type="ColorRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme = ExtResource( 4 )
+color = Color( 0, 0, 0, 0 )
+
+[node name="MainControls" type="Control" parent="."]
+editor/display_folded = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 6 )
 
 [node name="Label" type="Label" parent="MainControls"]
 margin_left = 80.0
 margin_top = 37.0
 margin_right = 507.0
 margin_bottom = 98.0
-custom_fonts/font = ExtResource( 5 )
+custom_fonts/font = ExtResource( 7 )
 text = "DAVUS"
 uppercase = true
 
@@ -95,7 +319,7 @@ margin_top = 100.0
 margin_right = 300.0
 margin_bottom = 150.0
 rect_min_size = Vector2( 0, 50 )
-custom_fonts/font = ExtResource( 6 )
+custom_fonts/font = ExtResource( 8 )
 text = "btn_play"
 
 [node name="OptionsButton" type="Button" parent="MainControls/MarginContainer/VBoxContainer"]
@@ -103,7 +327,7 @@ margin_top = 200.0
 margin_right = 300.0
 margin_bottom = 250.0
 rect_min_size = Vector2( 0, 50 )
-custom_fonts/font = ExtResource( 6 )
+custom_fonts/font = ExtResource( 8 )
 text = "btn_options"
 
 [node name="CreditsButton" type="Button" parent="MainControls/MarginContainer/VBoxContainer"]
@@ -111,7 +335,7 @@ margin_top = 300.0
 margin_right = 300.0
 margin_bottom = 350.0
 rect_min_size = Vector2( 0, 50 )
-custom_fonts/font = ExtResource( 6 )
+custom_fonts/font = ExtResource( 8 )
 text = "btn_credits"
 
 [node name="QuitButton" type="Button" parent="MainControls/MarginContainer/VBoxContainer"]
@@ -119,17 +343,18 @@ margin_top = 400.0
 margin_right = 300.0
 margin_bottom = 450.0
 rect_min_size = Vector2( 0, 50 )
-custom_fonts/font = ExtResource( 6 )
+custom_fonts/font = ExtResource( 8 )
 text = "btn_quit"
 
-[node name="Credits" parent="." instance=ExtResource( 7 )]
+[node name="Credits" parent="." instance=ExtResource( 9 )]
 visible = false
 
 [node name="Options" type="Control" parent="."]
+editor/display_folded = true
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme = ExtResource( 4 )
+theme = ExtResource( 6 )
 
 [node name="MarginContainer" type="MarginContainer" parent="Options"]
 anchor_left = 0.5
@@ -142,23 +367,52 @@ margin_right = 400.0
 margin_bottom = 300.0
 rect_min_size = Vector2( 800, 600 )
 
-[node name="Options" parent="Options/MarginContainer" instance=ExtResource( 8 )]
+[node name="Options" parent="Options/MarginContainer" instance=ExtResource( 10 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 800.0
 margin_bottom = 600.0
 enable_close = true
 
+[node name="ConsoleText" type="Control" parent="."]
+editor/display_folded = true
+visible = false
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -512.0
+margin_top = -300.0
+margin_right = 512.0
+rect_min_size = Vector2( 0, 300 )
+
+[node name="Label" type="Label" parent="ConsoleText"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_fonts/font = ExtResource( 11 )
+text = "info_emergency_call_detected"
+align = 1
+valign = 1
+uppercase = true
+
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 9 )
+stream = ExtResource( 12 )
 autoplay = true
 bus = "Music"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-autoplay = "alarm"
+[node name="AlarmAnimationPlayer" type="AnimationPlayer" parent="."]
 anims/alarm = SubResource( 2 )
+
+[node name="CinematicAnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "menu"
+anims/intro = SubResource( 3 )
+anims/menu = SubResource( 4 )
 [connection signal="pressed" from="MainControls/MarginContainer/VBoxContainer/StartButton" to="." method="_on_StartButton_pressed"]
 [connection signal="pressed" from="MainControls/MarginContainer/VBoxContainer/OptionsButton" to="." method="_on_OptionsButton_pressed"]
 [connection signal="pressed" from="MainControls/MarginContainer/VBoxContainer/CreditsButton" to="." method="_on_CreditsButton_pressed"]
 [connection signal="pressed" from="MainControls/MarginContainer/VBoxContainer/QuitButton" to="." method="_on_QuitButton_pressed"]
 [connection signal="closed" from="Options/MarginContainer/Options" to="." method="_on_Options_closed"]
+
+[editable path="Spatial/FemaleCharacter"]
+
+[editable path="Spatial/Console"]
