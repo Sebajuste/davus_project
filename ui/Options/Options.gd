@@ -44,7 +44,7 @@ func reload():
 
 func set_enable_savegame(value):
 	enable_savegame = value
-	$MarginContainer/VBoxContainer/HBoxContainer/OptionsList/SaveGame.visible = value
+	#$MarginContainer/VBoxContainer/HBoxContainer/OptionsList/SaveGame.visible = value
 
 
 func set_enable_close(value):

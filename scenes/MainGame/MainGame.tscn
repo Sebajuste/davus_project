@@ -15,7 +15,6 @@
 [sub_resource type="AnimationNodeStateMachinePlayback" id=1]
 
 [node name="MainGame" type="Node"]
-pause_mode = 2
 script = ExtResource( 1 )
 
 [node name="World" type="Spatial" parent="."]
@@ -29,25 +28,19 @@ editor/display_folded = true
 
 [node name="Player" parent="World" instance=ExtResource( 3 )]
 
-[node name="Skeleton" parent="World/Player" index="1"]
-bones/5/bound_children = [ NodePath("Head") ]
-bones/22/bound_children = [ NodePath("RightHand") ]
-bones/35/bound_children = [ NodePath("LeftFoot") ]
-bones/40/bound_children = [ NodePath("RightFoot") ]
-
 [node name="Head" parent="World/Player/Skeleton" index="1"]
-transform = Transform( 0.999541, 0.0167615, 0.025248, -0.0159907, 0.999409, -0.030426, -0.0257431, 0.0300083, 0.999218, -0.0339205, 1.55933, -0.0618848 )
+transform = Transform( 0.999335, 0.0189572, 0.0311639, -0.0166986, 0.997321, -0.0711942, -0.0324301, 0.070627, 0.996976, -0.0280888, 1.56073, -0.0458578 )
 
 [node name="RightHand" parent="World/Player/Skeleton" index="2"]
-transform = Transform( 0.342916, 0.0856452, 0.935453, 0.131083, -0.990454, 0.0426295, 0.930174, 0.108004, -0.35087, -0.232421, 0.954098, -0.0174327 )
+transform = Transform( 0.330885, 0.0852416, 0.939813, 0.1243, -0.99117, 0.0461376, 0.935448, 0.101553, -0.338561, -0.222843, 0.943461, -0.00821351 )
 
 [node name="RightFoot" parent="World/Player/Skeleton" index="3"]
-transform = Transform( 0.991567, 0.00119731, -0.129599, 9.54494e-005, 0.99995, 0.00996702, 0.129605, -0.00989458, 0.991515, 0.0820701, -0.00108857, -0.0326105 )
+transform = Transform( 0.991723, 0.00158893, -0.12839, -0.000212088, 0.999942, 0.0107337, 0.1284, -0.0106173, 0.991665, 0.0817394, -0.00122978, -0.0325742 )
 
 [node name="LeftFoot" parent="World/Player/Skeleton" index="4"]
-transform = Transform( 0.867274, 0.0176327, 0.497518, -0.0331621, 0.999199, 0.0223981, -0.496725, -0.0359218, 0.867166, 0.161325, 0.00597642, 0.104112 )
+transform = Transform( 0.867618, 0.017901, 0.49691, -0.0324044, 0.999264, 0.0205833, -0.496176, -0.0339583, 0.867559, 0.161275, 0.00598391, 0.103958 )
 
-[node name="AnimationTree" parent="World/Player" index="13"]
+[node name="AnimationTree" parent="World/Player" index="15"]
 parameters/StateMachine/playback = SubResource( 1 )
 
 [node name="Camera" parent="World" instance=ExtResource( 4 )]
@@ -66,7 +59,9 @@ anchor_bottom = 1.0
 
 [node name="Menu" parent="." instance=ExtResource( 8 )]
 pause_mode = 2
-editor/display_folded = true
+
+[node name="Options" parent="Menu/MarginContainer/TabContainer/Options" index="0"]
+enable_savegame = false
 
 [node name="InventoryMenu" parent="Menu/MarginContainer/TabContainer/Inventory" index="0"]
 inventory = NodePath("../../../../../World/Player/Inventory")
