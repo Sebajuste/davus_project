@@ -1,0 +1,36 @@
+[gd_resource type="AnimationNodeStateMachine" load_steps=9 format=2]
+
+[sub_resource type="AnimationNodeAnimation" id=1]
+animation = "closed"
+
+[sub_resource type="AnimationNodeAnimation" id=2]
+animation = "closing"
+
+[sub_resource type="AnimationNodeAnimation" id=3]
+animation = "opened"
+
+[sub_resource type="AnimationNodeAnimation" id=4]
+animation = "opening"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=5]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=6]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=7]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=8]
+switch_mode = 2
+auto_advance = true
+
+[resource]
+states/closed/node = SubResource( 1 )
+states/closed/position = Vector2( 135, 76 )
+states/closing/node = SubResource( 2 )
+states/closing/position = Vector2( 307, 146 )
+states/opened/node = SubResource( 3 )
+states/opened/position = Vector2( 535, 64 )
+states/opening/node = SubResource( 4 )
+states/opening/position = Vector2( 312, 50 )
+transitions = [ "closed", "opening", SubResource( 5 ), "opening", "opened", SubResource( 6 ), "opened", "closing", SubResource( 7 ), "closing", "closed", SubResource( 8 ) ]

@@ -1,0 +1,20 @@
+[gd_resource type="AnimationNodeStateMachine" load_steps=5 format=2]
+
+[sub_resource type="AnimationNodeAnimation" id=1]
+animation = "closed"
+
+[sub_resource type="AnimationNodeAnimation" id=2]
+animation = "opened"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=3]
+xfade_time = 0.3
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=4]
+xfade_time = 1.0
+
+[resource]
+states/closed/node = SubResource( 1 )
+states/closed/position = Vector2( 221, 86 )
+states/opened/node = SubResource( 2 )
+states/opened/position = Vector2( 508, 86 )
+transitions = [ "closed", "opened", SubResource( 3 ), "opened", "closed", SubResource( 4 ) ]

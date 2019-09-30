@@ -8,30 +8,30 @@ animation = "RangedInsectHit"
 [sub_resource type="AnimationNodeAnimation" id=3]
 animation = "RangedInsectAttack"
 
-[sub_resource type="AnimationNodeAnimation" id=10]
+[sub_resource type="AnimationNodeAnimation" id=4]
 animation = "RangedInsectDeath"
 
-[sub_resource type="AnimationNodeAnimation" id=4]
+[sub_resource type="AnimationNodeAnimation" id=5]
 animation = "RangedInsectIdle"
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=5]
-
 [sub_resource type="AnimationNodeStateMachineTransition" id=6]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=7]
 switch_mode = 2
 auto_advance = true
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=11]
+[sub_resource type="AnimationNodeStateMachineTransition" id=8]
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=12]
+[sub_resource type="AnimationNodeStateMachineTransition" id=9]
 
-[sub_resource type="AnimationNodeStateMachine" id=7]
+[sub_resource type="AnimationNodeStateMachine" id=10]
 states/Attack/node = SubResource( 3 )
 states/Attack/position = Vector2( 320, -16 )
-states/Death/node = SubResource( 10 )
+states/Death/node = SubResource( 4 )
 states/Death/position = Vector2( 614, 46 )
-states/Idle/node = SubResource( 4 )
+states/Idle/node = SubResource( 5 )
 states/Idle/position = Vector2( 320, 119 )
-transitions = [ "Idle", "Attack", SubResource( 5 ), "Attack", "Idle", SubResource( 6 ), "Attack", "Death", SubResource( 11 ), "Idle", "Death", SubResource( 12 ) ]
+transitions = [ "Idle", "Attack", SubResource( 6 ), "Attack", "Idle", SubResource( 7 ), "Attack", "Death", SubResource( 8 ), "Idle", "Death", SubResource( 9 ) ]
 start_node = "Idle"
 graph_offset = Vector2( -21, -58 )
 
@@ -41,6 +41,6 @@ nodes/Animation/node = SubResource( 1 )
 nodes/Animation/position = Vector2( -360, 260 )
 nodes/Hit/node = SubResource( 2 )
 nodes/Hit/position = Vector2( -20, 100 )
-nodes/StateMachine/node = SubResource( 7 )
+nodes/StateMachine/node = SubResource( 10 )
 nodes/StateMachine/position = Vector2( -360, 60 )
 node_connections = [ "output", 0, "Hit", "Hit", 0, "StateMachine", "Hit", 1, "Animation" ]

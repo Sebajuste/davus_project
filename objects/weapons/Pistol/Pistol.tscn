@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://models/Weapons/Pistol/Pistol.tscn" type="PackedScene" id=1]
-[ext_resource path="res://objects/weapons/Pistol/Pistol.gd" type="Script" id=2]
+[ext_resource path="res://objects/weapons/Weapon.gd" type="Script" id=2]
 [ext_resource path="res://sounds/weapons/shoot_gun01.wav" type="AudioStream" id=3]
 
 [node name="Pistol" instance=ExtResource( 1 )]

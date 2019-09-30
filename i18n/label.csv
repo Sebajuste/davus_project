@@ -10,3 +10,18 @@ label_vsync,Vertical sync.,Synchro Verticle
 label_antialiasing,Antialiasing,Anti crénelage
 label_ammo,Ammo,Munitions
 label_health,Health,Vie
+label_move,Move,Déplacement
+label_unsheathe,Unsheathe,Dégainer
+label_jump_jetpack,Jump / Jetpack,Sauter / Jetpack
+label_use_object,Use object,Utiliser un objet
+label_shield,Shield,Bouclier
+label_shoot,Shoot,Tirer
+label_menus,Menus / Map / Inventory,Menus / Cartes / Inventaires
+label_switch_ammo,Next ammo,Munition suivante
+label_normal,Normal,Normal
+label_fire,Fire,Feu
+label_ice,Ice,Glace
+label_damage,Damage,Dégâts
+label_fire_rate,Fire rate,Coups/minutes
+label_dps,DPS,DPS
+label_equiped,Equiped,Equipé

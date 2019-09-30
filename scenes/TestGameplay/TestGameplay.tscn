@@ -1,15 +1,33 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://scenes/TestGameplay/TestGameplay.gd" type="Script" id=1]
 [ext_resource path="res://tileset/test/Test.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scenes/TestGameplay/Camera.gd" type="Script" id=3]
-[ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=4]
-[ext_resource path="res://characters/Mobs/MobTentacle/MobTentacle.tscn" type="PackedScene" id=5]
+[ext_resource path="res://objects/doors/DungeonExit/DungeonExit.tscn" type="PackedScene" id=3]
+[ext_resource path="res://objects/doors/DungeonPipe/DungeonPipe00.tscn" type="PackedScene" id=4]
+[ext_resource path="res://objects/items/Ammo/Ammo.tscn" type="PackedScene" id=5]
+[ext_resource path="res://objects/items/Gun/Gun.tscn" type="PackedScene" id=6]
+[ext_resource path="res://objects/keys/DoorKey/DoorKey.tscn" type="PackedScene" id=7]
+[ext_resource path="res://objects/items/DataPad/DataPad.tscn" type="PackedScene" id=8]
+[ext_resource path="res://objects/items/SMG/SMG.tscn" type="PackedScene" id=9]
+[ext_resource path="res://characters/Mobs/MobTentacle/MobTentacle.tscn" type="PackedScene" id=10]
+[ext_resource path="res://characters/Mobs/Fly/Fly.tscn" type="PackedScene" id=11]
+[ext_resource path="res://characters/Mobs/Turret/Turret.tscn" type="PackedScene" id=12]
+[ext_resource path="res://objects/chests/WeaponRack/WeaponRack.tscn" type="PackedScene" id=13]
+[ext_resource path="res://tools/Camera/Camera.gd" type="Script" id=14]
+[ext_resource path="res://characters/FemaleCharacter/FemaleCharacter.tscn" type="PackedScene" id=15]
+[ext_resource path="res://ui/Game/Ammo/Ammo.tscn" type="PackedScene" id=16]
+[ext_resource path="res://ui/Game/Health/Health.tscn" type="PackedScene" id=17]
+[ext_resource path="res://ui/Game/ControllerHelper/ControllerHelper.tscn" type="PackedScene" id=18]
+[ext_resource path="res://ui/Menu/Menu.tscn" type="PackedScene" id=19]
+[ext_resource path="res://ui/DataPad/DataPad.tscn" type="PackedScene" id=20]
+[ext_resource path="res://tools/Notifications/Notifications.tscn" type="PackedScene" id=21]
 
 [sub_resource type="CubeMesh" id=1]
 
 [sub_resource type="ConcavePolygonShape" id=2]
 data = PoolVector3Array( -1, 1, 1, 1, 1, 1, -1, -1, 1, 1, 1, 1, 1, -1, 1, -1, -1, 1, 1, 1, -1, -1, 1, -1, 1, -1, -1, -1, 1, -1, -1, -1, -1, 1, -1, -1, 1, 1, 1, 1, 1, -1, 1, -1, 1, 1, 1, -1, 1, -1, -1, 1, -1, 1, -1, 1, -1, -1, 1, 1, -1, -1, -1, -1, 1, 1, -1, -1, 1, -1, -1, -1, 1, 1, 1, -1, 1, 1, 1, 1, -1, -1, 1, 1, -1, 1, -1, 1, 1, -1, -1, -1, 1, 1, -1, 1, -1, -1, -1, 1, -1, 1, 1, -1, -1, -1, -1, -1 )
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=3]
 
 [node name="TestGameplay" type="Spatial"]
 script = ExtResource( 1 )
@@ -67,16 +85,133 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 2, 0 )
 [node name="Test13" parent="World" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, 0 )
 
+[node name="Doors" type="Spatial" parent="."]
+editor/display_folded = true
+
+[node name="DungeonExit" parent="Doors" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -1 )
+id = 1
+locked = true
+
+[node name="DungeonPipe00" parent="Doors" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 8, -2 )
+
+[node name="DungeonPipe01" parent="Doors" instance=ExtResource( 4 )]
+transform = Transform( -0.0245443, -0.999699, 0, 0.999699, -0.0245443, 0, 0, 0, 1, -15.5547, 0, -2 )
+id = 1
+locked = true
+
+[node name="Items" type="Spatial" parent="."]
+
+[node name="Ammo" parent="Items" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.88394, 2.12825, 0 )
+
+[node name="Ammo2" parent="Items" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.881694, 6.15759, 0 )
+ammo_type = "Fire"
+
+[node name="Gun" parent="Items" instance=ExtResource( 6 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.06597, 3.89488, 0 )
+
+[node name="Gun2" parent="Items" instance=ExtResource( 6 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 0 )
+rate = 120
+
+[node name="DoorKey" parent="Items" instance=ExtResource( 7 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75829, 0, 0 )
+id_door = 1
+
+[node name="DataPad" parent="Items" instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.93798, 8.18843, 0 )
+message = "Hello World"
+
+[node name="SMG" parent="Items" instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10.0738, 8.13404, 0 )
+rate = 300
+
+[node name="Mobs" type="Spatial" parent="."]
+editor/display_folded = true
+
+[node name="MobTentacle" parent="Mobs" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.157, 0, 0 )
+
+[node name="CombatStats" parent="Mobs/MobTentacle" index="4"]
+armor = 2
+
+[node name="Fly" parent="Mobs" instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 18.104, 0, 0 )
+
+[node name="Turret" parent="Mobs" instance=ExtResource( 12 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 34.9055, -1, 0 )
+
+[node name="Turret2" parent="Mobs" instance=ExtResource( 12 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 41.7027, -1, 0 )
+
+[node name="Chests" type="Spatial" parent="."]
+
+[node name="WeaponRack" parent="Chests" instance=ExtResource( 13 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -17.9425, -1.03039, -1.23468 )
+
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.999289, 0.0377137, 0, -0.0377137, 0.999289, 0, 1.61902, 8.05316 )
 fov = 40.0
-script = ExtResource( 3 )
+script = ExtResource( 14 )
 target = NodePath("../Player")
 distance = 20.0
 
-[node name="Player" parent="." instance=ExtResource( 4 )]
+[node name="Player" parent="." instance=ExtResource( 15 )]
+editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22544, 0 )
 
-[node name="MobTentacle" parent="." instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.15666, -0.529681, 0 )
+[node name="Skeleton" parent="Player" index="1"]
+bones/5/bound_children = [ NodePath("Head") ]
+bones/22/bound_children = [ NodePath("RightHand") ]
+bones/35/bound_children = [ NodePath("LeftFoot") ]
+bones/40/bound_children = [ NodePath("RightFoot") ]
+
+[node name="Head" parent="Player/Skeleton" index="1"]
+transform = Transform( 0.999546, 0.0181458, 0.0240298, -0.0175579, 0.999546, -0.0244526, -0.0244627, 0.0240199, 0.999412, -0.0294576, 1.55928, -0.0638521 )
+
+[node name="RightHand" parent="Player/Skeleton" index="2"]
+transform = Transform( 0.333983, 0.0997196, 0.937289, 0.139607, -0.988652, 0.055439, 0.932181, 0.112337, -0.344116, -0.221792, 0.95306, -0.0174145 )
+
+[node name="RightFoot" parent="Player/Skeleton" index="3"]
+transform = Transform( 0.991517, 0.00166557, -0.129976, -0.000132136, 0.999929, 0.0118051, 0.129986, -0.0116878, 0.991445, 0.0817607, -0.00127997, -0.0315786 )
+
+[node name="LeftFoot" parent="Player/Skeleton" index="4"]
+transform = Transform( 0.86767, 0.0178584, 0.49682, -0.0333828, 0.999192, 0.0223874, -0.496019, -0.0360083, 0.867566, 0.161212, 0.00593398, 0.103914 )
+
+[node name="AnimationTree" parent="Player" index="12"]
+parameters/StateMachine/playback = SubResource( 3 )
+
+[node name="UI" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Ammo" parent="UI" instance=ExtResource( 16 )]
+
+[node name="Health" parent="UI" instance=ExtResource( 17 )]
+
+[node name="ControllerHelper" parent="UI" instance=ExtResource( 18 )]
+
+[node name="Menu" parent="." instance=ExtResource( 19 )]
+visible = false
+
+[node name="InventoryMenu" parent="Menu/MarginContainer/TabContainer/Inventory" index="0"]
+inventory = NodePath("../../../../../Player/Inventory")
+
+[node name="DataPad" parent="." instance=ExtResource( 20 )]
+visible = false
+
+[node name="Notifications" parent="." instance=ExtResource( 21 )]
 [connection signal="died" from="Player" to="." method="_on_Player_died"]
+[connection signal="health_changed" from="Player" to="UI/Health" method="_on_health_changed"]
+[connection signal="aimed" from="Player/WeaponHandler" to="UI/ControllerHelper" method="_on_WeaponHandler_aimed"]
+[connection signal="ammo_selected" from="Player/AmmoHandler" to="UI/Ammo" method="_on_ammo_selected"]
+[connection signal="shield_changed" from="Player/ShieldHandler/Shield" to="UI/Health" method="_on_shield_changed"]
+
+[editable path="Mobs/MobTentacle"]
+
+[editable path="Player"]
+
+[editable path="Menu"]

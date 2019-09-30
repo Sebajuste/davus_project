@@ -9,13 +9,8 @@ export var life_time := 3.0
 func _ready():
 	
 	direction = direction.normalized()
-	"""
-	var look_pos = transform.origin + direction
-	var rotTransform = transform.looking_at(look_pos, Vector3.UP)
-	transform = Transform(rotTransform.basis, transform.origin)
-	transform.origin.z = 0
-	"""
-	pass # Replace with function body.
+	
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -25,12 +20,58 @@ func _process(delta):
 
 
 func _physics_process(delta):
+	
 	transform.origin = transform.origin + direction * speed * delta
+	
 
 
 func set_direction(dir):
+	
 	direction = dir.normalized()
+	
 
+
+func set_damage(damage: int) -> void:
+	
+	$DamageSource.damage = damage
+	
+
+
+func set_type(type: String) -> void:
+	$DamageSource.type = type
+	#print("bullet ", type)
+	match type:
+		"Fire":
+			var mat = $Area/MeshInstance.material_override.duplicate()
+			mat.albedo_color = Color.orange
+			$OmniLight.light_color = Color.orange
+			$Area/MeshInstance.material_override = mat
+			$Area/MeshInstance.material_override = mat
+			$Area/MeshInstance.material_override = mat
+			pass
+		"Ice":
+			var mat = $Area/MeshInstance.material_override.duplicate()
+			mat.albedo_color = Color.cyan
+			$OmniLight.light_color = Color.cyan
+			$Area/MeshInstance.material_override = mat
+			$Area/MeshInstance.material_override = mat
+			$Area/MeshInstance.material_override = mat
+			pass
+	
+	
+
+
+func _destroy():
+	
+	queue_free()
+	
 
 func _on_Area_body_entered(body):
+	
+	call_deferred("_destroy")
+	
+
+func _on_DamageSource_hit(target):
+	
 	queue_free()
+	

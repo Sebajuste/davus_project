@@ -1,5 +1,6 @@
 extends Node
 
+signal batch_generated(batch)
 
 export var noise: OpenSimplexNoise
 

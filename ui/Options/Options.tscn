@@ -1,33 +1,20 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://ui/Options/Options.gd" type="Script" id=1]
-[ext_resource path="res://fonts/mechsuit.tres" type="DynamicFont" id=2]
-[ext_resource path="res://fonts/mechsuit_thin.tres" type="DynamicFont" id=3]
-[ext_resource path="res://ui/Options/OptionsVideo.tscn" type="PackedScene" id=4]
-[ext_resource path="res://ui/Options/OptionsAudio.tscn" type="PackedScene" id=5]
-[ext_resource path="res://ui/Options/OptionsGame.tscn" type="PackedScene" id=6]
+[ext_resource path="res://themes/default/default.theme" type="Theme" id=1]
+[ext_resource path="res://ui/Options/Options.gd" type="Script" id=2]
+[ext_resource path="res://fonts/mechsuit.tres" type="DynamicFont" id=3]
+[ext_resource path="res://fonts/mechsuit_thin.tres" type="DynamicFont" id=4]
+[ext_resource path="res://ui/Options/OptionsVideo.tscn" type="PackedScene" id=5]
+[ext_resource path="res://ui/Options/OptionsAudio.tscn" type="PackedScene" id=6]
+[ext_resource path="res://ui/Options/OptionsGame.tscn" type="PackedScene" id=7]
 
-[node name="Options" type="Control"]
-pause_mode = 2
+[node name="Options" type="Panel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 1.29236
-margin_top = -1.29234
-margin_right = 1.29236
-margin_bottom = -1.29236
-script = ExtResource( 1 )
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
 
-[node name="Panel" type="Panel" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -419.5
-margin_top = -292.5
-margin_right = 419.5
-margin_bottom = 292.5
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 20.0
@@ -35,128 +22,167 @@ margin_top = 20.0
 margin_right = -20.0
 margin_bottom = -20.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
-margin_right = 799.0
-margin_bottom = 545.0
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+margin_right = 984.0
+margin_bottom = 560.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
-margin_right = 799.0
-margin_bottom = 511.0
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+margin_right = 984.0
+margin_bottom = 560.0
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="OptionsList" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 margin_right = 200.0
-margin_bottom = 511.0
+margin_bottom = 560.0
 rect_min_size = Vector2( 200, 0 )
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/OptionsList"]
 margin_right = 200.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 0, 30 )
-custom_fonts/font = ExtResource( 2 )
+custom_fonts/font = ExtResource( 3 )
 text = "title_options"
 align = 1
 valign = 1
 
-[node name="HSeparator" type="HSeparator" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/HBoxContainer/OptionsList"]
 margin_top = 36.0
 margin_right = 200.0
 margin_bottom = 40.0
 
-[node name="VideoOptions" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="VideoOptions" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/OptionsList"]
 margin_top = 44.0
 margin_right = 200.0
 margin_bottom = 74.0
 rect_min_size = Vector2( 0, 30 )
-custom_fonts/font = ExtResource( 3 )
+custom_fonts/font = ExtResource( 4 )
 text = "title_video"
 
-[node name="AudioOptions" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="AudioOptions" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/OptionsList"]
 margin_top = 78.0
 margin_right = 200.0
 margin_bottom = 108.0
 rect_min_size = Vector2( 0, 30 )
-custom_fonts/font = ExtResource( 3 )
+custom_fonts/font = ExtResource( 4 )
 text = "title_sound"
 
-[node name="GameOptions" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="GameOptions" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/OptionsList"]
 margin_top = 112.0
 margin_right = 200.0
 margin_bottom = 142.0
 rect_min_size = Vector2( 0, 30 )
-custom_fonts/font = ExtResource( 3 )
+custom_fonts/font = ExtResource( 4 )
 text = "title_game"
 
-[node name="VSeparator" type="VSeparator" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer/HBoxContainer/OptionsList"]
+margin_top = 146.0
+margin_right = 200.0
+margin_bottom = 186.0
+rect_min_size = Vector2( 0, 40 )
+
+[node name="SaveGame" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/OptionsList"]
+visible = false
+margin_top = 146.0
+margin_right = 200.0
+margin_bottom = 176.0
+rect_min_size = Vector2( 0, 30 )
+custom_fonts/font = ExtResource( 4 )
+text = "btn_save_game"
+
+[node name="CloseButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/OptionsList"]
+visible = false
+margin_top = 146.0
+margin_right = 200.0
+margin_bottom = 176.0
+rect_min_size = Vector2( 0, 30 )
+custom_fonts/font = ExtResource( 4 )
+text = "btn_close"
+
+[node name="ReturnMainMenu" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/OptionsList"]
+visible = false
+margin_top = 146.0
+margin_right = 200.0
+margin_bottom = 176.0
+rect_min_size = Vector2( 0, 30 )
+custom_fonts/font = ExtResource( 4 )
+text = "btn_return_main_menu"
+
+[node name="QuitGame" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/OptionsList"]
+visible = false
+margin_top = 146.0
+margin_right = 200.0
+margin_bottom = 176.0
+rect_min_size = Vector2( 0, 30 )
+custom_fonts/font = ExtResource( 4 )
+text = "btn_quit_game"
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 margin_left = 204.0
 margin_right = 208.0
-margin_bottom = 511.0
+margin_bottom = 560.0
 
-[node name="OptionsContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="OptionsContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 margin_left = 212.0
-margin_right = 799.0
-margin_bottom = 511.0
+margin_right = 984.0
+margin_bottom = 560.0
 size_flags_horizontal = 3
 
-[node name="OptionsVideo" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/OptionsContainer" instance=ExtResource( 4 )]
-margin_right = 587.0
-margin_bottom = 511.0
+[node name="OptionsContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/OptionsContainer"]
+margin_right = 772.0
+margin_bottom = 527.0
+size_flags_vertical = 3
 
-[node name="OptionsAudio" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/OptionsContainer" instance=ExtResource( 5 )]
+[node name="OptionsVideo" parent="MarginContainer/VBoxContainer/HBoxContainer/OptionsContainer/OptionsContainer" instance=ExtResource( 5 )]
+margin_right = 772.0
+margin_bottom = 527.0
+
+[node name="OptionsAudio" parent="MarginContainer/VBoxContainer/HBoxContainer/OptionsContainer/OptionsContainer" instance=ExtResource( 6 )]
 visible = false
-margin_right = 587.0
-margin_bottom = 511.0
+margin_right = 772.0
+margin_bottom = 527.0
 
-[node name="OptionsGame" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer/OptionsContainer" instance=ExtResource( 6 )]
+[node name="OptionsGame" parent="MarginContainer/VBoxContainer/HBoxContainer/OptionsContainer/OptionsContainer" instance=ExtResource( 7 )]
 visible = false
-margin_right = 587.0
-margin_bottom = 511.0
+margin_right = 772.0
+margin_bottom = 527.0
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
-margin_top = 515.0
-margin_right = 799.0
-margin_bottom = 545.0
-rect_min_size = Vector2( 0, 30 )
-
-[node name="ReturnButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
-margin_right = 107.0
-margin_bottom = 30.0
-custom_fonts/font = ExtResource( 3 )
-text = "btn_back"
-
-[node name="CancelButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
-margin_left = 111.0
-margin_right = 242.0
-margin_bottom = 30.0
-custom_fonts/font = ExtResource( 3 )
-text = "btn_cancel"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
-margin_left = 246.0
-margin_right = 799.0
-margin_bottom = 30.0
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/OptionsContainer"]
+editor/display_folded = true
+margin_top = 531.0
+margin_right = 772.0
+margin_bottom = 560.0
 size_flags_horizontal = 3
 alignment = 2
 
-[node name="ApplyButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
-margin_left = 220.0
-margin_right = 370.0
-margin_bottom = 30.0
+[node name="CancelButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/OptionsContainer/HBoxContainer3"]
+margin_left = 304.0
+margin_right = 435.0
+margin_bottom = 29.0
+custom_fonts/font = ExtResource( 4 )
+text = "btn_cancel"
+
+[node name="ApplyButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/OptionsContainer/HBoxContainer3"]
+margin_left = 439.0
+margin_right = 589.0
+margin_bottom = 29.0
 rect_min_size = Vector2( 150, 0 )
-custom_fonts/font = ExtResource( 3 )
+custom_fonts/font = ExtResource( 4 )
 text = "btn_apply"
 
-[node name="ApplySaveButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
-margin_left = 374.0
-margin_right = 553.0
-margin_bottom = 30.0
+[node name="ApplySaveButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/OptionsContainer/HBoxContainer3"]
+margin_left = 593.0
+margin_right = 772.0
+margin_bottom = 29.0
 rect_min_size = Vector2( 150, 0 )
-custom_fonts/font = ExtResource( 3 )
+custom_fonts/font = ExtResource( 4 )
 text = "btn_save_apply"
-[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/VideoOptions" to="." method="_on_VideoOptions_pressed"]
-[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/AudioOptions" to="." method="_on_AudioOptions_pressed"]
-[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/GameOptions" to="." method="_on_GameOptions_pressed"]
-[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ReturnButton" to="." method="_on_ReturnButton_pressed"]
-[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/CancelButton" to="." method="_on_CancelButton_pressed"]
-[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer/ApplyButton" to="." method="_on_ApplyButton_pressed"]
-[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer/ApplySaveButton" to="." method="_on_ApplySaveButton_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/OptionsList/VideoOptions" to="." method="_on_VideoOptions_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/OptionsList/AudioOptions" to="." method="_on_AudioOptions_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/OptionsList/GameOptions" to="." method="_on_GameOptions_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/OptionsList/SaveGame" to="." method="_on_SaveGame_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/OptionsList/CloseButton" to="." method="_on_CloseButton_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/OptionsList/ReturnMainMenu" to="." method="_on_ReturnMainMenu_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/OptionsList/QuitGame" to="." method="_on_QuitGame_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/OptionsContainer/HBoxContainer3/CancelButton" to="." method="_on_CancelButton_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/OptionsContainer/HBoxContainer3/ApplyButton" to="." method="_on_ApplyButton_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/OptionsContainer/HBoxContainer3/ApplySaveButton" to="." method="_on_ApplySaveButton_pressed"]

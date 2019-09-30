@@ -1,13 +1,15 @@
 extends Spatial
 
+signal batch_added(batch)
+signal batch_removed(batch)
 
 export(int) var batch_size := 16
-
+export var multithreading := true
 
 var _current_batch_x := 99999
 var _current_batch_y := 99999
 
-var _thread := Thread.new()
+var _thread : Thread
 var _stop_tread := false
 var _stop_thread_mutex := Mutex.new()
 
@@ -30,7 +32,9 @@ var _layouts := []
 var _current_batch_loc := []
 
 func _ready():
-	_thread.start(self, "_thread_process")
+	if multithreading:
+		_thread = Thread.new()
+		_thread.start(self, "_thread_process")
 	for child in get_children():
 		if child != $Batches:
 			_layouts.append(child)
@@ -43,18 +47,20 @@ func _process(delta):
 		var batch = _add_batch_queue.pop_front()
 		if batch:
 			$Batches.add_child(batch)
+			emit_signal("batch_added", batch)
 	_add_batch_mutex.unlock()
-	
 	
 	var index := 0
 	for item in _delete_queue:
 		item.timer += delta
 		if item.timer > 5.0:
-			#item.batch.queue_free()
 			call_deferred("_delete_batch", item.batch)
 			_delete_queue.remove(index)
 			return
 		index += 1
+	
+	if not multithreading:
+		_load_queued_batch()
 	
 	"""
 	_delete_queue_mutex.lock()
@@ -69,7 +75,8 @@ func _exit_tree():
 	_stop_thread_mutex.lock()
 	_stop_tread = true
 	_stop_thread_mutex.unlock()
-	_thread.wait_to_finish()
+	if multithreading:
+		_thread.wait_to_finish()
 	pass
 
 
@@ -123,6 +130,7 @@ func update(global_x: float, global_y: float):
 			for batch in $Batches.get_children():
 				var batch_loc = _to_batch_loc(batch.global_transform.origin)
 				if batch_loc.x == delete_loc.x && batch_loc.y == delete_loc.y:
+					emit_signal("batch_removed", batch)
 					$Batches.remove_child(batch)
 					_delete_queue_mutex.lock()
 					

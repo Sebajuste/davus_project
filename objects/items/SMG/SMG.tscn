@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://objects/items/SMG/SMG.gd" type="Script" id=1]
+[ext_resource path="res://models/Weapons/SMG/SMG.tscn" type="PackedScene" id=2]
+[ext_resource path="res://sounds/ui/take_object.wav" type="AudioStream" id=3]
+
+[sub_resource type="SphereShape" id=1]
+
+[sub_resource type="Animation" id=2]
+loop = true
+tracks/0/type = "transform"
+tracks/0/path = NodePath("Spatial")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = PoolRealArray( 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0.5, 1, 0, 0, 0, 0, 1, 0, -4.37114e-008, 1, 1, 1, 0.7, 1, 0, 0, 0, 0, 0.707107, 0, 0.707107, 1, 1, 1 )
+
+[node name="SMG" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="Spatial" type="Spatial" parent="."]
+transform = Transform( -0.138307, 0, -0.99039, 0, 1, 0, 0.99039, 0, -0.138307, 0, 0, 0 )
+
+[node name="Scene Root" parent="Spatial" instance=ExtResource( 2 )]
+
+[node name="Area" type="Area" parent="."]
+
+[node name="CollisionShape" type="CollisionShape" parent="Area"]
+shape = SubResource( 1 )
+
+[node name="PickUpSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+pitch_scale = 1.2
+bus = "SoundEffects"
+
+[node name="DestroyTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "default"
+anims/default = SubResource( 2 )
+[connection signal="body_entered" from="Area" to="." method="_on_Area_body_entered"]
+[connection signal="timeout" from="DestroyTimer" to="." method="queue_free"]

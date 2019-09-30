@@ -26,4 +26,10 @@ func gen(loc: Vector3) -> Spatial:
 		liana.translate( Vector3(16, 16, -30) )
 		liana.scale_object_local( Vector3(1.5, 1.5, 1.5) )
 	
+	if loc.y < -1:
+		var liana = GIANT_LIANA.instance()
+		batch.add_child(liana)
+		liana.translate( Vector3(16, 16, -35) )
+		liana.scale_object_local( Vector3(1.2, 1.2, 1.2) )
+	emit_signal("batch_generated", batch)
 	return batch

@@ -10,6 +10,12 @@ height = 0.155486
 collision_layer = 1024
 collision_mask = 0
 script = ExtResource( 1 )
+damage = 10
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 shape = SubResource( 1 )
+
+[node name="ReactivationTimer" type="Timer" parent="."]
+one_shot = true
+[connection signal="hit" from="." to="." method="_on_DamageSource_hit"]
+[connection signal="timeout" from="ReactivationTimer" to="." method="_on_ReactivationTimer_timeout"]
