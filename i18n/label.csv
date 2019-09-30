@@ -23,3 +23,5 @@ label_fire,Fire,Feu
 label_ice,Ice,Glace
 label_damage,Damage,Dégâts
 label_fire_rate,Fire rate,Coups/minutes
+label_dps,DPS,DPS
+label_equiped,Equiped,Equipé

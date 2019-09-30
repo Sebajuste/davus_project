@@ -25,6 +25,8 @@ func _ready():
 	$VBoxContainer/HBoxContainer/Control/MarginContainer/VBoxContainer/Damage/Value.text = str(damage)
 	$VBoxContainer/HBoxContainer/Control/MarginContainer/VBoxContainer/FireRate/Value.text = str(rate)
 	
+	var dps = (damage * rate) / 60
+	$VBoxContainer/HBoxContainer/Control/MarginContainer/VBoxContainer/DPS/Value.text = str(dps)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

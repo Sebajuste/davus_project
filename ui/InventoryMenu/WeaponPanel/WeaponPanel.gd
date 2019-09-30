@@ -30,6 +30,9 @@ func set_weapon(item: Item) -> void:
 	$MarginContainer/HBoxContainer/Stats/Damage/Value.text = str(weapon.properties["damage"])
 	$MarginContainer/HBoxContainer/Stats/Rate/Value.text = str(weapon.properties["rate"])
 	$MarginContainer/HBoxContainer/Equiped.visible = weapon.equiped
+	
+	var dps = (weapon.properties["damage"] * weapon.properties["rate"]) / 60
+	$MarginContainer/HBoxContainer/Stats2/DPS/Value.text = str(dps)
 
 
 
