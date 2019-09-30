@@ -1,0 +1,49 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://objects/projectiles/Spike/Spike.gd" type="Script" id=1]
+[ext_resource path="res://tools/combat/DamageSource/DamageSource.tscn" type="PackedScene" id=2]
+
+[sub_resource type="SpatialMaterial" id=4]
+albedo_color = Color( 0.227451, 0.298039, 0.0745098, 1 )
+metallic_specular = 0.2
+roughness = 0.8
+emission_enabled = true
+emission = Color( 0.0862745, 0.12549, 0.0588235, 1 )
+emission_energy = 1.0
+emission_operator = 0
+emission_on_uv2 = false
+
+[sub_resource type="SphereMesh" id=3]
+material = SubResource( 4 )
+
+[sub_resource type="SphereShape" id=1]
+margin = 0.05
+radius = 0.0535139
+
+[sub_resource type="SphereShape" id=2]
+radius = 0.0724853
+
+[node name="Spike" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+transform = Transform( 0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0 )
+mesh = SubResource( 3 )
+material/0 = null
+
+[node name="Area" type="Area" parent="."]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0 )
+collision_layer = 4
+
+[node name="CollisionShape" type="CollisionShape" parent="Area"]
+shape = SubResource( 1 )
+
+[node name="DamageSource" parent="." instance=ExtResource( 2 )]
+editor/display_folded = true
+
+[node name="CollisionShape" parent="DamageSource" index="0"]
+shape = SubResource( 2 )
+[connection signal="body_entered" from="Area" to="." method="_on_Area_body_entered"]
+[connection signal="hit" from="DamageSource" to="." method="_on_DamageSource_hit"]
+
+[editable path="DamageSource"]

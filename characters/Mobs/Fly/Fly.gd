@@ -1,6 +1,6 @@
 extends "res://characters/Mobs/Mob.gd"
 
-const Bullet = preload("res://objects/projectiles/Bullet/Bullet.tscn")
+const Spike = preload("res://objects/projectiles/Spike/Spike.tscn")
 
 export(float) var distance_min = 2.5 # Distance minimum qu'il doit y avoir entre le joueur et la mouche lorsque la mouche attaque
 export(float) var distance_max = 3.0 # Distance maximum qu'il doit y avoir entre le joueur et la mouche lorsque la mouche attaque
@@ -126,12 +126,12 @@ func set_vulnerability(type: String):
 
 
 func attack():
-	var bullet = Bullet.instance()
-	bullet.set_damage(attack_damage)
+	var spike = Spike.instance()
+	spike.set_damage(attack_damage)
 	var root_node = get_tree().get_root().get_child(0)
-	root_node.add_child(bullet)
+	root_node.add_child(spike)
 	
-	bullet.global_transform.origin = $AttackPosition.global_transform.origin
+	spike.global_transform.origin = $AttackPosition.global_transform.origin
 	
 	# Modification des positions utilisées pour diriger le tir
 	var target_position = current_target.global_transform.origin
@@ -142,7 +142,7 @@ func attack():
 	else:
 		new_position = Vector3(self.global_transform.origin.x - 1, self.global_transform.origin.y, 0)
 		
-	bullet.direction = (new_position_target - new_position).normalized()
+	spike.direction = (new_position_target - new_position).normalized()
 
 
 
