@@ -245,6 +245,7 @@ func _on_CombatStats_health_depleted():
 	self.set_collision_mask(0x01)
 	$Smoke.visible = true
 	$Shield.visible = false
+	$DestroySound.play()
 	$RemoveTimer.start()
 
 

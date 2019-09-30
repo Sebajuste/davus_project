@@ -297,10 +297,10 @@ func _on_CombatStats_damage_taken():
 func _on_CombatStats_health_depleted():
 	self.set_collision_layer(0x00)
 	self.set_collision_mask(0x01)
-	
-	$RemoveTimer.start()
 	$Smoke.visible = true
-
+	$AnimationPlayer.stop()
+	$DestroySound.play()
+	$RemoveTimer.start()
 
 
 func _on_RemoveTimer_timeout():

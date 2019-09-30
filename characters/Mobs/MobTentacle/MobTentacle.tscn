@@ -73,7 +73,8 @@ one_shot = true
 
 [node name="DieSound" type="AudioStreamPlayer3D" parent="." index="6"]
 stream = ExtResource( 6 )
-unit_size = 20.0
+unit_db = 20.0
+unit_size = 40.0
 max_distance = 40.0
 
 [node name="AttackSound" type="AudioStreamPlayer3D" parent="." index="7"]
