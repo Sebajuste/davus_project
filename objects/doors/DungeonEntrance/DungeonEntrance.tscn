@@ -9,7 +9,7 @@
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=2]
 
-[node name="DungeonEntrance" groups=[
+[node name="DungeonEntrance" index="0" groups=[
 "door",
 ] instance=ExtResource( 1 )]
 script = ExtResource( 2 )
@@ -43,9 +43,8 @@ shape = SubResource( 1 )
 
 [node name="OpenSound" type="AudioStreamPlayer3D" parent="." index="3"]
 stream = ExtResource( 4 )
-unit_db = 20.0
+unit_size = 80.0
 pitch_scale = 0.3
-max_distance = 30.0
 bus = "SoundEffects"
 
 [node name="AnimationTree" parent="." index="5"]
