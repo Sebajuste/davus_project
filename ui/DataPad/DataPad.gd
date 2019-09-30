@@ -25,10 +25,12 @@ func set_message(content):
 		$MarginContainer/VBoxContainer/Footer/MarginContainer/HBoxContainer/CloseButton.grab_focus()
 		visible = true
 		get_tree().paused = true
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 
 func _on_CloseButton_pressed():
 	visible = false
 	get_tree().paused = false
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	emit_signal("closed")
 	
