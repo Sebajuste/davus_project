@@ -21,7 +21,7 @@ func _ready():
 	var _weapon_resource = WeaponResource.new()
 	var default_weapon := Item.new()
 	default_weapon.type = "gun"
-	var p = _weapon_resource.eWeaponsType.Pistol #SMG
+	var p = _weapon_resource.eWeaponsType.AssaultRifle #Pistol #SMG
 	default_weapon.properties["type"] = _weapon_resource.WEAPONS_NAME[p]
 	default_weapon.properties["damage"] = _weapon_resource.WEAPONS_SETTINGS[p]["Damage"]["Min"]
 	default_weapon.properties["rate"] = _weapon_resource.WEAPONS_SETTINGS[p]["Rate"]["Min"]
