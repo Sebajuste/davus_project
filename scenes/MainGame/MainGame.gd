@@ -33,6 +33,7 @@ func _ready():
 	$Menu/MarginContainer/TabContainer/Inventory.name = tr("title_inventory")
 	$Menu/MarginContainer/TabContainer/Map.name = tr("title_map")
 	
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	
 	if game_loaded:
 		return
@@ -166,6 +167,15 @@ func _on_Player_died():
 
 
 func _on_DataPad_opened():
-	
 	get_tree().paused = true
-	
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+
+func _on_Menu_closed():
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	get_tree().paused = false
+
+
+func _on_DataPad_closed():
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	get_tree().paused = false

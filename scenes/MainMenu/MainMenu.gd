@@ -3,6 +3,10 @@ extends Node
 signal start_game
 
 
+
+var _cinematic_started := false
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
@@ -15,6 +19,13 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+
+
+func _input(event):
+	
+	if _cinematic_started and ( Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("ui_cancel") ):
+		start_game()
+	
 
 
 
@@ -42,9 +53,9 @@ func start_game():
 
 
 func _on_StartButton_pressed():
+	_cinematic_started = true
 	$MainControls.visible = false
 	$CinematicAnimationPlayer.play("intro")
-	
 
 
 func _on_OptionsButton_pressed():

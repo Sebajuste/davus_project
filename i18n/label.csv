@@ -13,7 +13,7 @@ label_health,Health,Vie
 label_move,Move,Déplacement
 label_unsheathe,Unsheathe,Dégainer
 label_jump_jetpack,Jump / Jetpack,Sauter / Jetpack
-label_use_object,Use object,Utiliser un objet
+label_use_object,Action,Action
 label_shield,Shield,Bouclier
 label_shoot,Shoot,Tirer
 label_menus,Menus / Map / Inventory,Menus / Cartes / Inventaires
