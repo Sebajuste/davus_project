@@ -1,5 +1,7 @@
 extends Control
 
+signal closed
+
 var _current_tab := 0
 
 # Called when the node enters the scene tree for the first time.
@@ -60,10 +62,8 @@ func _on_Menu_visibility_changed():
 
 
 func _on_Options_closed():
-	
 	visible = false
-	get_tree().paused = false
-	
+	emit_signal("closed")
 
 
 func _on_TabContainer_tab_changed(tab):

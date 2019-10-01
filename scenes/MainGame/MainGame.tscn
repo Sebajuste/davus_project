@@ -30,16 +30,16 @@ editor/display_folded = true
 [node name="Player" parent="World" instance=ExtResource( 3 )]
 
 [node name="Head" parent="World/Player/Skeleton" index="1"]
-transform = Transform( 0.999247, 0.0226371, 0.031513, -0.0207932, 0.998119, -0.057659, -0.032759, 0.0569605, 0.997838, -0.022627, 1.56037, -0.0533249 )
+transform = Transform( 0.998827, 0.0256983, 0.0410344, -0.0228497, 0.997393, -0.0684363, -0.0426861, 0.0674183, 0.996811, -0.0270953, 1.5607, -0.0474866 )
 
 [node name="RightHand" parent="World/Player/Skeleton" index="2"]
-transform = Transform( 0.320464, 0.0959115, 0.942392, 0.1259, -0.990347, 0.0579802, 0.938856, 0.100067, -0.329447, -0.218191, 0.950407, -0.01476 )
+transform = Transform( 0.328872, 0.0868675, 0.94037, 0.122367, -0.991285, 0.0487764, 0.936411, 0.0990299, -0.336637, -0.222083, 0.944483, -0.00956477 )
 
 [node name="RightFoot" parent="World/Player/Skeleton" index="3"]
-transform = Transform( 0.991442, 0.00164673, -0.130537, -0.000116795, 0.99993, 0.0117256, 0.130547, -0.0116101, 0.991373, 0.082016, -0.00132669, -0.0328932 )
+transform = Transform( 0.991518, 0.00146195, -0.129957, -5.16549e-005, 0.999941, 0.0108558, 0.129965, -0.0107567, 0.991459, 0.0819734, -0.0011731, -0.0324852 )
 
 [node name="LeftFoot" parent="World/Player/Skeleton" index="4"]
-transform = Transform( 0.867485, 0.0188477, 0.497106, -0.0321502, 0.999318, 0.0182177, -0.496424, -0.0317837, 0.867499, 0.161379, 0.00608835, 0.103545 )
+transform = Transform( 0.867517, 0.0181182, 0.497077, -0.0314261, 0.999337, 0.0184234, -0.496415, -0.0316018, 0.867512, 0.161288, 0.0060736, 0.103801 )
 
 [node name="AnimationTree" parent="World/Player" index="15"]
 parameters/StateMachine/playback = SubResource( 1 )
@@ -83,6 +83,8 @@ pause_mode = 2
 [connection signal="aimed" from="World/Player/WeaponHandler" to="UI/ControllerHelper" method="_on_WeaponHandler_aimed"]
 [connection signal="ammo_selected" from="World/Player/AmmoHandler" to="UI/Ammo" method="_on_ammo_selected"]
 [connection signal="shield_changed" from="World/Player/ShieldHandler/Shield" to="UI/Health" method="_on_shield_changed"]
+[connection signal="closed" from="Menu" to="." method="_on_Menu_closed"]
+[connection signal="closed" from="DataPad" to="." method="_on_DataPad_closed"]
 [connection signal="opened" from="DataPad" to="." method="_on_DataPad_opened"]
 
 [editable path="World/Player"]
