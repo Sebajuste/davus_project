@@ -22,7 +22,7 @@ var velocity := Vector3()
 var _fall_time := 0.0
 var _anim_update := false
 var _jump_event := false
-var _jump_action := false
+#var _jump_action := false
 var _jump_count := MAX_JUMP
 var _jumping := false
 var _air_time := 0.0
@@ -46,16 +46,11 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	
-	_jump_event = false
+	#_jump_event = false
 	
 	if $CombatStats.health == 0:
 		return
 	
-	if Input.is_action_just_pressed("jump"):
-		_jump_action = true
-		_jump_event = true
-	if Input.is_action_just_released("jump"):
-		_jump_action =  false
 	
 	_look_dir = Vector3()
 	
@@ -111,6 +106,7 @@ func _physics_process(delta):
 	velocity.y += delta * -GRAVITY * 2
 	
 	if _jump_event:
+		_jump_event = false
 		if not is_falling() and _jump_count > 0:
 			_jump_count -= 1
 			_jumping = true
@@ -209,11 +205,20 @@ func _physics_process(delta):
 
 func _input(event) -> void:
 	
+	if $CombatStats.health == 0:
+		return
+	
+	if Input.is_action_just_pressed("jump"):
+		#_jump_action = true
+		_jump_event = true
+	#if Input.is_action_just_released("jump"):
+	#	_jump_action =  false
+	
 	if Input.is_action_just_pressed("use"):
 		var usable = $UsableArea.get_usable()
 		if usable != null and usable.has_method("use"):
 			usable.use(self)
-	
+
 
 
 func get_items() -> Array:
