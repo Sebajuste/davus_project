@@ -221,9 +221,21 @@ func get_items() -> Array:
 
 
 func give_item(item: Item, raise_notification: bool = true) -> void:
-	$Inventory.add_item(item)
+	var added := false
+	if item.type == "ammo":
+		var same_ammo_type_found := false
+		for inventory_item in $Inventory.get_items():
+			if inventory_item.type == "ammo":
+				if inventory_item.properties["ammo_type"] == item.properties["ammo_type"]:
+					same_ammo_type_found = true
+		if not same_ammo_type_found:
+			$Inventory.add_item(item)
+			added = true
+	else:
+		$Inventory.add_item(item)
+		added = true
 	
-	if raise_notification:
+	if added and raise_notification:
 		var notification = _notification_message.create_item_notification(item)
 		notifications.push_notification(notification)
 
