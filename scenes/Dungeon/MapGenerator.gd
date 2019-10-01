@@ -40,10 +40,10 @@ var tile_size:int
 var spawn_position:Vector3
 
 ##################### DEBUG AREA #####################
-const DEBUG:bool = true
+const DEBUG:bool = false
 const FORCE_START_DOOR:bool = false
 const FORCE_END_DOOR:bool = false
-const DISABLE_COLLISION:bool = true
+const DISABLE_COLLISION:bool = false
 const SHOW_DOOR_INSERTIONS:bool = false
 const SHOW_STARTING_ROOM:bool = false
 const SHOW_ENDING_ROOM:bool = false
@@ -53,18 +53,21 @@ const PRINT_LADDER:bool = false
 const PRINT_ROOMS_TRAVEL:bool = false
 const PRINT_DOOR_LOCATION:bool = false
 const PRINT_AMMO_TYPE:bool = false
-const PRINT_KEYS_CHECK:bool = true
-const PRINT_DOOR_KEYS:bool = true
-const TEST_DOOR_KEYS_EQUALITY:bool = true
-const DESIRED_SEED_STEP_COUNTER:int = 3
+const PRINT_KEYS_CHECK:bool = false
+const PRINT_DOOR_KEYS:bool = false
+const TEST_DOOR_KEYS_EQUALITY:bool = false
+const DESIRED_SEED_STEP_COUNTER:int = 1
 var _desired_seed_counter:int = -1
-var _seed_counter:int = 1
+var _seed_counter:int = 0
 var _no_mobs_counter:int = 0
+var _one_mobs_counter:int = 0
+var _two_mobs_counter:int = 0
+var _unknow_mobs_counter:int = 0
 
 var testCase := Dictionary()
 var nbOfCase:int = 0
-var _continue_looping = true
-var _timer_value:float = 1
+var _continue_looping = false
+var _timer_value:float = 0.5
 var _timer_looping:Timer
 ##################### DEBUG AREA #####################
 
@@ -125,6 +128,16 @@ func gen_dungeon(graph_generator:GraphGenerator) -> bool:
 	_fill_the_map()
 	_write_rooms_on_map()
 	if _write_corridors_on_map():
+		if DEBUG:
+			if _continue_looping:
+				if _seed_counter < _desired_seed_counter:
+					return false #emit_signal("request_new_dungeon")
+				elif _seed_counter == _desired_seed_counter:
+					_continue_looping = false
+				else:
+					_timer_looping.start(_timer_value)
+			else:
+				print("seed_counter = ", _seed_counter)
 		return false #emit_signal("request_new_dungeon")
 	else:
 		var door = _add_outside_door(_graph_generator.starting_room)
@@ -142,9 +155,19 @@ func gen_dungeon(graph_generator:GraphGenerator) -> bool:
 			if TEST_DOOR_KEYS_EQUALITY:
 				print("Doors Closed ways = ", _doors_closed_ways.size(), " Dropped keys = ", _doors_dropped_unlockables.size())
 				print("Mobs Closed ways = ", _mobs_closed_ways.size(), " Dropped racks = ", _mobs_dropped_unlockables.size())
-				if _mobs_dropped_unlockables.size() == 0:
-					_no_mobs_counter += 1
+				match _mobs_dropped_unlockables.size():
+					0:
+						_no_mobs_counter += 1
+					1:
+						_one_mobs_counter += 1
+					2:
+						_two_mobs_counter += 1
+					_:
+						_unknow_mobs_counter += 1
 				print("_no_mobs_counter = ", _no_mobs_counter, "/", _seed_counter)
+				print("_one_mobs_counter = ", _one_mobs_counter, "/", _seed_counter)
+				print("_two_mobs_counter = ", _two_mobs_counter, "/", _seed_counter)
+				print("_unknow_mobs_counter = ", _unknow_mobs_counter, "/", _seed_counter)
 				if _doors_dropped_unlockables.size() != _doors_closed_ways.size() || _mobs_dropped_unlockables.size() != _mobs_closed_ways.size():
 					_continue_looping = false
 					if PRINT_KEYS_CHECK: 
@@ -194,7 +217,6 @@ func _write_rooms_on_map():
 			room.prefab = prefab
 			if room != _graph_generator.starting_room:
 				var datapadPos:Vector3 = prefab.get_spot(rnd)
-				var mobPos:Vector3 = prefab.get_spot(rnd)
 				if room != _graph_generator.ending_room:
 					if rnd.randf() <= chance_drop_rack:
 						_add_rack_spawn(prefab)
@@ -204,14 +226,13 @@ func _write_rooms_on_map():
 						datapad.message = _stories.get_random_story()
 					
 					if rnd.randf() <= mob_chance_rooms:
-						_add_mob_spawn(mobPos, _resourceMgr.eMobType.Fly, false, false)
+						_add_mob_spawn(prefab.get_spot(rnd, false) + Vector3.UP, _resourceMgr.eMobType.Fly, false, false)
 				else:
 					var datapad = _place_object(datapadPos, _resourceMgr.DATAPAD_RESOURCES, Vector3.ZERO, 0, false)
 					datapad.message = tr("story_final")
-					_add_mob_spawn(mobPos, _resourceMgr.eMobType.Fly, false, false)
-					_add_mob_spawn(mobPos, _resourceMgr.eMobType.Fly, false, false)
-					var floorMob = _add_mob_spawn(mobPos, _resourceMgr.eMobType.Floor, false, false)
-					floorMob.translate(Vector3.UP)
+					_add_mob_spawn(prefab.get_spot(rnd, false) + Vector3.UP, _resourceMgr.eMobType.Fly, false, false)
+					_add_mob_spawn(prefab.get_spot(rnd, false) + Vector3.UP, _resourceMgr.eMobType.Fly, false, false)
+					_add_mob_spawn(prefab.get_spot(rnd, false) + Vector3.UP, _resourceMgr.eMobType.Floor, false, false)
 			else:
 				var datapadPos:Vector3 = prefab.get_spot(rnd)
 				var datapad = _place_object(datapadPos, _resourceMgr.DATAPAD_RESOURCES, Vector3.ZERO, 0, false)
@@ -390,8 +411,8 @@ func _dig_horizontally(startPos: Vector3, endPos: Vector3, mobSpawn: bool, lockD
 		elif mobSpawn:
 			_add_mob_spawn(middlePos, _resourceMgr.eMobType.Floor)
 	else:
-		var quarter:Vector3 = (startPos - middlePos) / 2
-		if abs(quarter.x) > 1 && putMonster && not refuseMonster && _ammo_bag.size() > 0:
+		var quarter:Vector3 = _geometry.vector3_abs((startPos - middlePos) / 2)
+		if quarter.x > 2 && putMonster && not refuseMonster && _ammo_bag.size() > 0:
 			_add_mob_spawn(startPos + Vector3(quarter.x * step.x, 0, 0), _resourceMgr.eMobType.Floor, true)
 		elif mobSpawn:
 			_add_mob_spawn(middlePos, _resourceMgr.eMobType.Fly)
@@ -622,7 +643,6 @@ func _get_number_of_keys(nb_rooms_on_path:int) ->int:
 	return 0
 
 func _should_lock(desired_nb_of_unlockables:int, closed_ways:Dictionary) ->bool:
-	
 	var remainingRoomsToClose:int = desired_nb_of_unlockables - closed_ways.size()
 	var remainingDoorsOnPath:int = _graph_generator.shortest_path.size() - 2 - _pathRoomsCounter - remainingRoomsToClose
 	if remainingDoorsOnPath > 0 && closed_ways.size() < desired_nb_of_unlockables:
@@ -635,7 +655,6 @@ func _should_lock(desired_nb_of_unlockables:int, closed_ways:Dictionary) ->bool:
 
 
 func _should_drop_unlockable(is_dead_end:bool, unlockables_to_drop:Array) ->bool:
-	
 	if unlockables_to_drop.size() > 0:
 		var remainingRooms:int = _rooms_areas.size() - 1 - _totalRoomsCounter
 		if remainingRooms <= 0:

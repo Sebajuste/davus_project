@@ -26,26 +26,19 @@ editor/display_folded = true
 
 [node name="Player" parent="World" instance=ExtResource( 3 )]
 
-[node name="Skeleton" parent="World/Player" index="1"]
-bones/5/bound_children = [ NodePath("Head") ]
-bones/22/bound_children = [ NodePath("RightHand") ]
-bones/35/bound_children = [ NodePath("LeftFoot") ]
-bones/40/bound_children = [ NodePath("RightFoot") ]
-
 [node name="Head" parent="World/Player/Skeleton" index="1"]
-transform = Transform( 0.999246, 0.0234994, 0.0309067, -0.0219007, 0.998454, -0.0510931, -0.0320596, 0.0503777, 0.998215, -0.0214592, 1.56018, -0.0555541 )
+transform = Transform( 0.999455, 0.0205097, 0.0258684, -0.0192287, 0.998621, -0.0488289, -0.0268342, 0.0483051, 0.998472, -0.0256739, 1.56044, -0.0547897 )
 
 [node name="RightHand" parent="World/Player/Skeleton" index="2"]
-transform = Transform( 0.321693, 0.0963297, 0.941931, 0.128266, -0.990074, 0.0574477, 0.938115, 0.102338, -0.330857, -0.217422, 0.95181, -0.0156303 )
+transform = Transform( 0.32461, 0.0995421, 0.940595, 0.136653, -0.988948, 0.0574998, 0.935924, 0.109871, -0.334627, -0.216006, 0.948118, -0.0120256 )
 
 [node name="RightFoot" parent="World/Player/Skeleton" index="3"]
-editor/display_folded = true
-transform = Transform( 0.991486, 0.00163525, -0.130203, -2.50638e-005, 0.999923, 0.0123685, 0.130213, -0.0122596, 0.991409, 0.0820231, -0.00138017, -0.0325016 )
+transform = Transform( 0.991625, 0.00198715, -0.129134, -0.000552878, 0.999938, 0.0111407, 0.129148, -0.010976, 0.991563, 0.0819454, -0.00124928, -0.0325831 )
 
 [node name="LeftFoot" parent="World/Player/Skeleton" index="4"]
-transform = Transform( 0.867644, 0.0198162, 0.496791, -0.0324662, 0.999332, 0.0168432, -0.496125, -0.0307403, 0.867709, 0.161418, 0.00619642, 0.103526 )
+transform = Transform( 0.867637, 0.0189624, 0.496836, -0.0339769, 0.999198, 0.0212015, -0.496036, -0.0352739, 0.867587, 0.161744, 0.00613982, 0.104347 )
 
-[node name="AnimationTree" parent="World/Player" index="13"]
+[node name="AnimationTree" parent="World/Player" index="15"]
 parameters/StateMachine/playback = SubResource( 1 )
 
 [node name="CameraPlayer" parent="World" instance=ExtResource( 4 )]

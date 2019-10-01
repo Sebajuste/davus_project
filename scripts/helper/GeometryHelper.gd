@@ -22,6 +22,9 @@ func vector2_floor(v: Vector2) -> Vector2:
 func vector2_round(v: Vector2) -> Vector2:
 	return Vector2(round(v.x), round(v.y))
 
+func vector2_abs(v: Vector2) -> Vector2:
+	return Vector2(abs(v.x), abs(v.y))
+
 func to_vector2(v: Vector3) -> Vector2:
 	return Vector2(v.x, v.y)
 
@@ -40,9 +43,6 @@ func get_line_intersection(p1: Vector2, p2: Vector2, p3: Vector2, p4: Vector2) -
 
 ###########################	3D	###########################
 # Vector 3
-func to_vector3(v: Vector2, z :int = 0) -> Vector3:
-	return Vector3(v.x, v.y, z)
-
 func vector3_ceil(v: Vector3) -> Vector3:
 	return Vector3(ceil(v.x), ceil(v.y), ceil(v.z))
 
@@ -51,3 +51,9 @@ func vector3_floor(v: Vector3) -> Vector3:
 
 func vector3_round(v: Vector3) -> Vector3:
 	return Vector3(round(v.x), round(v.y), round(v.z))
+
+func vector3_abs(v: Vector3) -> Vector3:
+	return Vector3(abs(v.x), abs(v.y), abs(v.z))
+
+func to_vector3(v: Vector2, z :int = 0) -> Vector3:
+	return Vector3(v.x, v.y, z)
