@@ -29,10 +29,14 @@ func get_usable() -> Spatial:
 
 func _on_UsableArea_area_entered(area):
 	_usable_list.append(area)
-	pass # Replace with function body.
+	print("usable !")
+	$"../ActionHelper".visible = true
+	
 
 
 func _on_UsableArea_area_exited(area):
 	var index = _usable_list.find(area)
 	if index != -1:
 		_usable_list.remove(index)
+	if _usable_list.empty():
+		$"../ActionHelper".visible = false
