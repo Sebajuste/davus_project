@@ -22,7 +22,6 @@ var velocity := Vector3()
 var _fall_time := 0.0
 var _anim_update := false
 var _jump_event := false
-#var _jump_action := false
 var _jump_count := MAX_JUMP
 var _jumping := false
 var _air_time := 0.0
@@ -220,6 +219,8 @@ func _input(event) -> void:
 			usable.use(self)
 
 
+func is_aiming() -> bool:
+	return $WeaponHandler.aiming
 
 func get_items() -> Array:
 	return $Inventory.get_items()
