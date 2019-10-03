@@ -288,9 +288,9 @@ func _on_WalkTimer_timeout():
 
 
 func _on_CombatStats_damage_taken():
-	
 	$AnimationTree.set("parameters/Hit/active", true)
-	
+	if controller.type == Controller.Type.GAMEPAD:
+		Input.start_joy_vibration(0, 0, 0.2, 0.2)
 
 
 func _on_CombatStats_health_depleted():
