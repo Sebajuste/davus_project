@@ -91,6 +91,16 @@ func _process(delta):
 
 func _physics_process(delta):
 	
+	
+	if $WeaponHandler.aiming and $WeaponHandler.valid_target and $WeaponHandler.shoot_ready and controller.type == controller.Type.GAMEPAD:
+		$LaserPointer.visible = true
+		$LaserPointer.weapon_pos = $WeaponHandler.get_weapon().global_transform.origin
+		$LaserPointer.target_pos = $WeaponHandler.target
+	else:
+		$LaserPointer.visible = false
+	
+	
+	
 	var move_dir = Vector3()
 	
 	if $CombatStats.health > 0:

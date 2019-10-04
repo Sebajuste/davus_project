@@ -29,7 +29,6 @@ func get_usable() -> Spatial:
 
 func _on_UsableArea_area_entered(area):
 	_usable_list.append(area)
-	print("usable !")
 	$"../ActionHelper".visible = true
 	
 
