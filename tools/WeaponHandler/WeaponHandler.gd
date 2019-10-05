@@ -53,12 +53,24 @@ func _process(delta):
 			var ammo = null
 			if _ammo_node:
 				ammo = _ammo_node.get_ammo()
-			weapon.shoot(target, ammo)
+			if weapon.shoot(target, ammo):
+				if controller.type == Controller.Type.GAMEPAD:
+					match weapon_item.properties["type"]:
+						"pistol":
+							Input.start_joy_vibration (0, 0.5, 0.0, 0.1)
+						"smg":
+							Input.start_joy_vibration (0, 0.25, 0.0, 0.1)
+						"rifle":
+							Input.start_joy_vibration (0, 0.75, 0.0, 0.1)
 
 
 func _input(event):
 	if Input.is_action_just_pressed("unsheathe"):
 		set_aiming(not aiming)
+
+
+func get_weapon() -> Spatial:
+	return weapon
 
 
 func remove():

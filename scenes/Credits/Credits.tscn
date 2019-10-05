@@ -56,13 +56,13 @@ anchor_bottom = 1.0
 
 [node name="Control" type="Control" parent="HBoxContainer"]
 margin_right = 480.0
-margin_bottom = 4273.0
+margin_bottom = 3973.0
 size_flags_horizontal = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 margin_left = 484.0
 margin_right = 1024.0
-margin_bottom = 4273.0
+margin_bottom = 3973.0
 rect_min_size = Vector2( 500, 0 )
 size_flags_horizontal = 3
 
@@ -276,7 +276,7 @@ align = 1
 valign = 2
 uppercase = true
 
-[node name="Subtitle6" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="Quality" type="Label" parent="HBoxContainer/VBoxContainer"]
 margin_top = 2103.0
 margin_right = 540.0
 margin_bottom = 2253.0
@@ -290,10 +290,21 @@ align = 1
 valign = 1
 uppercase = true
 
-[node name="Name12" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="Duruti" type="Label" parent="HBoxContainer/VBoxContainer"]
 margin_top = 2257.0
 margin_right = 540.0
 margin_bottom = 2278.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 6 )
+text = "Duruti"
+align = 1
+valign = 2
+uppercase = true
+
+[node name="Name12" type="Label" parent="HBoxContainer/VBoxContainer"]
+margin_top = 2282.0
+margin_right = 540.0
+margin_bottom = 2303.0
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 6 )
 text = "HornedReaper"
@@ -302,9 +313,9 @@ valign = 2
 uppercase = true
 
 [node name="Name11" type="Label" parent="HBoxContainer/VBoxContainer"]
-margin_top = 2282.0
+margin_top = 2307.0
 margin_right = 540.0
-margin_bottom = 2303.0
+margin_bottom = 2328.0
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 6 )
 text = "Hydrogene"
@@ -313,9 +324,9 @@ valign = 2
 uppercase = true
 
 [node name="Subtitle9" type="Label" parent="HBoxContainer/VBoxContainer"]
-margin_top = 2307.0
+margin_top = 2332.0
 margin_right = 540.0
-margin_bottom = 2457.0
+margin_bottom = 2482.0
 rect_min_size = Vector2( 0, 150 )
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 5 )
@@ -327,9 +338,9 @@ valign = 1
 uppercase = true
 
 [node name="Name40" type="Label" parent="HBoxContainer/VBoxContainer"]
-margin_top = 2461.0
+margin_top = 2486.0
 margin_right = 540.0
-margin_bottom = 2482.0
+margin_bottom = 2507.0
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 6 )
 text = "Sebajuste"
@@ -338,9 +349,9 @@ valign = 2
 uppercase = true
 
 [node name="Subtitle7" type="Label" parent="HBoxContainer/VBoxContainer"]
-margin_top = 2486.0
+margin_top = 2511.0
 margin_right = 540.0
-margin_bottom = 2636.0
+margin_bottom = 2661.0
 rect_min_size = Vector2( 0, 150 )
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 5 )
@@ -352,9 +363,9 @@ valign = 1
 uppercase = true
 
 [node name="Name13" type="Label" parent="HBoxContainer/VBoxContainer"]
-margin_top = 2640.0
+margin_top = 2665.0
 margin_right = 540.0
-margin_bottom = 2661.0
+margin_bottom = 2686.0
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 6 )
 text = "Anata"
@@ -363,9 +374,9 @@ valign = 2
 uppercase = true
 
 [node name="Name14" type="Label" parent="HBoxContainer/VBoxContainer"]
-margin_top = 2665.0
+margin_top = 2690.0
 margin_right = 540.0
-margin_bottom = 2686.0
+margin_bottom = 2711.0
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 6 )
 text = "Asthegor"
@@ -374,9 +385,9 @@ valign = 2
 uppercase = true
 
 [node name="Name15" type="Label" parent="HBoxContainer/VBoxContainer"]
-margin_top = 2690.0
+margin_top = 2715.0
 margin_right = 540.0
-margin_bottom = 2711.0
+margin_bottom = 2736.0
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 6 )
 text = "Breakingbardo"
@@ -385,9 +396,9 @@ valign = 2
 uppercase = true
 
 [node name="Name16" type="Label" parent="HBoxContainer/VBoxContainer"]
-margin_top = 2715.0
+margin_top = 2740.0
 margin_right = 540.0
-margin_bottom = 2736.0
+margin_bottom = 2761.0
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 6 )
 text = "CryptoLogiq"
@@ -396,9 +407,9 @@ valign = 2
 uppercase = true
 
 [node name="Name17" type="Label" parent="HBoxContainer/VBoxContainer"]
-margin_top = 2740.0
+margin_top = 2765.0
 margin_right = 540.0
-margin_bottom = 2761.0
+margin_bottom = 2786.0
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 6 )
 text = "Ced30"
@@ -407,23 +418,12 @@ valign = 2
 uppercase = true
 
 [node name="Name18" type="Label" parent="HBoxContainer/VBoxContainer"]
-margin_top = 2765.0
-margin_right = 540.0
-margin_bottom = 2786.0
-size_flags_horizontal = 3
-custom_fonts/font = ExtResource( 6 )
-text = "DeadSystem"
-align = 1
-valign = 2
-uppercase = true
-
-[node name="Name19" type="Label" parent="HBoxContainer/VBoxContainer"]
 margin_top = 2790.0
 margin_right = 540.0
 margin_bottom = 2811.0
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 6 )
-text = "Duruti"
+text = "DeadSystem"
 align = 1
 valign = 2
 uppercase = true

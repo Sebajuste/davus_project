@@ -74,6 +74,8 @@ func _on_remove_ammo(item: Item) -> void:
 
 
 func _on_update_ammo(item: Item) -> void:
-	if ammo_available_list.find(item) != -1:
+	var index = ammo_available_list.find(item)
+	if index != -1:
+		current_ammo = index
 		if item.equiped:
 			emit_signal("ammo_selected", item)

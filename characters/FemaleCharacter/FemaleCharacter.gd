@@ -22,7 +22,6 @@ var velocity := Vector3()
 var _fall_time := 0.0
 var _anim_update := false
 var _jump_event := false
-#var _jump_action := false
 var _jump_count := MAX_JUMP
 var _jumping := false
 var _air_time := 0.0
@@ -91,6 +90,17 @@ func _process(delta):
 
 
 func _physics_process(delta):
+	
+	if $WeaponHandler.aiming and $WeaponHandler.valid_target and $WeaponHandler.shoot_ready and controller.type == controller.Type.GAMEPAD:
+		var weapon = $WeaponHandler.get_weapon()
+		if weapon != null:
+			$LaserPointer.visible = true
+			$LaserPointer.weapon_pos = weapon.global_transform.origin
+			$LaserPointer.target_pos = $WeaponHandler.target
+	else:
+		$LaserPointer.visible = false
+	
+	
 	
 	var move_dir = Vector3()
 	
@@ -220,6 +230,8 @@ func _input(event) -> void:
 			usable.use(self)
 
 
+func is_aiming() -> bool:
+	return $WeaponHandler.aiming
 
 func get_items() -> Array:
 	return $Inventory.get_items()
@@ -287,9 +299,9 @@ func _on_WalkTimer_timeout():
 
 
 func _on_CombatStats_damage_taken():
-	
 	$AnimationTree.set("parameters/Hit/active", true)
-	
+	if controller.type == Controller.Type.GAMEPAD:
+		Input.start_joy_vibration(0, 0, 0.2, 0.2)
 
 
 func _on_CombatStats_health_depleted():

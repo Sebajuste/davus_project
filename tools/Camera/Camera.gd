@@ -34,7 +34,7 @@ func _process(delta):
 		if velocity.length() > 0.5:
 			_target_posistion += velocity / VELOCITY_FACTOR
 	
-	if target_node.get("_look_dir"):
+	if target_node.get("_look_dir") and not target_node.is_aiming():
 		if controller.type == Controller.Type.GAMEPAD:
 			_target_posistion += target_node._look_dir
 		elif abs(target_node._look_dir.x) > 12.0 or abs(target_node._look_dir.y) > 6.0:

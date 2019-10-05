@@ -1,6 +1,44 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://ui/Game/Health/Health.gd" type="Script" id=1]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.184314, 0.00784314, 0.00784314, 1 )
+corner_radius_top_left = 16
+corner_radius_bottom_right = 16
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 1, 0.129412, 0.129412, 1 )
+corner_radius_top_left = 16
+corner_radius_bottom_right = 16
+shadow_color = Color( 0.54902, 0.270588, 0.270588, 0.196078 )
+shadow_size = 8
+
+[sub_resource type="Theme" id=3]
+ProgressBar/colors/font_color = Color( 0.941176, 0.941176, 0.941176, 1 )
+ProgressBar/colors/font_color_shadow = Color( 0, 0, 0, 1 )
+ProgressBar/fonts/font = null
+ProgressBar/styles/bg = SubResource( 1 )
+ProgressBar/styles/fg = SubResource( 2 )
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0.0196078, 0.0784314, 0.192157, 1 )
+corner_radius_top_left = 16
+corner_radius_bottom_right = 16
+
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 0.313726, 0.92549, 0.956863, 1 )
+corner_radius_top_left = 16
+corner_radius_bottom_right = 16
+shadow_color = Color( 0.317647, 0.505882, 0.54902, 0.196078 )
+shadow_size = 8
+
+[sub_resource type="Theme" id=6]
+ProgressBar/colors/font_color = Color( 0.941176, 0.941176, 0.941176, 1 )
+ProgressBar/colors/font_color_shadow = Color( 0, 0, 0, 1 )
+ProgressBar/fonts/font = null
+ProgressBar/styles/bg = SubResource( 4 )
+ProgressBar/styles/fg = SubResource( 5 )
 
 [node name="Health" type="VBoxContainer"]
 anchor_top = 1.0
@@ -17,11 +55,11 @@ margin_bottom = 35.0
 size_flags_vertical = 3
 
 [node name="ProgressBar" type="ProgressBar" parent="Life"]
-modulate = Color( 1, 0.486275, 0.486275, 1 )
 margin_right = 303.0
 margin_bottom = 25.0
 rect_min_size = Vector2( 0, 25 )
 size_flags_horizontal = 3
+theme = SubResource( 3 )
 percent_visible = false
 
 [node name="Tween" type="Tween" parent="Life/ProgressBar"]
@@ -33,11 +71,11 @@ margin_bottom = 74.0
 size_flags_vertical = 3
 
 [node name="ProgressBar" type="ProgressBar" parent="Shield"]
-modulate = Color( 0, 0.764706, 1, 1 )
 margin_right = 303.0
 margin_bottom = 25.0
 rect_min_size = Vector2( 0, 25 )
 size_flags_horizontal = 3
+theme = SubResource( 6 )
 percent_visible = false
 
 [node name="Tween" type="Tween" parent="Shield/ProgressBar"]
