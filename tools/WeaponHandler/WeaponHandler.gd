@@ -69,6 +69,10 @@ func _input(event):
 		set_aiming(not aiming)
 
 
+func get_weapon() -> Spatial:
+	return weapon
+
+
 func remove():
 	if weapon:
 		if current_item:
