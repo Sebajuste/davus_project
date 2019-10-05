@@ -49,6 +49,7 @@ custom_fonts/font = ExtResource( 4 )
 text = "info_key_found"
 align = 1
 valign = 1
+autowrap = true
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 5.0
