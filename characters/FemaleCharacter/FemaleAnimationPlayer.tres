@@ -104,7 +104,7 @@ nodes/Weapon/position = Vector2( 20, 120 )
 nodes/WeaponBackward/node = SubResource( 16 )
 nodes/WeaponBackward/position = Vector2( 40, 420 )
 nodes/output/position = Vector2( 480, 100 )
-node_connections = [ "output", 0, "Backward", "Weapon", 0, "Animation", "Weapon", 1, "Animation 2", "Weapon", 2, "Animation 3", "Backward", 0, "Weapon", "Backward", 1, "WeaponBackward", "WeaponBackward", 0, "Animation 6", "WeaponBackward", 1, "Animation 5", "WeaponBackward", 2, "Animation 4" ]
+node_connections = [ "output", 0, "Backward", "Backward", 0, "Weapon", "Backward", 1, "WeaponBackward", "Weapon", 0, "Animation", "Weapon", 1, "Animation 2", "Weapon", 2, "Animation 3", "WeaponBackward", 0, "Animation 6", "WeaponBackward", 1, "Animation 5", "WeaponBackward", 2, "Animation 4" ]
 
 [sub_resource type="AnimationNodeAnimation" id=18]
 animation = "jump"

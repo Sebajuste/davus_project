@@ -80,14 +80,16 @@ angular_velocity = 1.0
 [sub_resource type="SphereShape" id=7]
 radius = 17.5667
 
-[sub_resource type="VisualShaderNodeColorConstant" id=14]
+[sub_resource type="VisualShaderNodeColorConstant" id=8]
 constant = Color( 1, 0, 0, 1 )
 
-[sub_resource type="VisualShaderNodeColorConstant" id=17]
+[sub_resource type="VisualShaderNodeColorConstant" id=9]
 constant = Color( 1, 0, 0, 1 )
 
-[sub_resource type="VisualShader" id=15]
+[sub_resource type="VisualShader" id=10]
 code = "shader_type spatial;
+render_mode blend_add, cull_disabled, unshaded, shadows_disabled, ambient_light_disabled;
+
 
 
 
@@ -121,16 +123,21 @@ void light() {
 }
 "
 graph_offset = Vector2( -589.5, 142 )
-nodes/fragment/2/node = SubResource( 14 )
+modes/blend = 1
+modes/cull = 2
+flags/ambient_light_disabled = true
+flags/shadows_disabled = true
+flags/unshaded = true
+nodes/fragment/2/node = SubResource( 8 )
 nodes/fragment/2/position = Vector2( -20, 140 )
-nodes/fragment/3/node = SubResource( 17 )
+nodes/fragment/3/node = SubResource( 9 )
 nodes/fragment/3/position = Vector2( -200, 280 )
 nodes/fragment/connections = PoolIntArray( 3, 0, 0, 5, 2, 0, 0, 0 )
 
-[sub_resource type="ShaderMaterial" id=16]
-shader = SubResource( 15 )
+[sub_resource type="ShaderMaterial" id=11]
+shader = SubResource( 10 )
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=12]
 length = 0.033333
 tracks/0/type = "transform"
 tracks/0/path = NodePath("Skeleton:mixamorig_Head")
@@ -378,7 +385,7 @@ tracks/34/imported = false
 tracks/34/enabled = true
 tracks/34/keys = PoolRealArray( 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 )
 
-[sub_resource type="AnimationNodeTransition" id=9]
+[sub_resource type="AnimationNodeTransition" id=13]
 input_count = 2
 xfade_time = 0.1
 input_0/name = "Alive"
@@ -386,25 +393,25 @@ input_0/auto_advance = false
 input_1/name = "Death"
 input_1/auto_advance = false
 
-[sub_resource type="AnimationNodeAnimation" id=10]
+[sub_resource type="AnimationNodeAnimation" id=14]
 animation = "hit"
 
-[sub_resource type="AnimationNodeAnimation" id=11]
+[sub_resource type="AnimationNodeAnimation" id=15]
 animation = "death"
 
-[sub_resource type="AnimationNodeOneShot" id=12]
+[sub_resource type="AnimationNodeOneShot" id=16]
 fadein_time = 0.5
 fadeout_time = 0.5
 
-[sub_resource type="AnimationNodeBlendTree" id=13]
+[sub_resource type="AnimationNodeBlendTree" id=17]
 graph_offset = Vector2( -719.25, 117.5 )
-nodes/Alive/node = SubResource( 9 )
+nodes/Alive/node = SubResource( 13 )
 nodes/Alive/position = Vector2( 40, 200 )
-nodes/Animation/node = SubResource( 11 )
+nodes/Animation/node = SubResource( 15 )
 nodes/Animation/position = Vector2( -280, 340 )
-"nodes/Animation 2/node" = SubResource( 10 )
+"nodes/Animation 2/node" = SubResource( 14 )
 "nodes/Animation 2/position" = Vector2( -640, 300 )
-nodes/Hit/node = SubResource( 12 )
+nodes/Hit/node = SubResource( 16 )
 nodes/Hit/position = Vector2( -345, 119 )
 nodes/StateMachine/node = ExtResource( 34 )
 nodes/StateMachine/position = Vector2( -680, 140 )
@@ -635,14 +642,14 @@ material/0 = null
 
 [node name="Head" type="BoneAttachment" parent="Skeleton"]
 editor/display_folded = true
-transform = Transform( 0.99948, 0.0178186, 0.0268739, -0.0163336, 0.998379, -0.0545009, -0.0278016, 0.0540338, 0.998151, -0.0251729, 1.56063, -0.0538653 )
+transform = Transform( 0.999483, 0.01731, 0.0270728, -0.016107, 0.9989, -0.0440317, -0.0278052, 0.0435728, 0.998662, -0.0235989, 1.56044, -0.0561233 )
 bone_name = "mixamorig_Head"
 
 [node name="HairTail" parent="Skeleton/Head" instance=ExtResource( 3 )]
 transform = Transform( 0.998199, -0.0278291, 0.0532083, 0.0272939, 0.999569, 0.0107601, -0.053485, -0.00928839, 0.998525, 0.0482045, -1.51198, 0.0532389 )
 
 [node name="RightHand" type="BoneAttachment" parent="Skeleton"]
-transform = Transform( 0.334905, 0.0909444, 0.937852, 0.127877, -0.990508, 0.0503873, 0.933532, 0.103055, -0.343357, -0.221146, 0.951968, -0.0130211 )
+transform = Transform( 0.336284, 0.0896498, 0.937482, 0.129124, -0.990446, 0.0483977, 0.932866, 0.104777, -0.344649, -0.222274, 0.955271, -0.0134432 )
 bone_name = "mixamorig_RightHand"
 
 [node name="Position" type="Spatial" parent="Skeleton/RightHand"]
@@ -650,7 +657,7 @@ transform = Transform( 0.0147597, 0.915448, -0.402164, 0.980249, 0.0660798, 0.18
 
 [node name="RightFoot" type="BoneAttachment" parent="Skeleton"]
 editor/display_folded = true
-transform = Transform( 0.991687, 0.00135779, -0.128665, 0.000182711, 0.999928, 0.0119602, 0.128672, -0.0118842, 0.991614, 0.082054, -0.00124363, -0.0322227 )
+transform = Transform( 0.991707, 0.00149567, -0.12851, 8.55327e-006, 0.999931, 0.0117019, 0.128519, -0.0116056, 0.991638, 0.082013, -0.0012597, -0.0324308 )
 bone_name = "mixamorig_RightToe_End"
 
 [node name="Particles" type="Particles" parent="Skeleton/RightFoot"]
@@ -665,7 +672,7 @@ process_material = SubResource( 4 )
 draw_pass_1 = SubResource( 5 )
 
 [node name="LeftFoot" type="BoneAttachment" parent="Skeleton"]
-transform = Transform( 0.867903, 0.0186156, 0.496385, -0.0320166, 0.999317, 0.018505, -0.495701, -0.031951, 0.867907, 0.16135, 0.00611651, 0.103893 )
+transform = Transform( 0.867913, 0.0190522, 0.49635, -0.0323311, 0.999313, 0.0181792, -0.495663, -0.0318229, 0.867934, 0.161427, 0.00621325, 0.10424 )
 bone_name = "mixamorig_LeftToe_End"
 
 [node name="Particles" type="Particles" parent="Skeleton/LeftFoot"]
@@ -733,7 +740,7 @@ texture = ExtResource( 10 )
 expand = true
 
 [node name="LaserPointer" type="ImmediateGeometry" parent="."]
-material_override = SubResource( 16 )
+material_override = SubResource( 11 )
 cast_shadow = 0
 script = ExtResource( 11 )
 
@@ -784,7 +791,7 @@ wait_time = 3.0
 autoplay = "default"
 anims/angry = ExtResource( 20 )
 anims/death = ExtResource( 21 )
-anims/default = SubResource( 8 )
+anims/default = SubResource( 12 )
 anims/falling = ExtResource( 22 )
 anims/hit = ExtResource( 23 )
 anims/idle = ExtResource( 24 )
@@ -799,7 +806,7 @@ anims/rifle-run-backward = ExtResource( 32 )
 anims/slow_run = ExtResource( 33 )
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource( 13 )
+tree_root = SubResource( 17 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
 parameters/Alive/current = 0
